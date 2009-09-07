@@ -471,7 +471,7 @@ prepare_overlay (){
 	plain "释放附加字体包${font}-font.tgz"
        	tar -xzvpf "${font}-font.tgz" -C "${OVERLAY}/usr/share/fonts/TTF/"  2>&1 > /dev/null
    done
-   [ -d "${OVERLAY}/home/arch" ] && chown -R arch:users "${OVERLAY}/home/arch" && chmod -R 700 "${OVERLAY}/home/arch"
+   [ -d "${OVERLAY}/home/arch" ] && chown -R 1001:100 "${OVERLAY}/home/arch" && chmod -R 700 "${OVERLAY}/home/arch"
    [ -d ${OVERLAY}/root ] && chown -R root:root "${OVERLAY}/root" && chmod -R 700 "${OVERLAY}/root"
 
    msg2 "overlay准备完毕"
@@ -669,7 +669,7 @@ function pac_clean () {
    msg2 "清理无用文件..."
 
    plain "清理aufs文件系统临时文件.wh.* "
-   for tmp in "$(find ${MODULEDIR} -type f -name .wh.* )"; do rm -f $tmp; done
+   for tmp in "$(find ${MODULEDIR} -type f -name .wh.* )"; do [ "x$tmp" != "x" ] && rm -f $tmp; done
    green "完成!"
 
    plain "删除为宿主系统创建的内核镜像文件..."
@@ -680,25 +680,29 @@ function pac_clean () {
    green "完成!"
 
    plain "删除pamcan产生的垃圾文件..."
-   for tmp in "$(find ${MODULEDIR} -name *.pacnew -name *.pacsave -name *.pacorig)"; do rm -f $tmp; done
+   for tmp in "$(find ${MODULEDIR} -name *.pacnew -name *.pacsave -name *.pacorig)"; do [ "x$tmp" != "x" ] && rm -f $tmp; done
    green "完成!"
 
    plain "删除指定的文件夹..."
    kill_dirs="dev var/cache/man var/cache/pacman var/log/* var/mail tmp/* initrd ${DELDIR}"
    #for tmp in ${kill_dirs}; do [ -e "${UNION}/${x}" ] && rm -rf "${UNION}/${tmp}"; done
    for tmp in ${kill_dirs}; do
-	for tmp_dir in $(find ${MODULEDIR} -type d -name "$(basename $tmp)" | grep "$tmp"); do rm -rf ${tmp_dir}; done
+	for tmp_dir in $(find ${MODULEDIR} -type d -name "$(basename $tmp)" | grep "$tmp");do
+		[ "x${tmp_dir}" != "x" ] && rm -rf ${tmp_dir}
+	done
    done
    green "完成!"
 
    plain "删除图标缓存文件..."
-   for tmp in "$(find ${MODULEDIR} -type f -name *.cache)"; do rm -f $tmp; done
+   for tmp in "$(find ${MODULEDIR} -type f -name *.cache)"; do [ "x$tmp" != "x" ] && rm -f $tmp; done
    green "完成!"
 
    if [ "${CUT_LOCALE}" = "y" ]; then
 	plain "删除${REMAIN_LOCALE}外的语言文件、帮助文件、X语言文件..."
 	for tmpdir in $(find ${MODULEDIR} -type d -name "locale"); do
-		for tmp in "$(find $tmpdir/* -maxdepth 0 -type d | grep -v "[${REMAIN_LOCALE}]$")"; do rm -rf $tmp; done
+		for tmp in "$(find $tmpdir/* -maxdepth 0 -type d | grep -v "[${REMAIN_LOCALE}]$")"; do
+			[ "x$tmp" != "x" ] && rm -rf $tmp
+		done
 	done
    	green "完成!"
    fi
