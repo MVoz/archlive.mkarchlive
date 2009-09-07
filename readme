@@ -7,11 +7,7 @@ B、宿主系统需要安装如下常用软件: cdrkit(mkisofs) wget tar links s
 
 
 1、取得脚本
-   hg clone http://archlive.googlecode.com/hg
-   archlive/archliveinstaller  为archlive安装程序——支持定义软件清单快速安装和复制archlive到硬盘快速安装
-   archlive/mkarchlive  为基于Arch GNU/Linux的live系统的定制脚本
-   archlive/QI   快速安装脚本 ——将合并到archliveinstaller
-   archlive/repo-tools  软件仓维护工具
+   hg clone http://mkarchlive.archlive.googlecode.com/hg mkarchlive
 
 2、DIY archlive 直通车
    获取到mkarchlive制作脚本后

@@ -20,6 +20,7 @@
 # 支持全方位定制： 定制启动脚本、定制目标系统软件、定制软件仓、预配置文件。。。
 #########################################################################################
 #
+# 2009-09-07 独立hg repo， 使脚本独立运行
 # 2009-09-04 优化更新。
 # 2009-08-25 加入pacman.static 在非Arch环境下也可运行本脚本制作基于Arch GNU/Linux的Live系统。
 # 2009-08-24 加入ARCH选项，在i686环境下可以制作x86_64的live系统，反之亦然。
@@ -192,7 +193,7 @@ esac
 START_DIR=.
 PROFILE_DIR="${START_DIR}/${PROFILE_DIR}"
 MKINITCPIO="${START_DIR}/mkinitcpio/mkinitcpio"
-REPO_ADD="${START_DIR}/../repo-tools/repo-add"
+REPO_ADD="${START_DIR}/lib/repo-add"
 
 # 如果archlive.conf没有定义则采用如下默认配置
 
@@ -767,7 +768,7 @@ cmd_install () {
 	remount_aufs_w ${MODULEDIR}/${mod}	
 	
 	plain "将模块软件清单整理后输出（去除被#注释的）"
- 	cat "${PROFILE_DIR}/$LISTDIR/${mod}.list" | sed -r "s/#.*//g" | sed -r "/^$/d" |sort >${PACKLIST}/${mod}.new
+ 	cat "${PROFILE_DIR}/$LISTDIR/${mod}.list" | sed -r "s/#.*//g" | sed -r "/^$/d" >${PACKLIST}/${mod}.new
 	plain "完成."
 
 	# 如果已经存在对应模块，则将对应软件包及版本信息输出到清单并根据已经安装的软件升级

@@ -6,20 +6,22 @@ tzdata
 # Sources for time zone and daylight saving time data  5.34MB  基本库
 glibc
 # GNU C Library  31.59MB  最基本库  必须保留  (Archlive精简版，只有中文支持，14.2MB）
+arj
+# Free and portable clone of the ARJ archiver  0.30MB
 attr
 # Extended attribute support library for ACL support 0.37MB  基本库
-acl
-# Library for filesystem ACL support  0.57MB  基本库
-bzip2
-# A high-quality data compression program 0.25MB  基本工具
-zlib
-# A compression/decompression Library 0.30MB  基本库
 ncurses
 # System V Release 4.0 curses emulation library 8.96MB   基本库
 readline
 # GNU readline library   1.05MB   基本库
 bash
 # The GNU Bourne Again shell 1.05MB  基本工具
+acl
+# Library for filesystem ACL support  0.57MB  基本库
+bzip2
+# A high-quality data compression program 0.25MB  基本工具
+zlib
+# A compression/decompression Library 0.30MB  基本库
 gdbm
 # GNU database library  0.14MB  基本库   zsh 等需要此库
 gcc-libs
@@ -261,7 +263,6 @@ unrar
 unzip
 # 用busybox代替
 zip
-arj
 lha
 lzop
 p7zip
