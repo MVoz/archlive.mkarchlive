@@ -30,7 +30,7 @@ APPEND=""
 PRESET=""
 MESSAGE=""
 SKIPHOOKS=""
-PRESETDIR="$CWD/mkinitcpio.d"
+PRESETDIR="${basedir}/etc/mkinitcpio.d"
 QUIET="y"
 SHOW_AUTOMODS="n"
 

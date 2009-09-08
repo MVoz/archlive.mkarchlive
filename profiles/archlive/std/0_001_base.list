@@ -192,8 +192,6 @@ module-init-tools
 # utilities needed by Linux systems for managing loadable kernel modules 0.70MB
 less
 # A terminal based program for viewing text files  0.20MB
-libdownload
-#  URL based download library, forked from libfetch  0.11MB
 libpcap
 # A system-independent interface for user-level packet capture  0.86MB
 libusb

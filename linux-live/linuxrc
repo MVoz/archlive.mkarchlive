@@ -42,7 +42,7 @@ debug_shell
 
 # 内核可以通过sgn=...来定义搜索标的，该文件同一目录下的文件夹即为模块文件夹
 SGN=$(cmdline_value sgn)
-if [ "$SGN" = "" ]; then SGN=archlive.list; fi
+if [ "$SGN" = "" ]; then SGN=$LIVECDNAME.list; fi
 echolog "搜索$LIVECDNAME基本模块(根据$SGN定位)"
 
 # 在启动参数中加入datafrom 或者 ip可以加快查找数据文件夹base

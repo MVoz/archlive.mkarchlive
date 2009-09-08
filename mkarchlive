@@ -1,6 +1,6 @@
 #!/bin/bash
 #########################################################################################
-# 本脚本属于 archlive 项目一部分    作者  Carbon Jiao  (Email:  carbonjiao alt gmail dot com)
+# 本脚本属于 archlive 项目一部分  作者  Carbon Jiao  (Email:  carbonjiao alt gmail dot com)
 # 详情 http://archlive.googlecode.com http://archlive-pkg.googlecode.com
 #
 # 本工具可以在任何符合条件的linux系统上构建基于Arch GNU/Linux包管理系统pacman的live系统——
@@ -46,9 +46,9 @@ else
 fi
 plain() { 
 	if [ "${NO_COLOR}" != "y" ]; then 
-		echo -e "\033[1;2m  \033[1;0m$@\033[1;0m"
+		echo -e "\033[1;2m  \033[1;0m     $@\033[1;0m"
 	else
-		echo "$@"
+		echo "     $@"
 	fi
 }
 msg() {
@@ -89,46 +89,48 @@ green() {
 # usage: usage <exitvalue>
 usage ()
 {
-   echo " 本制作程序须用管理员身份或者sudo来执行，须要aufs文件系统的支持，同时有cdrkit等软件"
-   echo " 如果强制使用pacman.static，需确保宿主系统含有 wget links 等程序"
-   echo " 请确保archlive制作配置文件archlive.conf存放位置与archlive.conf中指定的PROFILE_DIR一致"
-   echo " 注意：输入的选项及命令定义的参数优先性高于配置文件." 
+   green " 本制作程序须用管理员身份或者sudo来执行，须要aufs文件系统的支持，同时有cdrkit等软件"
+   green " 如果强制使用pacman.static，需确保宿主系统含有 wget links 等程序"
+   green " 请确保archlive制作配置文件archlive.conf存放位置与archlive.conf中指定的PROFILE_DIR一致"
+   green " 注意：输入的选项及命令定义的参数优先性高于配置文件." 
    echo ""
-   echo " usage ${APPNAME} [选项] 命令 <命令选项>"
-   echo " 一般选项:"
+   green " 用法：${APPNAME} [选项] 命令 <命令选项>"
+   green " 一般选项:"
    echo "    -f               强制覆盖现有的工作目录等，全部重新制作"
    echo "    -i CPIO_CONFIG   用CONFIG 作为archlive启动内核配置文件. "
    echo "    -c CDNAME        目标镜像名. 默认: archlive"
-   echo "    -b BOOT	     启动选项(syslinux,isolinux,grub,grub-gfx, grub2 默认配置文件中没有提供grub2的菜单文件)"
+   echo -e "    -b BOOT	     启动选项(syslinux,isolinux,grub,grub-gfx, grub2 \
+	 \n		     默认配置文件中没有提供grub2的菜单文件)"
    echo "    -M MODULES       livecd的模块. "
    echo "    -m MODULESCOPY   从指定的文件夹拷贝附加模块，比如程序模块等. 默认: 无"
    echo "    -a ADDON_DIR     从指定文件夹制作附加设置模块. 默认: 无"
-   echo "    -t <iso,img>    目标镜像类型. 默认iso."
+   echo "    -t <iso,img>     目标镜像类型. 默认iso."
    echo "    -v               运行输出结果."
    echo "    -h               本帮助信息."
-   echo " 命令:"
-   echo "     prepare                   : 准备iso根目录结构及overlay(如果选择需要overlay，在archlive.conf中配置)"
+   green " 命令:"
+   echo -e "     prepare                   : 准备iso根目录结构及overlay(如果选择需要overlay，\
+	 \n			          在archlive.conf中配置)"
    echo "     modules <工作目录>        : 仅在工作目录下制作独立程序模块, 程序清单在archlive.conf中配置"
-   echo "     install <工作目录>        : 将程序安装到工作目录下"
+   echo "     install [工作目录]        : 将程序安装到工作目录下"
    echo "     squash <工作目录>         : 从指定的目录创建squash模块"
-   echo "     bootimage <工作目录>     : 从指定的目录制作archlive启动内核镜像."
+   echo "     bootimage <工作目录>      : 从指定的目录制作archlive启动内核镜像."
    echo "     core_module <工作目录>    : 创建archlive基本模块到工作目录下指定位置."
    echo "     img <工作目录> <目标镜像> : 从指定目录创建目标镜像"
    echo "     all <工作目录> <目标镜像> : 顺序执行以上所有命令"
    exit $1
 }
-
-green "                           运行本程序前： "
+[ "$EUID" != "0" ] && (error "错误: 必须以root用户运行本制作脚本." && exit 1)
+green "  *************************************************************************"
+green "				运行本程序前： "
 green "  *** 请详细阅读readme, archlive.conf等文件——了解详细的操作过程后继续 ***"
-echo "				     5 秒后继续"
+green "	 			5 秒后继续"
+green "  *************************************************************************"
 echo ""
 sleep 5
-[ "$EUID" != "0" ] && (error "错误: 必须以root用户运行本制作脚本." && exit 1)
 
 # 挂载aufs文件系统并判断是否已经挂载成功
 modprobe aufs
 [ $? -ne 0 ] && (error "无法装载aufs文件系统模块,请确保宿主系统aufs内核模块被正确安装. " && exit 1)
-
 
 ###------------------------检测配置---------------------------------------
 # 根据配置文件archlive.conf存放位置与archlive.conf中PROFILE_DIR定义的值是否一致来判断查找到的配置文件是否是正确
@@ -179,12 +181,12 @@ shift $(($OPTIND - 1))
 CMD_NAME="${1}"
 case "${CMD_NAME}" in
    prepare) DESCRIPTION="准备工作: 准备安装程序，准备镜像目录结构，Overlay目录等.";;
-   modules) WORK_DIR="${2}"; RE_EXTRAMODULES="y"; DESCRIPTION="在工作目录下制作独立程序模块：安装后用mksquash压缩." ;;
-   install) WORK_DIR="${2}"; RE_EXTRAMODULES="n" ; DESCRIPTION="将程序清单或者附加模块指定的程序安装到工作目录." ;;
-   squash) WORK_DIR="${2}"; RE_EXTRAMODULES="n"; DESCRIPTION="将工作目录中的程序用mksquash压缩为模块." ;;
-   core_module) WORK_DIR="${2}"; DESCRIPTION="创建archlive基本模块到工作目录下指定位置." ;;
-   bootimage) WORK_DIR="${2}"; DESCRIPTION="从指定的目录制作archlive启动内核模块及基本模块等" ;;
-   img) WORK_DIR="${2}"; IMGNAME="${3}"; DESCRIPTION="将工作目录对应目录制作为iso或者img镜像." ;;
+   modules) WORK_DIR="${2}"; RE_EXTRAMODULES="y"; DESCRIPTION="在工作目录${WORK_DIR}下制作独立程序模块：安装后用mksquash压缩." ;;
+   install) WORK_DIR="${2}"; RE_EXTRAMODULES="n" ; DESCRIPTION="将程序清单或者附加模块指定的程序安装到工作目录${WORK_DIR}." ;;
+   squash) WORK_DIR="${2}"; RE_EXTRAMODULES="n"; DESCRIPTION="将工作目录${WORK_DIR}中的程序用mksquash压缩为模块." ;;
+   core_module) WORK_DIR="${2}"; DESCRIPTION="创建archlive基本模块到工作目录${WORK_DIR}下指定位置." ;;
+   bootimage) WORK_DIR="${2}"; DESCRIPTION="从指定的目录${WORK_DIR}制作archlive启动内核模块及基本模块等" ;;
+   img) WORK_DIR="${2}"; IMGNAME="${3}"; DESCRIPTION="将工作目录${WORK_DIR}对应目录制作为iso或者img镜像." ;;
    all) WORK_DIR="${2}"; IMGNAME="${3}"; DESCRIPTION="根据配置文件或者参数指定的设置制作程序模块并打包为启动镜像." ;;
    *) warn "无效命令 '${CMD_NAME}'"; usage 1 ;;
 esac
@@ -311,9 +313,6 @@ EXTRA_PACKAGE_TARGET="${IMGROOT}/${CDNAME}/modules/extra_package"
 # 内核模块的安装位置   比如 ${WORK_DIR}/modules/0_000_core  制作启动内核镜像需要此变量
 INSTROOT="${MODULEDIR}/$(basename ${KERNEL_MOD} .list)"
 
-# 集成的软件清单
-PKGFILE="${IMGROOT}/packages.list"
-
 # 模块软件清单（包含版本信息）目录
 PACKLIST="${WORK_DIR}/list"
 # .new  存放目前对应模块最新软件清单
@@ -342,38 +341,38 @@ if [ "x${host_pacman_version}" = "x" ] && [ "${USE_STATIC_PACMAN}" != "y" ]; the
 	exit 1
 fi
 #--------------------------------------
-green "-----------------------${APPNAME} 程序设置结果：-----------------------------------"
-echo "       ${APPNAME}程序执行操作: ${CMD_NAME}"
-echo "                ${DESCRIPTION}"
-echo "         Archlive定制配置文件: ${CONFIG_FILE}"
-echo "                     目标系统: ${ARCH}"
-echo "                     工作目录: ${WORK_DIR}"
+
+green "----------------- *** ${APPNAME} 程序设置结果： *** --------------------------"
+echo "       ${APPNAME}程序执行操作:  ${CMD_NAME}"
+echo "         Archlive定制配置文件:  ${CONFIG_FILE}"
+echo "                     目标系统:  ${ARCH}"
+echo "                     工作目录:  ${WORK_DIR}"
 if [ "${CMD_NAME}" = "prepare" -o "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
-echo "       目标镜像源文件存放目录: ${IMGROOT} "
+echo "       目标镜像源文件存放目录:  ${IMGROOT} "
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
-echo "               软件包缓存目录: ${CACHE} "
+echo "               软件包缓存目录:  ${CACHE} "
 fi
 echo "              pacman.conf文件: ${PACMANCONF}"
 if [ "${CMD_NAME}" = "img" -o "${CMD_NAME}" = "all" ]; then
-echo "                 目标镜像类型: ${IMG_TYPE}"
-echo "                     标镜像名: ${IMGNAME}"
-echo "                     启动程序: ${BOOT}"
+echo "                 目标镜像类型:  ${IMG_TYPE}"
+echo "                     标镜像名:  ${IMGNAME}"
+echo "                     启动程序:  ${BOOT}"
 fi
 if [ "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "modules" -o "${CMD_NAME}" = "all" ]; then
-echo "                     模块类型: ${EXT}"
+echo "                     模块类型:  ${EXT}"
 fi
 if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
-echo " Archlive启动内核镜像配置文件: ${CPIOCONFIG}"
+echo " Archlive启动内核镜像配置文件:  ${CPIOCONFIG}"
 fi
 if [ "${CMD_NAME}" = "core_module" -o "${CMD_NAME}" = "all" ]; then
-echo "          基本核心模块存放到: ${IMGROOT}/${CDNAME}/archlive.sqfs"
+echo "          基本核心模块存放到:  ${IMGROOT}/${CDNAME}/archlive.sqfs"
 fi
 if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
-echo "          包含内核程序的模块: ${KERNEL_MOD}"
+echo "           包含内核程序的模块:  ${KERNEL_MOD}"
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
-echo "                    是否覆盖： ${FORCE}"
+echo "                    是否覆盖：  ${FORCE}"
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "all" ]; then
 echo " 需要制作的模块为: $(echo ${MODULES} | tr -s "\n" " ")"
@@ -381,6 +380,8 @@ fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "modules" -o "${CMD_NAME}" = "all" ]; then
 echo "  需要制作的附加独立程序模块为: $(echo ${EXTRAMODULES} | tr -s "\n" " ")"
 fi
+echo ""
+plain " 执行的动作： ${DESCRIPTION}"
 green "-----------------------------------------------------------------------------------"
 green "*** 如果以上设置不是你想要的设置，Ctrl+C 终止程序的执行，并检测相关配置文件. ***"
 echo "                        5 秒后开始程序                               "
@@ -917,11 +918,39 @@ cmd_extramodules_squash () {
    [ "${RE_EXTRAMODULES}" = "y" ] && green "独立模块在 $(echo $start $(date +%s) | awk '{ printf "%0.2f",($2-$1)/60 }') 分钟内完成压缩."
 }
 
+check_kernel()
+{
+   preset_file=$(find $MODULEDIR -type f -name "kern*.preset")
+   kver_file=$(find $MODULEDIR -type f -name "kern*.kver")
+   right_kver_file="n"
+   basedir=""
+   case "${preset_file%/*/*/*}" in "${kver_file%/*/*/*}") basedir=${kver_file%/*/*/*} ;; esac
+   [ "x$basedir" = "x" ] && error "目标系统无安装内核或者内核安装出错..." && usage 1
+   case ${kver_file} in "$basedir$(grep source $preset_file | cut -d " " -f2)") right_kver_file="y";; esac
+   if [ "${right_kver_file}" = "y" ]; then
+	source ${kver_file} && kernelver=${ALL_kver}
+	[ "x$kernelver" = "x" ] && (error "目标系统内核安装有误，或者内核程序包有问题..." && exit 1)
+   fi
+
+   # 不采用pacman解决问题
+   kernel_desc_file="$(dirname $(grep "$(echo ${kver_file} | awk -F "etc" '{print $2}')" `find $basedir/var/lib/pacman/local` | cut -d ":" -f1))/desc"
+   ker_pkgname=$(sed -n '2p' ${kernel_desc_file})
+   ker_pkg_ver=$(sed -n '5p' ${kernel_desc_file})
+
+   plain "目标系统内核程序名为 ${ker_pkgname}, 版本为${ker_pkg_ver}"
+   plain "目标系统内核模块安装于 $basedir, 版本为$kernelver"
+}
+
 cmd_squash () {
 
    [ ! -d ${MODULEDIR} ] && (error "${WORK_DIR}下还没有安装模块，请先执行 install命令." && usage 1)
    msg "创建squash模块..."
    start=$(date +%s)
+
+   msg2 "更新内核模块依赖关系..."
+   check_kernel
+   depmod -a -b ${basedir} ${kernelver}
+   plain "完成."
 
    #squashfs压缩的基本模块存放位置 比如0_000_core-i686.sqfs
    moduleplace="${IMGROOT}/${CDNAME}/base"
@@ -950,56 +979,85 @@ cmd_squash () {
    green "模块在 $minutes 分钟内完成创建."
 }
 
-check_kernel () {
-   prepare_pacman
-   preset_file=$(find $MODULEDIR -type f -name "kern*.preset")
-   kver_file=$(find $MODULEDIR -type f -name "kern*.kver")
-   right_kver_file="n"
-   basedir=""
-   case "${preset_file%/*/*/*}" in "${kver_file%/*/*/*}") basedir=${kver_file%/*/*/*} ;; esac
-   [ "x$basedir" = "x" ] && error "目标系统无安装内核或者内核安装出错..." && usage 1
-   case ${kver_file} in "$basedir$(grep source $preset_file | cut -d " " -f2)") right_kver_file="y";; esac
-   if [ "${right_kver_file}" = "y" ]; then
-	source ${kver_file} && kernelver=${ALL_kver}
-	[ "x$kernelver" = "x" ] && (error "目标系统内核安装有误，或者内核程序包有问题..." && usage 1)
-   fi
-   ker_desc=$($PACMAN -Qo $kver_file -r $basedir)
-   ker_pkgname=$(echo $ker_desc | cut -d " " -f3)
-   ker_pkg_ver=$(echo $ker_desc | cut -d " " -f4)
-}
 cmd_boot_kernel_image () {
 
-   msg "准备archlive内核及内核镜像"
+   # 日志文件
+   LOG=${BUILDLOG}/create_boot_image.log
+   [ -f ${LOG} ] && rm -f ${LOG}
+
+   msg "准备archlive内核及内核镜像" | tee -a ${LOG}
 
    # 判断archlive内核镜像配置文件是否存在
    [ ! -e "${CPIOCONFIG}" ] && error "错误: live系统启动内核镜像配置文件 '${CPIOCONFIG}' 不存在, 退出." && usage 1
 
    check_kernel
-   plain "目标系统内核程序包为 $ker_pkgname 版本 $ker_pkg_ver "
 
+   msg2 "拷贝内核文件${KER_FILE}..." | tee -a ${LOG}
+   # KER_FILE 在配置文件archlive.conf中定义，默认为vmlinuz26
    [ ! -d "${IMGROOT}/${CDNAME}/boot" ] && mkdir -p "${IMGROOT}/${CDNAME}/boot"
-   right_ker_file="n"    # KER_FILE 在配置文件archlive.conf中定义，默认为vmlinuz26
-   case $(grep "boot/${KER_FILE}" $basedir/var/lib/pacman/local/${ker_pkgname}-${ker_pkg_ver}/files) in boot/$KER_FILE) right_ker_file="y";; esac
-   [ "${right_ker_file}" = "n" ] && error "目标系统的内核文件名不是${KER_FILE}，请再次检查配置文件和目标系统的内核程序包..." && usage 1
+   [ -f "${IMGROOT}/${CDNAME}/boot/${KER_FILE}" ]
+   right_ker_file="n" 
+
+   case $(grep "boot/${KER_FILE}" "$(dirname ${kernel_desc_file})/files") in boot/$KER_FILE) right_ker_file="y";; esac
+   [ "${right_ker_file}" = "n" ] && error "目标系统的内核文件名不是${KER_FILE}，请再次检查配置文件和目标系统的内核程序包..." | tee -a ${LOG} && exit 1
    [ -f ${basedir}/boot/${KER_FILE} ] && cp -f "${basedir}/boot/${KER_FILE}" "${IMGROOT}/${CDNAME}/boot/${KER_FILE}"
-   [ -f "${IMGROOT}/${CDNAME}/boot/${KER_FILE}" ] && green "已经拷贝内核文件${KER_FILE}到目标镜像文件夹下."
+   [ -f "${IMGROOT}/${CDNAME}/boot/${KER_FILE}" ] && plain "拷贝内核文件完成." | tee -a ${LOG}
 
-   plain "创建${CDNAME}  live系统启动的内核镜像..."
-	green "配置文件 ${CPIOCONFIG}, "
-	green "基于目录 ${basedir}, "
-	green "archlive内核版本 ${kernelver} "
-
-   if [ "${QUIET}" = "y" ]; then append_cmd=">/dev/null"; else append_cmd=""; fi
+   msg2 "创建${CDNAME}  live系统启动的内核镜像..." | tee -a ${LOG}
+	plain "配置文件 ${CPIOCONFIG}, " | tee -a ${LOG}
+	plain "基于目录 ${basedir}, " | tee -a ${LOG}
+	plain "内核版本 ${kernelver} " | tee -a ${LOG}
+	
+   echo ""
+   green "创建启动内核镜像可能要好几分钟时间，请稍候..."
+   if [ "${QUIET}" = "y" ]; then append_cmd=">>${LOG}"; else append_cmd="| tee -a ${LOG}"; fi
    sh $MKINITCPIO -c "${CPIOCONFIG}" -b "${basedir}" -k "${kernelver}" -g \
 		"${IMGROOT}/${CDNAME}/boot/archlive.img" ${append_cmd}
    if [ $? -ne 0 ]; then
-	error "错误: 内核镜像创建失败..."
+	error "错误: 内核镜像创建失败..." | tee -a ${LOG}
 	usage 1
    else
-	green "内核启动镜像制作成功！"
+	green "内核启动镜像制作成功！" | tee -a ${LOG}
    fi
 }
 
+r_copy()
+{
+   CWD=$(pwd)
+   cd $1
+   SOURCE="$2"
+   DEST="$3"
+   echo "source: $1/$SOURCE target: $DEST" >>$4
+   if [ -L "$SOURCE" ]; then
+      REALPATH=$(readlink -f "$SOURCE")
+      cp -r --parent -a "$REALPATH" "$DEST"
+      ln -sf "$REALPATH" "$DEST/$SOURCE"
+   else
+      cp -r --parent -a "$SOURCE" "$DEST"
+   fi
+   [ "$?" -ne 0 ] && (echo "拷贝文件失败..." && exit 1)
+   cd $CWD
+}
+# 判断指定$1下是否存在$2
+# 如果不存在且宿主系统内核版本跟目标系统一致，则ROOT切换到宿主系统根目录
+cp_all()
+{
+   ROOT=$1
+   if [ ! -e $ROOT/$2 ]; then
+	if [ "${same_ver}" = "y" ]; then
+		ROOT="/"
+		if [ ! -e $ROOT/$2 ]; then
+			error "目标系统和宿主系统都不存在$2 " && exit 1
+		fi
+	else
+		error "目标系统不存在$2，宿主系统的该文件不可用——版本不一致." && exit 1
+	fi
+   fi
+   local source=$2
+   local target=$3
+   local log=$4
+   r_copy $ROOT $source $target $log
+}
 create_base_module (){
 
    [ ! -d ${WORK_DIR} ] && (warn "工作目录还不存在，请先 install..." && exit 1)
@@ -1010,35 +1068,20 @@ create_base_module (){
    LIVECDNAME=${CDNAME}
    ADDLOCALE=$(echo ${REMAIN_LOCALE} | tr "|" " ")
 
-   # 基本目录、临时工作目录
-   msg2 "创建基本模块临时目录${base_module_tree}" | tee -a ${LOG}
-   base_module_tree="${MODULEDIR}/archlive"
-   [ -d ${base_module_tree} ] && rm -rf ${base_module_tree}
-   mkdir -p ${base_module_tree}
-   
    # 日志 (比较关键，独立日志)
    [ ! -d ${IMGROOT}/${CDNAME} ] && mkdir -p ${IMGROOT}/${CDNAME}
    [ ! -d ${BUILDLOG} ] && mkdir -p ${BUILDLOG}
    LOG=${BUILDLOG}/create_base_module.log
    [ -f ${LOG} ] && rm -f ${LOG}
 
-   msg2 "检查目标系统内核版本及模块安装目录" | tee -a ${LOG}
-   check_kernel
-   if [ "x$(echo $basedir | grep "${WORK_DIR}")" = "x" ]; then
-	error "工作目录下还没有安装有内核程序包的模块，或者安装不完整..."
-	exit 1
-   fi
-   kernel_modules_dir=${basedir}/lib/modules/${kernelver}/kernel
-   ROOT=${basedir} #rcopy_ex 函数需要此参数
+   # 基本目录、临时工作目录
+   msg2 "创建基本模块临时目录..." | tee -a ${LOG}
+   base_module_tree="${MODULEDIR}/archlive"
+   [ -d ${base_module_tree} ] && rm -rf ${base_module_tree}
+   mkdir -pv ${base_module_tree} >> ${LOG}
+   mkdir -pv ${base_module_tree}/{etc,dev,bin,mnt,proc,lib,sys,tmp,var/log} >> ${LOG}
 
-   host_kernel_ver=$(uname -r)
-   host_kernel_dep_file=$(find /lib -type f -name "modules.dep")
-   host_kernel_dir=${host_kernel_dep_file%/modules.dep}
-
-   msg2 "创建基本目录" | tee -a ${LOG}
-   mkdir -p ${base_module_tree}/{etc,dev,bin,mnt,proc,lib,sys,tmp,var/log} | tee -a ${LOG}
-
-   msg2 "创建基本设备文件"  | tee -a ${LOG}
+   msg2 "创建基本设备文件..."  | tee -a ${LOG}
    mknod ${base_module_tree}/dev/console c 5 1
    mknod ${base_module_tree}/dev/fb0 c 29 0
    mknod ${base_module_tree}/dev/null c 1 3
@@ -1051,83 +1094,89 @@ create_base_module (){
 	mknod ${base_module_tree}/dev/tty$i c 4 $i;
    done
 
-   msg2 "拷贝文件到基本模块"
+   msg2 "拷贝文件(启动文件、程序文件等)到基本模块..." | tee -a ${LOG}
    touch ${base_module_tree}/etc/{m,fs}tab
    cat ${live_dir}/liblinuxlive | sed -r 's/^LIVECDNAME=.*/LIVECDNAME="'$LIVECDNAME'"/' > ${base_module_tree}/liblinuxlive
-   cp ${live_dir}/{linuxrc,cleanup} ${base_module_tree}
+   cp -v ${live_dir}/{linuxrc,cleanup} ${base_module_tree} >> ${LOG}
    chmod ago+x ${base_module_tree}/{linuxrc,cleanup}
 
-   cp -a ${live_dir}/fuse/* ${base_module_tree}
-   cp -a ${live_dir}/httpfs/* ${base_module_tree}
-   cp -a ${live_dir}/posixovl/* ${base_module_tree}
-   cp -a ${live_dir}/ntfs-3g/* ${base_module_tree}
-   cp -af ${live_dir}/rootfs/* ${base_module_tree}
-   rm -f ${base_module_tree}/bin/*
+   cp -av ${live_dir}/fuse/* ${base_module_tree} >> ${LOG}
+   cp -av ${live_dir}/httpfs/* ${base_module_tree} >> ${LOG}
+   cp -av ${live_dir}/posixovl/* ${base_module_tree} >> ${LOG}
+   cp -av ${live_dir}/ntfs-3g/* ${base_module_tree} >> ${LOG}
+   cp -afv ${live_dir}/rootfs/* ${base_module_tree} >> ${LOG}
+   rm -fv ${base_module_tree}/bin/* >> ${LOG}
 
    # 基本模块中使用busybox来替代常用程序，比如vi wget等
    for i in $(${live_dir}/rootfs/bin/busybox --help | grep -v Copyright | grep , | tr , " "); do
-	ln -s busybox ${base_module_tree}/bin/$i
+	ln -sv busybox ${base_module_tree}/bin/$i >> ${LOG}
    done
 
    for i in $(ls ${live_dir}/rootfs/bin); do
-	rm -f ${base_module_tree}/bin/$i
-	cp -f ${live_dir}/rootfs/bin/$i ${base_module_tree}/bin/$i
+	rm -fv ${base_module_tree}/bin/$i >> ${LOG}
+	cp -fv ${live_dir}/rootfs/bin/$i ${base_module_tree}/bin/$i >> ${LOG}
    done
-   ln -sf bin ${base_module_tree}/sbin
+   ln -sfv bin ${base_module_tree}/sbin >> ${LOG}
 
-   # 创建相关目录
-   mkdir -p ${base_module_tree}/lib/modules/${kernelver}/kernel/fs
+   msg2 "检查目标系统安装内核的模块及内核版本..." | tee -a ${LOG}
+   check_kernel
+   [ "x$basedir" = "x" ] && (error "没有找到安装内核的模块..." | tee -a ${LOG} && exit 1)
+   if [ "x$(echo $basedir | grep "${WORK_DIR}")" = "x" ]; then
+	error "工作目录下还没有安装有内核程序包的模块，或者安装不完整..." | tee -a ${LOG}
+	exit 1
+   fi
+   plain "目标系统内核安装于$basedir，内核版本为${kernelver}" >> ${LOG}
 
-   msg2 "拷贝内核模块：文件系统 设备驱动等"
-   FS="aufs squashfs fuse isofs udf fat vfat ntfs ext3 ext4 btrfs reiserfs xfs nls"
+   msg2 "拷贝内核模块：文件系统、设备驱动等..." | tee -a ${LOG}
+   kernel_modules_dir="lib/modules/${kernelver}"
+   host_kernel_ver=$(uname -r)
+   sam_ver=""
+   case ${kernelver%-*} in ${host_kernel_ver}) same_ver="y";; esac
+
+   FS="aufs squashfs fuse isofs udf fat ntfs ext3 ext4 btrfs reiserfs xfs nls"
    BASE_DRIVERS="cdrom ide"
    USB="storage host/ehci-hcd.ko host/ohci-hcd.ko host/uhci-hcd.ko"
    PCMCIA="pcmcia_core.ko pcmcia.ko rsrc_nonstatic.ko yenta_socket.ko"
-   for source in fs/${FS} drivers/${BASE_DRIVERS} drivers/usb/${USB} drivers/pcmcia/${PCMCIA}; do
-	if [ ! -e ${kernel_modules_dir}/${source} ]; then
-		case ${kernelver%-*} in ${host_kernel_ver})
-			kernel_modules_dir=${host_kernel_dir}/kernel
-   			ROOT=
-			;;
-		esac
-	fi
-	rcopy_ex ${kernel_modules_dir}/${source} ${base_module_tree} | tee -a ${LOG}
-   done
+   for source in $FS; do cp_all ${basedir} ${kernel_modules_dir}/kernel/fs/${source} ${base_module_tree} ${LOG}; done
+   for source in ${BASE_DRIVERS}; do cp_all ${basedir} ${kernel_modules_dir}/kernel/drivers/${source} ${base_module_tree} ${LOG}; done
+   for source in $USB; do cp_all ${basedir} ${kernel_modules_dir}/kernel/drivers/usb/${source} ${base_module_tree} ${LOG}; done
+   for source in $PCMCIA; do cp_all ${basedir} ${kernel_modules_dir}/kernel/drivers/pcmcia/${source} ${base_module_tree} ${LOG}; done
+
    # 网卡模块
    for mod in $(list_network_drivers); do
-	cat ${kernel_modules_dir%/kernel}/modules.dep | fgrep /$mod.ko | while read mod_dep_line; do
+	cat ${basedir}/${kernel_modules_dir}/modules.dep | fgrep /$mod.ko | while read mod_dep_line; do
 		for dep in $(echo ${mod_dep_line} | tr -d ":"); do
-			rcopy_ex $dep ${base_module_tree} | tee -a ${LOG}
+			cp_all ${basedir} ${kernel_modules_dir}/$dep ${base_module_tree} ${LOG}
 		done
 	done
    done
 
-   msg2 "加入archlive.conf中设置的语言支持"
+   msg2 "加入${CONFIG_FILE}中设置的语言支持..."
    if [ "$ADDLOCALE" != "" ]; then
-	localeroot=$(find ${MODULEDIR} -type f -name "locale.alias" | grep -v "${base_module_tree}" | grep -v "${EXTRA_MODULES_INS_DIR}")
+	localeroot=$(find ${MODULEDIR} -type f -name "locale.alias" | grep "usr/share/locale/locale.alias" | grep -v "${base_module_tree}" | grep -v "${EXTRA_MODULES_INS_DIR}")
 	localeroot=${localeroot%/usr/share/locale/locale.alias}
+	echo "localeroot=${localeroot}" >>${LOG}
 	plain "拷贝locale文件, 支持的locale: $ADDLOCALE" | tee -a ${LOG}
 	copylocales ${localeroot} ${base_module_tree} $ADDLOCALE
    fi
 
    msg2 "更新基本模块内核模块依赖关系" | tee -a ${LOG}
-   depmod -a -b ${base_module_tree}
+   depmod -a -b ${base_module_tree} ${kernelver}
 
    msg2 "用squash压缩基本模块中的usr drivers目录..." | tee -a ${LOG}
-   mksquashfs_module ${base_module_tree}/usr ${base_module_tree}/usr.lzm
+   mksquashfs_module ${base_module_tree}/usr ${base_module_tree}/usr.lzm >>${LOG}
    chmod ago-x ${base_module_tree}/usr.lzm
    rm -Rf ${base_module_tree}/usr/*
-   mksquashfs_module ${base_module_tree}/lib/modules/${kernelver}/kernel/drivers ${base_module_tree}/drivers.lzm
+   mksquashfs_module ${base_module_tree}/lib/modules/${kernelver}/kernel/drivers ${base_module_tree}/drivers.lzm >>${LOG}
    chmod ago-x ${base_module_tree}/drivers.lzm
    rm -Rf ${base_module_tree}/lib/modules/${kernelver}/kernel/drivers/*
 
    msg2 "用squash压缩基本模块..." | tee -a ${LOG}
-   mksquashfs_module ${base_module_tree} ${IMGROOT}/${CDNAME}/archlive.sqfs
+   mksquashfs_module ${base_module_tree} ${IMGROOT}/${CDNAME}/archlive.sqfs >>${LOG}
    chmod ago-x ${IMGROOT}/${CDNAME}/archlive.sqfs
    chmod 0444 "${IMGROOT}/${CDNAME}/archlive.sqfs"
-   msg2 "基本模块archlive.sqfs制作完成!"
+   msg2 "基本模块archlive.sqfs制作完成!" | tee -a ${LOG}
 }
-
 
 cmd_img () {
 
@@ -1159,7 +1208,7 @@ cmd_img () {
    fi
 
    msg2 "将软件清单放到镜像目录中"
-   cp -f ${PKGFILE} ${IMGROOT}/${CDNAME}/${CDNAME}.list
+   cat ${PKGFILE} | sort > ${IMGROOT}/${CDNAME}/${CDNAME}.list
    green "完成."
 
    msg2 "准备启动文件..."
@@ -1237,7 +1286,7 @@ cmd_img () {
         ${START_DIR}/mkusbimg "${IMGROOT}" "${IMGNAME}"
    fi
    if [ "$IMG_TYPE" = "iso" ]; then
-        msg2 "使用mkisofs v${mkisofs_version}来创建ISO镜像, 基于目录${IMGROOT}..."
+        msg2 "基于目录${IMGROOT} 使用mkisofs v${mkisofs_version}来创建ISO镜像..."
         qflag=""
         [ "${QUIET}" = "y" ] && qflag="-q"
         mkisofs ${qflag} -v -J -R -D -r -l $bootflags -uid 0 -gid 0 \
@@ -1245,7 +1294,7 @@ cmd_img () {
             -no-emul-boot -boot-load-size 4 -boot-info-table \
             -publisher "${PUBLISHER}" \
             -A "${CDNAME}" -V "${CDNAME}" \
-            -o "${IMGNAME}" "${IMGROOT}"
+            -o "${IMGNAME}" "${IMGROOT}" >/dev/null
        isohybrid "${IMGNAME}"
        md5sum "${IMGNAME}" > "${IMGNAME}".md5
        green "${IMGNAME}制作成功！"
@@ -1257,7 +1306,7 @@ case ${CMD_NAME} in
 	install) cmd_prepare; cmd_install ;;
 	modules) prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash ;;
 	squash) cmd_squash ;;
-	bootimage) prepare_pacman; cmd_boot_kernel_image ;;
+	bootimage) cmd_boot_kernel_image ;;
 	core_module) create_base_module ;;
 	img) cmd_img ;;
 	all) cmd_prepare; cmd_install; cmd_squash; cmd_boot_kernel_image; prepare_base_module; cmd_img ;;
