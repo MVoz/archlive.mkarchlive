@@ -1,6 +1,8 @@
 #
 # Arch Linux repository mirrorlist
 #
+Server = http://ftp.iinet.net.au/pub/archlinux/$repo/os/i686
+Server = ftp://ftp.iinet.net.au/pub/archlinux/$repo/os/i686
 Server = http://mirror.lupaworld.com/archlinux/$repo/os/i686
 Server = http://mirrors.163.com/archlinux/archlinux/$repo/i686
 Server = ftp://public.gooth.cn/archlinux/$repo/i686

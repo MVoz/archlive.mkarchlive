@@ -33,8 +33,8 @@ fi
 generate_initial_config() {
 		stat_busy "正在初始化 /etc/X11/xorg.conf"
 		sleep 3
-		LANG=C /usr/bin/Xorg -configure > /tmp/xorg_detection.log 2>&1
-		mv /xorg.conf.new /etc/X11/xorg.conf
+		#LANG=C /usr/bin/Xorg -configure > /tmp/xorg_detection.log 2>&1
+		#mv /xorg.conf.new /etc/X11/xorg.conf
 cat <<EOF >> /etc/X11/xorg.conf
 Section "Extensions"
 	Option "Composite" "Enable"

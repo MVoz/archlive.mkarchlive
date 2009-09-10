@@ -845,6 +845,7 @@ cmd_install () {
 	#if [ $(echo $mod | grep "base") ] && [ "x${SP_CUSTOM_DIR}" != "x" ]; then
 		[ -d ${SP_CUSTOM_DIR} ] && cp -rf ${SP_CUSTOM_DIR}/* $UNION/
 		[ -f ${SP_CUSTOM_DIR}/etc/locale.gen ] && chroot $UNION locale-gen
+		[ -f ${SP_CUSTOM_DIR}/etc/rc.sysinit ] && chmod ago+x ${MODULEDIR}/${mod}/etc/rc.*
 	fi
         if [ -e "${UNION}/etc/ld.so.conf" ]; then
             ldconfig -r ${UNION}
@@ -1062,6 +1063,7 @@ create_base_module (){
 
    [ ! -d ${WORK_DIR} ] && (warn "工作目录还不存在，请先 install..." && exit 1)
    msg "创建基本模块archlive.sqfs ..."
+   [ -f ${IMGROOT}/${CDNAME}/archlive.sqfs ] && rm -f ${IMGROOT}/${CDNAME}/archlive.sqfs
 
    live_dir=./linux-live
    . ${live_dir}/liblinuxlive || exit 1
@@ -1097,26 +1099,21 @@ create_base_module (){
    msg2 "拷贝文件(启动文件、程序文件等)到基本模块..." | tee -a ${LOG}
    touch ${base_module_tree}/etc/{m,fs}tab
    cat ${live_dir}/liblinuxlive | sed -r 's/^LIVECDNAME=.*/LIVECDNAME="'$LIVECDNAME'"/' > ${base_module_tree}/liblinuxlive
-   cp -v ${live_dir}/{linuxrc,cleanup} ${base_module_tree} >> ${LOG}
-   chmod ago+x ${base_module_tree}/{linuxrc,cleanup}
-
    cp -av ${live_dir}/fuse/* ${base_module_tree} >> ${LOG}
    cp -av ${live_dir}/httpfs/* ${base_module_tree} >> ${LOG}
    cp -av ${live_dir}/posixovl/* ${base_module_tree} >> ${LOG}
    cp -av ${live_dir}/ntfs-3g/* ${base_module_tree} >> ${LOG}
+   chmod ago+x ${live_dir}/rootfs/bin/*
    cp -afv ${live_dir}/rootfs/* ${base_module_tree} >> ${LOG}
-   rm -fv ${base_module_tree}/bin/* >> ${LOG}
 
    # 基本模块中使用busybox来替代常用程序，比如vi wget等
    for i in $(${live_dir}/rootfs/bin/busybox --help | grep -v Copyright | grep , | tr , " "); do
-	ln -sv busybox ${base_module_tree}/bin/$i >> ${LOG}
+	[ ! -f ${base_module_tree}/bin/$i ] && ln -sv busybox ${base_module_tree}/bin/$i >> ${LOG}
    done
 
-   for i in $(ls ${live_dir}/rootfs/bin); do
-	rm -fv ${base_module_tree}/bin/$i >> ${LOG}
-	cp -fv ${live_dir}/rootfs/bin/$i ${base_module_tree}/bin/$i >> ${LOG}
-   done
    ln -sfv bin ${base_module_tree}/sbin >> ${LOG}
+   cp -v ${live_dir}/{linuxrc,cleanup} ${base_module_tree} >> ${LOG}
+   chmod ago+x ${base_module_tree}/{linuxrc,cleanup,bin/init}
 
    msg2 "检查目标系统安装内核的模块及内核版本..." | tee -a ${LOG}
    check_kernel
@@ -1130,20 +1127,25 @@ create_base_module (){
    msg2 "拷贝内核模块：文件系统、设备驱动等..." | tee -a ${LOG}
    kernel_modules_dir="lib/modules/${kernelver}"
    host_kernel_ver=$(uname -r)
-   sam_ver=""
+   same_ver=""
    case ${kernelver%-*} in ${host_kernel_ver}) same_ver="y";; esac
 
    FS="aufs squashfs fuse isofs udf fat ntfs ext3 ext4 btrfs reiserfs xfs nls"
    BASE_DRIVERS="cdrom ide"
    USB="storage host/ehci-hcd.ko host/ohci-hcd.ko host/uhci-hcd.ko"
    PCMCIA="pcmcia_core.ko pcmcia.ko rsrc_nonstatic.ko yenta_socket.ko"
-   for source in $FS; do cp_all ${basedir} ${kernel_modules_dir}/kernel/fs/${source} ${base_module_tree} ${LOG}; done
-   for source in ${BASE_DRIVERS}; do cp_all ${basedir} ${kernel_modules_dir}/kernel/drivers/${source} ${base_module_tree} ${LOG}; done
-   for source in $USB; do cp_all ${basedir} ${kernel_modules_dir}/kernel/drivers/usb/${source} ${base_module_tree} ${LOG}; done
-   for source in $PCMCIA; do cp_all ${basedir} ${kernel_modules_dir}/kernel/drivers/pcmcia/${source} ${base_module_tree} ${LOG}; done
+   for mod in ${FS} ${BASE_DRIVERS} ${USB} {PCMCIA}; do
+	cat ${basedir}/${kernel_modules_dir}/modules.order | fgrep /$mod.ko | while read mod_line; do
+		cp_all ${basedir} ${kernel_modules_dir}/${mod_line} ${base_module_tree} ${LOG}
+	done
+   done
 
    # 网卡模块
-   for mod in $(list_network_drivers); do
+   NET="3c59x acenic atl1 de4x5 dgrs eepro100 e1000 epic100 hp100 ne2k-pci olympic pcnet32 r8169 rcpci 8139too 8139cp sktr skge sky2\
+	tulip via-rhine yellowfin tg3 dl2k ns83820 depca ibmtr 3c501 3c503 3c505 3c507 3c509 3c515 ac3200 acenic at1700 cosa cs89x0\
+	de4x5 de600 de620 e2100 eepro eexpress es3210 eth16i ewrk3 fmv18x forcedeth hostess_sv11 hp-plus hp lne390 ne3210 ni5010\
+	ni52 ni65 sb1000 sealevel smc-ultra sis900 smc-ultra32 smc9194 wd"
+   for mod in ${NET}; do
 	cat ${basedir}/${kernel_modules_dir}/modules.dep | fgrep /$mod.ko | while read mod_dep_line; do
 		for dep in $(echo ${mod_dep_line} | tr -d ":"); do
 			cp_all ${basedir} ${kernel_modules_dir}/$dep ${base_module_tree} ${LOG}
