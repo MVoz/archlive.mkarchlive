@@ -3,6 +3,10 @@
 # 存在其他依赖关系时候 加 "-d" 参数
 # 这样也很方便，内核更新的时候修改该清单就可以了
 #
+#
+################  特别注意： 如下内核 及 内核模块版本必须一致——只能是包含一个版本，否则制作脚本会强行退出
+################              同时有两个或者两个以上的版本，模块也会工作不正常
+#
 #  两种方案：
 # A、使用Arch官方编译的内核
 # B、使用Archlive-pkg软件仓中内核
@@ -31,16 +35,14 @@
 #-d squashfs
 # squashfs 4.0 archlive定制，包含squashfs-tools, 无法打开以前的archlive模块
 ##################### 常用网卡驱动程序
--d ndiswrapper-archlive
+#-d ndiswrapper-archlive
 # Archlive 编译包, 内核驱动模块及ndiswrapper-utils  For 2.6.31
 #
-#-d ndiswrapper
-#-d ndiswrapper-utils
+-d ndiswrapper
+-d ndiswrapper-utils
 #
-#-d madwifi-utils
-#-d madwifi
-# 暂时还没有2.6.31-ARCH 版的
-#
+-d madwifi-utils
+-d madwifi
 -d rt2x00-rt61-fw
 -d rt2x00-rt71w-fw
 -d iwlwifi-3945-ucode
@@ -55,3 +57,4 @@
 #
 -d virtualbox-modules
 -d virtualbox-ose-additions-modules
+-d virtualbox-additions
