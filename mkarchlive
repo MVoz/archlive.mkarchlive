@@ -20,6 +20,7 @@
 # 支持全方位定制： 定制启动脚本、定制目标系统软件、定制软件仓、预配置文件。。。
 #########################################################################################
 #
+# 2009-09-22 修改目标系统内核版本判断方式，加快速度。普通用户可以使用 -h 来获取帮助
 # 2009-09-14 加入检测宿主系统是否存在必须命令的判断
 # 2009-09-07 独立hg repo， 使脚本独立运行
 # 2009-09-04 优化更新。
@@ -94,7 +95,7 @@ usage ()
    green " 如果强制使用pacman.static，需确保宿主系统含有如下程序："
    green " cdrkit(mkisofs) wget tar links shell sed grep gawk module-init-tools(depmod)"
    green " util-linux-ng(mount) glibc(ldconfig) findutils(find) "
-   green " coreutils(ls, cut, tr, echo, rm, mkdir, cp, cat, chown, chmod, head, mknod, tee, touch, ln, md5sum)"
+   green " coreutils(ls, cut, tr, echo, rm, mkdir, cp, cat, chown, chmod, head, mknod, tee, touch, sort, ln, md5sum)"
    green " 以上程序中，括号里面的是本脚本调用的命令，确保宿主系统包含这些命令! "
    green " 请确保archlive制作配置文件archlive.conf存放位置与archlive.conf中指定的PROFILE_DIR一致"
    green " 注意：输入的选项及命令定义的参数优先性高于配置文件." 
@@ -124,7 +125,10 @@ usage ()
    echo "     all <工作目录> <目标镜像> : 顺序执行以上所有命令"
    exit $1
 }
+
+case "$cmdline" in *-h*) usage 1;; esac
 [ "$EUID" != "0" ] && (error "错误: 必须以root用户运行本制作脚本." && exit 1)
+
 green "  *************************************************************************"
 green "				运行本程序前： "
 green "  *** 请详细阅读readme, archlive.conf等文件——了解详细的操作过程后继续 ***"
@@ -136,22 +140,24 @@ sleep 5
 # 挂载aufs文件系统并判断是否已经挂载成功
 modprobe aufs
 [ $? -ne 0 ] && (error "无法装载aufs文件系统模块,请确保宿主系统aufs内核模块被正确安装. " && exit 1)
-
+rmmod aufs
 ###------------------------检测配置---------------------------------------
 
 # 检测宿主系统是否包含本脚本调用的命令
-need_cmd="mkisofs wget tar links sed grep gawk depmod mount ldconfig find ls cut tr echo rm mkdir cp cat chown chmod head mknod tee touch ln md5sum"
+need_cmd="wget tar links sed grep gawk depmod mount ldconfig find ls cut tr echo rm mkdir cp cat chown chmod head mknod tee sort touch ln md5sum"
 host_cmd_dir=$(echo $PATH | tr ":" "\n")
 [ -f /tmp/cmd_list ] && rm -f /tmp/cmd_list
 for dir in ${host_cmd_dir}; do
+   if [ -d $dir ]; then 
 	ls -1 $dir >>/tmp/cmd_list
+   fi
 done
 for cmd in ${need_cmd}; do
-	if [ "x$(grep "$cmd" /tmp/cmd_list)" = "x" ]; then
-		error "宿主系统不存在(或者在系统PATH指定的路径下不存在)必须的命令$cmd"
-		error "请安装后再运行本制作脚本..."
-		usage 1
-	fi
+   if [ "x$(grep "$cmd" /tmp/cmd_list)" = "x" ]; then
+	error "宿主系统不存在(或者在系统PATH指定的路径下不存在)必须的命令$cmd"
+	error "请安装后再运行本制作脚本..."
+	usage 1
+   fi
 done
 
 # 根据配置文件archlive.conf存放位置与archlive.conf中PROFILE_DIR定义的值是否一致来判断查找到的配置文件是否是正确
@@ -336,9 +342,10 @@ INSTROOT="${MODULEDIR}/$(basename ${KERNEL_MOD} .list)"
 
 # 模块软件清单（包含版本信息）目录
 PACKLIST="${WORK_DIR}/list"
-# .new  存放目前对应模块最新软件清单
+# .new  存放目前对应模块最新软件清单（需要安装的）
 # .old  存放运行本脚本前对应模块的软件清单
 # .list 存放对应模块更新详情
+# mod_模块.new 为最终 对应模块的实际软件清单
 
 # 附加模块清单（最终，包含版本信息）
 EX_MODULE_LIST=${PACKLIST}/extra_module.list
@@ -349,6 +356,9 @@ BUILDLOG="${WORK_DIR}/log"
 # -current.log 为目前正进行操作的日志
 #  -errors.log 为对应模块安装错误日志
 
+# 宿主系统可用执行程序
+HOST_CMD="${WORK_DIR}/host_cmd_list"
+
 #--------检查宿主系统程序是否满足条件----
 case ${IMG_TYPE} in iso)
 	mkisofs_version=$(mkisofs --version | head -1| cut -d " " -f2)
@@ -356,14 +366,28 @@ case ${IMG_TYPE} in iso)
 	;;
 esac
 squashfs_version=$($MKSQUASHFS -version | head -1 | cut -d " " -f3)
-host_pacman_version=$(pacman -V | grep "Pacman" | head -1 | tr -s " " | cut -d " " -f 4)
-if [ "x${host_pacman_version}" = "x" ] && [ "${USE_STATIC_PACMAN}" != "y" ]; then
-	error "宿主系统不是Arch，请在${CONFIG_FILE}中设置USE_STATIC_PACMAN=y"
-	exit 1
+
+# 判断宿主系统是否是Arch
+ARCH_HOST="n"
+# 将宿主系统可用执行程序排序输出到工作目录下
+sort /tmp/cmd_list > ${HOST_CMD}
+if [ -d /var/lib/pacman/local ]; then
+	case $(cat ${HOST_CMD}) in *makepkg*pacman*) ARCH_HOST="y" ;; esac
 fi
+if [ "${ARCH_HOST}" = "n" ]; then
+	if [ "${USE_STATIC_PACMAN}" != "y" ]; then
+		error "宿主系统不是Arch，请在${CONFIG_FILE}中设置USE_STATIC_PACMAN=y"
+		exit 1
+	fi
+else
+	host_pacman_version=$(pacman -V | grep "Pacman" | head -1 | tr -s " " | cut -d " " -f4)
+fi
+	
+	
 #--------------------------------------
 
 green "----------------- *** ${APPNAME} 程序设置结果： *** --------------------------"
+echo " 宿主系统是否是Arch GNU/Linux:  ${ARCH_HOST} "
 echo "       ${APPNAME}程序执行操作:  ${CMD_NAME}"
 echo "         Archlive定制配置文件:  ${CONFIG_FILE}"
 echo "                     目标系统:  ${ARCH}"
@@ -387,13 +411,13 @@ if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
 echo " Archlive启动内核镜像配置文件:  ${CPIOCONFIG}"
 fi
 if [ "${CMD_NAME}" = "core_module" -o "${CMD_NAME}" = "all" ]; then
-echo "          基本核心模块存放到:  ${IMGROOT}/${CDNAME}/archlive.sqfs"
+echo "           基本核心模块存放到:  ${IMGROOT}/${CDNAME}/archlive.sqfs"
 fi
 if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
 echo "           包含内核程序的模块:  ${KERNEL_MOD}"
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
-echo "                    是否覆盖：  ${FORCE}"
+echo "                     是否覆盖：  ${FORCE}"
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "all" ]; then
 echo " 需要制作的模块为: $(echo ${MODULES} | tr -s "\n" " ")"
@@ -405,7 +429,7 @@ echo ""
 plain " 执行的动作： ${DESCRIPTION}"
 green "-----------------------------------------------------------------------------------"
 green "*** 如果以上设置不是你想要的设置，Ctrl+C 终止程序的执行，并检测相关配置文件. ***"
-echo "                        5 秒后开始程序                               "
+echo "                        5 秒后开始程序"
 sleep 5
 echo ""
 msg "现在开始执行 ${APPNAME} ${CMD_NAME}"
@@ -775,7 +799,8 @@ function get_all_pkgname () {
    pkgname=$(awk 'BEGIN {all_pkg=""}{if ($1 !~ /^#+/) { {all_pkg=nodep_pkg " " $1" "$2}}}END {print all_pkg}' $1)
 }
 
-cmd_install () {
+cmd_install ()
+{
 
    # 软件清单文件夹
    [ -d ${PACKLIST} ] && rm -R ${PACKLIST}
@@ -936,8 +961,11 @@ cmd_extramodules_squash () {
 
 check_kernel()
 {
-   preset_file=$(find $MODULEDIR -type f -name "kern*.preset")
-   kver_file=$(find $MODULEDIR -type f -name "kern*.kver")
+   #preset_file=$(find $MODULEDIR -type f -name "kern*.preset")
+   #kver_file=$(find $MODULEDIR -type f -name "kern*.kver")
+   # 改成直接列出来节约时间
+   preset_file=$(ls $MODULEDIR/${KERNEL_MOD}/etc/mkinitcpio.d/kern*.preset)
+   kver_file=$(ls $MODULEDIR/${KERNEL_MOD}/etc/mkinitcpio.d/ker*.kver)
    right_kver_file="n"
    basedir=""
    case "${preset_file%/*/*/*}" in "${kver_file%/*/*/*}") basedir=${kver_file%/*/*/*} ;; esac
@@ -1255,31 +1283,31 @@ cmd_img () {
 	bootflags="-b boot/grub/stage2_eltorito"
 	green "引导程序$BOOT 准备完毕."
    fi
+
    if [ "$BOOT" = "syslinux" -o "$BOOT" = "isolinux" ]; then
 	[ ! -d ${IMGROOT}/boot/isolinux ] && mkdir -p ${IMGROOT}/boot/isolinux
-	bootfile=$(find $MODULEDIR -type f -name "isolinux.bin")
-	bootfile_dir=${bootfile%/isolinux.bin}
-	if [ ! "x${bootfile_dir}" = "x" ]; then
+	boot_mod=$(basename "$(grep "syslinux" `find ${PACKLIST} -name "*.new"` |head -1)" .new:syslinux)
+	bootfile_dir=${MODULEDIR}/${boot_mod}/usr/lib/syslinux
+	if [ -f ${bootfile_dir}/isolinux.bin ]; then
 		cp -f ${bootfile_dir}/*.* ${IMGROOT}/boot/isolinux/
-		green "找到引导程序${bootfile}，使用该引导程序覆盖cd-root里可能已经存在的引导程序."
+	elif [ ! -f ${IMGROOT}/boot/isolinux/isolinux.bin ] && [ -f ${IMGROOT}/boot/syslinux/isolinux.bin ]; then
+		bootfile_dir=${IMGROOT}/boot/syslinux
+		cp -f ${bootfile_dir}/*.* ${IMGROOT}/boot/isolinux/
 	else
-		if [ -f ${IMGROOT}/boot/isolinux/isolinux.bin ]; then
-			warn "目标系统中没有选择安装$BOOT, 使用cd-root中原来的引导程序..."
+		warn "目标系统和${IMGROOT}下都没有syslinux启动文件，现在从宿主系统查找..."
+		bootfile=$(find /usr -type f -name "isolinux.bin")
+		bootfile_dir=${bootfile%/isolinux.bin}
+		if [ -f ${bootfile_dir}/isolinux.bin ]; then
+			cp -f ${bootfile_dir}/*.* ${IMGROOT}/boot/isolinux/
 		else
-			warn "目标系统中没有选择安装$BOOT, 在宿主系统中查找..."
-			bootfile=$(find /usr -type f -name "isolinux.bin")
-			bootfile_dir=${bootfile%/isolinux.bin}
-			if [ ! "x${bootfile_dir}" = "x" ]; then
-				cp -f ${bootfile_dir}/*.* ${IMGROOT}/boot/isolinux/ 
-				green "在${bootfile_dir}目录下找到引导程序."
-			else 
-				error "宿主系统也没有安装$BOOT. 无法继续!请选择其他引导程序或者安装$BOOT..." && usage1
-			fi
+			error "宿主系统也不存在syslinux. 无法继续，请选择其他启动程序或者安装$BOOT..." && usage 1
 		fi
 	fi
+	green "在${bootfile_dir}下找到syslinux的启动程序."
 	bootflags="-b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
 	green "引导程序$BOOT 准备完毕."
    fi
+
    if [ "$BOOT" = "grub2" ]; then
 	[ ! -d ${IMGROOT}/boot/grub ] && mkdir -p ${IMGROOT}/boot/grub
 	grub2_mkimg=$(find $MODULEDIR -type f -name "grub-mkimage")
