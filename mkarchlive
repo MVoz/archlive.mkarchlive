@@ -137,10 +137,13 @@ green "  ***********************************************************************
 echo ""
 sleep 5
 
-# 挂载aufs文件系统并判断是否已经挂载成功
-modprobe aufs
-[ $? -ne 0 ] && (error "无法装载aufs文件系统模块,请确保宿主系统aufs内核模块被正确安装. " && exit 1)
-rmmod aufs
+case "$cmdline" in *all*|*install*|*modules*)
+	# 挂载aufs文件系统并判断是否已经挂载成功
+	modprobe aufs
+	[ $? -ne 0 ] && (error "无法装载aufs文件系统模块,请确保宿主系统aufs内核模块被正确安装. " && exit 1)
+	rmmod aufs
+	;;
+esac
 ###------------------------检测配置---------------------------------------
 
 # 检测宿主系统是否包含本脚本调用的命令
@@ -398,7 +401,7 @@ fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
 echo "               软件包缓存目录:  ${CACHE} "
 fi
-echo "              pacman.conf文件: ${PACMANCONF}"
+echo "              pacman.conf文件:  ${PACMANCONF}"
 if [ "${CMD_NAME}" = "img" -o "${CMD_NAME}" = "all" ]; then
 echo "                 目标镜像类型:  ${IMG_TYPE}"
 echo "                     标镜像名:  ${IMGNAME}"
@@ -961,20 +964,27 @@ cmd_extramodules_squash () {
 
 check_kernel()
 {
+   right_kver_file="n"
+   basedir=""
+   kernelver=""
+
    #preset_file=$(find $MODULEDIR -type f -name "kern*.preset")
    #kver_file=$(find $MODULEDIR -type f -name "kern*.kver")
+   #case "${preset_file%/*/*/*}" in "${kver_file%/*/*/*}") basedir=${kver_file%/*/*/*} ;; esac
+   #[ "x$basedir" = "x" ] && error "目标系统无安装内核或者内核安装出错..." && usage 1
+
    # 改成直接列出来节约时间
    preset_file=$(ls $MODULEDIR/${KERNEL_MOD}/etc/mkinitcpio.d/kern*.preset)
    kver_file=$(ls $MODULEDIR/${KERNEL_MOD}/etc/mkinitcpio.d/ker*.kver)
-   right_kver_file="n"
-   basedir=""
-   case "${preset_file%/*/*/*}" in "${kver_file%/*/*/*}") basedir=${kver_file%/*/*/*} ;; esac
-   [ "x$basedir" = "x" ] && error "目标系统无安装内核或者内核安装出错..." && usage 1
-   case ${kver_file} in "$basedir$(grep source $preset_file | cut -d " " -f2)") right_kver_file="y";; esac
+   basedir="$MODULEDIR/${KERNEL_MOD}"
+   case "$(grep source ${preset_file} | awk '{print $2}')" in "/etc/mkinitcpio.d/$(basename ${kver_file})") right_kver_file="y";; esac
+
    if [ "${right_kver_file}" = "y" ]; then
-	source ${kver_file} && kernelver=${ALL_kver}
-	[ "x$kernelver" = "x" ] && (error "目标系统内核安装有误，或者内核程序包有问题..." && exit 1)
+	source ${kver_file}
+	kernelver=${ALL_kver}
    fi
+
+   [ "x$kernelver" = "x" ] && error "目标系统内核安装有误，或者内核程序包有问题..." && exit 1
 
    # 不采用pacman解决问题
    kernel_desc_file="$(dirname $(grep "$(echo ${kver_file} | awk -F "etc" '{print $2}')" `find $basedir/var/lib/pacman/local` | cut -d ":" -f1))/desc"
@@ -982,7 +992,7 @@ check_kernel()
    ker_pkg_ver=$(sed -n '5p' ${kernel_desc_file})
 
    plain "目标系统内核程序名为 ${ker_pkgname}, 版本为${ker_pkg_ver}"
-   plain "目标系统内核模块安装于 $basedir, 版本为$kernelver"
+   plain "目标系统内核模块安装于 $basedir 版本为$kernelver"
 }
 
 cmd_squash () {
@@ -1036,6 +1046,8 @@ cmd_boot_kernel_image () {
 
    check_kernel
 
+   [ "x$kernelver" = "x" ] && error "目标系统内核安装有误，或者内核程序包有问题..." && exit 1
+
    msg2 "拷贝内核文件${KER_FILE}..." | tee -a ${LOG}
    # KER_FILE 在配置文件archlive.conf中定义，默认为vmlinuz26
    [ ! -d "${IMGROOT}/${CDNAME}/boot" ] && mkdir -p "${IMGROOT}/${CDNAME}/boot"
@@ -1048,8 +1060,8 @@ cmd_boot_kernel_image () {
    [ -f "${IMGROOT}/${CDNAME}/boot/${KER_FILE}" ] && plain "拷贝内核文件完成." | tee -a ${LOG}
 
    msg2 "创建${CDNAME}  live系统启动的内核镜像..." | tee -a ${LOG}
-	plain "配置文件 ${CPIOCONFIG}, " | tee -a ${LOG}
-	plain "基于目录 ${basedir}, " | tee -a ${LOG}
+	plain "配置文件 ${CPIOCONFIG} " | tee -a ${LOG}
+	plain "基于目录 ${basedir} " | tee -a ${LOG}
 	plain "内核版本 ${kernelver} " | tee -a ${LOG}
 	
    echo ""
