@@ -79,15 +79,15 @@ HRK="\033[1;31;40m"
 plain() { 
 	if [ $# -eq 2 ] && [ "$1" = "-n" ]; then
 		if [ "${COLOR}" = "y" ]; then 
-			echo -n -e "$W$RST     $2$RST"
+			echo -n -e "$W$RST      $2$RST"
 		else
-			echo -n "     $2"
+			echo -n "      $2"
 		fi
 	else
 		if [ "${COLOR}" = "y" ]; then 
-			echo -e "$W$RST     $@$RST"
+			echo -e "$W$RST      $@$RST"
 		else
-			echo "     $@"
+			echo "      $@"
 		fi
 	fi
 }
@@ -708,7 +708,7 @@ cmd_prepare (){
    msg "mkarchlive准备工作完成"
 }
 function mount_aufs_w () {
-   plain "将$1以aufs可写模式挂载到${UNION}"
+   plain -n "将$1以aufs可写模式挂载到${UNION}"
    mount -t aufs -o br:$1=rw aufs ${UNION}
    if [ $? -ne 0 ]; then 
         error "无法将$1以aufs可写模式挂载到${UNION}."
@@ -750,7 +750,8 @@ function sync_database () {
    [ ! -d ${UNION}/var/lib/pacman ] && mkdir -p ${UNION}/var/lib/pacman
    [ -f ${UNION}/var/lib/pacman/db.lck ] && rm -f ${UNION}/var/lib/pacman/db.lck
    plain -n "现在开始更新软件仓..."
-   $PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}"
+   if [ "${QUIET}" = "y" ]; then append=">/dev/null"; else append=""; fi
+   $PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}" ${append}
    green "完成!"
    remount_aufs_r "${SYNC}"
    plain -n "导出可用软件包清单到${PACKLIST}/available.list"
@@ -922,11 +923,26 @@ cmd_install ()
  	cat "${PROFILE_DIR}/$LISTDIR/${mod}.list" | sed -r "s/#.*//g" | sed -r "/^$/d" >${PACKLIST}/${mod}.new
 	green "完成!"
 
+	msg2 "检查 ${mod} 软件清单中软件是否存在于设定的软件仓中..."
+	cat ${PACKLIST}/${mod}.new | while read pkgname; do
+		pkgname=${pkgname#-d }
+		if grep " $pkgname " ${PACKLIST}/available.list >/dev/null; then
+			continue
+		elif grep " $pkgname " ${PACKLIST}/group_detail.list >/dev/null; then
+			continue
+		else
+			error "模块 ${mod} 中指定的软件 $pkgname 无法从当前设定的软件仓中找到，请删除或者添加对应软件仓。"
+			exit 1
+		fi
+	done
+	green "完成!"
+
+
 	# 如果已经存在对应模块，则将对应软件包及版本信息输出到清单并根据已经安装的软件升级
 	pacman_local_data=${MODULEDIR}/${mod}/var/lib/pacman/local
 	if [ -d ${pacman_local_data} ] && [ "x$(find ${pacman_local_data} -type f -name "desc")" != "x" ]; then
 		$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${mod}.old
-		plain "已安装的程序及版本信息已导出到文件${PACKLIST}/${mod}.old"
+		green "已安装的程序及版本信息已导出到文件${PACKLIST}/${mod}.old"
 		$PACMAN -Su -f --needed --noconfirm --config "${PACMANCONF}" -fr "${UNION}" >/dev/null
 		green "已有程序升级完成."
 
@@ -936,10 +952,11 @@ cmd_install ()
 		[ -f ${PACKLIST}/${mod}.new.tmp ] && rm -f ${PACKLIST}/${mod}.new.tmp
 		cp -f ${PACKLIST}/${mod}.new ${PACKLIST}/${mod}.new.tmp
 		cat ${PACKLIST}/${mod}.new | while read pkgname; do
-			if grep " $pkgname " ${PACKLIST}/available.list; then continue; fi
+			pkgname=${pkgname#-d }
+			if grep " $pkgname " ${PACKLIST}/available.list >/dev/null; then continue; fi
 			grep "^$pkgname " ${PACKLIST}/group_detail.list | awk '{print $2}' >>${PACKLIST}/${mod}.new.tmp
 			cat ${PACKLIST}/${mod}.new.tmp | sed "s|^base$||g" | sed -r "/^$/d" >${PACKLIST}/${mod}.new.tmp.1
-			mv -f ${PACKLIST}/${mod}.new.tmp.1 ${PACKLIST}/${mod}.new.tmp
+			cp -f ${PACKLIST}/${mod}.new.tmp.1 ${PACKLIST}/${mod}.new.tmp
 		done
 
 		# 比较新就清单执行相应动作
@@ -950,8 +967,9 @@ cmd_install ()
 		pkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${mod}.old ${PACKLIST}/${mod}.new.tmp | grep "\-d")
 		if [ "x$pkgname" != "x" ]; then plain "$pkgname 是新添加的(无需检测依赖关系)，需要安装..."; pac_install; fi
 		# 删除已经安装的多余的软件
-		pkgname=$(awk 'BEGIN {OFS="\t"}NR==FNR{a[$0];b[$2]}NR>FNR{if (!($1 in b)) {if (!($1 in a)) {print $1}}}' ${PACKLIST}/${mod}.new.tmp ${PACKLIST}/${mod}.old)
-		if [ "x$pkgname" != "x" ]; then plain "$pkgname 在新清单中没有，需要删除..."; pac_remove; fi
+		# 暂时先不卸载了！ 依赖关系！。。。
+		#pkgname=$(awk 'BEGIN {OFS="\t"}NR==FNR{a[$0];b[$2]}NR>FNR{if (!($1 in b)) {if (!($1 in a)) {print $1}}}' ${PACKLIST}/${mod}.new.tmp ${PACKLIST}/${mod}.old)
+		#if [ "x$pkgname" != "x" ]; then plain "$pkgname 在新清单中没有，需要删除..."; pac_remove; fi
 	fi
 	if [ "x$(find ${MODULEDIR}/${mod} -type f -name "desc")" = "x" ]; then
 		touch ${PACKLIST}/${mod}.old
@@ -983,7 +1001,7 @@ cmd_install ()
 	fi
 	# 检测包含内核的模块中，文件系统模块是否齐全
 	if [ -d ${MODULEDIR}/${mod}/lib/modules ] && [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "*.ko")" != "x" ]; then
-		msg2 "检查目标系统是否有足够的文件系统模块: aufs,squashfs等..."
+		msg2 -n "检查目标系统是否有足够的文件系统模块: aufs,squashfs等..."
 		[ $(ls ${MODULEDIR}/${mod}/lib/modules | wc -l) -ge 2 ] && (error "目标系统中内核模块有两个或者两个以上的版本" && exit 1)
 		fs_system="aufs squashfs"
 		case ${ZIP_MODE} in 1|2) fs_system="${fs_system} sqlzma unlzma";; esac
