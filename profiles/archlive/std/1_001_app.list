@@ -4,7 +4,7 @@
 ######base-devel 包含： （86.99MB)
 #ed
 # A POSIX-compliant line editor  0.11MB
-binutils
+#binutils
 # A set of programs to assemble and manipulate binary and object files  9.91MB
 # gcc 需要此包
 libtool
@@ -12,21 +12,20 @@ libtool
 # aircrack-ng-svn 等需要此包
 pkgconfig
 # A system for managing library compile/link flags 0.10MB
-m4
+#m4
 # m4 macro processor 0.25MB  autoconf依赖于此包
-autoconf
+#autoconf
 # A GNU tool for automatically configuring source code   2.55MB
-automake
+#automake
 # A GNU tool for automatically creating Makefiles  1.80MB
-bin86
-bison
+#bin86
+#bison
 fakeroot
 # Gives a fake root environment, useful for building packages as a non-privileged user  0.12MB
 #flex
 #ppl
 #cloog-ppl
 #gcc
-# 放于独立程序模块中，不需要的删除该模块包即可
 make
 #######################
 yaourt
@@ -38,7 +37,7 @@ neon
 perl-error
 # Perl/CPAN Error module - Error/exception handling in an OO-ish way 0.07MB  git依赖于此软件
 #
-mpfr
+#mpfr
 # multiple-precision floating-point library 0.97MB   gcc 依赖于此软件
 #
 #nasm
@@ -52,18 +51,13 @@ abs
 # Utilities to download and work with the Arch Build System (ABS)   0.12MB
 #git
 #GIT - the stupid content tracker  13.62MB
-# 放于独立程序模块中，不需要的删除模块
 #
-#subversion
-# Replacement for CVS, another versioning system (svn)  23.34MB
-# 放于独立程序模块中，不需要的删除模块
 #cvs 
 #Concurrent Versions System - a source control system 1.49MB
 #
 # scons extra  SCons is an open source software contruction tool that is a substitute for make.3.95MB
 #scons
-#pacbuilder-svn
-# Archlive 编译包
+pacbuilder-svn
 # A tool to massively recompile archlinux packages from sources   0.10MB
 #devtools
 # namcap

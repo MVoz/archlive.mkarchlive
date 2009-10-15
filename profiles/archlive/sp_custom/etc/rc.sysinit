@@ -9,7 +9,7 @@
 echo " "
 printhl "${C_CLEAR}Arch${C_OTHER}live, ${C_MAIN}live system base on ${C_CLEAR}Arch GNU/Linux."
 printhl "${C_CLEAR}Arch${C_OTHER}live, 基于${C_CLEAR}Arch GNU/Linux的${C_MAIN}live系统."
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	printhl "此系统在GNU通用发布协议(GPL)下发行..."
 else
 	printhl "Distributed under the GNU General Public License (GPL)"  
@@ -62,7 +62,7 @@ fi
 echo > /proc/sys/kernel/hotplug
 
 if [ -x /sbin/udevadm ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在启动 UDev服务..."
 	else
 		stat_busy "Starting UDev Daemon"
@@ -71,7 +71,7 @@ if [ -x /sbin/udevadm ]; then
 	stat_done
 else
 	# Static /dev, our last resort
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		status "使用 静态/dev文件系统..." true
 	else
 		status "Using static /dev filesystem" true
@@ -80,7 +80,7 @@ fi
 
 # Trigger udev uevents
 if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在激活 UDev事件..."
 	else
 		stat_busy "Triggering UDev uevents"
@@ -92,7 +92,7 @@ fi
 # Load modules from the MODULES array defined in rc.conf
 if ! [ "$load_modules" = "off" ]; then
 	if [ -f /proc/modules ]; then
-		if [ "${LOCALE%_*}x" = "zhx" ]; then
+		if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 			stat_busy "正在启动 UDev服务..."
 		else
 			stat_busy "Starting UDev Daemon"
@@ -130,7 +130,7 @@ fi
 
 # Wait for udev uevents
 if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在加载 UDev事件..."
 	else
 		stat_busy "Loading UDev uevents"
@@ -139,7 +139,7 @@ if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
 	/sbin/udevadm settle
 	stat_done
 	udevend="$(/bin/date +%s%0N)"
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		printhl "   UDev 事件加载时间: $((($udevend-$udevstart)/1000000))ms"
 	else
 		printhl "   UDev uevent processing time: $((($udevend-$udevstart)/1000000))ms"
@@ -148,7 +148,7 @@ fi
 
 # bring up the loopback interface
 if [ -d /sys/class/net/lo ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在配置 网络回环接口..."
 	else
 		stat_busy "Bringing up loopback interface"
@@ -170,7 +170,7 @@ if [ -f /etc/mdadm.conf -a "$(/bin/grep ^ARRAY /etc/mdadm.conf 2>/dev/null)" ]; 
 		minor=$(echo $node | /bin/sed 's|^[^0-9]*||')
 		[ ! -e $path/$node ] && /bin/mknod $path/$node b 9 $minor
 	done
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		status "正在激活 RAID整列" /sbin/mdadm --assemble --scan
 	else
 		status "Activating RAID arrays" /sbin/mdadm --assemble --scan
@@ -181,7 +181,7 @@ if [ "$USELVM" = "yes" -o "$USELVM" = "YES" ]; then
 	if [ -x /sbin/lvm -a -d /sys/block ]; then
 		# Kernel 2.6.x, LVM2 groups
 		/sbin/modprobe -q dm-mod 2>/dev/null
-		if [ "${LOCALE%_*}x" = "zhx" ]; then
+		if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 			stat_busy "正在激活 LVM2 加密卷管理..."
 		else
 			stat_busy "Activating LVM2 groups"
@@ -199,7 +199,7 @@ fi
 # Set up non-root encrypted partition mappings
 if [ -f /etc/crypttab -a -n "$(/bin/grep -v ^# /etc/crypttab | /bin/grep -v ^$)" ]; then
 	/sbin/modprobe -q dm-mod 2>/dev/null
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在解锁 加密卷:"
 	else
 		stat_busy "Unlocking encrypted volumes:"
@@ -275,7 +275,7 @@ if [ -f /etc/crypttab -a -n "$(/bin/grep -v ^# /etc/crypttab | /bin/grep -v ^$)"
 	fi
 fi
 
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	status "正在挂载 Root分区为只读..." /bin/mount -n -o remount,ro /
 else
 	status "Mounting Root Read-only" /bin/mount -n -o remount,ro /
@@ -294,7 +294,7 @@ fsck_reboot() {
 }
 
 if [ -x /sbin/fsck ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在检查 文件系统..."
 	else
 		stat_busy "Checking Filesystems"
@@ -335,7 +335,7 @@ if [ -x /sbin/fsck ]; then
 	stat_done
 fi
 
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	stat_busy "正在挂载 本地文件系统..."
 else
 	stat_busy "Mounting Local Filesystems"
@@ -352,14 +352,14 @@ fi
 /bin/mount -a -t $NETFS -O no_netdev
 stat_done
 
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	stat_busy "正在激活 交换分区..."
 	/sbin/swapon -a
 else
 	status "Activating Swap" /sbin/swapon -a
 fi
 
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	stat_busy "正在配置 系统时钟..."
 else
 	stat_busy "Configuring System Clock"
@@ -380,7 +380,7 @@ stat_done
 
 RANDOM_SEED=/var/lib/misc/random-seed
 if [ -f $RANDOM_SEED ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在初始 随机种子..."
 	else
 		stat_busy "Initializing Random Seed"
@@ -389,7 +389,7 @@ if [ -f $RANDOM_SEED ]; then
 	stat_done
 fi
 
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	stat_busy "正在删除 多余文件..."
 else
 	stat_busy "Removing Leftover Files"
@@ -410,7 +410,7 @@ stat_done
 #status "Updating Shared Library Links" /sbin/ldconfig
 
 if [ "$HOSTNAME" != "" ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		status "正在设置 主机名: $HOSTNAME" /bin/hostname $HOSTNAME
 	else
 		status "Setting Hostname: $HOSTNAME" /bin/hostname $HOSTNAME
@@ -420,14 +420,14 @@ fi
 # Set the NIS domain name, if necessary
 [ -f /etc/conf.d/nisdomainname ] && . /etc/conf.d/nisdomainname
 if [ "$NISDOMAINNAME" != "" ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		status "正在设置 NIS域名: $NISDOMAINNAME" /bin/nisdomainname $NISDOMAINNAME
 	else
 		status "Setting NIS Domain Name: $NISDOMAINNAME" /bin/nisdomainname $NISDOMAINNAME
 	fi
 fi
 
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	status "正在更新 模块依赖关系..." /sbin/depmod -A
 else
 	status "Updating Module Dependencies" /sbin/depmod -A
@@ -438,7 +438,7 @@ fi
 /bin/chmod 755 /etc/profile.d/locale.sh
 # Set user defined locale
 [ -z "$LOCALE" ] && LOCALE="en_US"
-if [ "${LOCALE%_*}x" = "zhx" ]; then
+if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 	stat_busy "正在设置 语言地区信息: $LOCALE"
 else
 	stat_busy "Setting Locale: $LOCALE"
@@ -447,7 +447,7 @@ echo "export LANG=$LOCALE" >>/etc/profile.d/locale.sh
 stat_done
 
 if echo "$LOCALE" | /bin/grep -qi utf ; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在设置 控制台为UTF-8模式..."
 	else
 		stat_busy "Setting Consoles to UTF-8 mode"
@@ -463,14 +463,14 @@ if echo "$LOCALE" | /bin/grep -qi utf ; then
 	echo 'if [ "$CONSOLE" = "" -a "$TERM" = "linux" -a -t 1 ]; then printf "\e%%G"; fi' >>/etc/profile.d/locale.sh
 	stat_done
 	if [ -n "$KEYMAP" ]; then
-		if [ "${LOCALE%_*}x" = "zhx" ]; then
+		if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 			status "正在设置 键盘布局: $KEYMAP" /bin/loadkeys -q -u $KEYMAP
 		else
 			status "Loading Keyboard Map: $KEYMAP" /bin/loadkeys -q -u $KEYMAP
 		fi
 	fi
 else
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在设置 控制台为传统模式"
 	else
 		stat_busy "Setting Consoles to legacy mode"
@@ -484,7 +484,7 @@ else
 	echo 'if [ "$CONSOLE" = "" -a "$TERM" = "linux" -a -t 1 ]; then printf "\e%%@"; fi' >>/etc/profile.d/locale.sh
 	stat_done
 	if [ -n "$KEYMAP" ]; then
-		if [ "${LOCALE%_*}x" = "zhx" ]; then
+		if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 			status "正在设置 键盘布局: $KEYMAP" /bin/loadkeys -q $KEYMAP
 		else
 			status "Loading Keyboard Map: $KEYMAP" /bin/loadkeys -q $KEYMAP
@@ -493,7 +493,7 @@ else
 fi
 
 if [ -n "$CONSOLEFONT" ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在加载 控制台字体: $CONSOLEFONT"
 	else
 		stat_busy "Loading Console Font: $CONSOLEFONT"
@@ -523,7 +523,7 @@ fi
 
 # Adding persistent network/cdrom generated rules
 if [ -f "/dev/.udev/tmp-rules--70-persistent-cd.rules" ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在保存 cdrom挂载规则: $CONSOLEFONT"
 	else
 		stat_busy "Adding persistent cdrom udev rules"
@@ -532,7 +532,7 @@ if [ -f "/dev/.udev/tmp-rules--70-persistent-cd.rules" ]; then
 	stat_done
 fi
 if [ -f "/dev/.udev/tmp-rules--70-persistent-net.rules" ]; then
-	if [ "${LOCALE%_*}x" = "zhx" ]; then
+	if [ "${LOCALE%_*}x" = "zhx" ] || [ "$cn" = "y" ]; then
 		stat_busy "正在保存 网络挂载规则: $CONSOLEFONT"
 	else
 		stat_busy "Adding persistent network udev rules"

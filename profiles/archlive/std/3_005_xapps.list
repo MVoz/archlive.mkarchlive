@@ -1,17 +1,5 @@
-bluez
-# Libraries and tools for the Bluetooth protocol stack  1.88MB
-#
-# Java 环境  >=160MB
-##ca-certificates-java
-#openjdk6
-# Free Java environment based on OpenJDK 6.0 with IcedTea6 replacing binary plugs.  151.25MB
-#jre
-# Sun's java runtime environment   110.27MB
-# 由于your-freedom 依赖于openjdk6， 所以先安装openjdk6、your-freedom 再删除openjdk6，再装回jre
-#  your-freedom 在jre下也正常工作（官方pkgbuild问题，应依赖于java-runtime）
 #### Special
 # your-freedom 2.66MB
-# ca-certificates-java  openjdk6
 #your-freedom
 # 依赖安装openjdk6  151.25MB
 #jre
@@ -30,19 +18,19 @@ bluez
 # Archlive编译包
 #
 #锐捷网络认证
-#ruijieclient
+ruijieclient
 # Archlive编译包
 # 需要gnome相关支持
 #gruijieclient
 #
-#drcom-pum
+drcom-pum
 # Archlive编译包 DRCOM认证程序
 #
 # 远程桌面
 # libsamplerate
 rdesktop
 # libvncserver
-#grdc
+grdc
 # Archlive编译包
 #
 # 局域网共享
@@ -51,20 +39,17 @@ rdesktop
 # gogolo-svn 0.42MB
 #gigolo-svn
 # Archlive编译包, 网上邻居的最好替代品，利用gvfs文件系统
-# flashplugin及依赖  17.84MB
-# mozilla-common nspr nss
-flashplugin
 #
 # 无线网络密码破解java图形前端   1.58 + 8.24MB
-#spoonwep
+spoonwep
 # Archlive定制包
-#spoonwpa
+spoonwpa
 # Archlive定制包
 # vuze-archlive  Java写的BT下载工具 14.79MB (依赖于ca-certificates-java  openjdk6)
 #vuze-archlive
 # Archlive定制包
 ##### benliud  2.61MB
-#benliud
+benliud
 # Archlive定制包
 #
 #transmission-svn
@@ -91,13 +76,13 @@ xchat
 #### pidgin-git  25.14MB
 #pidgin-git
 # Archlive定制包
-pidgin
+pidgin-msn
+# Archlive定制包
 #grsync
 #### pan,  A powerful Newsgroup Article reader based on GTK2   8.15MB
 ## hunspell enchant gtkspell   
 #pan
 #
-##### firefox-archlive已经包含ftp工具及下载工具
 #gftp
 #filezilla
 ##### UrlGfe is a GTK2 download manager 0.30MB
@@ -105,33 +90,36 @@ pidgin
 ###################### 媒体工具
 # 影音播放
 # libmowgli   libmcs
+# audacious-plugins
 audacious
-audacious-plugins
 ShowLyric
+#
+gmbox
+# Archlive定制编译包，Google音乐下载器
 #
 # vlc 及其依赖 57.44MB  vlc-git 23.68MB
 # libmpeg2 faad2 sdl libmp4v2  faac xvidcore x264 libtheora ffmpeg ladspa fluidsynth zvbi libdvbpsi
 # libdvdread libdvdnav libebml libmatroska  libcddb libmpcdec  libmodplug speex sdl_image libdca taglib 
 # avahi dbus libdaemon 
-vlc
 #vlc-git
 # Archlive定制包
+vlc
 # mplayer-svn 及其依赖  24.40MB
 # cdparanoia libmng aalib libftdi  lirc-utils 
-mplayer
 #mplayer-svn
 # Archlive定制包
+mplayer
 #
-gmlive
 # gmlive-svn 及其依赖 79.14MB
 # libsigc++2.0 glibmm cairomm pangomm gtkmm libglademm libstdc++5 sopcast
 #gmlive-svn
 # Archlive定制包
+gmlive
 #
 #gpodder
 #
 # recordmydesktop
-gtk-recordmydesktop
+#gtk-recordmydesktop
 #   0.82MB
 #
 #streamripper
@@ -147,7 +135,7 @@ gtk-recordmydesktop
 # portaudio qt
 ### mixxx, Digital DJ mixing software   97.28MB
 #
-lash
+#lash
 ### lash, A session management system for JACK and ALSA  0.68MB
 #
 # hydrogen, Drum Machine and Pattern-based Sequencer 及其依赖 104.46MB
@@ -175,7 +163,7 @@ lash
 #gimp
 #mtpaint
 #
-#gsnapshot-cn
+gsnapshot-cn
 # Archlive编译包
 #
 # pil
@@ -196,7 +184,7 @@ lash
 # poppler-glib
 #epdfview
 #
-#foxitreader
+foxitreader
 # Archlive编译包  5.49MB
 leafpad
 geany
@@ -218,11 +206,9 @@ isomaster
 ##### CD image editor written in GTK2  0.96MB
 #homebank
 #################### 系统工具
-larchin-syscalls
-larchin
-#larchin-syscalls-svn
+larchin-syscalls-svn
 # Archlive定制包，中文版
-#larchin-svn
+larchin-svn
 # Archlive定制包，中文版
 gparted
 #

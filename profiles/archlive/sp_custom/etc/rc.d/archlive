@@ -33,8 +33,8 @@ fi
 generate_initial_config() {
 		stat_busy "正在初始化 /etc/X11/xorg.conf"
 		sleep 3
-		#LANG=C /usr/bin/Xorg -configure > /tmp/xorg_detection.log 2>&1
-		#mv /xorg.conf.new /etc/X11/xorg.conf
+		LANG=C /usr/bin/Xorg -configure > /tmp/xorg_detection.log 2>&1
+		mv /xorg.conf.new /etc/X11/xorg.conf
 cat <<EOF >> /etc/X11/xorg.conf
 Section "Extensions"
 	Option "Composite" "Enable"
@@ -52,22 +52,21 @@ EOF
 }
 
 # 如果不想启动X，在内核参数加入 noxconf
-if [ ! "`cmdline_parameter noxconf`" ]; then
+if [ ! "`cmdline_parameter noxconf`" ] && [ ! -e /etc/X11/xorg.conf ]; then
 	if [ "`cmdline_parameter nonfree`" ]; then
-		if [ -e "/etc/X11/xorg.conf" ]; then
-    			/etc/rc.d/xakra-nonfree start
-		else
+  		/etc/rc.d/xakra-nonfree start
+	elif [ "`cmdline_parameter xakra`" ]; then
 			/etc/rc.d/xakra start
-    			/etc/rc.d/xakra-nonfree start
-		fi
-	elif [ ! -e "/etc/X11/xorg.conf" ]; then
-		generate_initial_config
+			sed -i 's|"vga"|"vesa"|g' /etc/X11/xorg.conf
+	else
+		#generate_initial_config
+		# Ctrl + Alt + Backspace 已经完全无效了！
 	fi
 fi
 
 # lang: 重新设置语言
 lang="`cmdline_value lang`"
-if [ "$lang" ]; then
+if [ "$lang" ] && [ "$lang" != "cn" ]; then
     locale-gen
 fi
 
@@ -84,6 +83,7 @@ session="`cmdline_value session`"
 if [ "$session" != "" ]; then
 	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/X11/xinit/xinitrc
 	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/skel/.xinitrc
+	startx
 fi
 
 chmod 0440 /etc/sudoers
@@ -94,19 +94,5 @@ if [ "x$(cmdline_parameter root)" = "x" ]; then
 	fi
 fi
 
-chown arch:users -R /home/arch
-chown root:root -R /root
-
-a8tc=$(cmdline_parameter a8tc)
-if [ "$a8tc" ]; then
-#	/etc/rc.d/asus-a8tc #太慢
-   if [ -f /etc/modprobe.d/modprobe.conf ]; then
-	if [ "x$(grep "options snd-hda-intel model=6stack" /etc/modprobe.d/modprobe.conf)" = "x" ]; then
-            echo "options snd-hda-intel model=6stack" > /etc/modprobe.d/modprobe.conf
-        fi
-   else
-      cat <<EOF >> /etc/modprobe.d/modprobe.conf
-options snd-hda-intel model=6stack
-EOF
-   fi
-fi
+#chown arch:users -R /home/arch
+#chown root:root -R /root

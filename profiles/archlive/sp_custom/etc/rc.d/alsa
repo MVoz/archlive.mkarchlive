@@ -32,6 +32,15 @@ load_alsa_oss_modules() {
 
 load_alsa()
 {
+
+# Asus A8Tc声卡特别设置  内核启动参数加入 a8tc
+if [ "${a8tc}" = "y" ]; then
+	if ! grep "options snd-hda-intel model=6stack" /etc/modprobe.d/modprobe.conf; then
+		cat >>/etc/modprobe.d/modprobe.conf << "EOF"
+options snd-hda-intel model=6stack
+EOF
+	fi
+fi
 # If hotplug or something else has loaded the ALSA modules, then
 # simply load the mixer settings and make sure the OSS compat
 # modules are loaded:

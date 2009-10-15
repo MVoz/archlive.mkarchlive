@@ -1,5 +1,11 @@
 #!/bin/sh
 # mkinitcpio - modular tool for building an init ramfs cpio image
+# base on ver: 0.5.26 Changed:
+# INSTDIR can be 2 or more selections  (By Carbon Jiao)
+# 2009-10-12 更新: 新加功能——从INSTDIR参数中指定的顺序查找对应启动脚本，\
+#                    第一个目录中没有则从第二个查找， 依次类推
+#                    几个目录中同时存在时以排在前面的为优先
+#
 #
 # IMPORTANT: We need to keep a common base syntax here
 # because some of these hooks/scripts need to run under
@@ -11,7 +17,6 @@
 #   incase of embedded spaces, quote all path names and string comarpisons
 #
 
-
 # Settings
 TMPDIR="$(mktemp -d /tmp/mkinitcpio.XXXXXX)"
 CWD="$(dirname $0)"
@@ -22,7 +27,7 @@ KERNELVERSION="$(uname -r)"
 FUNCTIONS="$CWD/initcpio/functions"
 CONFIG="/etc/mkinitcpio.conf"
 HOOKDIR="$CWD/initcpio/hooks"
-INSTDIR="$CWD/initcpio/install"
+INSTDIR="$CWD/initcpio/install ${BASEDIR}/lib/initcpio/install"
 MODULE_FILE=""
 SAVELIST=""
 GENIMG=""
@@ -90,14 +95,26 @@ while getopts ':c:k:s:b:g:a:p:m:vH:LMhS:' arg; do
         m) MESSAGE="${OPTARG}" ;;
         v) QUIET="n" ;;
         S) SKIPHOOKS="${OPTARG}" ;;
-        H) source "${INSTDIR}/${OPTARG}";
-           echo "Help for hook '${OPTARG}':"
-           help
-           cleanup
+        H) found=0
+           for instdir in ${INSTDIR}; do
+              if [ -f $instdir/${OPTARG} ]; then
+                 source "${INSTDIR}/${OPTARG}";
+                 echo "Help for hook '${OPTARG}':"
+                 help
+                 cleanup
+                 found=1
+                 break
+	      else
+                 continue
+              fi
+	   done
+           if [ $found -eq 0 ]; then echo "No hook ${OPTARG} available in dirs ${INSTDIR}"; fi		
            exit 0 ;;
         L) echo "Available hooks: " 
-           for h in ${INSTDIR}/*; do
-               echo "   $(basename ${h})"
+           for instdir in ${INSTDIR}; do
+               for h in $instdir/*; do
+                  echo "   $(basename ${h})"
+               done
            done
            cleanup
            exit 0 ;;
@@ -227,9 +244,12 @@ if [ -n "${GENIMG}" ]; then
 else
     echo ":: Begin build"
 fi
+
 #parse 'global' hook, as defined in ${CONFIG}
+# "MODULES, BINARIES, FILES" firstly (All from ${BASEDIR})
 parse_hook
 
+# Then "HOOKS" in ${CONFIG} file (From the dirs defined in ${INSTDIR}, the front the pirror )
 for hook in ${HOOKS}; do
     echo "${SKIPHOOKS}" | grep -qw ${hook} && continue
     unset MODULES
@@ -250,14 +270,31 @@ for hook in ${HOOKS}; do
             hook="${newhook}"
         fi
     fi
-    if grep "install" "${INSTDIR}/${hook}" >/dev/null 2>&1; then
-        source "${INSTDIR}/${hook}"
-        echo ":: Parsing hook [${hook}]"
-        install
-        parse_hook
-    else
-        die "Hook '${hook}' can not be found."
-    fi
+    found=0
+    for instdir in ${INSTDIR}; do
+	if grep "install" "$instdir/${hook}" >/dev/null 2>&1; then
+            source "$instdir/${hook}"
+            echo ":: Parsing hook [${hook}]"
+            install
+            HOOKDIR="$instdir/../hooks"
+            parse_hook
+            found=1
+            break
+        else
+            continue
+        fi
+    done
+    if [ $found -eq 0 ]; then die "Hook '${hook}' can not be found in ${INSTDIR}."; fi
+
+#    if grep "install" "$instdir/${hook}" >/dev/null 2>&1; then
+#        source "${INSTDIR}/${hook}"
+#        echo ":: Parsing hook [${hook}]"
+#        install
+#        parse_hook
+#    else
+#        die "Hook '${hook}' can not be found."
+#    fi
+
 done
 
 if [ "${HAS_MODULES}" == "y" ]; then

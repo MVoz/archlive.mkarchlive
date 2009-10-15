@@ -4,10 +4,10 @@
 # libdv audiofile esound libidl2 orbit2 libsasl libldap gconf 
 # wavpack taglib libproxy libsoup libv4l libcaca 
 # 总共 180MB
+gstreamer0.10-base-plugins
 gstreamer0.10-good-plugins
 #
 #cdparanoia libvisual
-gstreamer0.10-base-plugins
 #
 # gstreamer0.10-bad xvidcore libdca libusb1 libdc1394 exempi 
 # libsndfile jack-audio-connection-kit libmp4v2-1.6-1  faac  gcc 
