@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# “运行”对话框
+
+# 文件/var/tmp/run-dialog-`logname`保存上一次运行的命令
+LOG_FILE="/var/tmp/run-dialog-`logname`"
+LAST_RUN=
+if [ -f "$LOG_FILE" ]; then
+	LAST_RUN="$( cat $LOG_FILE )";
+fi
+
+CMD_TO_RUN="$( zenity --entry --title="运行" --text="要执行的命令：" --entry-text="$LAST_RUN" --width=400 )"
+if [ ! -z "CMD_TO_RUN" ]; then
+	# log it and run it !
+	echo "$CMD_TO_RUN" > $LOG_FILE
+	sh -c "$CMD_TO_RUN" &
+fi

@@ -239,10 +239,12 @@ if [ "${SHOW_AUTOMODS}" = "y" ]; then
     exit 0
 fi
 
-if [ -n "${GENIMG}" ]; then
-    echo ":: Begin dry run"
-else
-    echo ":: Begin build"
+if [ "$QUIET" = "n" ]; then
+	if [ -n "${GENIMG}" ]; then
+    		echo ":: Begin dry run"
+	else
+    		echo ":: Begin build"
+	fi
 fi
 
 #parse 'global' hook, as defined in ${CONFIG}
@@ -274,7 +276,7 @@ for hook in ${HOOKS}; do
     for instdir in ${INSTDIR}; do
 	if grep "install" "$instdir/${hook}" >/dev/null 2>&1; then
             source "$instdir/${hook}"
-            echo ":: Parsing hook [${hook}]"
+            if [ "$QUIET" = "n" ]; then echo ":: Parsing hook [${hook}]"; fi
             install
             HOOKDIR="$instdir/../hooks"
             parse_hook
@@ -297,8 +299,9 @@ for hook in ${HOOKS}; do
 
 done
 
+
 if [ "${HAS_MODULES}" == "y" ]; then
-    echo ":: Generating module dependencies"
+    if [ "$QUIET" = "n" ]; then echo ":: Generating module dependencies"; fi
     for mod in $(grep "file /lib/modules/${KERNELVERSION}" ${FILELIST} | cut -d' ' -f2); do
         dir=$(dirname "${mod}")
         mkdir -p "${TMPDIR}/${dir}"
@@ -311,8 +314,9 @@ if [ "${HAS_MODULES}" == "y" ]; then
 fi
 
 status=0
+
 if [ -n "${GENIMG}" ]; then
-    echo -n ":: Generating image '${GENIMG}'..."
+    if [ "$QUIET" = "n" ]; then echo -n ":: Generating image '${GENIMG}'..."; fi
     if ! /sbin/gen_init_cpio ${FILELIST} | gzip -9 > "${GENIMG}"; then
         echo "FAILED"
         status=1

@@ -1,4 +1,5 @@
 #!/bin/sh
+
 RST="\033[1;0m"
 
 # regular colors
@@ -32,6 +33,9 @@ BGC="\033[46m"
 BGW="\033[47m"
 
 hl () { echo -n "${W}$@${RST}";  }
+hg () { echo "${EMG}$@${RST}"; }
+hy () { echo "${EMY}$@${RST}"; }
+hr () { echo "${EMR}$@${RST}"; }
 
 info () {
     if [ $# -eq 2 ] && [ "$1" = "-n" ]; then
@@ -61,7 +65,17 @@ warn () {
     fi
 }
 
-info "正在装载内核镜像"
+echo
+hg "                   Welcome to Archlive ! 欢迎使用 Archlive !"
+hl "*******************************************************************************"
+echo
+echo  "${EMY}  Archlive${RST}, ${EMG}live system ${RST}base on ${EMY}Arch GNU/Linux${RST}."
+echo  "${EMY}  Archlive${RST}, 基于${EMY}Arch GNU/Linux${RST}的${EMG}live系统${RST}."
+echo 
+hr "  此系统基于GNU通用发布协议(GPL)发行"
+hr "  Distributed under the GNU General Public License (GPL)"  
+hl "*******************************************************************************"
+echo
 
 /bin/mount -t sysfs none /sys
 /bin/mount -t proc  none /proc
@@ -77,6 +91,7 @@ export kinit_params=""
 export root=""
 echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
 
+# Checking boot paremeters 检查启动参数
 for cmd in ${CMDLINE}; do
     case "${cmd}" in
         \#*) break ;; # ignore everything after a # in the commandline
@@ -96,11 +111,20 @@ for cmd in ${CMDLINE}; do
     esac
 done
 
+if [ "$cn" = "y" ]; then
+	msg "现在开始启动 ..."
+else
+	msg "Now start to boot ..."
+fi
+
 if [ -n "${disablehooks}" ]; then
     for d in $(replace "${disablehooks}" ','); do
         export "hook_${d}=disabled"
     done
 fi
+
+# Special for plymouth
+[ "$splash" != "y" ] && export "hook_plymouth=disabled"
 
 if [ -n "${disablemodules}" ]; then
     for d in $(replace "${disablemodules}" ','); do
@@ -151,11 +175,14 @@ if [ "${rootdelay}" != "0" ]; then
     echo
 fi
 
-    if [ "${break}" = "y" ]; then
-        warn "被要求暂停, 输入'exit'继续"
-        warn "   注意: klibc不包含ls命令, 请用'echo *'替代"
-        PS1="ramfs$ " /bin/sh -i
-    fi
+if [ "${break}" = "y" ]; then
+	if [ "$cn" = "y" ]; then
+		echo ":: 被要求暂停, 输入'exit'继续"
+	else
+		echo ":: Break requested, type 'exit' to resume operation"
+	fi
+    PS1="ramfs$ " /bin/sh -i
+fi
 
 if [ ! -b "${root}" ]; then
     # This duplicates code from the filesystem hook
@@ -189,15 +216,21 @@ if [ ! -b "${root}" ]; then
         fi
 fi
 
-info "内核镜像加载完成 - 开始kinit启动"
+
 if [ -f "/message" ]; then
     msg "$(cat /message)"
+fi
+
+if [ "$cn" = "y" ]; then
+	msg ":: 内核镜像加载完成 - 开始kinit启动进程"
+else
+	msg ":: Initramfs Completed - control passing to kinit"
 fi
 
 #Special handling if udev is running
 udevpid=$(/bin/minips -C udevd -o pid=)
 if [ -n "${udevpid}" ]; then
-    /bin/kill -9 ${udevpid}
+    /bin/kill -9 ${udevpid} 2>/dev/null 1>/dev/null
     /bin/sleep 0.01
 fi
 

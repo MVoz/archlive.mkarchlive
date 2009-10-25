@@ -8,7 +8,7 @@ install ()
         MODULES="${MODULES} usb_storage sd_mod sr_mod"
     fi
     
-    BINARIES="cp ls find touch rm test chmod chown grep less sed basename tr ntfs-3g mount.aufs umount.aufs"
+    BINARIES="cp ls clear find touch rm test chmod chown grep less sed basename tr ntfs-3g mount.aufs umount.aufs"
     FILES=""
     add_dir /real_root
     add_dir /tmpfs

@@ -3,4 +3,7 @@ run_hook ()
     # Set our usbdelay time. Default: 0
     /bin/mkdir -p /etc/modproble.d/
     echo "options usb-storage delay_use=${usbdelay:-0}" > /etc/modprobe.d/usb-delay
+
+    # Set the maxium quantity of loop device from 8 to 64
+    echo "options loop max_loop=64" > /etc/modprobe.d/modprobe.conf
 }

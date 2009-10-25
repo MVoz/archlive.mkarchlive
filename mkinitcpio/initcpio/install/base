@@ -31,6 +31,7 @@ install ()
         add_file "${MESSAGEFILE}" "/message"
     fi
     add_file "/etc/modprobe.d/usb-load-ehci-first.conf"
+
     SCRIPT=""
 }
 

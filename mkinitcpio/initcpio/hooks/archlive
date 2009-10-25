@@ -195,7 +195,6 @@ run_hook ()
     # 调试用测试点
     if [ "${break}" = "y" ]; then
         echo ":: 被要求暂停, 输入'exit'继续"
-        echo "   注意: klibc不包含ls命令, 但archlive内核镜像加入了ls命令"
         PS1="ramfs$ " /bin/sh -i
     fi
 
@@ -240,7 +239,6 @@ run_hook ()
     # 调试用测试点
     if [ "${break}" = "y" ]; then
         echo ":: 被要求暂停, 输入'exit'继续"
-        echo "   注意: klibc不包含ls命令, 但archlive内核镜像加入了ls命令"
         PS1="ramfs$ " /bin/sh -i
     fi
 		
@@ -251,17 +249,26 @@ run_hook ()
     [ ! -c $ROOT/dev/null ] && /bin/mknod $ROOT/dev/null c 1 3 2>&1 >/dev/null
     [ ! -c $ROOT/dev/zero ] && /bin/mknod $ROOT/dev/zero c 1 5 2>&1 >/dev/null
 
-    udevpid=$(/bin/minips -C udevd -o pid=)
-    [ "x${udevpid}" != "x" ] && /bin/kill -9 $udevpid 2>&1 >/dev/null
     # 调试用测试点
     if [ "${break}" = "y" ]; then
         echo ":: 被要求暂停, 输入'exit'继续"
-        echo "   注意: klibc不包含ls命令, 但archlive内核镜像加入了ls命令"
+        PS1="ramfs$ " /bin/sh -i
+    fi
+
+    sleep 1
+
+    # 退出 udevd 后台服务程序 （对硬件的有限支持) 
+    udevpid=$(/bin/minips -C udevd -o pid=)
+    [ "x${udevpid}" != "x" ] && /bin/kill -9 $udevpid 2>/dev/null 1>/dev/null
+
+    # 调试用测试点
+    if [ "${break}" = "y" ]; then
+        echo ":: 被要求暂停, 输入'exit'继续"
         PS1="ramfs$ " /bin/sh -i
     fi
     #info "准备完毕，现在卸载/sys /proc"
-    /bin/umount -l /sys
-    /bin/umount -l /proc
+    /bin/umount -l /sys >/dev/null
+    /bin/umount -l /proc >/dev/null
 
     info "现在启动基本模块archlive.sqfs"
     info "-----------------------------------------------------------------------------"

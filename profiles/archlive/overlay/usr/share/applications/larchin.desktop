@@ -1,0 +1,11 @@
+[Desktop Entry]
+Categories=Application;System
+Encoding=UTF-8
+Exec=sudo larchin.py
+Icon=larchin
+StartupNotify=true
+Terminal=false
+Type=Application
+Name=Install Arch Linux
+Name[zh_CN]=安装Archlive到硬盘
+Comment=
