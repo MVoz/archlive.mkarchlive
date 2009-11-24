@@ -169,7 +169,7 @@ shift $(($OPTIND - 1))
 
 CMD_NAME="${1}"
 case "${CMD_NAME}" in
-   prepare) DESCRIPTION="准备工作: 准备安装程序，准备镜像目录结构，Overlay目录等.";;
+   prepare) WORK_DIR="${2}"; DESCRIPTION="准备工作: 准备安装程序，准备镜像目录结构，Overlay目录等.";;
    modules) WORK_DIR="${2}"; RE_EXTRAMODULES="y"; DESCRIPTION="在工作目录 ${WORK_DIR} 下制作独立程序模块：安装后用 mksquash 压缩." ;;
    install) WORK_DIR="${2}"; RE_EXTRAMODULES="n" ; DESCRIPTION="将程序清单或者附加模块指定的程序安装到工作目录${WORK_DIR}." ;;
    squash) WORK_DIR="${2}"; RE_EXTRAMODULES="n"; DESCRIPTION="将工作目录 ${WORK_DIR} 中的程序用 mksquash 压缩为模块." ;;
