@@ -382,44 +382,45 @@ sleep 5
 echo "---------------------------------------------------------------------------------"
 hgreen "               *** ${APPNAME} 程序设置结果： ***"
 echo ""
-echo " 宿主系统是否是Arch GNU/Linux:  ${ARCH_HOST} "
-echo "       ${APPNAME}程序执行操作:  ${CMD_NAME}"
-echo "         Archlive定制配置文件:  ${CONFIG_FILE}"
-echo "                     目标系统:  ${ARCH}"
-echo "                     工作目录:  ${WORK_DIR}"
+echo "  宿主系统是否是Arch GNU/Linux:  ${ARCH_HOST} "
+echo "        ${APPNAME}程序执行操作:  ${CMD_NAME}"
+echo "          Archlive定制配置文件:  ${CONFIG_FILE}"
+echo "                      目标系统:  ${ARCH}"
+echo "                      工作目录:  ${WORK_DIR}"
 if [ "${CMD_NAME}" = "prepare" -o "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
-echo "       目标镜像源文件存放目录:  ${IMGROOT} "
+echo "        目标镜像源文件存放目录:  ${IMGROOT} "
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
-echo "               软件包缓存目录:  ${CACHE} "
+echo "                软件包缓存目录:  ${CACHE} "
 fi
-echo "              pacman.conf文件:  ${PACMANCONF}"
+echo "               pacman.conf文件:  ${PACMANCONF}"
 if [ "${CMD_NAME}" = "img" -o "${CMD_NAME}" = "all" ]; then
-echo "                 目标镜像类型:  ${IMG_TYPE}"
-echo "                     标镜像名:  ${IMGNAME}"
-echo "                     启动程序:  ${BOOT}"
+echo "                  目标镜像类型:  ${IMG_TYPE}"
+echo "                      标镜像名:  ${IMGNAME}"
+echo "                      启动程序:  ${BOOT}"
 fi
 if [ "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" ]; then
-echo "                     模块类型:  ${EXT}"
+echo "                      模块类型:  ${EXT}"
 fi
 if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
-echo " Archlive启动内核镜像配置文件:  ${CPIOCONFIG}"
+echo "  Archlive启动内核镜像配置文件:  ${CPIOCONFIG}"
 fi
 if [ "${CMD_NAME}" = "core_module" -o "${CMD_NAME}" = "all" ]; then
-echo "           基本核心模块存放到:  ${IMGROOT}/${CDNAME}/archlive.sqfs"
+echo "            基本核心模块存放到:  ${IMGROOT}/${CDNAME}/archlive.sqfs"
 fi
 if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
-echo "           包含内核程序的模块:  ${KERNEL_MOD}"
+echo "            包含内核程序的模块:  ${KERNEL_MOD}"
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
-echo "                     是否覆盖：  ${FORCE}"
+echo "                      是否覆盖：  ${FORCE}"
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "all" ]; then
 echo " 需要制作的模块为: $(echo ${MODULES} | tr -s "\n" " ")"
 fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" ]; then
-echo "  需要制作的附加独立程序模块为: $(echo ${EXTRAMODULES} | tr -s "\n" " ")"
+echo "  需要制作的附加独立程序模块为:  $(echo ${EXTRAMODULES} | tr -s "\n" " ")"
 fi
+echo "                不显示制作详情:  ${QUIET}"
 echo ""
 hgreen "***  如果以上不是你想要的，Ctrl+C 终止程序的执行，并检测相关配置文件.  ***"
 echo -n "                            "; yellow "5 秒后开始程序"
@@ -680,7 +681,8 @@ function sync_database () {
    [ -f ${UNION}/var/lib/pacman/db.lck ] && rm -f ${UNION}/var/lib/pacman/db.lck
 
    plain "现在开始更新软件仓..."
-   if [ "${QUIET}" = "y" ]; then append="2&1 >${BUILDLOG}/sync.log"; else append="| tee ${BUILDLOG}/sync.log"; fi
+   echo ""
+   if [ "${QUIET}" = "y" ]; then append="1>${BUILDLOG}/sync.log 2>>${BUILDLOG}/sync.log"; else append="| tee ${BUILDLOG}/sync.log"; fi
    $PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}" ${append}
    green "软件仓更新完成!"
 
@@ -702,10 +704,12 @@ function pac_install () {
    [ ! -c $UNION/dev/zero ] && mknod $UNION/dev/zero c 1 5 >/dev/null
 
    while true; do
+	echo ""
 	$PACMAN -S -f $pkgname --needed --noconfirm --config "${PACMANCONF}" \
 			-r "$UNION"  2>&1 | tee -a ${BUILDLOG}/${mod}-current.log
-
-	if [ $? -ne 0 ]; then
+	case $? in
+	   0) green "软件包${pkgname/-d /} 安装成功! " && break;;
+	    1) 
 		pkgname=${pkgname/-d /}
 		for pkg in $pkgname; do
 			if [ "x$(grep $pkgname ${PACKLIST}/available.list)" != "x" ]; then
@@ -722,10 +726,9 @@ function pac_install () {
 				break
 			fi
 		done
-	else
-		green "软件包${pkgname/-d /} 安装成功! "
-		break
-	fi
+		;;
+	    255) exit;;
+	    esac
    done
 }
 
@@ -814,7 +817,7 @@ cmd_extramodules_install () {
    # 初始化附加模块安装目录
    [ -d ${EXTRA_MODULES_INS_DIR} ] && rm -rf ${EXTRA_MODULES_INS_DIR} && mkdir -p ${EXTRA_MODULES_INS_DIR}
    # 如果只是独立制作模块需要单独更新软件仓库信息
-   if [ "${CMD_NAME}" = "solemodules" ] || [ "${RE_EXTRAMODULES}" != "y" ]; then
+   if [ "${CMD_NAME}" = "solemodules" ]; then
 	sync_database
    fi
 
@@ -830,7 +833,9 @@ cmd_extramodules_install () {
    	# 导出已经安装的软件清单(独立模块，含版本信息)
 	$PACMAN -Q -r ${EXTRA_MODULES_INS_DIR}/${mod} >> ${EX_MODULE_LIST}
    done
-   msg2 "附加模块 $EXTRAMODULES 安装完成."
+
+   msg2 "附加模块 $(echo ${EXTRAMODULES} | tr -s "\n" " ") 安装完成."
+
    # 卸载UNION
    msg2 "卸载aufs件系统 ${UNION}."
    umount -l ${UNION}
@@ -980,7 +985,7 @@ cmd_install ()
 			[ -d ${SP_CUSTOM_DIR}/etc ] && cp -rf ${SP_CUSTOM_DIR}/etc/* $UNION/etc/
 			[ -f ${SP_CUSTOM_DIR}/etc/locale.gen ] && chroot $UNION locale-gen
 		fi
-		chmod 0440 ${MODULEDIR}/${mod}/etc/sudoers
+		[ -f ${MODULEDIR}/${mod}/etc/sudoers ] && chmod 0440 ${MODULEDIR}/${mod}/etc/sudoers
 	fi
 
         if [ -e "${UNION}/etc/ld.so.conf" ]; then
