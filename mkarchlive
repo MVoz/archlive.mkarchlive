@@ -80,7 +80,7 @@ usage ()
    echo "       -h               本帮助信息."
    green " 命令:"
    echo "        prepare                   : 准备iso根目录结构及overlay (如果需要) "
-   echo "        modules <工作目录>        : 仅在工作目录下制作独立程序模块"
+   echo "        solemodules <工作目录>    : 仅在工作目录下制作独立程序模块"
    echo "        install [工作目录]        : 将程序安装到工作目录下"
    echo "        squash <工作目录>         : 从指定的目录创建squash模块"
    echo "        bootimage <工作目录>      : 从指定的目录制作archlive启动内核镜像."
@@ -104,7 +104,7 @@ green "  ***********************************************************************
 echo ""
 
 if [ "${KERNEL_KEY_FS_INCLUDED}" = "n" ]; then
-   case "$cmdline" in *all*|*install*|*modules*)
+   case "$cmdline" in *all*|*install*|*solemodules*)
 	# 挂载aufs文件系统并判断是否已经挂载成功
 	modprobe aufs
 	[ $? -ne 0 ] && (error "无法装载aufs文件系统模块,请确保宿主系统aufs内核模块被正确安装. " && exit 1)
@@ -170,7 +170,7 @@ shift $(($OPTIND - 1))
 CMD_NAME="${1}"
 case "${CMD_NAME}" in
    prepare) WORK_DIR="${2}"; DESCRIPTION="准备工作: 准备安装程序，准备镜像目录结构，Overlay目录等.";;
-   modules) WORK_DIR="${2}"; RE_EXTRAMODULES="y"; DESCRIPTION="在工作目录 ${WORK_DIR} 下制作独立程序模块：安装后用 mksquash 压缩." ;;
+   solemodules) WORK_DIR="${2}"; RE_EXTRAMODULES="y"; DESCRIPTION="在工作目录 ${WORK_DIR} 下制作独立程序模块：安装后用 mksquash 压缩." ;;
    install) WORK_DIR="${2}"; RE_EXTRAMODULES="n" ; DESCRIPTION="将程序清单或者附加模块指定的程序安装到工作目录${WORK_DIR}." ;;
    squash) WORK_DIR="${2}"; RE_EXTRAMODULES="n"; DESCRIPTION="将工作目录 ${WORK_DIR} 中的程序用 mksquash 压缩为模块." ;;
    core_module) WORK_DIR="${2}"; DESCRIPTION="创建 archlive 基本模块到工作目录 ${WORK_DIR} 下指定位置." ;;
@@ -390,7 +390,7 @@ echo "                 目标镜像类型:  ${IMG_TYPE}"
 echo "                     标镜像名:  ${IMGNAME}"
 echo "                     启动程序:  ${BOOT}"
 fi
-if [ "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "modules" -o "${CMD_NAME}" = "all" ]; then
+if [ "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" ]; then
 echo "                     模块类型:  ${EXT}"
 fi
 if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
@@ -408,7 +408,7 @@ fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "all" ]; then
 echo " 需要制作的模块为: $(echo ${MODULES} | tr -s "\n" " ")"
 fi
-if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "modules" -o "${CMD_NAME}" = "all" ]; then
+if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" ]; then
 echo "  需要制作的附加独立程序模块为: $(echo ${EXTRAMODULES} | tr -s "\n" " ")"
 fi
 echo ""
@@ -661,6 +661,8 @@ function sync_database () {
    msg2 "将Arch软件仓库信息更新到${SYNC} ..."
    [ ! -d ${SYNC} ] && mkdir -p "${SYNC}"
 
+   [ ! -d ${UNION} ] && mkdir -p "${UNION}"
+
    [ "x$(grep $UNION /proc/mounts)" != "x" ] && umount -l ${UNION}
 
    mount_aufs_w "${SYNC}"
@@ -693,21 +695,26 @@ function pac_install () {
    while true; do
 	$PACMAN -S -f $pkgname --needed --noconfirm --config "${PACMANCONF}" \
 			-r "$UNION"  2>&1 | tee -a ${BUILDLOG}/${mod}-current.log
+
 	if [ $? -ne 0 ]; then
-		if [ "x$(grep $pkgname ${PACKLIST}/available.list)" != "x" ]; then
-			error "安装$pkgname出错"
-			cat ${BUILDLOG}/${mod}-current.log >> ${BUILDLOG}/${mod}-errors.log
-			break
-		else
-			if [ $(echo $pkgname | grep "-") ]; then
-				error "现有软件仓中无 $pkgname, 去掉 -* 后再查找"
-				pkgname=${pkgname%-*}
+		pkgname=${pkgname/-d /}
+		for pkg in $pkgname; do
+			if [ "x$(grep $pkgname ${PACKLIST}/available.list)" != "x" ]; then
+				error "安装$pkgname出错"
+				cat ${BUILDLOG}/${mod}-current.log >> ${BUILDLOG}/${mod}-errors.log
+				break
 			else
-				error "现有软件仓中无 $pkgname, 忽略"
+				if [ $(echo $pkgname | grep "-") ]; then
+					error "现有软件仓中无 $pkgname, 去掉 -* 后再查找"
+					pkgname=${pkgname%-*}
+				else
+					error "现有软件仓中无 $pkgname, 忽略"
+				fi
+				break
 			fi
-		fi
+		done
 	else
-		#green "软件包${pkgname} 安装成功! "
+		green "软件包${pkgname/-d /} 安装成功! "
 		break
 	fi
    done
@@ -741,12 +748,14 @@ function pac_clean () {
    for tmp in "$(find ${MODULEDIR} -type f -name .wh.* )"; do [ "x$tmp" != "x" ] && rm -f $tmp; done
    green "完成!"
 
-   plain -n "删除为宿主系统创建的内核镜像文件..."
-   default_image=$(grep "default_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
-   fallback_image=$(grep "fallback_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
-   [ "x${default_image}" != "x" ] && rm -f "${INSTROOT}${default_image}"
-   [ "x${fallback_image}" != "x" ] && rm -f "${INSTROOT}${fallback_image}"
-   green "完成!"
+   if [ "${CMD_NAME}" != "solemodules" ]; then
+	plain -n "删除为宿主系统创建的内核镜像文件..."
+	default_image=$(grep "default_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
+	fallback_image=$(grep "fallback_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
+	[ "x${default_image}" != "x" ] && rm -f "${INSTROOT}${default_image}"
+	[ "x${fallback_image}" != "x" ] && rm -f "${INSTROOT}${fallback_image}"
+	green "完成!"
+   fi
 
    plain -n "删除pamcan产生的垃圾文件..."
    for tmp in "$(find ${MODULEDIR} -name *.pacnew -name *.pacsave -name *.pacorig)"; do [ "x$tmp" != "x" ] && rm -f $tmp; done
@@ -781,11 +790,22 @@ cmd_extramodules_install () {
 
    msg2 "开始制作附加程序模块——每个模块只有一个软件"
 
+    # 初始化文件夹
+   [ ! -d ${MODULEDIR} ] && mkdir -p "${MODULEDIR}"
+   if [ "${CMD_NAME}" = "solemodules" ]; then
+	[ -d ${BUILDLOG} ] && rm -R ${BUILDLOG}
+	mkdir -p ${BUILDLOG}
+	chmod 777 ${BUILDLOG}
+	[ -d ${PACKLIST} ] && rm -R ${PACKLIST}
+	mkdir -p ${PACKLIST}
+	chmod 777 ${PACKLIST}
+   fi
+
    if [ "${RE_EXTRAMODULES}" != "y" ]; then umount -l ${UNION}; fi
    # 初始化附加模块安装目录
    [ -d ${EXTRA_MODULES_INS_DIR} ] && rm -rf ${EXTRA_MODULES_INS_DIR} && mkdir -p ${EXTRA_MODULES_INS_DIR}
    # 如果只是独立制作模块需要单独更新软件仓库信息
-   if [ "${CMD_NAME}" = "modules" ] || [ "${RE_EXTRAMODULES}" != "y" ]; then
+   if [ "${CMD_NAME}" = "solemodules" ] || [ "${RE_EXTRAMODULES}" != "y" ]; then
 	sync_database
    fi
 
@@ -794,7 +814,7 @@ cmd_extramodules_install () {
 	[ ! -d ${EXTRA_MODULES_INS_DIR}/${mod} ] && mkdir -p ${EXTRA_MODULES_INS_DIR}/${mod}
 	remount_aufs_w ${EXTRA_MODULES_INS_DIR}/${mod}
 	[ "x$mod" = "x" ] && continue
-	pkgname=" -d $mod"
+	pkgname="-d $mod"
 	pac_install
 	#再只读挂载
 	remount_aufs_r ${EXTRA_MODULES_INS_DIR}/${mod}
@@ -1021,7 +1041,7 @@ cmd_install ()
 }
 
 function mksquashfs_module () {
-   plain -n "将${1}用$MKSQUASHFS进行压缩..."
+   plain -n "将${1} 用 $MKSQUASHFS 进行压缩..."
    [ -d ${1}/usr/share/fonts ] && chmod 755 ${1}/usr/share/fonts
    [ -d ${1}/etc/fonts ] && chmod 755 ${1}/etc/fonts
    OPTION="-noappend ${OPTION}"
@@ -1451,7 +1471,7 @@ cmd_img () {
 case ${CMD_NAME} in
 	prepare) cmd_prepare ;;
 	install) cmd_prepare; cmd_install ;;
-	modules) prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash ;;
+	solemodules) prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash ;;
 	squash) cmd_squash ;;
 	bootimage) cmd_boot_kernel_image ;;
 	core_module) cmd_base_module ;;
