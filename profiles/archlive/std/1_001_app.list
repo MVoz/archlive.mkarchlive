@@ -64,7 +64,7 @@ pacbuilder-svn
 # A few tools to help Arch Linux developers   0.10MB
 #aurtools
 # Tools for TUs and Developers for manipulating the community repo   0.01MB
-pkgtools
+#pkgtools-git
 # A collection of scripts for Arch Linux packages  0.14MB
 #
 #gdb
@@ -323,7 +323,7 @@ macchanger
 #
 wgetpaste
 cdargs
-vifm
+vifm-git
 #lftp
 # 依赖于 libtash1 gnutls   总7.75MB
 # Sophisticated command line based FTP client   1.29MB

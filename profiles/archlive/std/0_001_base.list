@@ -260,7 +260,6 @@ xfsprogs
 unrar
 unzip
 # 用busybox代替
-zip
 lha
 lzop
 p7zip
