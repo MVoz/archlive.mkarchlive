@@ -1241,7 +1241,7 @@ cmd_boot_kernel_image () {
 	plain "创建启动内核镜像可能要好几分钟时间，请稍候..."
    fi
    sh $MKINITCPIO -c "${CPIOCONFIG}" -b "${basedir}" -k "${kernelver}" -g \
-		"${IMGROOT}/${CDNAME}/boot/archlive.img" ${append_cmd}
+		"${IMGROOT}/${CDNAME}/boot/archlive.img" | tee -a ${LOG}
    if [ $? -ne 0 ]; then
 	error "错误: 内核镜像创建失败..." | tee -a ${LOG}
 	usage 1
@@ -1349,7 +1349,7 @@ cmd_base_module (){
 	error "工作目录下还没有安装有内核程序包的模块，或者安装不完整..." | tee -a ${LOG}
 	exit 1
    fi
-   plain "目标系统内核安装于$basedir，内核版本为${kernelver}" >> ${LOG}
+   plain "目标系统内核安装于$basedir，内核版本为${kernelver}" | tee -a ${LOG}
 
    msg2 "拷贝内核模块：文件系统、设备驱动等..." | tee -a ${LOG}
    kernel_modules_dir="lib/modules/${kernelver}"
@@ -1472,7 +1472,7 @@ cmd_img () {
    if [ "$BOOT" = "syslinux" -o "$BOOT" = "isolinux" ]; then
 	export bootfile_dir
 	[ ! -d ${IMGROOT}/boot/isolinux ] && mkdir -p ${IMGROOT}/boot/isolinux
-	boot_mod=$(basename "$(grep "syslinux" `find ${PACKLIST} -name "*.new"` |head -1)" .new:syslinux)
+	boot_mod=$(basename "$(grep "syslinux" `find ${PACKLIST} -name "*.new"` |head -1)" ".new:syslinux")
 	bootfile_dir=${MODULEDIR}/${boot_mod}/usr/lib/syslinux
 	if [ -f ${bootfile_dir}/isolinux.bin ]; then
 		cp -f ${bootfile_dir}/*.* ${IMGROOT}/boot/isolinux/
