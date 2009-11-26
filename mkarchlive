@@ -38,6 +38,7 @@
 #
 APPNAME=$(basename "${0}")
 cmdline=$@
+time=5
 
 # 消息提示风格, 默认 有颜色输出
 export COLOR=y
@@ -345,14 +346,14 @@ PACKLIST="${WORK_DIR}/list"
 # 附加模块清单（最终，包含版本信息）
 EXTRA_MODULE_LIST=${PACKLIST}/extra_module.list
 
-# 安装清理删除的文件、目录
-CLEANED_LIST=${PACKLIST}/cleaned.list
-
 # 模块安装日志存放目录
 BUILDLOG="${WORK_DIR}/log"
 # 该目录下
 # -current.log 为目前正进行操作的日志
 #  -errors.log 为对应模块安装错误日志
+
+# 安装清理删除的文件、目录
+CLEANED_LIST=${BUILDLOG}/cleaned.list
 
 # 宿主系统可用执行程序
 HOST_CMD="${WORK_DIR}/host_cmd_list"
@@ -381,7 +382,7 @@ else
 	host_pacman_version=$(pacman -V | grep "Pacman" | head -1 | tr -s " " | cut -d " " -f4)
 fi
 
-sleep 5
+sleep $time
 echo "---------------------------------------------------------------------------------"
 hgreen "               *** ${APPNAME} 程序设置结果： ***"
 echo ""
@@ -428,7 +429,7 @@ echo ""
 hgreen "***  如果以上不是你想要的，Ctrl+C 终止程序的执行，并检测相关配置文件.  ***"
 echo -n "                            "; yellow "5 秒后开始程序"
 echo "---------------------------------------------------------------------------------"
-sleep 5
+sleep $time
 echo ""
 msg "现在开始执行 ${APPNAME} ${CMD_NAME}"
 echo ""
@@ -812,7 +813,10 @@ function pac_clean () {
    plain -n "删除指定的文件夹..." | tee -a ${CLEANED_LIST}
    kill_dirs="dev var/cache/man var/cache/pacman var/log/* var/mail tmp/* initrd ${DELDIR}"
    for tmp_dir in ${kill_dirs}; do
-	for tmp in $(find ${MODULEDIR} -type d -name "$(basename ${tmp_dir})" | grep "${tmp_dir}");do rm_tmp; done
+	for mod in ${MODULES}; do
+		tmp=${MODULEDIR}/${mod}/${tmp_dir}
+		rm_tmp
+	done
    done
    green "完成!" | tee -a ${CLEANED_LIST}
 
