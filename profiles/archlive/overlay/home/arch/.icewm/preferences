@@ -1,0 +1,314 @@
+# Command to shutdown the system
+ShutdownCommand="sudo /sbin/shutdown -h now"
+# Command to reboot the system
+RebootCommand="sudo /sbin/shutdown -r now"
+
+ShowProgramsMenu=1
+
+#让ICEWM支持滚轮鼠标
+UseMouseWheel=1
+
+#窗口行为部分：
+# 只有鼠标点击才能选择一个窗口
+ClickToFocus = 1 #0/1
+
+# 窗口被选择时将窗口放到最前面
+RaiseOnFocus = 1  #0/1 
+
+#点击时才选择窗口
+FocusOnClickClient = 1  #0/1 
+
+#点击时将窗口拉到最前端
+RaiseOnClickClient = 1  #0/1 
+
+#点击窗口条将窗口拉到最前端
+RaiseOnClickTitleBar = 1 #0/1 
+
+#点击按钮时将窗口拉到最前端
+RaiseOnClickButton = 1  #0/1 
+
+#点击窗口周围边框时，将窗口拉至最前端
+RaiseOnClickFrame = 1  #0/1 
+
+# 当点击能将窗口拉至前端，同时还将点击的消息传给按键
+PassFirstClickToCient = 1 #0/1 
+
+#自动将窗口拉至前端假如被选择
+AutoRaise = 0  #0/1 
+
+#自动将窗口选择假如鼠标停留在此窗口上
+StrongPointerFocus = 0  #0/1 
+
+#是否用Alt+Tab来选择窗口（象windoz那样）
+QuickSwitch = 1  #0/1 
+
+#是否用Alt+Tab来选择workspace
+QuickSwitchToAllWorkspaces = 1  #0/1 
+
+#是否win95这三个键有效，假如有效，则分别被映射成metaL metaR 和menu
+Win95Keys = 1  #0/1 
+
+#是否自动读取menu配置文档当menu主菜单被按下时
+AutoReloadMenus = 1  #0/1 
+
+#是否显示Theme子菜单在menu主菜单里
+ShowThemesMenu = 1  #0/1 
+
+#  Enable address bar functionality in taskbar
+EnableAddressBar=1 # 0/1
+
+#  Show address bar in task bar
+ShowAddressBar=1 # 0/1
+
+#是否显示任务条
+ShowTaskBar = 1  #0/1 
+
+#显示任务条在顶端（否则在底部）
+TaskBarAtTop = 1   #0/1 
+
+#同理于windows下的“总是在最前端”
+TaskBarKeepBelow = 1  #0/1 
+
+#  Auto hide task bar after delay
+TaskBarAutoHide=0 # 0/1 
+
+# 同理于windows下的"开始"
+TaskBarShowStartMenu = 1  #0/1 
+
+#显示工作区选择按钮（用过gnome的都知道有4个工作区吧）
+#TaskBarshowWorkspaces = 0/1 
+
+#显示时间
+#TaskBarShowClock = 0/1 
+
+#显示时间为电子表的数字形式
+#TaskBarClockLeds = 0/1 
+
+#  Show APM status on task bar
+TaskBarShowAPMStatus=0 # 0/1
+
+#  Show APM status on task bar in time-format
+TaskBarShowAPMTime=0 # 0/1
+
+#显示邮件箱状态，具体根据$MAIL决定
+#TaskBarShowMailboxStatus = 0/1 
+
+#假如有新邮件到达喇叭叫
+TaskBarMailboxStatusBeepOnNewMail = 0  #0/1 
+
+#当鼠标移动当mail标志时，会显示受到的mail数目
+TaskBarMailboxSTatusCountMessages = 0  # 0/1 
+
+#  Show workspace switching buttons on task bar
+TaskBarShowWorkspaces=1 # 0/1
+
+#  Show windows on the taskbar
+TaskBarShowWindows=1 # 0/1
+
+#  Show 'show desktop' button on taskbar
+TaskBarShowShowDesktopButton=1 # 0/1 
+
+#  Show windows in the tray
+TaskBarShowTray=1 # 0/1
+
+#  Show windows from all workspaces on tray
+TrayShowAllWindows=1 # 0/1
+
+#  Show windows from all workspaces on task bar
+TaskBarShowAllWindows=0 # 0/1
+
+#  Show icons of windows on the task bar
+TaskBarShowWindowIcons=1 # 0/1 
+
+#  Show 'Start' menu on task bar
+TaskBarShowStartMenu=1 # 0/1
+
+#  Show 'window list' menu on task bar
+TaskBarShowWindowListMenu=1 # 0/1
+
+#  Show CPU status on task bar (Linux             & Solaris)
+TaskBarShowCPUStatus=1 # 0/1
+
+#  Show network status on task bar (Linux only)
+TaskBarShowNetStatus=1 # 0/1
+
+#  Use double-height task bar
+TaskBarDoubleHeight=0 # 0/1 
+
+#  Place workspace pager on left, not right
+TaskBarWorkspacesLeft=1 # 0/1
+
+#  Execute taskbar applet commands (like MailCommand,     ClockCommand,   ...) on single click
+TaskBarLaunchOnSingleClick=1 # 0/1
+
+#  Move mouse when doing focusing in pointer focus mode
+WarpPointer=0 # 0/1
+
+#  Allow mouse actions on client windows (buggy with some programs)
+ClientWindowMouseActions=1 # 0/1
+
+#  Show programs submenu
+ShowProgramsMenu=0 # 0/1
+
+#  Show themes submenu
+ShowThemesMenu=1 # 0/1
+
+#  Show logout menu
+ShowLogoutMenu=1 # 0/1
+
+#  Show the help menu item
+ShowHelp=0 # 0/1
+
+#  Show logout submenu
+ShowLogoutSubMenu=1 # 0/1
+
+#  Show the about menu item
+ShowAbout=1 # 0/1
+
+#  Show the run menu item
+ShowRun=1 # 0/1
+
+#  Show the window menu item
+ShowWindowList=1 # 0/1
+
+#  Allow to switch a window to fullscreen
+AllowFullscreen=1 # 0/1
+
+#  Enable address bar functionality in taskbar
+EnableAddressBar=0 # 0/1
+
+#  Show address bar in task bar
+ShowAddressBar=1 # 0/1
+
+#  Overrides automatic multiple byte detection
+MultiByte=1 # 0/1
+
+#  Confirm logout
+ConfirmLogout=1 # 0/1
+
+#  Don't cut client windows by shapes set trough frame corner pixmap
+ShapesProtectClientWindow=1 # 0/1
+
+#  Use double buffering when redrawing the display
+DoubleBuffer=1 # 0/1
+
+#  Pointer motion distance before click gets interpreted as drag
+ClickMotionDistance=4 # [0-32]
+
+#  Delay before click gets interpreted as drag
+ClickMotionDelay=200 # [0-2000]
+
+#  Multiple click time
+MultiClickTime=400 # [0-5000]
+
+#  Delay before activating menu items
+MenuActivateDelay=0 # [0-5000]
+
+#  Delay before activating menu submenus
+SubmenuMenuActivateDelay=0 # [0-5000]
+
+#  Maximal width of popup menus,  2/3 of the screen's width if set to zero
+MenuMaximalWidth=0 # [0-16384]
+
+#  Delay before tooltip window is displayed
+ToolTipDelay=600 # [0-5000]
+
+#  Time before tooltip window is hidden (0 means never
+ToolTipTime=0 # [0-60000]
+
+#  Delay before task bar is automatically hidden
+AutoHideDelay=300 # [0-5000]
+
+#  Delay before windows are auto raised
+AutoRaiseDelay=400 # [0-5000]
+
+#  Resistance in pixels when trying to move windows off the screen (10000 = infinite)
+EdgeResistance=32 # [0-10000]
+
+#  Delay for pointer focus switching
+PointerFocusDelay=200 # [0-1000]
+
+#  Distance in pixels before windows snap together
+SnapDistance=8 # [0-64]
+
+#  Screen edge workspace switching delay
+EdgeSwitchDelay=600 # [0-5000]
+
+#  Inital scroll bar autoscroll delay
+ScrollBarStartDelay=500 # [0-5000]
+
+#  Scroll bar autoscroll delay
+ScrollBarDelay=30 # [0-5000]
+
+#  Auto scroll start delay
+AutoScrollStartDelay=500 # [0-5000]
+
+#  Auto scroll delay
+AutoScrollDelay=60 # [0-5000]
+
+#  Time before workspace status window is hidden
+WorkspaceStatusTime=2500 # [0-2500]
+
+#  Bitmask of root window button click to use in window manager
+UseRootButtons=255 # [0-255]
+
+#  Bitmask of buttons that raise the window when pressed
+ButtonRaiseMask=1 # [0-255]
+
+#  Desktop mouse-button click to show the window list menu
+DesktopWinMenuButton=1 # [0-20]
+
+#  Desktop mouse-button click to show the window list
+DesktopWinListButton=2 # [0-20]
+
+#  Desktop mouse-button click to show the root menu
+DesktopMenuButton=3 # [0-20]
+
+#  TitleBar mouse-button double click to maximize the window
+TitleBarMaximizeButton=1 # [0-5]
+
+#  TitleBar mouse-button double click to rollup the window
+TitleBarRollupButton=2 # [0-5]
+
+#  Preselect to Cancel (0) or the OK (1) button in message boxes
+MsgBoxDefaultAction=0 # [0-1]
+
+#  Delay between new-mail checks. (seconds)
+MailCheckDelay=30 # [0-86400]
+
+#  Width of CPU Monitor
+TaskBarCPUSamples=20 # [2-1000]
+
+#  Delay between CPU Monitor samples in ms
+TaskBarCPUDelay=500 # [10-3600000]
+
+#  Width of Net Monitor
+TaskBarNetSamples=20 # [2-1000]
+
+#  Delay between Net Monitor samples in ms
+TaskBarNetDelay=500 # [10-3600000]
+
+#  Primary screen for xinerama (taskbar, ...)
+XineramaPrimaryScreen=0 # [0-63]
+
+#  Number of seconds the taskbar app will blink when requesting focus
+FocusRequestFlashTime=86400 # [0-86400]
+
+#  Minimal number of themes after which the Themes menu becomes nested (0=disabled)
+NestedThemeMenuMinNumber=0 # [0-1234]
+
+#图标的路径
+IconPath = "/usr/share/pixmaps:/usr/share/gnome/pixmaps:/usr/share/IceWMCP/pixmaps:/usr/X11R6/include/X11/pixmaps"
+
+#能够填写标准scheme格式的收邮件地址
+#MailBoxPath = "" 
+#[url=scheme://%5Buser:password%5D@server%5B:port%5D%5B/path%5D]scheme://[user:password]@server[:port][/path][/url]
+
+TaskBarShowMailboxStatus = 0
+TaskBarMailboxStatusBeepOnNewMail = 0
+TaskBarMailboxStatusCountMessages = 0
+MailCheckDelay=0
+#MailBoxPath = "imap://liangzhdp:xxxxxx@imap.gmail.com:993/" 
+
+#MailCommand = "xterm -title "alpine" -e alpine"
+# 收取邮件的软件， 默认为pine

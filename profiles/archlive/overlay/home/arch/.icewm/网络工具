@@ -1,0 +1,9 @@
+prog Firefox网络浏览 /usr/share/pixmaps/firefox.png firefox
+prog Pidgin网络通讯 /usr/share/pixmaps/pidgin/logo.png pidgin
+prog Skype网络聊天 /usr/share/pixmaps/skype.png skype
+prog Xchat交流 /usr/share/pixmaps/xchat.png xchat
+prog 腾讯QQ /usr/share/tencent/qq/qq.png qq
+prog 奔流BT下载 /usr/share/pixmaps/benliud.png /usr/share/benliud/benliud
+prog Grdc远程桌面客户端 /usr/share/pixmaps/grdc.png grdc
+prog SSH代理 xxx tsocks opera
+prog gsopcast xxx gsopcasst

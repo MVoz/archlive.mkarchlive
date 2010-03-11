@@ -1,0 +1,33 @@
+%NAME%
+gnome-icon-theme
+
+%VERSION%
+2.28.0-1
+
+%DESC%
+Default icon theme for GNOME2
+
+%GROUPS%
+gnome
+
+%URL%
+http://www.gnome.org
+
+%LICENSE%
+GPL
+
+%ARCH%
+any
+
+%BUILDDATE%
+1253726937
+
+%INSTALLDATE%
+1255798113
+
+%PACKAGER%
+Jan de Groot <jgc@archlinux.org>
+
+%SIZE%
+21434368
+

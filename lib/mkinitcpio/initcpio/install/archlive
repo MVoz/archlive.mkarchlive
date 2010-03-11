@@ -1,0 +1,47 @@
+install ()
+{
+    MODULES="cdrom ide-cd_mod ide-core ide-generic loop nls_cp936 nls_utf8 $(all_modules 'kernel/fs' | grep -v "nls")"
+
+    # usb, mmc, memstick support
+    MODULES="${MODULES} $(checked_modules "/usb/host" | grep -ve "_cs" -e "sl1811-hcd" -e "isp116x-hcd") usb_storage"
+    MODULES="${MODULES} $(all_modules '/mmc/host') mmc_block sdhci-pci sd_mod sr_mod"
+    MODULES="${MODULES} $(all_modules '/memstick/host')"
+    #pcmcia support
+    MODULES="${MODULES} pcmcia rsrc_nonstatic yenta_socket"
+
+    # 网卡驱动模块等
+#    MODULES="${MODULES} $(all_modules '/net/wireless') $(all_modules '/net/usb')"
+
+    MODULES="${MODULES} r8169 ath5k iwl3945"
+
+#    MODULES="${MODULES} 3c501 3c503 3c505 3c507 3c509 3c515 3c59x 8139too 8139cp \
+#	ac3200 acenic at1700 atl1c de620 eepro e2100 epic100 hp100 ne2k-pci pcnet32 \
+#	r8169 skge sky2 smc-ultra sis900 smc9194 smsc9420 tg3 via-rhine yellowfin \
+#	dl2k ns83820 depca cs89x0 de4x5 de600 de620 e2100 eepro eexpress eth16i \
+#	ewrk3 forcedeth hp-plus hp ni52 ni65 sb1000 wd"
+
+    MODULES="${MODULES} pppoe"
+
+    #trim whitespace
+    MODULES=$(echo ${MODULES}) 
+    
+    BINARIES="mount.aufs umount.aufs"
+    BINARIES="${BINARIES} iwconfig iwlist dhcpcd"
+
+    add_binary "$CWD/initcpio/busybox" "/bin/busybox"
+    add_binary "$CWD/initcpio/ipconfig" "/bin/ipconfig"
+    add_binary "$CWD/initcpio/nfsmount" "/bin/nfsmount"
+    add_binary "$CWD/initcpio/mount.cifs" "/bin/mount.cifs"
+    add_binary "$CWD/initcpio/umount.cifs" "/bin/umount.cifs"
+    add_file "$CWD/initcpio/liblinuxlive" "/usr/lib/liblinuxlive"
+    add_file "$CWD/initcpio/cleanup" "/cleanup"
+    add_file "$CWD/initcpio/init_functions" "/init_functions"
+    add_file "$CWD/initcpio/init" "/init"
+
+    FILES=""
+#    add_dir /real_root
+#    add_dir /tmpfs
+#    add_dir /bootmnt
+    add_dir /tmp
+    SCRIPT="archlive"
+}

@@ -1,0 +1,5 @@
+prog Mplayer媒体播放器 /usr/share/pixmaps/mplayer.xpm gmplayer %F
+prog VLC媒体播放器 /usr/share/vlc/vlc48x48-christmas.png vlc %U
+prog Streamtuner网络收音机 /usr/share/pixmaps/streamtuner.png streamtuner
+prog Gmlive网络电视 /usr/share/pixmaps/gmlive.png gmlive
+prog Audacious音乐播放 /usr/share/pixmaps/audacious.png audacious %U

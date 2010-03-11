@@ -1,0 +1,76 @@
+ThemeDescription="VistaBlue-Velvet"
+ThemeAuthor="Warren Willson aka WhoDo - December 2007"
+Look=flat
+
+TaskBarShowTray=1 # 0/1
+TrayDrawBevel=1 # 0/1
+
+# Background
+DesktopBackgroundColor="#3A6EA5"
+
+# Window
+BorderSizeX=2
+BorderSizeY=2
+ColorActiveBorder="#999999"
+ColorNormalBorder="#555555"
+CornerSizeX=32
+CornerSizeY=32
+
+# Key Stuff
+ModSuperIsCtrlAlt=1
+Win95Keys=1
+
+# icewm generic
+ColorActiveButton="#FF0000"
+ColorActiveButtonText="#FFFFFF"
+ColorNormalButton="#0000FF"
+ColorNormalButtonText="#FFFFFF"
+
+# Titlebar
+ColorActiveTitleBar="#0072D0"
+ColorActiveTitleBarText="#FFFFFF"
+ColorNormalTitleBar="#D2D2D3"
+ColorNormalTitleBarText="#000000"
+
+RolloverButtonsSupported=1
+ShowMenuButtonIcon=1
+TitleBarHeight=22
+TitleBarHorzOffset=16
+#TitleButtonsLeft="s"
+TitleButtonsRight="xmi"
+TitleButtonsSupported="sdhxmir"
+TitleFontName="-*-tahoma-medium-r-*-*-12-*-*-*-*-*-*-*"
+TitleFontNameXft="Arial:size=10,sans-serif:size=10"
+
+# Taskbar
+ActiveTaskBarFontName="-*-tahoma-medium-r-*-*-12-*-*-*-*-*-*-*"
+ActiveTaskBarFontNameXft="tahoma:size=10,Verdana:size=10,Arial:size=10,sans-serif:size=10"
+ColorActiveTaskBarAppText="#FFFFFF"
+ColorActiveTaskBarApp="#008aef"
+ColorMinimizedTaskBarApp="#000000"
+ColorMinimizedTaskBarAppText="#F0FFFF"
+ColorNormalTaskBarAppText="#FFFFFF"
+ColorNormalTaskBarApp="#0000FF"
+ColorCPUStatusIdle=""
+NormalTaskBarFontName="-*-arial-medium-r-*-*-12-*-*-*-*-*-*-*"
+NormalTaskBarFontNameXft="Arial:size=10,sans-serif:size=10"
+
+# Menu
+ColorActiveMenuItemText="#001c9e"
+ColorDisabledMenuItemText="#808080"                                        
+ColorNormalMenu="#004dcf"
+ColorNormalMenuItemText="#FFFFFF"
+MenuFontName="-*-tahoma-medium-r-*-*-12-*-*-*-*-*-*-*"
+MenuFontNameXft="Tahoma:size=10,sans-serif:size=10"
+
+# Tooltips
+ColorToolTip="#FFE280"
+ToolTipFontName="-*-tahoma-medium-r-*-*-12-*-*-*-*-*-*-*"
+ToolTipFontNameXft="Tahoma:size=10,Verdana:size=10,Arial:size=10,sans-serif:size=10"
+
+# Clock
+ClockFontName="-*-tahoma-medium-r-*-*-12-*-*-*-*-*-*-*"
+ClockFontNameXft="Tahoma:size=10,Verdana:size=10,Arial:size=10,sans-serif:size=10"
+ColorClock=""
+ColorClockText="#FFFFFF"
+TimeFormat="%R"

@@ -1,0 +1,375 @@
+MenuStyle * Hilight3DThin, PopupOffset +0 100, PopupDelay 100
+MenuStyle * Font "Shadow=0 se:xft:WenQuanYi Bitmap Song:encoding=zh_CN.UTF-8:size=9"
+MenuStyle * MenuColorset 2, HilightBack, ActiveColorset 7 
+MenuStyle * BorderWidth 1, TitleUnderlines2, SeparatorsLong, Animation, TrianglesSolid
+MenuStyle * ItemFormat "%.2|%.5i%.5l%.5i%2.3>%2|"
+MenuStyle * AutomaticHotKeys
+
+#### menu
+DestroyMenu MenuFvwmWindowOps
+AddToMenu MenuFvwmWindowOps
++	"Identify"			Pick Module FvwmIdent
++	"Pick Stick"			Pick Stick
++	"关闭"				Close
+
+###################################################################
+##---------------------------------------------------------------##
+### Menu						   	###
+##---------------------------------------------------------------##
+###################################################################
+
+DestroyMenu MenuFvwmRoot
+AddToMenu MenuFvwmRoot	
++   	"网络工具"%$[fvwm_icon_path]/internet.png%		Popup MenuInternet
++   	"多媒体工具"%$[fvwm_icon_path]/multimedia.png%	Popup MenuMultimedia
+#+	"游戏"%$[fvwm_icon_path]/game.png%			Popup MenuGames
+#+	"编程工具"%$[fvwm_icon_path]/development.png%	Popup MenuProgramming
++   	"系统工具"%$[fvwm_icon_path]/system.png%		Popup MenuSystem
++   	"办公软件"%$[fvwm_icon_path]/office.png%		Popup MenuOffice
++	"附件"%$[fvwm_icon_path]/accessory.png%		Popup MenuAccesories
++   	""							Nop
++   	"&Lxterminal终端"%$[fvwm_icon_path]/lxterminal.png%	Exec exec lxterminal
++	"Gparted分区"%$[fvwm_icon_path]/gparted.png%	Exec exec sudo gparted
++	"安装Archlinux"%$[fvwm_icon_path]/install.png%	Exec exec sudo larchin.py
++   	""							Nop
++   	"杀掉所有进程"%$[fvwm_icon_path]/kill.png%		Pick Destroy
++   	"重新启动"%$[fvwm_icon_path]/restart.png%		Restart
++   	"退出FVWM"%$[fvwm_icon_path]/exit.png%		Exit
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuAccesories
+AddToMenu MenuAccesories
+#+	"= 附件 ="
++   	"Rox"%$[fvwm_icon_path]/rox.png%			Exec exec rox
++   	"PCManFM"%$[fvwm_icon_path]/pcmanfm.png%		Exec exec pcmanfm
++   	"Xfe"%$[fvwm_icon_path]/rox.png%			Exec exec xfe
++	"桌面嵌入终端"%$[fvwm_icon_path]/lxterminal.png%	Exec exec urxvt -g 153x44+259+160 -name work -tr +sb -rv -fg white
+#+	"GVim"%$[fvwm_icon_path]/vim.png%			Exec exec gvim
++	""							Nop
++	"计算器"%$[fvwm_icon_path]/calc.png%		Exec exec gcalctool
++	"Leafpad"%$[fvwm_icon_path]/gedit.png%		Exec exec leafpad
+#+	"Seahorse"%$[fvwm_icon_path]/keys.png%		Exec exec seahorse
++	"Xarchiver"%$[fvwm_icon_path]/file-roller.png%	Exec exec xarchiver
+#+	"Printing"%$[fvwm_icon_path]/printer.png%		Exec exec /usr/bin/system-config-printer-applet --no-tray-icon
+
+DestroyMenu MenuSystem
+AddToMenu MenuSystem
+#+   	"= 系统工具 ="						Title Setup
++   	"&Home"%$[fvwm_icon_path]/rox.png%			Exec exec rox ~
++   	"&终端"%$[fvwm_icon_path]/lxterminal.png%		Exec exec lxterminal
+#+   	"VM&ware"%$[fvwm_icon_path]/vmware.png%			Exec exec vmware
+#+	"Wine Configuration"%$[fvwm_icon_path]/wine.png%	Exec exec winecfg
+#+	"Browse C:"%$[fvwm_icon_path]/wine.png%			Exec exec rox ~/.wine/drive_c
+#+   	""							Nop
++   	"抓屏"%$[fvwm_icon_path]/screenshot.png%		Exec exec $[fvwm_script_path]/screenshot.sh
+#+   	"FontViewer"%$[fvwm_icon_path]/rox.png%			Exec exec gnome-font-viewer
++	"Gparted分区"%$[fvwm_icon_path]/gparted.png%		Exec exec sudo gparted
++	"安装Archlinux"%$[fvwm_icon_path]/install.png%		Exec exec sudo larchin.py
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuOffice
+AddToMenu MenuOffice
+#+   	"     = 办公软件 =     "					Title Biuro
++	"Open Office"%$[fvwm_icon_path]/ooffice.png%		Exec exec ooffice
++   	"Writer"%$[fvwm_icon_path]/oowriter.png%			Exec exec oowriter
++   	"Calc"%$[fvwm_icon_path]/oocalc.png%			Exec exec oocalc
++	"Impress%$[fvwm_icon_path]/ooimpress.png%			Exec exec ooimpress
++	"Draws%$[fvwm_icon_path]/oodraw.png%			Exec exec oodraw
++	"永中Office%$[fvwm_icon_path]/ese.png%			Exec exec eio
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuInternet
+AddToMenu MenuInternet
+#+   	"= 网络工具="						Title Internet
++	"Wicd网络设置%$[fvwm_icon_path]/wicd-client.png%		Exec exec wicd-client
++   	"Firefox网络浏览"%$[fvwm_icon_path]/firefox.png%		Exec exec firefox
++   	""							Nop
++   	"Pidgin聊天"%$[fvwm_icon_path]/pidgin.png%			Exec exec pidgin
++   	"Xchat交流"%$[fvwm_icon_path]/xchat.png%			Exec exec xchat
++   	"Skype聊天"%$[fvwm_icon_path]/skype.png%			Exec exec skype
++	"QQ聊天"%$[fvwm_icon_path]/qq.png%				Exec exec qq
++   	""							Nop
++	"aMule%$[fvwm_icon_path]/amule.png%			Exec exec amule
++	"奔流BT下载%$[fvwm_icon_path]/benliud.png%			Exec exec amule
+#+	"aMule%$[fvwm_icon_path]/amule.png%			Exec exec amule
+#+	"aMule%$[fvwm_icon_path]/amule.png%			Exec exec amule
+#+   	""							Nop
+#+	"Transmission%$[fvwm_icon_path]/download.png%		Exec exec transmission
+#+	"Frostwire%$[fvwm_icon_path]/limewire.png%		Exec exec /usr/bin/frostwire
+#+	"Nicotine%$[fvwm_icon_path]/nicotine_blue.png%		Exec exec nicotine
+#+   	""							Nop
+#+   	"DSL [Connect]"%$[fvwm_icon_path]/icon.png%		Exec exec /opt/ubudsl/bin/Applet
+#+   	"DSL [Configure]"%$[fvwm_icon_path]/icon.png%		Exec exec /opt/ubudsl/ubudsl
+#+   	"Remote desktops"%$[fvwm_icon_path]/d4x.png%		Exec exec vinagre
+#+   	"TsClient"%$[fvwm_icon_path]/d4x.png% 			Exec exec tsclient
+#+   	"Sun Java 6 Web Start"%$[fvwm_icon_path]/java.png%	Exec exec /usr/lib/jvm/java-6-sun-1.6.0.06/bin/javaws
+#+	"Firestarter%$[fvwm_icon_path]/firestarter.png%		Exec exec gksu /usr/sbin/firestarter
+
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuMultimedia
+AddToMenu MenuMultimedia
+#+   	"= 多媒体工具 ="					Title Multimedia
++	"音量设置"%$[fvwm_icon_path]/v4.png%			Exec exec $[fvwm_terminal] -e alsamixer
++	""							Nop
++   	"MPlayer媒体播放器"%$[fvwm_icon_path]/mplayer.png%		Exec exec gmplayer
++   	"VLC媒体播放器"%$[fvwm_icon_path]/vlc.png%			Exec exec vlc
++   	"Streamtuner网络收音机"%$[fvwm_icon_path]/streamtuner.png%	Exec exec streamtuner
++   	"Gmlive网络电视"%$[fvwm_icon_path]/gmlive.png%			Exec exec gmlive
++   	"Audacious音乐播放"%$[fvwm_icon_path]/audacious.png%		Exec exec audacious
+#+   	"Sonata"%$[fvwm_icon_path]/rhythmbox.png%		Exec exec sonata
+#+	"Sound Recorder"%$[fvwm_icon_path]/sound1.png%	Exec exec gnome-sound-recorder
+#+   	"Ex Falso"%$[fvwm_icon_path]/exfalso.png%		Exec exec exfalso
+#+	"NCMPC"%$[fvwm_icon_path]/bmp.png%		Exec exec $[fvwm_ncmpc] -e ncmpc
+#+   	"Totem"%$[fvwm_icon_path]/totem.png%		Exec exec totem
++   	""							Nop
++	"GpicView图像查看"%$[fvwm_icon_path]/gpicview.png% 	Exec exec gpicview
++	"Comix图像查看"%$[fvwm_icon_path]/comix.png% 		Exec exec comix
++	"FoxitPDF查看器"%$[fvwm_icon_path]/foxitreader.png%  		Exec exec foxitreader %f
++	"Gsnapshot抓屏工具"%$[fvwm_icon_path]/gsnapshot.png% 	Exec exec gsnapshot
++   	"&Gimp图像编辑"%$[fvwm_icon_path]/gimp.png%		Exec exec gimp
+#+   	"Picasa"%$[fvwm_icon_path]/picasa.png%			Exec exec /opt/picasa/bin/picasa
+#+   	"F-spot"%$[fvwm_icon_path]/gphoto.png%			Exec exec f-spot
+#+   	"Eog"%$[fvwm_icon_path]/gqview.png%			Exec exec eog
+#+   	"Xsane"%$[fvwm_icon_path]/xsane.png%			Exec exec xsane
+#+   	""							Nop
+#+   	"Evince"%$[fvwm_icon_path]/pdf.png%			Exec exec evince
+#+   	"K3B"%$[fvwm_icon_path]/k3b.png%			Exec exec k3b
+#+   	"XawTV"%$[fvwm_icon_path]/totem.png%			Exec exec xawtv
+#+   	""							Nop
+#+   	"Drives"%$[fvwm_icon_path]/divers.png%			Popup MenuDrives
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuProgramming
+AddToMenu MenuProgramming
++	"= 编程工具 ="
++	"Asystent Kdevelop"%$[fvwm_icon_path]/"kdevelop.png"% 	Exec exec kdevassistant
++	"Kdevelop: C/C++"%$[fvwm_icon_path]/"kdevelop.png"% 	Exec exec kdevelop --profile CandCppIDE
++	"Kdevelop: KDE/C++"%$[fvwm_icon_path]/"kdevelop.png"% 	Exec exec kdevelop --profile KDECppIDE
++	"Kdevelop: Ruby"%$[fvwm_icon_path]/"kdevelop.png"% 	Exec exec kdevelop --profile RubyIDE
++	"Kdevelop: Scripts"%$[fvwm_icon_path]/"kdevelop.png"% 	Exec exec kdevelop --profile ScriptingLanguageIDE
++	"Kdevelop: MultiLang"%$[fvwm_icon_path]/"kdevelop.png"% Exec exec kdevelop
++	""							Nop		
++	"QT Designer 4"%$[fvwm_icon_path]/"kdevelop.png"%	Exec exec /usr/bin/designer-qt4
++	"Qt 4 Assistant"%$[fvwm_icon_path]/"kdevelop.png"% 	Exec exec /usr/bin/assistant-qt4
++	"Lingwista Qt 4"%$[fvwm_icon_path]/"linguist.png"% 	Exec exec /usr/bin/linguist-qt4
++	""							Nop
++	"Free Pascal IDE"%$[fvwm_icon_path]/"kdevelop.png"% 	Exec exec gnome-terminal -e fp
++	"Kompare"%$[fvwm_icon_path]/"kompare.png"% 		Exec exec kompare
++	"Cervisia"%$[fvwm_icon_path]/"cervisia.png"% 		Exec exec cervisia
++	"Bluefish Editor"%$[fvwm_icon_path]/"bluefish.png"% 	Exec exec bluefish
++	"Quanta Plus"%$[fvwm_icon_path]/"quanta.png"% 		Exec exec quanta
++	"KImageMapEditor"%$[fvwm_icon_path]/"kimagemapeditor.png"% Exec exec kimagemapeditor
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuDrives
+AddToMenu MenuDrives
++   	"= Drives ="						Title Napędy
++   	"DVD&rip"%$[fvwm_icon_path]/dvdrip.png%			Exec exec dvdrip
++   	"AcidRip"%$[fvwm_icon_path]/dvdrip.png%			Exec exec acidrip
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuGames
+AddToMenu MenuGames
++	"= 游戏 ="
++	""							Nop
++	"Banner"%$[fvwm_icon_path]/banner.png%     		Exec exec banner
++	"Fortune"%$[fvwm_icon_path]/fortune.png%     		Exec exec fortune
++	"Gnome-gnuchess"%$[fvwm_icon_path]/gnome-gnuchess.png%  Exec exec gnome-gnuchess
++	"" 							Nop
++	"Blackjack"%$[fvwm_icon_path]/blackjack.png%     	Exec exec blackjack
++	"Glchess"%$[fvwm_icon_path]/glchess.png%     		Exec exec glchess
++	"Glines"%$[fvwm_icon_path]/glines.png%     		Exec exec glines
++	"Gnect"%$[fvwm_icon_path]/gnect.png%     		Exec exec gnect
++	"Gnibbles"%$[fvwm_icon_path]/gnibbles.png%   	  	Exec exec gnibbles
++	"Gnobots2"%$[fvwm_icon_path]/robots.png%   	  	Exec exec gnobots2
++	"Gnome-sudoku"%$[fvwm_icon_path]/gnome-sudoku.png%    	Exec exec gnome-sudoku
++	"Gnometris"%$[fvwm_icon_path]/gnometris.png%     	Exec exec gnometris
++	"Gnomine"%$[fvwm_icon_path]/mines.png%     		Exec exec gnomine
++	"Gnotravex"%$[fvwm_icon_path]/tetravex.png%  	   	Exec exec gnotravex
++	"Gnotski"%$[fvwm_icon_path]/klotski.png%     		Exec exec gnotski
++	"Gtali"%$[fvwm_icon_path]/gnome-tali.png%     		Exec exec gtali
++	"Iagno"%$[fvwm_icon_path]/iagno.png%     		Exec exec iagno
++	"Kfouleggs"%$[fvwm_icon_path]/kfouleggs.png%     	Exec exec kfouleggs
++	"Mahjongg"%$[fvwm_icon_path]/mahjongg.png%    	 	Exec exec mahjongg
++	"Same-gnome"%$[fvwm_icon_path]/samegnome.png%     	Exec exec same-gnome
++	"Sol"%$[fvwm_icon_path]/aisleriot.png%     		Exec exec sol
++	""							Nop
++	"Counter-Strike 1.6"%$[fvwm_icon_path]/cs.png%   	Exec exec wine "C:\\Program Files\\Counter-Strike 1.6\\hl.exe -nomaster -game cstrike
+
+##---------------------------------------------------------------##
+
+DestroyMenu Menusyscontrol
+AddToMenu Menusyscontrol
+#+   	"= 系统设置 ="					Title System config
+#+	"Conky设置"%$[fvwm_icon_path]/lxterminal.png%	Exec exec conky
++   	"刷新"%$[fvwm_icon_path]/refresh.png%		Refresh
++	"系统升级"%$[fvwm_icon_path]/update.png%		Exec exec urxvt -e sudo pacman -Syu
++   	"杀掉所有进程"%$[fvwm_icon_path]/kill.png%			Pick Destroy
++   	"重新启动"%$[fvwm_icon_path]/restart.png%		Restart
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuFvwmConfig
+AddToMenu MenuFvwmConfig
++   	"FVWM设置"%$[fvwm_icon_path]/gedit.png%		Popup MenuFVWMconfiguration
++	"程序设置"%$[fvwm_icon_path]/gedit.png%		Popup MenuProgramsConfiguration
++  	"切换主题风格"%$[fvwm_icon_path]/desktop.png%	Exec exec gtk-chtheme
++ 	MissingSubmenuFunction WallpaperBrowser
++   	"墙纸"%$[fvwm_icon_path]/folder.png%		Popup $[fvwm_wallpaper_dir]/
++	""							nop
++   	"系统设置"%$[fvwm_icon_path]/settings.png%		Popup Menusyscontrol
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuFVWMconfiguration
+AddToMenu MenuFVWMconfiguration
+#+   	"= FVWM设置="					Title Preferences
++   	"主配置文件"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/config
++   	"快捷键"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.binds-keys
++   	"鼠标绑定"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.binds-mouse
++   	"颜色设置"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.colorsets
++   	"鼠标指针"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.cursors
++   	"功能函数"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.functions
++   	"图标"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.iconman
++   	"程序菜单"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.menu
++   	"主菜单"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.macmenu
++   	"面板"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.panel
++   	"设定"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.settings
++   	"风格"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.style
++   	"图标缓存"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.thumbnails
++   	"窗口特效"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.wmdecor
++   	"附加设置"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] $[fvwm_config_path]/fvwm2rc.misc
+#+   	"编辑xinitrc"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] ~/.xinitrc
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuProgramsConfiguration
+AddToMenu MenuProgramsConfiguration
+#+   	"= 程序设置 ="					Title Preferences
++   	"conkyrc"%$[fvwm_icon_path]/gedit.png%		Exec exec sudo $[fvwm_editor] /etc/xdg/left-conkyrc.openbox
++   	"gtkrc-2.0"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] ~/.gtkrc-2.0
++   	"gtkrc.mine"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] ~/.gtkrc.mine
++   	"mpdconf"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] ~/.mpdconf
++   	"bashrc"%$[fvwm_icon_path]/gedit.png%		Exec exec $[fvwm_editor] ~/.bashrc
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuPlaces
+AddToMenu MenuPlaces
+#+	"= 位置 ="
++   	"Home"%$[fvwm_icon_path]/home.png%			Exec exec pcmanfm ~/
++   	"桌面"%$[fvwm_icon_path]/places.png%			Exec exec pcmanfm ~/Desktop/
++   	"根目录"%$[fvwm_icon_path]/places.png%			Exec exec pcmanfm /
+#+   	"Audio"%$[fvwm_icon_path]/audio.png%			Exec exec rox ~/Media/Audio/
+#+   	"Pictures and photos"%$[fvwm_icon_path]/pic.png%	Exec exec rox ~/Media/Pictures\ and\ photos/
+#+   	"University"%$[fvwm_icon_path]/gedit.png%		Exec exec rox ~/Politechnika
++	"Fvwm设置目录"%$[fvwm_icon_path]/places.png%		Exec exec pcmanfm ~/.fvwm
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuFvwmWindowOps
+AddToMenu MenuFvwmWindowOps
++   	"改变大小"						Pick Resize
++   	"窗口附着"						Pick Stick
++   	"刷新"						Pick RefreshWindow
++   	"Identify" 						Pick Module FvwmIdent
++   	"关闭"							Close
++   	"Destroy"						Destroy
+
+##---------------------------------------------------------------##
+
+DestroyMenu MenuFvwmArchlive
+AddToMenu MenuFvwmArchlive	
++   	"&Lxterminal终端"%$[fvwm_icon_path]/lxterminal.png%	Exec exec lxterminal
++   	"&PCManFM"%$[fvwm_icon_path]/pcmanfm.png%	Exec exec pcmanfm
++	"&Gparted分区"%$[fvwm_icon_path]/gparted.png%	Exec exec sudo gparted
++	"安装Archlinux"%$[fvwm_icon_path]/install.png%	Exec exec sudo larchin.py
++	"Archlive安装程序"%$[fvwm_icon_path]/archlive.png%	Exec exec sudo /opt/archlive-installer/bin/archlive-installer
+##---------------------------------------------------------------##
+
+DestroyFunc Exit
+AddToFunc Exit
++ I DestroyModuleConfig Exit: *
++ I *Exit: Font "Shadow=1 b bl r br r :xft:iYaHei:pixelsize=14:minspace=True" 
++ I *Exit: ButtonFont "xft:iYaHei:bold:pixelsize=10:minspace=True" 
++ I *Exit: Colorset 33
++ I *Exit: ItemColorset 34
++ I *Exit: Line center
++ I *Exit: Text "确定退出FVWM?"
++ I *Exit: Line center
++ I *Exit: Line center
++ I *Exit: Button quit "   是   " ^M
++ I *Exit: Command Exit2
++ I *Exit: Button quit "   返回   " ^[
++ I *Exit: Command Nop
++ I *Exit: Line center
++ I Module FvwmForm Exit
+
+##---------------------------------------------------------------##
+
+DestroyFunc Exit2
+AddToFunc Exit2
++ I DestroyModuleConfig Exit2: *
++ I *Exit2: Font "Shadow=1 b bl r br r :xft:iYaHei:pixelsize=14:minspace=True" 
++ I *Exit2: ButtonFont "xft:iYaHei:bold:pixelsize=14:minspace=True" 
++ I *Exit2: Colorset 33
++ I *Exit2: ItemColorset 34
++ I *Exit2: Line center
++ I *Exit2: Text "选择动作"
++ I *Exit2: Line center
++ I *Exit2: Line center
++ I *Exit2: Button quit "   关闭电脑   " ^N
++ I *Exit2: Command exec sudo halt
++ I *Exit2: Command Quit
++ I *Exit2: Button quit "   重新启动   " ^O
++ I *Exit2: Command exec sudo reboot
++ I *Exit2: Command Quit
++ I *Exit2: Button quit "   退出FVWM   " ^O
++ I *Exit2: Command Quit
++ I *Exit2: Line center
++ I Module FvwmForm Exit2
+
+##---------------------------------------------------------------##
+
+DestroyMenu sysup
+AddToMenu sysup Updates title
++ DynamicPopupAction Function Getsysup
+
+DestroyFunc SysupUpdateAll
+AddToFunc SysupUpdateAll
++ I Exec exec $0 -e sudo /usr/bin/pacman -Syu
+
+DestroyFunc SysupUpdate
+AddToFunc SysupUpdate
++ I Exec exec $0 -e sudo /usr/bin/pacman "=$1"
+
+DestroyFunc Getsysup
+AddToFunc Getsysup
+#+ I DestroyMenu recreate sysup
+#+ I AddToMenu sysup Updates title
+#+ I Piperead 'echo "`$[fvwm_scripts_path]/sysup`"'
+
+DestroyFunc WallpaperBrowser
+AddToFunc WallpaperBrowser
++ I PipeRead 'test ! -d "$0/.thumbs" && mkdir "$0/.thumbs"; \
+    for i in "$0/"*; do \
+        test -f "$0/.thumbs/${i##*/}" \
+            -a "${i}" -ot "$0/.thumbs/${i##*/}" || { \
+                convert -quality 0 -scale 24 "${i}" "png:$0/.thumbs/${i##*/}" 2>/dev/null \
+                    || continue; \
+            }; \
+    done; \
+    fvwm-menu-directory --icon-title icons/browse.png --icon-file __PIXMAP__ \
+    --icon-dir icons/browse.png --dir $0 --exec-file "^$[fvwm_script_path]/wallpapers" \
+    --exec-t="^eog *" | sed -e "s#FuncFvwmMenuDirectory#WallpaperBrowser#g" \
+    -e "s#__PIXMAP__\\(.*\\)\\"\\(.*/\\)\\(.*\\)\\"#\\2.thumbs/\\3\\1\\2\\3#g"'
+
+##---------------------------------------------------------------##

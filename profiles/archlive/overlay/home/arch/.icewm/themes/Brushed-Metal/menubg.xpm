@@ -1,0 +1,12 @@
+/* XPM */
+static char * menubg_xpm[] = {
+"4 4 5 1",
+" 	c None",
+".	c #F7F7F7",
+"+	c #F2F2F2",
+"@	c #EFEFEF",
+"#	c #EEEEEE",
+"....",
+"++++",
+"@@@@",
+"####"};

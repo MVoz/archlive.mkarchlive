@@ -1,0 +1,47 @@
+WindowTitle {FvwmMeminfo}
+WindowSize 50 22	
+WindowPosition 0 0	
+Colorset 5
+Font		"Shadow=1 se:xft:WenQuanYi Bitmap Song:encoding=zh_CN.UTF-8:size=9"
+
+Init
+ Begin
+  Set $memu=(GetOutput {free -m | grep - | cut -d ' ' -f 10} 1 -6) MB
+    ChangeTitle 2 $memu
+  Set $use=U:
+    ChangeTitle 1 $use
+ End
+
+PeriodicTasks
+Begin
+    If (RemainderOfDiv (GetTime) 30)==0 Then
+    Begin
+        Set $memu=(GetOutput {free -m | grep - | cut -d ' ' -f 10} 1 -6) MB
+        ChangeTitle 2 $memu
+    End
+End
+
+Widget 1
+Property
+ Size 10 22
+ Position 0 0
+ Colorset 5
+ Font		"Shadow=1 se:xft:WenQuanYi Bitmap Song:encoding=zh_CN.UTF-8:size=9"
+ Flags Left
+ Type ItemDraw
+ Title {OK}
+End
+
+Widget 2
+Property
+ Size 40 22
+ Position 12 0
+ Colorset 5
+ Font		"Shadow=1 se:xft:WenQuanYi Bitmap Song:encoding=zh_CN.UTF-8:size=9"
+ Flags Left
+ Type ItemDraw
+ Title {OK}
+End
+
+
+

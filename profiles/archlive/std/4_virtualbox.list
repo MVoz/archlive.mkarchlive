@@ -1,8 +1,0 @@
-#virtualbox-modules
-#  已经包含于基本模块
-#virtualbox-ose-additions
-#Guest Additions for VirtualBox (Open Source Edition)  2.02MB  已经包含于基本模块
-#virtualbox-ose-additions-modules
-#Kernel modules for VirtualBox Guest Additions  0.16MB  已经包含于基本模块
-#
--f virtualbox_bin

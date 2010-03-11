@@ -1,0 +1,4 @@
+prog GpicView图像查看 /usr/share/pixmaps/gpicview.png gpicview
+prog Comix图像查看 /usr/share/icons/hicolor/48x48/apps/comix.png comix
+prog FoxitPDF查看器 /usr/share/pixmaps/foxitreader.png  foxitreader %f
+prog Gsnapshot抓屏工具 /usr/share/pixmaps/gsnapshot.png gsnapshot

@@ -1,0 +1,24 @@
+# This is an example for IceWM's menu definition file.
+#
+# Place your variants in /etc/icewm or in $HOME/.icewm
+# since modifications to this file will be discarded when you
+# (re)install icewm.
+#
+
+menuprog Gnome folder icewm-menu-gnome1 --list 
+menuprog Gnome folder icewm-menu-gnome2 --list 
+#menuprog KDE folder icewm-menu-gnome --list 
+
+prog Gparted分区编辑器 /usr/share/icons/hicolor/48x48/apps/gparted.png sudo /usr/sbin/gparted %f
+prog Larchin安装程序 /usr/share/pixmaps/larchin.png sudo larchin.py
+prog Archlive安装程序 /usr/share/pixmaps/archlive.png sudo /opt/archlive-installer/bin/archlive-installer
+
+separator
+
+menufile 程序 folder programs
+
+separator
+prog Gsnapshot抓屏工具 /usr/share/pixmaps/gsnapshot.png gsnapshot
+prog Lxterminal终端 /usr/share/pixmaps/lxterminal.png lxterminal
+prog 系统硬件信息 /usr/share/hardinfo/pixmaps/logo.png hardinfo
+#prog rxvt xterm rxvt -bg black -cr green -fg white -C -fn 9x15 -sl 500

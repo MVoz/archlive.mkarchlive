@@ -1,0 +1,13 @@
+[Global]
+MoveFirst=false
+ArrowPosition=0
+
+[Entry 0]
+Name=Web Browser
+Comment=Surf the internet
+Icon=firefox
+Exec=/usr/bin/firefox
+Path=/home/arch
+Terminal=false
+StartupNotify=false
+

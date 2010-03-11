@@ -1,0 +1,10 @@
+key "Super+f" firefox
+key "Super+t" lxterminal
+key "Super+r" rox
+key "Super+p" pcmanfm
+key "Super+c" mpc play
+key "Super+v" mpc pause
+key "Super+b" mpc next
+key "Print" scrot -b -d 3 -s '/home/arch/Desktop/%Y%m%d_%H%M%S_$wx$h.png'
+key "Alt+Ctrl+Shift+Delete"	sudo halt -p
+key "Alt+Ctrl+Insert"		/usr/bin/exitx

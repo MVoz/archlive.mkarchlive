@@ -1,0 +1,4561 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: de\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-04 10:35+0000\n"
+"PO-Revision-Date: 2008-06-03 18:03+0200\n"
+"Last-Translator: Carbon Jiao\n"
+"Language-Team: Archlive Team <http://archlive-pkg.googlecode.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.2\n"
+
+msgid ""
+"\n"
+"\n"
+"This client bottle doesn't include any new menu entries."
+msgstr ""
+"\n"
+"\n"
+"这个boottle不包含任何新程序菜单."
+
+msgid ""
+"\n"
+"\n"
+"This installation of CrossOver includes Windows applications and data "
+"contained in one or more bottles. Do you want to delete these bottles in "
+"addition to uninstalling %s?"
+msgstr ""
+"\n"
+"\n"
+"安装的CrossOver中已经安装Windows程序或数据──存在于一个或几个Bottle中， "
+"在卸载%s的同时也删除这些包含程序或数据的Bottle? "
+
+msgid ""
+"\n"
+"\n"
+"You are now ready to run the following Windows applications:\n"
+"\n"
+" %s"
+msgstr ""
+"\n"
+"\n"
+"Sie können nun folgende Windowsanwendungen starten:\n"
+"\n"
+"%s"
+
+msgid ""
+"\n"
+"- Generate a new fstab file containing the 'unhide' and 'user' options:\n"
+msgstr ""
+"\n"
+"- Erstelle eine neue fstab-Datei, die die „unhide“ und „user“-Optionen "
+"enthält:\n"
+
+msgid ""
+"\n"
+"- Make the following devices world readable:\n"
+msgstr ""
+"\n"
+"- Mache folgende Laufwerke für alle lesbar:\n"
+
+msgid ""
+"\n"
+"- Remount the following filesystems with the corrected options:\n"
+msgstr ""
+"\n"
+"- Folgende Dateisysteme mit den korrekten Optionen neu mounten:\n"
+
+msgid ""
+"\n"
+"Note also that you should always uninstall a bottle before deleting it."
+msgstr ""
+"\n"
+"Beachten Sie auch, daß Sie immer zuerst eine Flasche deinstallieren sollten, "
+"bevor Sie sie löschen."
+
+msgid ""
+"\n"
+"Note also that you should always uninstall a client bottle before deleting "
+"it."
+msgstr ""
+"\n"
+"Beachten Sie auch, daß Sie immer zuerst eine Client-Flasche deinstallieren "
+"sollten, bevor Sie sie löschen."
+
+msgid ""
+"\n"
+"You will still be able to use Windows applications that were installed "
+"system-wide, if any. But all the Windows applications you installed as well "
+"as the C: drives contained in your bottles will be deleted."
+msgstr ""
+"\n"
+"Sie können weiternhin Windows-Anwendungen, die systemweit installiert "
+"wurden, benutzen; aber alle Anwendungen, die Sie installiert haben, sowie "
+"das C:-Laufwerk Ihrer Flasche werden gelöscht."
+
+msgid ""
+"%s\n"
+"\n"
+"Click 'Next' to download and install."
+msgstr ""
+"%s\n"
+"\n"
+"Zum Herunterladen und Installieren klicken Sie auf „Weiter“."
+
+msgid ""
+"%s\n"
+"\n"
+"To create a managed bottle, create a bottle as a normal user and publish via "
+"the 'Publish' button on the 'Manage Bottles' tab."
+msgstr ""
+"%s\n"
+"\n"
+"Um eine verwaltete Flasche zu erstellen, erzeugen Sie eine Flasche als "
+"normaler Benutzer und verwenden Sie den „Veröffentlichen“-Knopf unter "
+"„Flaschen verwalten“."
+
+msgid ""
+"%s\n"
+"(desktop icon)"
+msgstr ""
+"%s\n"
+"(Desktopsymbol)"
+
+msgid ""
+"%s\n"
+"(in %s)"
+msgstr ""
+"%s\n"
+"(in %s)"
+
+msgid ""
+"%s\n"
+"Unfortunately, only root can mount '%s'. %s"
+msgstr ""
+"%s\n"
+"Leider kann nur Root „%s“ einbinden. %s"
+
+msgid ""
+"%s\n"
+"Unfortunately, the device file '%s' is not accessible. %s"
+msgstr ""
+"%s\n"
+"Leider ist der Zugriff auf die Gerätedatei „%s“ nicht möglich. %s"
+
+msgid ""
+"%s\n"
+"Unfortunately, your CD device is not configured to correctly handle this "
+"Windows CD-ROM. The manufacturer has marked a file as 'hidden' which, in "
+"Windows, makes the file unviewable in Explorer, but still leaves the file "
+"there. On your system, that file is simply not there. There is a simple "
+"correction for this - we can adjust the way in which your system mounts the "
+"CD device to never hide these files. To do this, we will add an 'unhide' "
+"option to the '/etc/fstab' file which controls how your CD-ROM is accessed "
+"by Linux.\n"
+msgstr ""
+"%s\n"
+"Leider ist Ihr CD-ROM-Laufwerk nicht so konfiguriert, daß es diese Windows-"
+"CD-ROM benutzen kann. Der Hersteller hat eine Datei als „versteckt“ "
+"markiert, welche sie unter Windows nicht im Explorer anzeigt; trotzdem kann "
+"man auf sie zugreifen. Auf Ihrem System ist die Datei einfach nicht da. Die "
+"Lösung ist: Wir können Ihre mount-Einstellung so ändern, daß bei Ihrem CD-"
+"Laufwerk diese Dateien nie versteckt werden. Um das zu tun, fügen wir in der "
+"Datei „/etc/fstab“ die Option „unhide“ hinzu, die unter Linux bestimmt, wie "
+"auf CD-ROM zugegriffen wird.\n"
+
+msgid "%s Advanced Settings"
+msgstr "%s erweiterte Einstellungen"
+
+msgid "%s Setup"
+msgstr "Einrichten von %s"
+
+msgid "%s Trial"
+msgstr "%s Demo"
+
+msgid "%s Uninstall"
+msgstr "%s deinstallieren"
+
+msgid "%s already exists"
+msgstr "%s existiert bereits"
+
+msgid ""
+"%s detected that a more recent version of DCOM95 is already installed. The "
+"version you are trying to install is obsolete.\n"
+"\n"
+"Are you sure you want to install this version of DCOM95?\n"
+"If you are not sure, choose 'Cancel'."
+msgstr ""
+"%s hat festgestellt, daß eine neuere Version von DCOM95 bereits installiert "
+"ist; die Version, die Sie installieren wollen, ist obsolet.\n"
+"\n"
+"Wollen Sie wirklich diese DCOM95-Version installieren?\n"
+"Falls Sie unsicher sind, drücken Sie auf „Abbrechen“."
+
+msgid ""
+"%s does not seem to be installed (note that this may be normal if you "
+"installed a different version than expected)."
+msgstr ""
+"%s scheint nicht installiert zu sein. (Falls Sie eine andere als die "
+"erwartete Version installiert haben, kann das in Ordnung sein.)"
+
+msgid ""
+"%s failed:\n"
+"\n"
+"%s\n"
+"\n"
+"Using ssh instead."
+msgstr ""
+"%s fehlgeschlagen:\n"
+"\n"
+"%s\n"
+"\n"
+"Benutze SSH stattdessen."
+
+msgid ""
+"%s has been removed from your account.\n"
+"To fully uninstall it, run '%s' as root."
+msgstr ""
+"%s wurde bei Ihrem Benutzerkonto entfernt\n"
+"Um es vollständig zu deinstallieren, rufen Sie „%s“ als Root auf."
+
+msgid "%s has been removed."
+msgstr "%s wurde entfernt."
+
+msgid ""
+"%sThis is necessary because some Windows CD-ROMs are not compatible with "
+"every Linux configuration.\n"
+"\n"
+"Unfortunately, we found one or more problems with your CD drive "
+"configuration. Select 'Details' to learn more about the problems, or 'Fix' "
+"to have CrossOver help you fix the problems.\n"
+msgstr ""
+"%sDies ist nötig, da einige Windows-CD-ROMs nicht mit jeder Linux-"
+"Konfiguration kompatibel sind.\n"
+"\n"
+"Leider gibt es mit Ihrer CD-ROM-Konfiguration ein oder mehrere Probleme. "
+"Wählen Sie entweder „Details“, um mehr über die Probleme zu erfahren oder "
+"gehen Sie auf „Beheben“, so daß CrossOver bei der Lösung der Probleme helfen "
+"kann.\n"
+
+msgid "&Cancel"
+msgstr "&Abbrechen"
+
+msgid "&Directory:"
+msgstr "&Verzeichnis:"
+
+msgid "&OK"
+msgstr "&OK"
+
+msgid "&Open"
+msgstr "&Öffnen"
+
+msgid "&Save"
+msgstr "&Speichern"
+
+msgid "&Selection:"
+msgstr "Auswah&l:"
+
+msgid "'%s' does not appear to be a valid bottle."
+msgstr "„%s“ scheint keine gültige Flasche zu sein."
+
+msgid "'%s' is not a directory."
+msgstr "„%s“ ist kein Verzeichnis."
+
+msgid "'%s' is not readable."
+msgstr "„%s“ ist nicht lesbar."
+
+msgid "(Created by CrossOver Office 3.x or 4.x)"
+msgstr "(Erstellt mit CrossOver Office 3.x oder 4.x)"
+
+msgid "(Created by CrossOver Office 5.x, 6.0 or 6.1)"
+msgstr "(Erstellt mit CrossOver Office 5.x, 6.0 oder 6.1)"
+
+msgid "(Created by CrossOver Plugin 1.x)"
+msgstr "(Erstellt mit CrossOver Plugin 1.x)"
+
+msgid "(Created by CrossOver Plugin 2.x)"
+msgstr "(Erstellt von CrossOver Plugin 2.x)"
+
+msgid ""
+"(There is no Windows plugin\n"
+"corresponding to this file)"
+msgstr ""
+"(Kein Windows-Plugin entspricht\n"
+"dieser Datei)"
+
+msgid "(no associations)"
+msgstr "(kein Zuordnungen)"
+
+msgid "(no control panel apps)"
+msgstr "(keine Systemsteuerungs-Anwendungen)"
+
+msgid "(no menus)"
+msgstr "(keine Menüeinträge)"
+
+msgid "(no plugins)"
+msgstr "(keine Plugins)"
+
+msgid "(no users)"
+msgstr "(keine Benutzer)"
+
+msgid "(none)\n"
+msgstr "(keine)\n"
+
+msgid "(unknown)"
+msgstr "(unbekannt)"
+
+msgid ""
+"*IMPORTANT WARNING*\n"
+"The Service Release installation will fail unless you insert Office 2000 CD "
+"before continuing.  Please insert your CD now."
+msgstr ""
+"*WICHTIGE WARNUNG*\n"
+"Die Service-Release-Installation wird fehlschlagen, außer Sie legen die "
+"Office 2000-CD ein. Bitte legen Sie jetzt die CD ein."
+
+msgid "+"
+msgstr "+"
+
+msgid "-"
+msgstr "-"
+
+msgid ""
+".Net 2.0 can be installed as a prerequisite for other applications.  Most of "
+"its features currently to do not work."
+msgstr ""
+".Net 2.0 kann installiert werden um Abhängigkeiten anderer Anwendungen zu "
+"erfüllen, allerdings funktionieren die meisten Funktionen derzeit nicht."
+
+msgid "<< Prev"
+msgstr "<< Zurück"
+
+msgid ""
+"<P>Before installing unsupported software, you may want to consult some of "
+"CodeWeavers' online resources.  For tips, tricks, and user forums about "
+"particular applications, visit our <a href=\"http://www.codeweavers.com/"
+"compatibility/\">compatibility center</a>.</P><P>If you are interested in "
+"troubleshooting an application yourself, the <a href=\"http://www."
+"codeweavers.com/support/docs/unsupported/\">Unsupported Applications Guide</"
+"a> will help you get started.</P><P>Finally, CodeWeavers offers professional "
+"development services to fix bugs in unsupported application behavior.  For "
+"details, visit our <a href=\"http://www.codeweavers.com/services/\">services "
+"page</a>.</P>"
+msgstr ""
+"<P>Bevor Sie nicht unterstützte Software installieren, könnten Sie die "
+"Dokumentation auf der CrossOver-Seite konsultieren. Für Tricks, Tips und "
+"Benuterforen besuchen Sie unser <a href=\"http://www.codeweavers.com/"
+"compatibility/\">Kompatibilitätszentrum</a>.</P><P>Falls Sie daran "
+"interessiert sind, mögliche Probleme selbst zu lösen, können Ihnen die <a "
+"href=\"http://www.codeweavers.com/support/docs/unsupported/\">Hinweise zu "
+"nicht unterstützten Anwendungen</a> helfen.</p><p>Zudem bietet CodeWeavers "
+"einen professionellen Entwicklungsdienst an, der Fehler mit nicht "
+"unterstützten Anwendungen behebt. Für mehr Informationen besuchen Sie unsere "
+"<a href=\"http://www.codeweavers.com/services/\">Serviceseite</a>.</P>"
+
+msgid ""
+"<P>CrossOver has detected possible problems with your graphics system.  This "
+"could cause games to freeze or draw incorrectly.  These problems may be "
+"avoided if you update your graphics drivers.</P>%s"
+msgstr ""
+"<P>CrossOver hat ein mögliches Problem bei Ihrem Graphiksystem festgestellt, "
+"das zum Einfrieren oder Falschdarstellen führen kann. Durch Aktualiserung "
+"des Graphiksystems könnten die Probleme umgangen werden.</P>%s"
+
+msgid ""
+"<P>CrossOver should be able to run many games that use Direct X 9 or any "
+"previous version of Direct X.  However, there are sometimes problems with "
+"particular games.</P><P>For tips, tricks, and user forums about particular "
+"games, visit our <a href=\"http://www.codeweavers.com/compatibility/"
+"\">compatibility center</a>.</P><P>If you are interested in troubleshooting "
+"a game yourself, the <a href=\"http://www.codeweavers.com/support/docs/"
+"unsupported/\">Unsupported Applications Guide</a> will help you get started."
+"</P>"
+msgstr ""
+"<P>CrossOver sollte in der Lage sein, viele Spiele, die Direct X 9 oder "
+"vorherige Direct-X-Versionen benutzen, zu starten. Jedoch gibt es manchmal "
+"Probleme mit bestimmten Spielen.</P><P>Tricks, Tips und Benutzerforen zu "
+"bestimmten Spielen finden Sie in unserem <a href=\"http://www.codeweavers."
+"com/compatibility/\">Kompatibilitätszentrum</a>.</P><P>Falls Sie das Problem "
+"selbst lösen wollen,hilft dabei das <a href=\"http://www.codeweavers.com/"
+"support/docs/unsupported/\">Handbuch für nichtunterstützte Anwendungen</a>.</"
+"P>"
+
+msgid ""
+"<P>CrossOver supports the use of Word, Excel, PowerPoint and Outlook in "
+"Microsoft Office 2003.  Access is currently unsupported, and will probably "
+"not work at all with this version of CrossOver.</P><P>Before installing "
+"Office, CrossOver may download and install several TrueType fonts to improve "
+"document appearance.  If you are unable to download these files, you can "
+"proceed through the Office install and add the fonts at a later time.</P>"
+msgstr ""
+"<P>CrossOver unterstützt die Verwendung von Word, Excel, PowerPoint und "
+"Outlook in Microsoft Office 2003. Access wird gegenwärtig nicht unterstützt "
+"und funktioniert wahrscheinlich überhaupt nicht in dieser CrossOver-Version."
+"</P><P>Vor der Installation von Office wird CrossOver mehrere TrueType-"
+"Schriften herunterladen und installieren, um die Dokumentendarstellun zu "
+"verbessern. Falls Sie diese nicht herunterladen können, setzen Sie die "
+"Installation von Office fort; Sie können die Schriften später installieren.</"
+"P>"
+
+msgid "<P>The installation of %s failed.</P>"
+msgstr "<P>Die Installation von %s ist fehlgeschlagen.</P>"
+
+msgid "<P>The installation of %s failed:</P><P></P><P>%s</P>"
+msgstr "<P>Die Installation von %s ist fehlgeschlagen:</P><P></P><P>%s</P>"
+
+msgid ""
+"<P>You can learn more about this package or download an installer here:</"
+"P><P></P><P><a href=\"%s\">%s</a></P>"
+msgstr ""
+"<P>Mehr Information zum Paket oder Herunterladen dieses unter:</P><P></"
+"P><P><a href=\"%s\">%s</a></P>"
+
+msgid ""
+"A 'Bottle' corresponds to a Windows C: drive and contains an isolated "
+"collection of settings and applications.  To configure a bottle, select it "
+"from the list and click 'Configure'."
+msgstr ""
+"Eine „Flasche“ entspricht einem Windows-C:-Laufwerk und enthält eine "
+"abgetrennte Sammlung von Einstellungen und Anwendungen. Um eine Flasche zu "
+"konfigurieren, wählen Sie sie aus und klicken Sie auf „Einstellungen“."
+
+msgid ""
+"A virus was found in the '%s' file.\n"
+"It will thus not be run in order to protect your computer.\n"
+"\n"
+"%s"
+msgstr ""
+"Ein Virus wurde in der Datei „%s“ gefunden.\n"
+"Diese wird somit nicht ausgeführt, um Ihren Computer zu schützen.\n"
+"\n"
+"%s"
+
+msgid "AWR Design Environment 2003 (6.0x)"
+msgstr "AWR Design Environment 2003 (6.0x)"
+
+msgid "Abort"
+msgstr "Abbrechen"
+
+msgid "Action"
+msgstr "Aktion"
+
+msgid "Activating Plugins"
+msgstr "Plugins aktivieren"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Add"
+msgstr "Hinzufügen"
+
+msgid "Add a font..."
+msgstr "Schrift hinzufügen..."
+
+msgid "Add all fonts..."
+msgstr "Alle Schriften hinzufügen..."
+
+msgid "Add fonts"
+msgstr "Schriften hinzufügen"
+
+msgid "Add/Remove"
+msgstr "Hinzufügen/Entfernen"
+
+msgid "Adobe Acrobat Reader 5.0"
+msgstr "Adobe Acrobat Reader 5.0"
+
+msgid "Adobe FrameMaker 7"
+msgstr "Adobe FrameMaker 7"
+
+msgid "Adobe Photoshop 6"
+msgstr "Adobe Photoshop 6"
+
+msgid "Adobe Photoshop 7"
+msgstr "Adobe Photoshop 7"
+
+msgid "Adobe Photoshop CS"
+msgstr "Adobe Photoshop CS"
+
+msgid "Adobe Photoshop CS2"
+msgstr "Adobe Photoshop CS2"
+
+msgid "Adobe Photoshop CS3"
+msgstr "Adobe Photoshop CS3"
+
+msgid "Advanced"
+msgstr "Erweitert"
+
+msgid "Advanced install"
+msgstr "Erweiterte Installationsoptionen"
+
+msgid "Advanced settings"
+msgstr "Erweiterte Einstellungen"
+
+msgid "All bottles"
+msgstr "Alle Flaschen"
+
+msgid "All files"
+msgstr "Alle Dateien"
+
+msgid "Always Continue"
+msgstr "Immer fortfahren"
+
+msgid ""
+"An error occurred during the Wine environment (%s) creation or update. The "
+"application or document may fail to start or open."
+msgstr ""
+"Ein Fehler ist beim Erstellen/Aktualisieren der Wine-Umgebung (%s) "
+"aufgetreten. Es kann sein, daß die Anwendung bzw. das Dokument nicht mehr "
+"gestarted bzw. geöffnet werden kann."
+
+msgid ""
+"An error occurred while creating backup copy of '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Beim Erstellen einer Sicherungskopie von „%s“ trat ein Fehler auf:\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while deleting '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Beim Löschen von „%s“ trat ein Fehler auf:\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while launching %s:\n"
+"\n"
+"%s"
+msgstr ""
+"Beim Ausführen von „%s“ trat ein Fehler auf:\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while loading association data.\n"
+"%s"
+msgstr ""
+"Ein Fehler trat beim Laden der Zuordnungsdaten auf:\n"
+"%s"
+
+msgid ""
+"An error occurred while loading icon data.\n"
+"%s"
+msgstr ""
+"Ein Fehler trat beim Laden der Symbole auf:\n"
+"%s"
+
+msgid ""
+"An error occurred while performing the download:\n"
+"\n"
+"%s"
+msgstr ""
+"Beim Herunterladen trat ein Fehler auf:\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while reading '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Beim Lesen von „%s“ trat ein Fehler auf:\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while refreshing the menu list:\n"
+"\n"
+"%s"
+msgstr ""
+"Fehler beim Aktualisieren der Menüeinträge:\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while refreshing the plugins list. Plugin status may be "
+"incorrect."
+msgstr ""
+"Ein Fehler trat beim Aktualisieren der Pluginliste auf. Der Pluginstatus "
+"kannfehlerhaft sein."
+
+msgid "An error occurred while removing the %s files."
+msgstr "Beim Entfernen der %s-Dateien trat ein Fehler auf."
+
+msgid "An error occurred while removing your personal %s environment."
+msgstr ""
+"Beim Entfernen Ihrer persönlichen %s-Umgebung ist ein Fehler aufgetreten."
+
+msgid ""
+"An error occurred while simulating a Windows reboot:\n"
+"\n"
+"%s"
+msgstr ""
+"Beim Simulieren eines Windows-Neustartes ist ein Fehler aufgetreten:\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while trying to communicate with %s.\n"
+"\n"
+"%s"
+msgstr ""
+"Ein Fehler trat auf, beim Versuch mit %s zu kommunizieren.\n"
+"\n"
+"%s"
+
+msgid ""
+"An error occurred while trying to run a command on the server:\n"
+"\n"
+"%s\n"
+"%s"
+msgstr ""
+"Ein Fehler trat auf, beim Versuch einen Befehl auf dem Server auszuführen:\n"
+"\n"
+"%s\n"
+"%s"
+
+msgid "An error occurred while uninstalling %s."
+msgstr "Beim Deinstallieren von %s trat ein Fehler auf."
+
+msgid "An installation error occurred."
+msgstr "Ein Installationsfehler ist aufgetreten."
+
+msgid "Applet '%s' not found."
+msgstr "Applet „%s“ wurde nicht gefunden."
+
+msgid "Application"
+msgstr "Anwendung"
+
+msgid "Apply"
+msgstr "Anwenden"
+
+msgid "Applying changes"
+msgstr "Änderungen werden angewendet"
+
+msgid "Appropriate existing bottle (recommended):"
+msgstr "Geeignete existierende Flasche (empfohlen)"
+
+msgid "Appropriate existing bottle:"
+msgstr "Geeignete existierende Flasche:"
+
+msgid "Archive"
+msgstr "Archivieren"
+
+msgid "Archive '%s'"
+msgstr "Archiviere „%s“"
+
+msgid "Archiving %s"
+msgstr "Archiviere %s"
+
+msgid "Associations"
+msgstr "Zuordnungen"
+
+msgid "Associations:"
+msgstr "Zuordnungen:"
+
+msgid "Associations: None"
+msgstr "Zuordnungen: Keine"
+
+msgid "Automatically select a preferred browser"
+msgstr "Bevorzugten Browser automatisch wählen"
+
+msgid "Autorun - %s"
+msgstr "Automatisch ausführen - %s"
+
+msgid "Available bottles"
+msgstr "Verfügbare Flaschen"
+
+msgid "Available fonts"
+msgstr "Verfügbare Schriftarten"
+
+msgid "BIZTEL"
+msgstr "BIZTEL"
+
+msgid ""
+"Before uninstalling %s, make sure to uninstall it from each user's "
+"environment. To do so, run '%s' in their account."
+msgstr ""
+"Vor dem Deinstallieren von %s, stellen Sie sicher, daß es in den Umgebungen "
+"aller Nutzer deinstalliert ist; dazu führen Sie „%s“ in deren Benutzerkonten "
+"aus."
+
+msgid ""
+"Before you can use this software, you will need to download a client bottle "
+"from the CrossOver server.  This wizard will guide you through that "
+"process.  To download additional client bottles in the future, simply run "
+"the CrossOver Client configuration tool."
+msgstr ""
+"Bevor Sie diese Software benutzen können, müssen Sie eine Client-Flasche vom "
+"CrossOver-Server herunterladen. Dieser Wizard führt Sie durch diese Aufgabe. "
+"Um weitere Client-Flaschen in Zukunft herunterzuladen, führen Sie einfach "
+"das CrossOver-Client-Konfigurationsprogramm aus."
+
+msgid "Blocked extensions:"
+msgstr "Gesperrte Dateiendungen:"
+
+msgid "Both"
+msgstr "Beide"
+
+msgid "Bottle Defaults"
+msgstr "Flaschen-Standardeinstellungen"
+
+msgid "Bottle Settings"
+msgstr "Flaschen-Einstellungen"
+
+msgid "Bottle name:"
+msgstr "Flaschen-Name:"
+
+msgid "Bottle:"
+msgstr "Flasche:"
+
+msgid "Browse..."
+msgstr "Durchsuchen..."
+
+msgid "Browsers"
+msgstr "Browser"
+
+msgid "Building an RPM from %s"
+msgstr "Baue eine RPM aus %s"
+
+msgid "Built-in tool for configuring Bottle settings"
+msgstr "Eingebautes Werkzeug zur Flaschenkonfiguration"
+
+msgid "CD Error"
+msgstr "CD-Fehler"
+
+msgid "CD Warning"
+msgstr "CD-Warnung"
+
+msgid "CD Warning Detail"
+msgstr "Details zur CD-Warnung"
+
+msgid ""
+"CD Warning:\n"
+"\n"
+msgstr ""
+"CD-Warnung:\n"
+"\n"
+
+msgid "CD-ROM %s"
+msgstr "CD-ROM %s"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Change..."
+msgstr "Ändern..."
+
+msgid "Choose a bottle to install"
+msgstr "Wähle die zu installierende Flasche"
+
+msgid "Choose installer file:"
+msgstr "Installationsprogramms auswählen:"
+
+msgid "Clearing Ssh keys"
+msgstr "Lösche SSH-Schlüssel:"
+
+msgid ""
+"Click\n"
+"'Update user list'\n"
+"to fill this table."
+msgstr ""
+"Drücken Sie auf\n"
+"„Benutzerliste aktualisieren“,\n"
+"um diese Tabelle zu füllen."
+
+msgid "Click 'Run...' to run a command in this bottle."
+msgstr ""
+"Klicken Sie „Ausführen...“, um einen Befehl in dieser Flasche auszuführen."
+
+msgid "Click to remove the files associated with this DLL."
+msgstr "Klicken Sie hier, um die mit dieser DLL verknüpfte Dateien zu löschen."
+
+msgid "Click to run %s"
+msgstr "Klicken, um %s zu starten"
+
+msgid "Client Hostname:"
+msgstr "Rechnername des Clients:"
+
+msgid "Client Packages"
+msgstr "Client-Pakete"
+
+msgid "Client Settings"
+msgstr "Client-Einstellungen"
+
+msgid "Client packages have been placed in '%s'.\n"
+msgstr "Client-Pakete wurden nach „%s“ geschrieben.\n"
+
+msgid "Clients"
+msgstr "Clients"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Command:"
+msgstr "Befehl:"
+
+msgid "Configuration"
+msgstr "Konfiguration"
+
+msgid "Configure"
+msgstr "Konfigurieren"
+
+msgid "Configure %s"
+msgstr "Konfiguriere %s"
+
+msgid "Configure CrossOver for the root user only"
+msgstr "Konfiguriere CrossOver nur für den Root-Benutzer"
+
+msgid ""
+"Configure CrossOver for the root user only (Select this option to upgrade "
+"this Demo install to the full version)"
+msgstr ""
+"Konfiguriere CrossOver ausschließlich für den Root-Benutzer. (Benutzen Sie "
+"diese Option, um diese Demo auf die Vollversion zu aktualisieren.)"
+
+msgid "Configuring %s"
+msgstr "Konfiguriere %s"
+
+msgid "Configuring bottle %s"
+msgstr "Konfiguriere Flasche „%s“"
+
+msgid ""
+"Congratulations on your choice of %s! We hope you will enjoy the popular "
+"Windows office applications it brings to your desktop.\n"
+"\n"
+msgstr ""
+"Glückwünsche zu Ihrer Wahl zu %s! Wir hoffen, daß Sie Spaß an den populären "
+"Windows-Büroanwendungen haben, die es auf Ihren Desktop bringt.\n"
+
+msgid "Continue"
+msgstr "Fortfahren"
+
+msgid "Control Panel"
+msgstr "Systemsteuerung"
+
+msgid "Copy"
+msgstr "Kopieren"
+
+msgid "Copy of %s"
+msgstr "Kopie von %s"
+
+msgid "Copying '%s'"
+msgstr "Kopiere „%s“"
+
+msgid "Copying Log Files"
+msgstr "Kopiere Log-Dateien"
+
+msgid "Core Fonts"
+msgstr "Standardschriften"
+
+msgid "Cortona VRML Client"
+msgstr "Cortona VRML Client"
+
+msgid ""
+"Cortona VRML Client is a fast and highly interactive Web3D viewer that is "
+"ideal for viewing both simple 3D models and complex interactive solutions on "
+"the Web."
+msgstr ""
+"Cortona VRML Client ist ein schneller und extrem interaktiver Web3D-"
+"Betrachter, der ideal sowohl zum Anzeigen von einfachen 3D-Modellen als auch "
+"von komplexen, interaktiven Weblösungen geeignet ist."
+
+msgid "Create New Key"
+msgstr "Erzeuge neuen Schlüssel"
+
+msgid "Create RPM"
+msgstr "Erstelle RPM"
+
+msgid "Create RPM from %s"
+msgstr "Erstelle RPM aus %s"
+
+msgid "Create Shortcut"
+msgstr "Verknüpfung erstellen"
+
+msgid "Create a new bottle"
+msgstr "Neue Flasche erstellen"
+
+msgid "Create from template:"
+msgstr "Erstelle von Vorlage:"
+
+msgid "Create new bottle"
+msgstr "Neue Flasche erstellen"
+
+msgid "Create packages for:"
+msgstr "Pakete erstellen für:"
+
+msgid "Create..."
+msgstr "Erstellen..."
+
+msgid "Creating packages"
+msgstr "Pakete werden erstellt"
+
+msgid "Creating the '%s' bottle"
+msgstr "Erstelle Flasche „%s“"
+
+msgid "Creation of the %s bottle failed for an unknown reason."
+msgstr "Erstellung der %s-Flasche aus unbekannten Gründen fehlgeschlagen."
+
+msgid "CrossOver - Fixing '/etc/fstab'"
+msgstr "CrossOver - Korrigiere „/etc/fstab“"
+
+msgid "CrossOver Client"
+msgstr "CrossOver Client"
+
+msgid "CrossOver Client Package Wizard"
+msgstr "CrossOver Client-Paketwizard"
+
+msgid "CrossOver HTML engine"
+msgstr "CrossOver-HTML-Anzeigebibliothek"
+
+msgid "CrossOver Installation Wizard"
+msgstr "CrossOver Installationswizard"
+
+msgid "CrossOver Security Warning"
+msgstr "CrossOver Sicherheitswarnung"
+
+msgid "CrossOver Settings"
+msgstr "CrossOver-Einstellungen"
+
+msgid ""
+"CrossOver Setup failed to gather information on your system due to a Wine "
+"error. Click on 'Retry' if you want CrossOver Setup to kill all CrossOver "
+"applications (in case they are hung), and try again. Or click on 'Ignore' to "
+"ignore the error and continue anyway."
+msgstr ""
+"CrossOver Setup konnte aufgrund eines Wine-Fehlers keine Informationen auf "
+"Ihrem System sammeln. CrossOver Setup kann nun alle CrossOver-Anwendungen "
+"töten (falls Sie hängen) und es erneut versuchen. Oder Klicken Sie auf "
+"„Ignorieren“, um den Fehler zu übergehen und trotzdem fortzusetzen."
+
+msgid ""
+"CrossOver Setup still could not gather information on your system due to a "
+"Wine error. A detailed log of the error is available in '/tmp/cxsetup.log'. "
+"Please, include this log when contacting CodeWeavers support.\n"
+"\n"
+"Command line: '%s'\n"
+"Last 10 lines of the log file:\n"
+"%s"
+msgstr ""
+"CrossOver Setup konnte aufgrund eines Wine-Fehlers noch immer nicht alle "
+"Informationen auf Ihrem System sammeln. Unter „/tmp/cxsetup.log“ finden Sie "
+"ein ausführliches Fehlerprotokoll. Falls Sie sich an den Support von "
+"CodeWeavers wenden, fügen Sie bitte dieses Protokoll bei.\n"
+"\n"
+"Kommandozeile: „%s“\n"
+"Die letzten 10 Zeilen der Protokolldatei:\n"
+"%s"
+
+msgid "CrossOver Warning"
+msgstr "CrossOver-Warnung"
+
+msgid "CrossOver bottle archive"
+msgstr "CrossOver Flaschenarchiv"
+
+msgid ""
+"CrossOver cannot locate any writable bottles.  In order to install this "
+"package, you need to create a bottle now."
+msgstr ""
+"CrossOver kann keine schreibbaren Flaschen finden. Um dieses Paket zu "
+"installieren, müssen Sie jetzt eine Flasche erstellen."
+
+msgid ""
+"CrossOver has detected problems with your CD drive configuration. This "
+"installation is likely to fail because of this problem. There are two likely "
+"explanations:\n"
+"\n"
+" - You may be running Mandrake Linux with supermount. There are known "
+"problems with this version of supermount; to solve the problem you may need "
+"to disable supermount by logging in as root and typing '%s'.\n"
+"\n"
+" - Your system may not have the Joliet ISO9660 extension enabled in the "
+"kernel, which means that the files with long names on this CD-ROM will not "
+"be readable. To solve this problem, recompile your kernel with the Joliet CD-"
+"ROM extensions enabled, or consult your distribution vendor.\n"
+"\n"
+"Consult the 'Troubleshooting' section of the CrossOver User Guide for more "
+"information about this problem."
+msgstr ""
+"CrossOver hat Konfigurationensprobleme bei Ihrem CD-ROM-Laufwerk "
+"festgestellt; auf Grund dieser wird die Installation vermutlich "
+"fehlschlagen. Es gibt zwei wahrscheinlich Gründe dafür:\n"
+"\n"
+" - Sie verwenden Mandrake Linux mit supermount. Es gibt bekannte Probleme "
+"mit dieser Version von supermount; um diese zu beheben, müssen Sie ggf. "
+"supermount deaktivieren indem Sie „%s“ als Root eingeben.\n"
+"\n"
+" - Bei Ihrem System ist möglicherweise die Joliet-ISO9660-Erweiterung nicht "
+"im Kernel aktiviert. Somit kann auf CDs auf Dateien mit langen Dateinamen "
+"nicht zugegriffen werden. Um das Problem zu beheben, kompilieren Sie einen "
+"Kernel mit Joliet-Erweiterung oder konsultieren Sie Ihren "
+"Betriebsystemhersteller.\n"
+"\n"
+"Weitere Informationen finden Sie im Abschnitt „Troubleshooting“ des "
+"CrossOver Benutzerhandbuchs."
+
+msgid ""
+"CrossOver has detected that a browser is running ('%s' with pid %s). You may "
+"need to stop it in order for the installation to succeed.\n"
+"\n"
+"Proceed anyway?"
+msgstr ""
+"CrossOver hat erkannt, das ein Browser läuft („%s“ mit PID „%s“). Eventuell "
+"müssen Sie diesen beenden, damit die Installation erfolgreich ist.\n"
+"\n"
+"Trotzdem fortfahren?"
+
+msgid ""
+"CrossOver has detected that supermount is running on your system. You may "
+"need to reboot or restart supermount for these changes to take effect."
+msgstr ""
+"CrossOver hat ein laufendes „supermount“ auf Ihrem System entdeckt. Sie "
+"müssen möglicherweise den Computer oder „supermount“ neu starten, bevor "
+"diese Änderungen wirksam werden."
+
+msgid ""
+"CrossOver is tested with JInitiator version 1.1.5.21.1.  If Internet "
+"Explorer is not already installed, it will be installed before the "
+"JInitiator installation proceeds."
+msgstr ""
+"CrossOver wurde mit JInitiator Version 1.1.5.21.1 getestet. Falls der "
+"Internet Explorer noch nicht installiert ist, wird er installiert, bevor die "
+"JInitiator-Installation fortgesetzt wird."
+
+msgid ""
+"CrossOver is unable to access your CD-ROM. This is probably because you do "
+"not have permissions to mount or read the volume."
+msgstr ""
+"CrossOver kann nicht auf Ihre CD-ROM zugreifen. Dies liegt möglicherweise an "
+"fehlenden Rechten zum Mounten oder Lesen des Datenträgers."
+
+msgid ""
+"CrossOver is unable to eject the CD.\n"
+"\n"
+"%s"
+msgstr ""
+"CrossOver kann die CD nicht auswerfen.\n"
+"\n"
+"%s"
+
+msgid ""
+"CrossOver needs to:%s\n"
+"Do you want to make the above modifications?"
+msgstr ""
+"CrossOver muß:%s\n"
+"\n"
+"Möchten Sie obige Modifikationen durchführen?"
+
+msgid "CrossOver supports FrameMaker 7.0 and 7.1."
+msgstr "CrossOver unterstützt FrameMaker 7.0 und 7.1."
+
+msgid "CrossOver supports Photoshop 6."
+msgstr "CrossOver unterstützt Photoshop 6."
+
+msgid "CrossOver supports Photoshop 7."
+msgstr "CrossOver unterstützt Photoshop 7."
+
+msgid "CrossOver supports Photoshop CS."
+msgstr "CrossOver unterstützt Photoshop CS."
+
+msgid "CrossOver supports Photoshop CS2."
+msgstr "CrossOver unterstützt Photoshop CS2."
+
+msgid ""
+"CrossOver supports QuickBooks 2001, 2002, 2003 and 2004.  Later versions are "
+"not currently supported due to .net requirements."
+msgstr ""
+"CrossOver unterstützt QuickBooks 2001, 2002, 2003 und 2004. Neuere Versionen "
+"werden wegen der .net-Anforderungen nicht unterstützt."
+
+msgid ""
+"CrossOver supports US editions of Quicken 2002, 2003, 2004, 2005 and 2006.  "
+"Many non-US editions may not work properly."
+msgstr ""
+"CrossOver unterstützt die US-Editionen von Quicken 2002, 2003, 2004, 2005 "
+"und 2006.  Viele Nicht-US-Editionen funktionieren nicht richtig."
+
+msgid "CrossOver supports US editions of Quicken 2007 and 2008."
+msgstr "CrossOver unterstützt die US-Edition von Quicken 2007 und 2008."
+
+msgid ""
+"CrossOver supports Word, Excel, Outlook and PowerPoint in Microsoft Office "
+"XP."
+msgstr ""
+"CrossOver unterstützt Word, Excel, Outlook und PowerPoint aus Microsoft "
+"Office XP."
+
+msgid ""
+"CrossOver supports Word, Excel, PowerPoint and Outlook in Microsoft Office "
+"2000."
+msgstr ""
+"CrossOver unterstützt Word, Excel, PowerPoint und Outlook unter Microsoft "
+"Office 2000."
+
+msgid ""
+"CrossOver supports Word, Excel, PowerPoint and Outlook in Microsoft Office "
+"2003."
+msgstr ""
+"CrossOver unterstützt Word, Excel, PowerPoint und Outlook unter Microsoft "
+"Office 2003."
+
+msgid ""
+"CrossOver supports Word, Excel, PowerPoint and Outlook in Microsoft Office "
+"2007."
+msgstr ""
+"CrossOver unterstützt Word, Excel, PowerPoint und Outlook unter Microsoft "
+"Office 2007."
+
+msgid ""
+"CrossOver supports Word, Excel, PowerPoint and Outlook in Microsoft Office "
+"97."
+msgstr ""
+"CrossOver unterstützt Word, Excel, PowerPoint und Outlook aus Microsoft "
+"Office 97."
+
+msgid "CrossOver supports the Lotus Notes 5 client."
+msgstr "CrossOver unterstützt den Lotus Notes 5-Client."
+
+msgid "CrossOver supports the Lotus Notes 6.5.1 client."
+msgstr "CrossOver unterstützt den Lotus Notes 6.5.1-Client."
+
+msgid ""
+"CrossOver supports version 5 of the Windows Acrobat Reader.  We recommend "
+"that customers use the Linux Acrobat Reader, but some customers prefer the "
+"Windows version. If downloading Acrobat Reader manually, make sure you "
+"select Windows 98 as the platform."
+msgstr ""
+"CrossOver unterstützt Version 5 des Windows Acrobat Readers. Zwar empfehlen "
+"wir Benutzern die Verwendung des Linux Acrobat Readers, jedoch bevorzugen "
+"einige Anwender den Windowsversion. Wenn Sie Acrobat Reader manuell "
+"herunterladen möchten, geben Sie Windows 98 als Plattform an."
+
+msgid ""
+"CrossOver will automatically provide connectivity to Quicken.  Please do not "
+"install Internet Explorer in the bottle with Quicken 2007 or 2008."
+msgstr ""
+"CrossOver wird automatisch Verbindung für Quicken bereitstellen; bitte "
+"installieren Sie in der Quicken-2007- oder -2008-Flasche keinen Interner "
+"Explorer."
+
+msgid ""
+"CrossOver will now contact a server and learn what bottles are available.  "
+"Please enter a servername and login.  If necessary, you will be prompted for "
+"a password when you click 'Next >>'."
+msgstr ""
+"CrossOver wird jetzt einen Server kontaktieren, um die verfügbaren Flaschen "
+"kennenzulernen. Bitte geben Sie einen Server- und Benutzernamen ein. Falls "
+"nötig, werden Sie nach einem Paßwort gefragt, wenn Sie auf „Weiter >>“ "
+"drücken."
+
+msgid "DAO (Data Access Objects)"
+msgstr "DAO (Datenzugriffsobjekte)"
+
+msgid "DCOM95 (obsolete -- upgrade recommended)"
+msgstr "DCOM95 (veraltet -- Aktualisierung empfohlen)"
+
+msgid "DCOM98"
+msgstr "DCOM98"
+
+msgid "Default browser: '%s'"
+msgstr "Standard-Browser: „%s“"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "Delete Managed Data"
+msgstr "Lösche verwaltete Daten"
+
+msgid "Delete Selected Menus"
+msgstr "Ausgewählte Menüs löschen"
+
+msgid "Delete Ssh Keys"
+msgstr "Lösche SSH-Schlüssel:"
+
+msgid "Delete all CrossOver settings for the selected users"
+msgstr "Lösche alle CrossOver-Einstellungen für die ausgewählten Benutzer"
+
+msgid "Delete the CrossOver Ssh keys for the selected users"
+msgstr "Lösche die CrossOver-SSH-Schlüssel für die ausgewählten Benutzer"
+
+msgid "Delete the selected bottle"
+msgstr "Ausgewählte Flasche löschen"
+
+msgid "Deleting '%s'"
+msgstr "„%s“ wird gelöscht"
+
+msgid "Deleting CrossOver data"
+msgstr "Lösche CrossOver-Daten"
+
+msgid "Deleting the '%s' bottle"
+msgstr "Flasche „%s“ wird gelöscht"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Description:"
+msgstr "Beschreibung:"
+
+msgid "Desktop integration"
+msgstr "Desktop-Integration"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Detecting CD"
+msgstr "Erkennung der CD läuft"
+
+msgid "DirectDraw"
+msgstr "DirectDraw"
+
+msgid "Directories for shortcut scripts:"
+msgstr "Verzeichnisse für Verknüpfungsskripte:"
+
+msgid "Directories for system-wide shortcut scripts:"
+msgstr "Verzeichnisse für systemweite Verknüpfungsskripte:"
+
+msgid "Dll"
+msgstr "DLL"
+
+msgid "Dll Path"
+msgstr "DLL-Pfad"
+
+msgid "Do not warn about ulimits again."
+msgstr "Nie mehr über ulimits warnen."
+
+msgid "Do you want to delete root's bottles in addition to uninstalling %s?"
+msgstr "Möchten Sie die Root-Flaschen nach der Deinstallation von %s löschen?"
+
+msgid "Documentation"
+msgstr "Dokumentation"
+
+msgid "Download and Install a New Bottle"
+msgstr "Eine neue Flasche herunterladen und installieren"
+
+msgid "Download cancelled."
+msgstr "Herunterladen abgebrochen."
+
+msgid ""
+"Download failed.\n"
+"\n"
+"%s"
+msgstr ""
+"Herunterladen fehlgeschlagen.\n"
+"\n"
+"%s"
+
+msgid "Download installer:"
+msgstr "Installationsprogramm herunterladen:"
+
+msgid "Downloading '%s'"
+msgstr "„%s“ herunterladen:"
+
+msgid "Downloading Installer Information"
+msgstr "Informationen zum Installationsprogramm"
+
+msgid "Downloading the %s client bottle"
+msgstr "Herunterladen der %s-Client-Flasche"
+
+msgid "Dreamweaver MX"
+msgstr "Dreamweaver MX"
+
+msgid ""
+"During your purchase you will be asked to create an account using your email "
+"address and a password.  Enter your email address and password below and "
+"click 'Register' to upgrade to the full version."
+msgstr ""
+"Während Ihres Kaufes werden Sie gebeten, ein Konto mit Ihrer E-Mailadresse "
+"und einem Paßwort zu erstellen. Geben Sie Ihre E-Mailadresse und Paßwort "
+"unten ein und drücken Sie auf „Registrieren“, um auf die Vollversion zu "
+"aktualisieren."
+
+msgid "DynEd CourseWare"
+msgstr "DynEd CourseWare"
+
+msgid "EVE Online"
+msgstr "EVE Online"
+
+msgid ""
+"Each client bottle contains a set of applications that run on a particular "
+"server.  To get information about a client bottle, select it and click "
+"'Configure'."
+msgstr ""
+"Jede Client-Flasche enthält eine Anzahl von Anwendungen, die auf einem "
+"bestimmten Server laufen. Um Informationen über eine Client-Flasche zu "
+"erhalten, wählen Sie sie aus und drücken Sie auf „Konfigurieren“."
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "Eject"
+msgstr "Auswerfen"
+
+msgid "Eject CD"
+msgstr "CD Auswerfen"
+
+msgid "Eject failed"
+msgstr "Auswerfen fehlgeschlagen"
+
+msgid "Ejecting %s"
+msgstr "%s wird ausgeworfen"
+
+msgid ""
+"Ejecting a CD before the installer is done with it could interfer with the "
+"installation. Are you sure you want to eject the CD?"
+msgstr ""
+"Auswerfen der CD bevor das Installationsprogramm beendet ist, kann den "
+"Installationsprozeß stören. Wollen Sie wirklich die CD auswerfen?"
+
+msgid "Email address used for purchase:"
+msgstr "Für den Kauf verwandte E-Mail:"
+
+msgid "Enable DirectDraw support"
+msgstr "Aktiviere DirectDraw-Unterstützung"
+
+msgid "Enabled"
+msgstr "Aktiviert"
+
+msgid "Enabling Mozax"
+msgstr "Mozax aktivieren"
+
+msgid ""
+"Enabling the Mozax plugin may interfere with the behavior of other plugins.  "
+"If you encounter problems, return to this tab and deactivate Mozax."
+msgstr ""
+"Das Aktivieren des Mozax-Plugins kann das Verhalten von anderen Plugins "
+"beeinflussen. Wenn Sie Probleme mit anderen Plugins feststellen, "
+"deaktivieren Sie das Mozax-Plugin in diesem Menü."
+
+msgid "EndNote (7.0 or older)"
+msgstr "EndNote (7.0 oder älter)"
+
+msgid "EndNote 8"
+msgstr "EndNote 8"
+
+msgid "EndNote 8.0.2 upgrade"
+msgstr "EndNote 8.0.2-Aktualisierung"
+
+msgid "Enter the root password"
+msgstr "Root-Paßwort eingeben"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "Error creating empty file %s: %s"
+msgstr "Fehler beim Erstellen der leeren Datei %s: %s"
+
+msgid ""
+"Error executing '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Fehler beim Ausführen von „%s“:\n"
+"\n"
+"%s"
+
+msgid "Error in help file %s, line %s: found text outside section."
+msgstr "Fehler in Hilfedatei %s, Zeile %s: Text außerhalb Abschnitt gefunden."
+
+msgid "Error in help file '%s' at line %s: ']' expected."
+msgstr "Fehler in Hilfedatei %s, Zeile %s: „]“ erwartet."
+
+msgid ""
+"Error updating menu root:\n"
+"\n"
+"%s"
+msgstr ""
+"Fehler beim Aktualisieren der Menüwurzel:\n"
+"\n"
+"%s"
+
+msgid ""
+"Error while recreating menus:\n"
+"%s"
+msgstr ""
+"Fehler beim Neuerstellen der Menüs:\n"
+"%s"
+
+msgid ""
+"Error while setting .exe association:\n"
+"%s"
+msgstr ""
+"Fehler beim Setzen der .exe-Zuordnungen:\n"
+"%s"
+
+msgid "Error:  No bottle specified."
+msgstr "Fehler: Keine Flasche angegeben."
+
+msgid "Exe files"
+msgstr "EXE-Dateien"
+
+msgid "Exit"
+msgstr "Beenden"
+
+msgid "Exit and discard changes?"
+msgstr "Verlassen und Änderungen verwerfen?"
+
+msgid ""
+"Exit now and allow individual users to install their own Windows applications"
+msgstr ""
+"Jetzt beenden und individuellen Benutzern erlauben, ihre eigenen "
+"Windowsanwendungen zu installieren."
+
+msgid "Express install (recommended)"
+msgstr "Schnellinstallation (empfohlen)"
+
+msgid "Extension"
+msgstr "Dateiendung"
+
+msgid "Extracting %s"
+msgstr "Entpacke %s"
+
+msgid "Extracting files"
+msgstr "Dateien werden entpackt"
+
+msgid ""
+"Failed to add files to '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Hinzufügen der Dateien zu „%s“ fehlgeschlagen:\n"
+"\n"
+"%s"
+
+msgid ""
+"Failed to create menu:\n"
+"\n"
+"%s"
+msgstr ""
+"Erstellen des Menüs fehlgeschlagen:\n"
+"\n"
+"%s"
+
+msgid ""
+"Failed to download or install the bottle.\n"
+"\n"
+"%s"
+msgstr ""
+"Fehler beim Herunterladen oder Installieren der Flasche.\n"
+"\n"
+"%s"
+
+msgid "Falcom THE LEGEND OF HEROES \"SORA NO KISEKI : SECOND CHAPTER\""
+msgstr "Falcom THE LEGEND OF HEROES „SORA NO KISEKI : SECOND CHAPTER“"
+
+msgid "Falcom THE LEGEND OF HEROES \"SORA NO KISEKI the 3rd\""
+msgstr "Falcom THE LEGEND OF HEROES „SORA NO KISEKI the 3rd“"
+
+msgid "Falcom THE LEGEND OF HEROES VI \"SORA NO KISEKI\""
+msgstr "Falcom THE LEGEND OF HEROES VI „SORA NO KISEKI“"
+
+msgid "Falcom Ys ORIGIN"
+msgstr "Falcom Ys ORIGIN"
+
+msgid "Fatal Error"
+msgstr "Schwerer Fehler"
+
+msgid "File &name:"
+msgstr "Datei&name:"
+
+msgid "File &names:"
+msgstr "Datei&namen:"
+
+msgid "File Selection"
+msgstr "Dateiauswahl"
+
+msgid "Files of &type:"
+msgstr "Dateien des &Typs:"
+
+msgid "Finish"
+msgstr "Beenden"
+
+msgid "Finished"
+msgstr "Beendet"
+
+msgid "Finished installing "
+msgstr "Installation beendet"
+
+msgid "Finished installing %s"
+msgstr "%s wurde installiert"
+
+msgid "Finished. Press Return to continue."
+msgstr "Beendet. Drücken Sie Return, um fortzufahren."
+
+msgid "Finishing installation"
+msgstr "Beende Installation"
+
+msgid "Fix"
+msgstr "Beheben"
+
+msgid "Fix mount options"
+msgstr "Korrigiere Mount-Optionen"
+
+msgid "Flash 9 ocx"
+msgstr "Flash 9 ocx"
+
+msgid "Flash MX"
+msgstr "Flash MX"
+
+msgid "Flash Player"
+msgstr "Flash Player"
+
+msgid "Fonts"
+msgstr "Schriften"
+
+msgid ""
+"For best results, each game should be installed in its own bottle.  This "
+"will use only a small amount of additional disk space."
+msgstr ""
+"Für beste Ergebnisse, sollte jedes Spiel in einer eigenen Flasche "
+"installiert werden; dies braucht nur wenig zusätzlichen Festplattenspeicher."
+
+msgid "Force Quit"
+msgstr "Beenden erzwingen"
+
+msgid "Found installer:  '%s'"
+msgstr "Installationsprogramm gefunden: „%s“"
+
+msgid "Getting the list of available bottles from %s"
+msgstr "Laden der Liste verfügbarer Flaschen von %s"
+
+msgid "Graphics Problems Detected"
+msgstr "Graphikprobleme festgestellt"
+
+msgid "Guild Wars"
+msgstr "Guild Wars"
+
+msgid "HTTP Proxy"
+msgstr "HTTP-Proxy"
+
+msgid "Half-Life"
+msgstr "Half-Life"
+
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "Help unavailable"
+msgstr "Hilfe nicht verfügbar"
+
+msgid "Hide CrossOver system tray"
+msgstr "Verstecke CrossOver-System-Tray."
+
+msgid "Hide file extensions"
+msgstr "Dateiendungen verstecken"
+
+msgid "Home Directory"
+msgstr "Heimverzeichnis"
+
+msgid "Host:"
+msgstr "Rechner:"
+
+msgid "IBM Homepage Builder 10"
+msgstr "IBM Homepage Builder 10"
+
+msgid "IBM Homepage Builder 11"
+msgstr "IBM Homepage Builder 11"
+
+msgid "IBM Homepage Builder 12"
+msgstr "IBM Homepage Builder 12"
+
+msgid "Ichitaro 2006"
+msgstr "Ichitaro 2006"
+
+msgid "Ichitaro 2007"
+msgstr "Ichitaro 2007"
+
+msgid "Ichitaro Viewer"
+msgstr "Ichitaro Viewer"
+
+msgid "Icon"
+msgstr "Symbol"
+
+msgid ""
+"If this problem continues, contact CodeWeavers sales support at "
+"sales@CodeWeavers.com."
+msgstr ""
+"Falls die Probleme weiterhin auftreten, wenden Sie sich an die CodeWeavers-"
+"Verkaufsunterstützung unter sales@CodeWeavers.com."
+
+msgid ""
+"If this problem continues, you can also upgrade by downloading and "
+"installing an enabled version."
+msgstr ""
+"Falls das Problem weiterhin auftritt, können Sie auch Aktualisieren indem "
+"Sie eine aktivierte Version herunterladen und installieren."
+
+msgid ""
+"If you are certain that the installation is finished, click the "
+"'Installation complete' button to notify CrossOver."
+msgstr ""
+"Wenn Sie sich sicher sind, daß die Installation abgeschlossen ist, klicken "
+"Sie auf „Installationsprogramm ist beendet“, um CrossOver zu "
+"benachrichtigen. "
+
+msgid ""
+"If you are installing a downloaded version of Quicken, make sure that you "
+"install Internet Explorer first.  Without Internet Explorer, many online "
+"features of Quicken will not be available."
+msgstr ""
+"Wenn Sie eine Herunterlad-Version von Quicken installieren, stellen Sie "
+"sicher, daß der Internet Explorer zuerst installiert wird. Ohne diesen sind "
+"viele Online-Funktionen von Quicken nicht verfügbar."
+
+msgid ""
+"If you configure CrossOver as root, the applications that you install will "
+"only be available for the root user.\n"
+"\n"
+"Please select one of the options below, or click 'Help' for more information."
+msgstr ""
+"Falls Sie CrossOver als Root konfigurieren, werden die installieren "
+"Anwendungen nur für den Root-Benutzer verfügbar sein.\n"
+"\n"
+"Bitte wählen Sie eine der untenstehenden Möglichkeiten aus oder drücken Sie "
+"auf „Hilfe“, um weitere Information zu erhalten."
+
+msgid ""
+"If you have already purchased a full version of this product, rerun '%s' as "
+"root to register your copy."
+msgstr ""
+"Wenn Sie bereits eine Vollversion dieses Produktes gekauft haben, rufen Sie "
+"„%s“ als Root auf, um Ihre Kopie zu registrieren."
+
+msgid ""
+"If you'd like to remotely install the client package, select the 'Install "
+"client now' box.  The wizard will execute the installer on the client "
+"machine using ssh.\n"
+"\n"
+"This option requires that the client machine allow remote root logins via "
+"ssh -X."
+msgstr ""
+"Wenn Sie das Client-Paket von einem entfernten Rechner installieren möchten, "
+"wählen Sie „Client jetzt installieren“ aus. Der Wizard wird das "
+"Installationsprogramm auf dem Client-Rechner mittels SSH installieren.\n"
+"\n"
+"Diese Option setzt voraus, daß der entfernte Rechner das Anmelden als Root "
+"via SSH -X erlaubt."
+
+msgid "Ignore"
+msgstr "Ignorieren"
+
+msgid "Include these bottles:"
+msgstr "Diese Flaschen einschließen:"
+
+msgid "Initializing %s"
+msgstr "Initialisiere %s"
+
+msgid "Install %s"
+msgstr "Installiere %s"
+
+msgid "Install Software"
+msgstr "Software installieren"
+
+msgid "Install Windows Software"
+msgstr "Windows-Software installieren"
+
+msgid "Install a client bottle"
+msgstr "Eine Client-Flasche installieren"
+
+msgid "Install client now"
+msgstr "Client jetzt installieren"
+
+msgid "Install fonts"
+msgstr "Schriften installieren"
+
+msgid "Install into"
+msgstr "Installiere nach"
+
+msgid "Install mode"
+msgstr "Installationsmodus"
+
+msgid "Install more Windows software"
+msgstr "Weitere Windows-Software installieren"
+
+msgid "Install new software"
+msgstr "Neue Software installieren"
+
+msgid "Install other game"
+msgstr "Weiteres Spiel installieren"
+
+msgid "Install software"
+msgstr "Software installieren"
+
+msgid "Install unsupported software"
+msgstr "Nicht unterstützte Software installieren"
+
+msgid "Install..."
+msgstr "Installieren..."
+
+msgid "Installation complete"
+msgstr "Installation ist beendet"
+
+msgid "Installation complete. Press Enter to continue."
+msgstr "Installation beendet. Drücken Sie Enter, um fortzufahren."
+
+msgid "Installation complete?"
+msgstr "Installation beendet?"
+
+msgid "Installation of %s complete."
+msgstr "Die Installation von %s ist abgeschlossen."
+
+msgid "Installed Client Bottles"
+msgstr "Installierte Client-Flaschen"
+
+msgid "Installed software"
+msgstr "Installierte Software"
+
+msgid "Installing %s"
+msgstr "%s wird installiert"
+
+msgid "Installing client"
+msgstr "Client wird installiert"
+
+msgid ""
+"Installing unsupported software may interfere with the behavior of your "
+"existing applications.  In order to preserve the integrity of the '%s' "
+"bottle, we recommend that you install into a new bottle."
+msgstr ""
+"Die Installation nicht unterstützter Programme kann das Verhalten Ihrer "
+"existierenden Anwendungen beeinträchtigen. Um die Intigrität der „%s“-"
+"Flasche zu erhalten, sollten Sie diese in einer neuen Flasche installieren."
+
+msgid "Installing:\n"
+msgstr "Installiere:\n"
+
+msgid "Installs AWR Design Environment 2003."
+msgstr "Installiert AWR Design Environment 2003."
+
+msgid "Installs Apple's iTunes"
+msgstr "Installiert Apples iTunes"
+
+msgid "Installs BIZTEL."
+msgstr "Installiert BIZTEL."
+
+msgid "Installs EndNote 8."
+msgstr "Installiert EndNote 8."
+
+msgid "Installs EndNote."
+msgstr "Installiert EndNote."
+
+msgid ""
+"Installs Falcom game THE LEGEND OF HEROES \"SORA NO KISEKI : SECOND CHAPTER"
+"\"."
+msgstr ""
+"Installiert das Falcom-Spiel THE LEGEND OF HEROES „SORA NO KISEKI : SECOND "
+"CHAPTER“."
+
+msgid "Installs Falcom game THE LEGEND OF HEROES \"SORA NO KISEKI the 3rd\"."
+msgstr ""
+"Installiert das Falcom-Spiel THE LEGEND OF HEROES „SORA NO KISEKIthe 3rd“."
+
+msgid "Installs Falcom game THE LEGEND OF HEROES VI \"SORA NO KISEKI\"."
+msgstr "Installiert das Falcom-Spiel THE LEGEND OF HEROES „SORA NO KISEKI“."
+
+msgid "Installs Falcom game Yso ORIGIN."
+msgstr "Installiert das Falcom-Spiel Yso ORIGIN."
+
+msgid "Installs Flash MX."
+msgstr "Installiert Flash MX"
+
+msgid "Installs Half-Life."
+msgstr "Installiert Half-Life."
+
+msgid "Installs Internet Explorer 5.5."
+msgstr "Installiert Internet Explorer Version 5.5"
+
+msgid "Installs KOGADO game GADGET TRIAL."
+msgstr "Installiert das KOGADO-Spiel GADGET TRIAL."
+
+msgid "Installs KOGADO game JyouKyouKaishi!."
+msgstr "Installiert das KOGADO-Spiel JyouKyouKaishi!."
+
+msgid "Installs Microsoft Project 2000."
+msgstr "Installiert Microsoft Project 2000"
+
+msgid "Installs Microsoft Project 2002."
+msgstr "Installiert Microsoft Project 2002"
+
+msgid "Installs Microsoft Project 2003."
+msgstr "Installiert Microsoft Project 2003"
+
+msgid "Installs Microsoft Visio 2000."
+msgstr "Installiert Microsoft Visio 2002"
+
+msgid "Installs Microsoft Visio 2002."
+msgstr "Installiert Microsoft Visio 2002"
+
+msgid "Installs Microsoft Visio 2003."
+msgstr "Installiert Microsoft Visio 2003"
+
+msgid "Installs Vocaloid 2."
+msgstr "Installiert Vocaloid 2."
+
+msgid ""
+"Installs the Andale Mono TrueType font from Microsoft's pack of TrueType "
+"core fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Andale Mono aus dem Microsoft-Paket "
+"„TrueType core fonts for the Web“."
+
+msgid ""
+"Installs the Arial Black TrueType font from Microsoft's pack of TrueType "
+"core fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Arial Black aus dem Microsoft-Paket "
+"„TrueType core fonts for the Web“."
+
+msgid ""
+"Installs the Arial TrueType font from Microsoft's pack of TrueType core "
+"fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Arial aus dem Microsoft-Paket „TrueType "
+"core fonts for the Web“."
+
+msgid ""
+"Installs the Comic Sans TrueType font from Microsoft's pack of TrueType core "
+"fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Comic aus dem Microsoft-Paket „TrueType "
+"core fonts for the Web“."
+
+msgid ""
+"Installs the Courier New TrueType font from Microsoft's pack of TrueType "
+"core fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Courier New aus dem Microsoft-Paket "
+"„TrueType core fonts for the Web“."
+
+msgid ""
+"Installs the Georgia TrueType font from Microsoft's pack of TrueType core "
+"fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Georgia aus dem Microsoft-Paket „TrueType "
+"core fonts for the Web“."
+
+msgid ""
+"Installs the Impact TrueType font from Microsoft's pack of TrueType core "
+"fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Impact aus dem Microsoft-Paket „TrueType "
+"core fonts for the Web“."
+
+msgid "Installs the Japanese Homepage Builder 10."
+msgstr "Installiert den japanischen Homepage Builder 10."
+
+msgid "Installs the Japanese Homepage Builder 11."
+msgstr "Installiert den japanischen Homepage Builder 10."
+
+msgid "Installs the Japanese Homepage Builder 12."
+msgstr "Installiert den japanischen Homepage Builder 12."
+
+msgid "Installs the Japanese software Ichitaro Viewer."
+msgstr "Installiert die japanische Software Ichitaro Viewer."
+
+msgid "Installs the Japanese word processer Ichitaro 2006."
+msgstr "Installier die japanische Textverarbeitung Ichitaro 2006."
+
+msgid "Installs the Japanese word processer Ichitaro 2007."
+msgstr "Installier die japanische Textverarbeitung Ichitaro 2007."
+
+msgid "Installs the Sun Java SDK."
+msgstr "Installiert das Sun Java-Softwareentwicklungspaket (SDK)"
+
+msgid ""
+"Installs the Times New Roman TrueType font from Microsoft's pack of "
+"'TrueType core fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Times New Roman aus dem Microsoft-Paket "
+"„TrueType core fonts for the Web“."
+
+msgid ""
+"Installs the Trebuchet MS TrueType font from Microsoft's pack of 'TrueType "
+"core fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Trebuchet MS aus dem Microsoft-Paket "
+"„TrueType core fonts for the Web“."
+
+msgid ""
+"Installs the Verdana TrueType font from Microsoft's pack of 'TrueType core "
+"fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Verdana aus dem Microsoft-Paket „TrueType "
+"core fonts for the Web“."
+
+msgid ""
+"Installs the Webdings TrueType font from Microsoft's pack of 'TrueType core "
+"fonts for the Web."
+msgstr ""
+"Installiert die TrueType-Schrift Webdings aus dem Microsoft-Paket „TrueType "
+"core fonts for the Web“."
+
+msgid "Internet Explorer 5.5"
+msgstr "Internet Explorer, Version 5.5"
+
+msgid "Internet Explorer 6.0"
+msgstr "Internet Explorer, Version 6.0"
+
+msgid "Internet Explorer 6.0 installer files"
+msgstr "Internet Explorer 6.0 Installationsdateien"
+
+msgid ""
+"Internet Explorer, version 6.0.  Note that you must have a valid license to "
+"use this software, and it is your responsibility to read the EULA to insure "
+"this carefully."
+msgstr ""
+"Internet Explorer, Version 6.0. Beachten Sie, daß Sie eine gültige Lizenz "
+"zum Verwenden dieser Software benötigen und daß es in Ihrer Verantwortung "
+"liegt, EULA zu lesen, um dies sicherzustellen."
+
+msgid ""
+"Interrupting an installer before it has completely finished could "
+"permanently corrupt your bottle. Are you sure the installer has finished?"
+msgstr ""
+"Das Abbrechen eines noch laufenden Installationsprogramms kann Ihre Flasche "
+"unwiederuflich beschädigen. Sind Sie sich sicher, daß das "
+"Installationsprogramm beendet ist?"
+
+msgid "Invalid bottle '%s'"
+msgstr "Ungültige Flasche „%s“"
+
+msgid "Invalid bottle: %s"
+msgstr "Ungültige Flasche: %s"
+
+msgid ""
+"It seems that your ssh key is no longer being accepted by the server '%s'.\n"
+"\n"
+"Do you want to cancel the current operation or create a new Ssh key?"
+msgstr ""
+"Es scheint, daß Ihr SSH-Schlüssel nicht mehr vom Server „%s“ akzeptiert "
+"wird.\n"
+"\n"
+"Wollen Sie die aktuelle Operation abbrechen oder einen neuen SSH-Schlüssel "
+"erstellen?"
+
+msgid "Japanese Gothic Override"
+msgstr "Japanische Gothic überschreiben"
+
+msgid "Java 2 SDK"
+msgstr "Java 2 SDK"
+
+msgid "KDE plugin configuration"
+msgstr "KDE Plugin-Konfiguration"
+
+msgid "KOGADO GADGET TRIAL"
+msgstr "KOGADO GADGET TRIAL"
+
+msgid "KOGADO JyouKyouKaishi!"
+msgstr "KOGADO JyouKyouKaishi!"
+
+msgid "Kill all CrossOver processes for the selected users"
+msgstr "Alle CrossOver-Prozesse des ausgewählten Benutzers töten."
+
+msgid "Launch a Windows application"
+msgstr "Eine Windows-Anwendungen starten"
+
+msgid "Launch all .exe files using CrossOver"
+msgstr "Alle .exe-Dateien mit CrossOver starten"
+
+msgid "Launching %s"
+msgstr "%s wird ausgeführt"
+
+msgid "Launching the KDE plugin manager..."
+msgstr "Der KDE Plugin Manager wird gestartet.."
+
+msgid "Location:"
+msgstr "Pfad:"
+
+msgid "Lotus Notes 5"
+msgstr "Lotus Notes 5"
+
+msgid "Lotus Notes 6.5.1"
+msgstr "Lotus Notes 6.5.1"
+
+msgid "MDAC 2.5 SP3 can be installed as a prerequisite for other applications."
+msgstr ""
+"MDAC 2.5 SP3 kann installiert werden, um Abhängigkeit für andere Anwendungen "
+"zu erfüllen."
+
+msgid "MDL Chime"
+msgstr "MDL Chime"
+
+msgid ""
+"MDL Chime is a plugin which lets you visualize and manipulate molecules in "
+"3D."
+msgstr ""
+"MDL Chime ist ein Plugin, mit dem Sie Moleküle dreidimensional visualisieren "
+"und manipulieren können."
+
+msgid "MFC libraries for ActiveX"
+msgstr "MFC-Bibliotheken für ActiveX"
+
+msgid "MSXML 3.0 can be installed as a prerequisite for other applications."
+msgstr ""
+"MSXML 3.0 kann installiert werden, um Abhängigkeiten anderer Anwendung zu "
+"erfüllen."
+
+msgid ""
+"Macromedia Flash is used by many sites to write web applications or display "
+"sophisticated animations."
+msgstr ""
+"Macromedia Flash wird von vielen Webseiten zur Wiedergabe von Animationen "
+"oder zum Schreiben von Web Anwendungen verwendet."
+
+msgid "Make Default"
+msgstr "Zum Standard machen"
+
+msgid "Make Private Copy"
+msgstr "Private Kopie machen"
+
+msgid "Make this browser the default for Windows applications"
+msgstr "Diesen Browser als Standard für Windows-Anwendungen einrichten"
+
+msgid "Manage Bottles"
+msgstr "Flaschen verwalten"
+
+msgid "Manage the applications and processes running in this Bottle"
+msgstr "Verwalten der Anwendungen und Prozesse in dieser Flasche"
+
+msgid "Managed"
+msgstr "Verwaltet"
+
+msgid "Managed Bottle"
+msgstr "Verwaltete Flaschen"
+
+msgid "Managed_%s"
+msgstr "Verwaltet_%s"
+
+msgid "Maptitude for the Web - Linux Edition"
+msgstr "Maptitude for the Web - Linux-Edition"
+
+msgid "Mark bottle packages with release tag:"
+msgstr "Markiere Flaschenpakete mit Versionsbezeichnung:"
+
+msgid "Menu name"
+msgstr "Menü-Name"
+
+msgid "Menu root:"
+msgstr "Menü-Wurzel"
+
+msgid "Menus"
+msgstr "Menüs"
+
+msgid "Microsoft .NET Framework 2.*"
+msgstr "Microsoft .NET Framework 2.*"
+
+msgid "Microsoft .NET Framework 2.0"
+msgstr "Microsoft .NET Framework 2.0"
+
+msgid "Microsoft .NET Framework 2.0 For Win98 Bottles"
+msgstr "Microsoft .NET Framework 2.0 für Win98-Flaschen"
+
+msgid "Microsoft Data Access Components (MDAC) 2.5 Service Pack 3"
+msgstr "Microsoft Data Access Components (MDAC) 2.5 Service Pack 3"
+
+msgid "Microsoft DirectX Runtime"
+msgstr "Microsoft DirectX Laufzeitumgebung"
+
+msgid "Microsoft DirectX Runtime (Download)"
+msgstr "Microsoft DirectX Laufzeitumgebung (Herunterladen)"
+
+msgid "Microsoft Excel Viewer 2003"
+msgstr "Microsoft Excel Viewer 2003"
+
+msgid "Microsoft Excel Viewer 97/2000"
+msgstr "Microsoft Excel Viewer 97/2000"
+
+msgid "Microsoft NetMeeting"
+msgstr "Microsoft NetMeeting"
+
+msgid "Microsoft Office 2000"
+msgstr "Microsoft Office 2000"
+
+msgid "Microsoft Office 2000 Service Release 1a Update"
+msgstr "Microsoft Office 2000 Service Release 1a Update"
+
+msgid "Microsoft Office 2000 Service Release 3 Update"
+msgstr "Microsoft Office 2000 Service Release 3 Update"
+
+msgid "Microsoft Office 2003"
+msgstr "Microsoft Office 2003"
+
+msgid "Microsoft Office 2003 Service Pack 1"
+msgstr "Microsoft Office 2003 Service Pack 1"
+
+msgid "Microsoft Office 2003 Service Pack 3"
+msgstr "Microsoft Office 2003 Service Pack 3"
+
+msgid "Microsoft Office 2007"
+msgstr "Microsoft Office 2007"
+
+msgid "Microsoft Office 97"
+msgstr "Microsoft Office 97"
+
+msgid "Microsoft Office 97 Service Release 1 Update"
+msgstr "Microsoft Office 97 Service Release 1 Update"
+
+msgid "Microsoft Office 97 Service Release 2b Update"
+msgstr "Microsoft Office 97 Service Release 2b Update"
+
+msgid ""
+"Microsoft Office Compatibility Pack for Word, Excel, and PowerPoint 2007 "
+"File Formats"
+msgstr ""
+"Microsoft-Office-Kompatibilitätspaket für Word-, Excel- und PowerPoint-2007-"
+"Dateiformate"
+
+msgid "Microsoft Office XP"
+msgstr "Microsoft Office XP"
+
+msgid "Microsoft Office XP Service Pack 1 Update"
+msgstr "Microsoft Office XP Service Pack 1 Update"
+
+msgid "Microsoft Office XP Service Pack 2 Update"
+msgstr "Microsoft Office XP Service Pack 2 Update"
+
+msgid "Microsoft Outlook 2003"
+msgstr "Microsoft Outlook 2003"
+
+msgid "Microsoft Outlook Express"
+msgstr "Microsoft Outlook Express"
+
+msgid "Microsoft PowerPoint Viewer 2003"
+msgstr "Microsoft PowerPoint Viewer 2003"
+
+msgid "Microsoft PowerPoint Viewer 97/2000"
+msgstr "Microsoft PowerPoint Viewer 97/2000"
+
+msgid "Microsoft Project 2000"
+msgstr "Microsoft Project 2000"
+
+msgid "Microsoft Project 2002"
+msgstr "Microsoft Project 2002"
+
+msgid "Microsoft Project 2003"
+msgstr "Microsoft Project 2003"
+
+msgid "Microsoft Visio"
+msgstr "Microsoft Visio"
+
+msgid "Microsoft Visio 2002"
+msgstr "Microsoft Visio 2002"
+
+msgid "Microsoft Visio 2003"
+msgstr "Microsoft Visio 2003"
+
+msgid "Microsoft Word Viewer 2003"
+msgstr "Microsoft Word Viewer 2003"
+
+msgid "Microsoft Word Viewer 97/2000"
+msgstr "Microsoft Word Viewer 97/2000"
+
+msgid "Microsoft XML Parser (MSXML) 3.0"
+msgstr "Microsoft XML Parser (MSXML) 3.0"
+
+msgid ""
+"Most users should use the Mac OS X version of QuickTime and should not "
+"install this package. However, the Windows version of QuickTime may "
+"occasionally be useful when testing web pages in Internet Explorer."
+msgstr ""
+"Die meisten Nutzer sollten die MacOS-X-Version von QuickTime benutzen und "
+"nicht dies Paket installieren. Die Windows-QuickTime-Version kann jedoch "
+"manchmal sinnvoll zum Testen von Webseiten mit dem Internet Explorer sein."
+
+msgid "Move Down"
+msgstr "Nach unten"
+
+msgid "Move Up"
+msgstr "Nach oben"
+
+msgid "Msi files"
+msgstr "Msi-Dateien"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Native Browser Files"
+msgstr "Systemeigene Browerdateien"
+
+msgid "New bottle (recommended):"
+msgstr "Neue Flasche (empfohlen)"
+
+msgid "New bottle:"
+msgstr "Neue Software"
+
+msgid "New driver name:"
+msgstr "Neuer Treibername:"
+
+msgid "New fonts"
+msgstr "Neue Schriftarten"
+
+msgid "New software"
+msgstr "Neue Software"
+
+msgid "Next >>"
+msgstr "Weiter >>"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "No CD-ROM detected"
+msgstr "Es wurde keine CD-ROM erkannt"
+
+msgid ""
+"No bottles were located on %s.\n"
+"Please try a different server."
+msgstr ""
+"Keine Flaschen gefunden auf %s.\n"
+"Bitte versuchen Sie einen anderen Server."
+
+msgid "No modification is necessary."
+msgstr "Keine Änderungen notwendig."
+
+msgid ""
+"No servers have been configured so there are no Windows applications to "
+"stop.\n"
+msgstr ""
+"Kein Server wurde konfiguriert, so daß es keine zu stoppenden "
+"Windowsanwendungen gibt.\n"
+
+msgid ""
+"No valid plugin directories are specified.\n"
+"To add one, go to the 'CrossOver\n"
+"Settings' tab under 'Advanced Settings.'"
+msgstr ""
+"Kein gültiges Plugin-Verzeichnisse angegeben.\n"
+"Um eines hinzuzufügen, gehen Sie zum „CrossOver Einstellungen“-Reiter unter "
+"„Erweiterte Einstellungen“."
+
+msgid "No wineprefix specified."
+msgstr "Kein Wineprefix angegeben."
+
+msgid "No, keep waiting"
+msgstr "Nein, weiter warten"
+
+msgid ""
+"Not opening the '%s' document because its extension does not match any of "
+"the allowed extensions: %s. This could indicate malicious activity.\n"
+"\n"
+"If you wish to open it anyway, save it to disk, verify its extension, and "
+"then open it manually."
+msgstr ""
+"Öffne das „%s“-Dokument nicht, da seine Dateiendung keiner der erlaubten "
+"Endungen entspricht: %s. Dies kann auf eine bösartige Aktivität hindeuten.\n"
+"\n"
+"Falls Sie die Datei trotzdem öffnen wollen, speichern Sie sie, überprüfen "
+"die Endungund öffnen sie dann manuell."
+
+msgid ""
+"Note that at the time this list was established, VP3 would not work with "
+"QuickTime 6."
+msgstr ""
+"Zum Zeitpunkt der Erstellung dieser Liste funktionierte VP3 nicht zusammen "
+"mit QuickTime 6."
+
+msgid ""
+"Note that you may get an error complaining about some 'damaged download "
+"information' when installing Internet Explorer 6 from the Internet. This is "
+"a known Internet Explorer bug. If this happens, immediately retry the "
+"installation and it should work eventually."
+msgstr ""
+"Beachten Sie, daß Sie beim Installieren des rnet Explorer 6 aus dem Internet "
+"den Fehler „defekte Herunterladinformationen“ bekommen können. Das ist ein "
+"bekannter Fehler des Internet Explorers. In diesem Fall sollte man erneut zu "
+"installieren versuchen bis es klappt."
+
+msgid "OK"
+msgstr "OK"
+
+msgid ""
+"Once these menus are deleted, you will not be able to recreate them without "
+"reinstalling the associated software.  Are you sure you want to do this?"
+msgstr ""
+"Wenn diese Menüs gelöscht werden, können Sie ohne Neuinstallation der "
+"entsprechenden Software nicht wiederhergestellt werden. Wollen Sie "
+"fortfahren?"
+
+msgid "Open"
+msgstr "Öffnen"
+
+msgid "OpenSSH Authentication Passphrase Request"
+msgstr "OpenSSH-Authentifzierungspaßwort-Aufforderung"
+
+msgid "OpenSSH Host Authentication"
+msgstr "OpenSSH-Rechnerauthentifizierung"
+
+msgid "Operation cancelled"
+msgstr "Operation abgebrochen"
+
+msgid "Oracle JInitiator 1.1"
+msgstr "Oracle JInitiator 1.1"
+
+msgid "Other CD-ROM location:"
+msgstr "Andere CD-ROM-Pfad:"
+
+msgid "Other existing bottle -- LIKELY TO PRODUCE ERRORS --"
+msgstr "Andere existierende Flasche -- MACHT WAHRSCHEINLICH PROBLEME --"
+
+msgid "Other games"
+msgstr "Andere Spiele"
+
+msgid "Other installer file:"
+msgstr "Andere Installationsdatei:"
+
+msgid "Outlook security"
+msgstr "Outlook-Sicherheit"
+
+msgid "Overrides the font for MS Gothic and friends."
+msgstr "Überschreiben der Schrift für MS Gothic und andere."
+
+msgid "Package log for CodeWeavers support"
+msgstr "Paket-Log für den CodeWeavers-Support"
+
+msgid "Package to install:"
+msgstr "Zu installierende Pakete"
+
+msgid "Password:"
+msgstr "Paßwort:"
+
+msgid "Play"
+msgstr "Abspielen"
+
+msgid ""
+"Please be sure to read the Windows Media Player End User License Agreement "
+"(EULA) carefully before installing."
+msgstr ""
+"Bitte lesen Sie vor der Installation sorgfältig das Windows Media Player End "
+"User License Agreement (EULA)."
+
+msgid "Please enter your authentication passphrase:"
+msgstr "Bitte geben Sie Ihr Authentifizierungspaßwort ein:"
+
+msgid ""
+"Please insert the AWR Design Environment CD and click 'Next' to continue."
+msgstr ""
+"Bitte legen Sie die „AWR Design Environment“-CD ein und klicken auf "
+"„Weiter“, um fortzufahren."
+
+msgid ""
+"Please insert the Adobe FrameMaker 7 CD. If you are installing an upgrade "
+"version, you may have to umount/remount the CDROM manually during "
+"installation."
+msgstr ""
+"Legen Sie die Adobe-FrameMaker-7-CD ein. Bei Installation einer Upgrade-"
+"Version müssen Sie möglicherweise während der Installation die CD-ROM "
+"manuell unmounten/neu mounten."
+
+msgid ""
+"Please insert the Adobe Photoshop 6 CD. If you are installing an upgrade "
+"version, you may have to umount/remount the CDROM manually during "
+"installation."
+msgstr ""
+"Legen Sie die Adobe-Photoshop-6-CD ein. Bei Installation einer Upgrade-"
+"Version müssen Sie möglicherweise während der Installation die CD-ROM "
+"manuell unmounten/neu mounten."
+
+msgid ""
+"Please insert the Adobe Photoshop 7 CD. If you are installing an upgrade "
+"version, you may have to umount/remount the CDROM manually during "
+"installation."
+msgstr ""
+"Legen Sie die Adobe-Photoshop-7-CD ein. Bei Installation einer Upgrade-"
+"Version müssen Sie möglicherweise während der Installation die CD-ROM "
+"manuell unmounten/neu mounten."
+
+msgid "Please insert the Adobe Photoshop CS CD."
+msgstr "Bitte legen Sie die Adobe-Photoshop-CS-CD ein."
+
+msgid "Please insert the Adobe Photoshop CS2 CD."
+msgstr "Bitte legen Sie die Adobe-Photoshop-CS2-CD ein."
+
+msgid "Please insert the Adobe Photoshop CS3 CD."
+msgstr "Bitte legen Sie die Adobe-Photoshop-CS3-CD ein."
+
+msgid ""
+"Please insert the Dreamweaver MX CD.\n"
+"\n"
+"NOTE: CrossOver does not currently support Dreamweaver MX 2004."
+msgstr ""
+"Bitte legen Sie die Dreamweaver-MX-CD ein.\n"
+"\n"
+"Hinweis: CrossOver unterstützt gegenwärtig Dreamweaver MX 2004 nicht."
+
+msgid "Please insert the DynEd Installation CD and click 'Next' to continue."
+msgstr ""
+"Bitte legen Sie die DynEd-Installations-CD ein und klicken Sie auf „Weiter“, "
+"um fortzufahren."
+
+msgid ""
+"Please insert the EndNote 8 CD and click 'Next' to continue.\n"
+"\n"
+"NOTE:  If you are installing the EndNote demo, the demo warning dialog will "
+"not be visible.  You will need to press 'Enter' to dismiss the splash screen."
+msgstr ""
+"Bitte legen Sie die EndNote-8-CD ein und klicken Sie auf „Weiter“, um "
+"fortzufahren.\n"
+"Beachten Sie:  Falls Sie die EndNote-Demoversion installieren, ist der Demo-"
+"Warndialog verdeckt. Drücken Sie einfach „Enter“, um das Startbild zu "
+"beenden."
+
+msgid ""
+"Please insert the EndNote CD and click 'Next' to continue.\n"
+"\n"
+"NOTE:  If you are installing the EndNote demo, the demo warning dialog will "
+"not be visible.  You will need to press 'Enter' to dismiss the splash screen."
+msgstr ""
+"Bitte legen Sie die EndNote-CD ein und klicken Sie auf „Weiter“, um "
+"fortzufahren.\n"
+"Beachten Sie:  Falls Sie die EndNote-Demoversion installieren, ist der Demo-"
+"Warndialog nicht sichtbar. Drücken Sie einfach „Enter“, um das Startbild zu "
+"beenden."
+
+msgid ""
+"Please insert the Flash MX CD.\n"
+"\n"
+"NOTE: CrossOver does not currently support Flash MX 2004."
+msgstr ""
+"Bitte legen Sie die Flash-MX-CD ein.\n"
+"\n"
+"Beachten Sie, daß CrossOver gegenwärtig Flash MX 2004 nicht unterstützt."
+
+msgid "Please insert the GADGET TRIAL CD."
+msgstr "Bitte legen Sie die GADGET-TRIAL-CD ein."
+
+msgid "Please insert the Half-Life installer CD."
+msgstr "Bitte legen Sie die Half-Life-Installions-CD ein."
+
+msgid "Please insert the Homepage Builder CD."
+msgstr "Bitte legen Sie die Homepage-Builder-Installions-CD ein."
+
+msgid "Please insert the Ichitaro CD."
+msgstr "Bitte legen Sie die Ichitaro-CD ein."
+
+msgid "Please insert the Ichitaro Viewer CD."
+msgstr "Bitte legen Sie die Ichitaro-Viewer-CD ein."
+
+msgid "Please insert the JyouKyouKaishi! CD."
+msgstr "Bitte legen Sie die JyouKyouKaishi!-CD ein."
+
+msgid "Please insert the Lotus Notes CD."
+msgstr "Bitte legen Sie die Lotus-Notes-CD ein."
+
+msgid "Please insert the Maptitude CD and click 'Next' to continue."
+msgstr ""
+"Bitte legen Sie die Maptitude-CD ein und klicken auf „Weiter“, um "
+"fortzufahren."
+
+msgid "Please insert the Microsoft Office 2003 CD."
+msgstr "Bitte legen Sie die Microsoft-Office-2003-CD ein."
+
+msgid "Please insert the Microsoft Office 2007 CD."
+msgstr "Bitte legen Sie die Microsoft-Office-2007-CD ein."
+
+msgid "Please insert the Microsoft Office CD."
+msgstr "Bitte legen Sie die Microsoft-Office-CD ein."
+
+msgid "Please insert the Microsoft Outlook 2003 CD."
+msgstr "Bitte legen Sie die Microsoft-Outlook-2003-CD ein."
+
+msgid "Please insert the Microsoft Project CD."
+msgstr "Bitte legen Sie die Microsoft-Project-CD."
+
+msgid ""
+"Please insert the Microsoft Visio 2000 Standard CD (that is, version 6.0 "
+"Standard)."
+msgstr ""
+"Legen Sie die Microsoft-Visio-2000-Standard-CD ein (d.h. Version 6.0 "
+"Standard)."
+
+msgid "Please insert the Microsoft Visio 2002 Standard CD."
+msgstr "Bitte legen Sie die Microsoft-Visio-2002-Standard-CD ein."
+
+msgid "Please insert the Microsoft Visio 2003 Standard CD."
+msgstr "Bitte legen Sie die Microsoft-Visio-2003-Standard-CD ein."
+
+msgid "Please insert the QuickBooks CD and click 'Next' to continue."
+msgstr ""
+"Bitte legen Sie die QuickenBooks-CD ein und klicken auf „Weiter“, um "
+"fortzufahren."
+
+msgid ""
+"Please insert the THE LEGEND OF HEROES \"SORA NO KISEKI : SECOND CHAPTER\" "
+"CD."
+msgstr ""
+"Bitte legen Sie THE LEGEND OF HEROES „SORA NO KISEKI : SECOND CHAPTER“-CD "
+"ein."
+
+msgid "Please insert the THE LEGEND OF HEROES \"SORA NO KISEKI the 3rd\" CD."
+msgstr "Bitte legen Sie THE LEGEND OF HEROES „SORA NO KISEKI the 3rd“-CD ein."
+
+msgid "Please insert the THE LEGEND OF HEROES VI \"SORA NO KISEKI\" CD."
+msgstr "Bitte legen Sie THE LEGEND OF HEROES VI „SORA NO KISEKI“-CD ein."
+
+msgid "Please insert the Vocaloid 2 CD."
+msgstr "Bitte legen Sie die Vocaloid-2-CD ein."
+
+msgid ""
+"Please insert the World of Warcraft installer CD.  Note: it is very "
+"important to finish the installation before launching the game, as that "
+"allows CrossOver to configure your system, which you'll appreciate before "
+"you actually run World of Warcraft."
+msgstr ""
+"Bitte legen Sie die World-of-Warcraft-Installations-CD ein. Hinweis: Es ist "
+"sehr wichtig, die Installation zu beenden bevor Sie das Spiel starten, damit "
+"CrossOver Ihr System konfiguieren kann bevor Sie das Spiel tatsächlich "
+"starten."
+
+msgid "Please insert the Ys ORIGIN CD."
+msgstr "Bitte legen Sie die Ys-ORIGIN-CD ein."
+
+msgid ""
+"Please leave the english portion of this string intact, but insert 12 "
+"localized characters here: ABCDEFabcdef"
+msgstr ""
+"Please leave the english portion of this string intact, but insert 12 "
+"localized characters here: ÄBCDEFäbcdef"
+
+msgid ""
+"Please select a bottle to install.  You may be prompted for a password "
+"during the download process."
+msgstr ""
+"Bitte wählen Sie die zu installierende Flasche aus. Es kann sein, daß Sie "
+"während des Herunterladens nach einem Paßwort gefragt werden."
+
+msgid "Please select an application first"
+msgstr "Bitte wählen Sie zuerst eine Anwendung aus"
+
+msgid "Please specify the path to the installer."
+msgstr "Geben Sie den Pfad zum Installationsprogramm an."
+
+msgid "Please wait..."
+msgstr "Bitte warten..."
+
+msgid "Plugin"
+msgstr "Plugin"
+
+msgid "Plugin Directories:"
+msgstr "Plugin-Verzeichnisse:"
+
+msgid "Plugin Properties"
+msgstr "Plugin-Eigenschaften"
+
+msgid "Plugin name"
+msgstr "Plugin-Name"
+
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "Port:"
+msgstr "Port:"
+
+msgid "Preparing install wizard"
+msgstr "Bereite Installations-Wizard vor"
+
+msgid "Preparing to register"
+msgstr "Vorbereitung zum Registrieren"
+
+msgid "Prevent Outlook from opening attachments with these extensions"
+msgstr "Öffnen von Anhängen mit diesen Dateiendungen in Outlook verhindern"
+
+msgid "Preview"
+msgstr "Vorschau"
+
+msgid "Print"
+msgstr "Drucken"
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "Private or Managed"
+msgstr "Privat oder verwaltet"
+
+msgid "Proceed"
+msgstr "Fortfahren"
+
+msgid "Proceed anyway"
+msgstr "Trotzdem Fortfahren"
+
+msgid "Proceed despite likely error"
+msgstr "Trotz wahrscheinlichem Fehler fortfahren"
+
+msgid "Proceed without fixing"
+msgstr "Fortsetzen ohne Korrektur"
+
+msgid "Product registration"
+msgstr "Produktregistrierung"
+
+msgid "Programs"
+msgstr "Programme"
+
+msgid "Programs/Accessories/Windows Media Player"
+msgstr "Programme/Zubehör/Windows Media Player"
+
+msgid "Programs/Internet Explorer"
+msgstr "Programme/Internet Explorer"
+
+msgid "Properties"
+msgstr "Eigenschaften"
+
+msgid "Publish"
+msgstr "Veröffentlichen"
+
+msgid "Publishing '%s'"
+msgstr "Veröffentliche „%s“"
+
+msgid "Quick View Plus"
+msgstr "Quick View Plus"
+
+msgid ""
+"Quick View Plus 7 lets you view, copy and print files in more than 225 Dos, "
+"Windows and Unix formats, including Word, WordPerfect, FrameMaker, Excel, "
+"Lotus 1-2-3, Quattro, PowerPoint, Freelance, Access, Paradox, compressed "
+"files, etc."
+msgstr ""
+"Quick View Plus 7 erlaubt das Betrachten, Kopieren und Drucken von Dateien "
+"in mehr als 225 DOS, Windows und UNIX Formaten, inklusive Word, WordPerfect, "
+"FrameMaker, Excel, Lotus 1-2-3, Quattro, PowerPoint, Freelance, Access, "
+"Paradox, komprimierte Dateien, etc."
+
+msgid "QuickBooks"
+msgstr "QuickBooks"
+
+msgid "QuickTime"
+msgstr "QuickTime"
+
+msgid "QuickTime 6.5"
+msgstr "QuickTime 6.5"
+
+msgid "QuickTime 7"
+msgstr "QuickTime 7"
+
+msgid "Quicken"
+msgstr "Quicken"
+
+msgid "Quicken 2007 or 2008"
+msgstr "Quicken 2007 oder 2008"
+
+msgid "Quit"
+msgstr "Beenden"
+
+msgid "RPM Package details"
+msgstr "RPM-Paketdetails"
+
+msgid "RPM written to %s"
+msgstr "RPM geschrieben nach %s"
+
+msgid "Really eject?"
+msgstr "Wirklich auswerfen?"
+
+msgid "Reboot"
+msgstr "Neustarten"
+
+msgid "Recreate CrossOver menu"
+msgstr "Neuerstellen des CrossOver-Menüs"
+
+msgid "Recreate plugins"
+msgstr "Erstelle Plugins erneut"
+
+msgid "Recreating menus"
+msgstr "Erstelle Menüs erneut"
+
+msgid "Recreating plugins"
+msgstr "Erstelle Plugins erneut"
+
+msgid "Refresh the 'Active' column"
+msgstr "Aktualisieren der „Aktiv“-Spalte"
+
+msgid "Refreshing"
+msgstr "Aktualisieren"
+
+msgid "Refreshing desktop manager"
+msgstr "Aktualisieren des Desktopmanagers"
+
+msgid "Refreshing the control panel"
+msgstr "Aktualisieren der Systemsteuerung"
+
+msgid "Refreshing the font list"
+msgstr "Aktualisieren der Schriftliste"
+
+msgid "Refreshing the menu list"
+msgstr "Aktualisieren der Menüliste"
+
+msgid "Refreshing the plugin list"
+msgstr "Aktualisieren der Pluginliste"
+
+msgid "Refreshing the user list"
+msgstr "Aktualisieren der Benutzerliste"
+
+msgid "Register"
+msgstr "Registrieren"
+
+msgid "Register and unlock this demo"
+msgstr "Registrieren und diese Demo entsperren"
+
+msgid "Release:"
+msgstr "Version:"
+
+msgid "Remove"
+msgstr "Entfernen"
+
+msgid "Remove installer files"
+msgstr "Dateien des Installationsprogramms entfernen"
+
+msgid "Removing Japanese Gothic Override"
+msgstr "Entferne Überschreiben der Japanischen Gothic"
+
+msgid "Rename"
+msgstr "Umbenennen"
+
+msgid "Rename %s"
+msgstr "%s umbenennen"
+
+msgid "Renaming '%s'"
+msgstr "Benenne „%s“ um"
+
+msgid "Repair / Remove"
+msgstr "Reparieren / Entfernen"
+
+msgid "Require passphrase for application launch"
+msgstr "Paßwort für das Starten der Anwendung verlangen"
+
+msgid "Reset"
+msgstr "Zurücksetzten"
+
+msgid "Reset CrossOver"
+msgstr "CrossOver zurücksetzen"
+
+msgid "Resetting"
+msgstr "Zurücksetzen"
+
+msgid "Restore archived bottle"
+msgstr "Archiv. Flasche wiederherst."
+
+msgid "Restoring %s"
+msgstr "%s wird wiederhergestellt"
+
+msgid "Retry"
+msgstr "Wiederholen"
+
+msgid "Run"
+msgstr "Starten"
+
+msgid "Run %s"
+msgstr "%s wird ausgeführt"
+
+msgid "Run a Windows Command"
+msgstr "Einen Windows-Befehl ausführen"
+
+msgid "Run in bottle"
+msgstr "In Flasche starten"
+
+msgid "Run..."
+msgstr "Ausführen..."
+
+msgid "Running cxreset"
+msgstr "cxreset wird ausgeführt"
+
+msgid "Running postinstall script:  '%s'"
+msgstr "Nachinstallationsskript wird ausgeführt: „%s“"
+
+msgid "SAP Netweaver Studio"
+msgstr "SAP Netweaver Studio"
+
+msgid "Sample"
+msgstr "Beispiel"
+
+msgid "Scanning for users"
+msgstr "Suche nach Benutzern"
+
+msgid ""
+"Search system for CrossOver users.\n"
+"This could take several minutes."
+msgstr ""
+"Suche auf dem System nach CrossOver-Benutzern.\n"
+"Dies kann mehrere Minuten dauern."
+
+msgid "Searching for '%s' in '%s'"
+msgstr "Suchen nach „%s“ in „%s“"
+
+msgid "Searching for the postinstall script"
+msgstr "Suche nach dem Nachinstallationsskript"
+
+msgid "Select *.exe file"
+msgstr "*.exe-Datei wählen"
+
+msgid "Select installer source"
+msgstr "Installationsquelle auswählen"
+
+msgid "Select product location"
+msgstr "Produktpfad wählen"
+
+msgid ""
+"Server Setup has the ability to generate pre-configured client packages "
+"ready for installation on a variety of systems.\n"
+"\n"
+"Click the 'Create...' button to begin this process."
+msgstr ""
+"Die Server-Konfiguration bietet die Möglichkeit, vorkonfigurierte Client-"
+"Pakete zu erstellen, fertig für die Installation auf einer Vielzahl an "
+"Systemen.\n"
+"\n"
+"Klicken Sie auf den Knopf „Erstellen...“, um diesen Vorgang zu starten."
+
+msgid "Server hostname:"
+msgstr "Rechnername des Servers:"
+
+msgid "Server settings"
+msgstr "Server Einstellungen"
+
+msgid "Server:"
+msgstr "Server:"
+
+msgid "Setting Japanese Gothic Override"
+msgstr "Setzen der Überschreiung der Japansichen Gothic"
+
+msgid "Setup mode:"
+msgstr "Installationsmodus:"
+
+msgid "Shockwave Player 8.5"
+msgstr "Shockwave Player 8.5"
+
+msgid ""
+"Shockwave Player displays web animations and games that has been created by "
+"Macromedia Director Shockwave Studio."
+msgstr ""
+"Shockwave Player zeigt Webanimationen und Spiele an, die mit Macromedia "
+"Director Shockwave Studio erstellt wurden."
+
+msgid "Show all service packs and dependencies"
+msgstr "Zeige Servicepakete und Abhängigkeiten"
+
+msgid "Show common file types only"
+msgstr "Nur übliche Zuordnungen anzeigen"
+
+msgid "Simulate a system reboot in this Bottle"
+msgstr "System-Neustart in dieser Flasche simulieren"
+
+msgid "Simulating Windows reboot..."
+msgstr "Simulieren eines Windows-Neustarts..."
+
+msgid "Simulating Windows reboot... Done."
+msgstr "Simulieren eines Windows-Neustarts... Fertig."
+
+msgid "Simulating a Windows reboot"
+msgstr "Simulieren eines Windows-Neustarts"
+
+msgid "Skip"
+msgstr "Überspringen"
+
+msgid "Sorry, this feature is only available when running as root."
+msgstr "Leider ist die Option nur bei Installation als root verfügbar."
+
+msgid ""
+"Sorry, your support period has expired.  You are no longer entitled to "
+"product upgrades.\n"
+"\n"
+"Visit store.codeweavers.com to extend your support contract."
+msgstr ""
+"Leider ist Ihre Support abgelaufen. Sie dürfen keine Produktaktualisierungen "
+"mehr machen.\n"
+"\n"
+"Besuchen Sie store.codeweavers.com, um Ihren Support-Vertrag zu verlängern."
+
+msgid "Sorry. No help was found for this screen."
+msgstr "Für diesen Dialog wurde leider keine Hilfe gefunden."
+
+msgid "Sound driver load order:"
+msgstr "Lade Reihenfolge des Soundtreibers:"
+
+msgid "Specify Ssh path:"
+msgstr "Pfad zu SSH angeben:"
+
+msgid "Specify browser:"
+msgstr "Browser angeben:"
+
+msgid "Ssh Key Setup"
+msgstr "SSH-Schlüssel einrichten"
+
+msgid "Ssh Tools"
+msgstr "SSH-Tools"
+
+msgid "Ssh key"
+msgstr "SSH-Schlüssel:"
+
+msgid "Stale Ssh Key"
+msgstr "Abgelaufener SSH-Schlüssel"
+
+msgid "State"
+msgstr "Status"
+
+msgid "Steam from CD (e.g. The Orange Box)"
+msgstr "Steam als CD (z.B. The Orange Box)"
+
+msgid "Steam via download"
+msgstr "Steam durch Herunterladen"
+
+msgid ""
+"Step %s out of %s:\n"
+"\n"
+"Kill Windows applications running as %s on %s?"
+msgstr ""
+"Schritt %s von %s:\n"
+"\n"
+"Beenden der Windowsanwendungen, die als %s auf %s laufen?"
+
+msgid "Superscape Viscape Universal"
+msgstr "Superscape Viscape Universal"
+
+msgid ""
+"Superscape Viscape is a 3D browser for exploring both VRML and Superscape's "
+"own SVR-enabled Web pages."
+msgstr ""
+"Superscape Viscape ist ein 3D-Browser zum Erkunden von VRML- und Superscapes "
+"eigenen SVR-aktivierten Webseiten."
+
+msgid "Supported MIME types"
+msgstr "Unterstützte MIME-Typen"
+
+msgid "Supported file types"
+msgstr "Unterstützte Dateitypen"
+
+msgid "System-wide Plugin Directories:"
+msgstr "Systemweite Plugin-Verzeichnisse:"
+
+msgid "Tar files"
+msgstr "Tar-Dateien"
+
+msgid "Terminate Windows Applications"
+msgstr "Windows-Anwendungen beenden"
+
+msgid "The %s client bottle is now installed and configured."
+msgstr "Die %s-Client-Flasche wurde installiert und konfiguriert"
+
+msgid "The %s installer has exited."
+msgstr "Das Installationsprogramms „%s“ ist beendet."
+
+msgid ""
+"The Client package is now installed.\n"
+"\n"
+"Do you want to configure the server settings now?"
+msgstr ""
+"Das Client-Paket ist jetzt installiert.\n"
+"\n"
+"Möchten Sie jetzt die Servereinstellungen konfigurieren?"
+
+msgid ""
+"The CrossOver Installation Wizard will guide you through the process of "
+"adding Windows software to your system.\n"
+"\n"
+"To begin, select the option that you want to install, and click 'Next.'\n"
+"\n"
+"Software marked with a * is already installed."
+msgstr ""
+"Der CrossOver-Installationsassistent wird Ihnen beim Hinzufügen von Windows-"
+"Software zu Ihrem System helfen.\n"
+"\n"
+"Wählen Sie zunächst die zu installierende Anwendung aus und klicken Sie dann "
+"auf „Weiter“\n"
+"\n"
+"Mit einem * markierte Software ist bereits installiert."
+
+msgid ""
+"The CrossOver Server is not installed on '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Der CrossOver-Server ist nicht installiert auf „%s“:\n"
+"\n"
+"%s"
+
+msgid ""
+"The Express install of iTunes will download and install iTunes version "
+"4.9.0.  It is not recommended that you upgrade to a newer version."
+msgstr ""
+"Die Expressinstallation von iTunes lädt und installiert iTunes Version "
+"4.9.0.. Es wird abgeraten, diese auf eine neuere Version zu aktualisieren."
+
+msgid ""
+"The HOME directory (%s) does not belong to you. Please check the value of "
+"$HOME and/or use 'su -' or 'sudo -H'."
+msgstr ""
+"Das HOME-Verzeichnis (%s) gehört nicht Ihnen. Überprüfen Sie den Wert von "
+"$HOME und/oder verwenden Sie „sudo -H“."
+
+msgid "The copy of '%s' to the server failed for an unknown reason"
+msgstr ""
+"Das Kopieren von „%s“ auf den Server schlug aus unbekannten Gründen fehl"
+
+msgid ""
+"The copy of '%s' to the server failed:\n"
+"\n"
+"%s"
+msgstr ""
+"Das Kopieren von „%s“ auf den Server schlug fehl:\n"
+"\n"
+"%s"
+
+msgid "The information displayed on this tab may be incomplete or incorrect."
+msgstr ""
+"Die in diesem Reiter angezeigte Informationen können fehlerhaft oder "
+"unvollständig sein."
+
+msgid ""
+"The installation of %s failed.\n"
+"Do you want to continue installing %s?"
+msgstr ""
+"Die Installation von %s ist fehlgeschlagen.\n"
+"Wollen Sie mit der Installation von %s fortfahren?"
+
+msgid "The installer file is not readable."
+msgstr "Datei des Installationsprogramms ist nicht lesbar."
+
+msgid ""
+"The installer will ask you whether you want to reboot now or later. You can "
+"choose either, and of course you will not need to reboot."
+msgstr ""
+"Vom Installationsprogramm werden Sie gefragt, ob Sie jetzt oder später einen "
+"Neustart machen möchten. Sie können irgendeine Option wählen und müssen "
+"natürlich keinen Neustart machen."
+
+msgid "The key creation failed:\n"
+msgstr "Schlüsselerstellung fehlgeschlagen:\n"
+
+msgid ""
+"The log file indicates than an error occurred during installation.  This "
+"problem may or may not affect the operation of your software.  "
+msgstr ""
+"Die Log-Datei deutet auf einen Fehler während der Installation hin. Das "
+"Problem könnte Ihre Software unbenutzbar machen."
+
+msgid ""
+"The passphrase you entered is too short.\n"
+"Do you want to try again?\n"
+"\n"
+"%s"
+msgstr ""
+"Das eingegeben Paßwort ist zu kurz.\n"
+"Wollen Sie es noch einmal versuchen?\n"
+"\n"
+"%s"
+
+msgid ""
+"The server name must be specified in the configuration file or using '--"
+"server'"
+msgstr ""
+"Der Servername muß in der Konfigurationsdatei sein oder mittels „--server“ "
+"angegeben werden"
+
+msgid "The terminal emulator returned error %s"
+msgstr "Der Terminal-Emulator gab den Fehler %s zurück"
+
+msgid "The upgrade has failed.  %s"
+msgstr "Aktualiserung fehlgeschlagen. %s"
+
+msgid ""
+"The volume %s is mounted with the 'unhide' option set.  This may cause some "
+"files to copy incorrectly.  We strongly recommend that you remount this "
+"volume without the 'unhide' option before proceeding.\n"
+"\n"
+"The unhide option is usually set in the /etc/fstab file.  After changing it, "
+"you will need to unmount and remount the CD."
+msgstr ""
+"Das Medium %s wurde mit gesetzter „unhide“-Option gemountet. Das kann dazu "
+"führen, das einige Dateien fehlerhaft kopiert werden. Wir empfehlen Ihnen "
+"drigendst, daß Sie das Medium ohne die „unhide“-Option mounten bevor Sie "
+"fortfahren.\n"
+"\n"
+"Die unhide-Option wird normalerweise in der /etc/fstab-Datei gesetzt. "
+"Nachdem Sie sie geändert haben, müssen Sie die CD unmounten und wieder "
+"mounten."
+
+msgid ""
+"There is already a bottle named '%s'.  Creating a bottle with this name "
+"would overwrite the existing bottle."
+msgstr ""
+"Es gibt bereits eine Flasche „%s“. Eine Flasche mit diesem Namen zu "
+"erstellen, würde die existierende Flasche überschreiben."
+
+msgid ""
+"There is no Windows plugin DLL corresponding to this file. You can probably "
+"delete it safely.\n"
+msgstr ""
+"Es gibt keine zu dieser Datei gehörenden Windows-Plugin-DLLs. Sie können sie "
+"wahrscheinlich problemlos löschen.\n"
+
+msgid ""
+"There was an error creating the new bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Es ist ein Fehler beim Erstellen der neuen Flasche aufgetreten:\n"
+"\n"
+"%s"
+
+msgid ""
+"There was an error testing your 'dotwine' bottle.  A problem may have "
+"occurred during upgrade:\n"
+"\n"
+"%s"
+msgstr ""
+"Beim Testen Ihrer „dotwine“-Flasche ist ein Fehler aufgetreten; es kann "
+"sein, das ein Problem beim Upgrade auftrat:\n"
+"\n"
+"%s"
+
+msgid ""
+"There were some errors while reading config file '%s' (on lines %s). "
+"Processing anyway."
+msgstr ""
+"Beim Lesen der Konfigurationsdatei „%s“ (in den Zeilen %s) traten einige "
+"Fehler auf. Trotzdem fortfahren."
+
+msgid "This DLL is active for some browsers."
+msgstr "Diese DLL ist für einige Browser aktiv."
+
+msgid "This DLL is active."
+msgstr "Diese DLL ist aktiv."
+
+msgid "This DLL is deactivated."
+msgstr "Diese DLL ist deaktiviert."
+
+msgid "This Debian package cannot be installed on top of a Loki package."
+msgstr "Dies Debian-Paket kann nicht über ein Loki-Paket installiert werden."
+
+msgid "This RPM package cannot be installed on top of a Loki package."
+msgstr "Dies RPM-Paket kann nicht über ein Loki-Paket installiert werden."
+
+msgid ""
+"This action will cause all CrossOver processes to exit for the selected "
+"users.\n"
+"\n"
+"Unsaved changes in open documents will be lost.\n"
+"\n"
+"Are you sure you want to do this?"
+msgstr ""
+"Diese Aktion beendet alle CrossOver-Prozesse der ausgewählten Benutzer.\n"
+"\n"
+"Ungespeicherte Änderungen geöffneter Dokumente gehen verloren.\n"
+"\n"
+"Sind Sie sicher, daß Sie das wollen?"
+
+msgid ""
+"This action will delete all stub bottles for each selected user.\n"
+"\n"
+"This will remove any custom settings that users may have set up for managed "
+"bottles.\n"
+"\n"
+"Are you sure you want to do this?"
+msgstr ""
+"Diese Aktion wird alle Rumpfflaschen aller ausgewählten Benutzer löschen.\n"
+"\n"
+"Dies entfernt alle persönlichen Einstellungen, die ein Benutzer für "
+"verwaltete Flaschen eingestellt hat.\n"
+"\n"
+"Sind Sie sicher, daß Sie das wollen?"
+
+msgid ""
+"This action will remove the CrossOver-specific Ssh keys for each selected "
+"user.\n"
+"\n"
+"This will require them to create new ones the next time they run a CrossOver "
+"application.\n"
+"\n"
+"Are you sure you want to do this?"
+msgstr ""
+"Diese Aktion entfernt die CrossOver-spezifischen SSH-Schlüssel der "
+"ausgewählten Benutzer.\n"
+"\n"
+"Beim nächsten Start einer CrossOver-Anwendung müssen diese dann einen neuen "
+"Schlüssel erstellen.\n"
+"\n"
+"Sind Sie sicher, daß Sie das wollen?"
+
+msgid "This association is off, and hidden from your desktop environment."
+msgstr "Dies Zuordnung ist aus und verborgen vor Ihrer Desktopumgebung."
+
+msgid ""
+"This document type has been exported to your desktop environment,\n"
+"but is not actively associated with anything."
+msgstr ""
+"Dieser Dokumententyp wurde zu Ihrer Desktopumgebung exportiert,\n"
+"aber es existiert keine aktive Zuordnung zu irgend etwas."
+
+msgid ""
+"This downloads and installs a common set of Windows TrueType fonts.  This "
+"may be useful even for identically-named fonts because the Windows versions "
+"often contain characters that are lacking on the Mac."
+msgstr ""
+"Diese Option lädt und installiert ein Standardsatz von Windows-TrueType-"
+"Schriften. Dies kann selbst bei Schriften gleichen Namens sinnvoll sein, da "
+"die Windows-Versionen oft Zeichen enthalten, die auf dem Mac fehlen."
+
+msgid ""
+"This is a managed bottle.\n"
+"\n"
+"If you would like to install software into this bottle or change bottle "
+"settings, you may log in as root and rerun this tool.  Changes made as root "
+"will take effect for all users on this system.\n"
+"\n"
+"Alternatively you can make a private copy of this bottle (which you can edit "
+"as a user) with the 'Copy' button on the Manage Bottles tab."
+msgstr ""
+"Dies ist eine verwaltete Flasche\n"
+"\n"
+"Wenn Sie Software in diese Flasche installieren oder die "
+"Flascheneinstellungen ändern wollen, können Sie sich root einloggen und dort "
+"dies Programm starten; als root gemachte Änderungen gelten für alle Benutzer "
+"auf diesem System.\n"
+"\n"
+"Alternativ können Sie unter „Flaschen verwalten“ mit „Kopieren“ eine private "
+"Kopie dieser Flasche erstellen, die Sie dann als Benutzer bearbeiten können."
+
+msgid ""
+"This is a program from Microsoft which allows you to open, edit, and save "
+"Office 2007-format documents with Office 2003."
+msgstr ""
+"Dies ist ein Microsoft-Programm, daß Ihnen erlaubt Office-2007-Dokumente mit "
+"Office 2003 zu öffnen, zu bearbeiten und zu speichern."
+
+msgid "This is an alternative association."
+msgstr "Dies ist eine alternative Zuordnung."
+
+msgid ""
+"This is the Microsoft Excel Viewer from Microsoft Corporation.  Use it to "
+"view or print documents from most versions of Microsoft Excel."
+msgstr ""
+"Dies ist der Microsoft Excel Viewer der Microsoft Corporation. Verwenden Sie "
+"diesen zum Anzeigen oder Drucken von Dokumenten der meisten Version von "
+"Microsoft Excel."
+
+msgid ""
+"This is the Microsoft Excel Viewer from Microsoft Corporation.  Use it to "
+"view or print spreadsheets in the Excel 97, 2000 and 2002 formats."
+msgstr ""
+"Dies ist der Microsoft Excel Viewer von Microsoft Corporation. Verwenden Sie "
+"diesen zum Anzeigen oder Drucken von Dokumenten im Excel-97-, -2000- und -"
+"2002-Format."
+
+msgid ""
+"This is the Microsoft PowerPoint Viewer from Microsoft Corporation.  Use it "
+"to view or print documents from most versions of Microsoft PowerPoint."
+msgstr ""
+"Dies ist der Microsoft PowerPoint Viewer der Microsoft Corporation. "
+"Verwenden Sie ihn zum Anzeigen oder Drucken von Dokumenten der meisten "
+"Versionen von Microsoft PowerPoint."
+
+msgid ""
+"This is the Microsoft PowerPoint Viewer from Microsoft Corporation.  Use it "
+"to view or print presentations in the PowerPoint 97, 2000 and 2002 formats."
+msgstr ""
+"Dies ist der Microsoft PowerPoint Viewer der Microsoft Corporation. "
+"Verwenden Sie ihn zum Anzeigen oder Drucken von Präsentationen im "
+"PowerPoint97-, 2000- und 2002-Format."
+
+msgid ""
+"This is the Microsoft Word Viewer from Microsoft Corporation.  Use it to "
+"view or print documents from most versions of Microsoft Word."
+msgstr ""
+"Dies ist der Microsoft Word Viewer der Microsoft Corporation. Verwenden Sie "
+"ihn zum Anzeigen oder Drucken von Dokumenten der meisten Versionen von "
+"Microsoft Word."
+
+msgid ""
+"This is the Microsoft Word Viewer from Microsoft Corporation.  Use it to "
+"view or print documents in the Word 97, 2000 and 2002 formats."
+msgstr ""
+"Dies ist der Microsoft Word Viewer der Microsoft Corporation. Verwenden Sie "
+"ihn zum Anzeigen oder Drucken von Dokumenten im Word97-, 2000- und 2002-"
+"Format."
+
+msgid "This is the default association."
+msgstr "Dies ist die Standardzuordnung."
+
+msgid ""
+"This means we were unable to determine whether or not your Linux system is "
+"compatible with this CD-ROM. If you select the 'Fix' option below, we will "
+"make this device mountable by non-root users and retry this test.\n"
+msgstr ""
+"Das heißt, daß wir nicht bestimmen konnten, ob Ihr Linuxsystem kompatibel "
+"mit dieser CD-ROM ist. Falls Sie die untenstehende Option „Beheben“ wählen, "
+"wird das Gerät für Nicht-Root einbindbar gemacht und der Test wird erneut "
+"durchgeführt.\n"
+
+msgid ""
+"This means we were unable to determine whether or not your Linux system is "
+"compatible with this CD-ROM. If you select the 'fix' option below, we will "
+"mark this device as readable and retry this test.\n"
+msgstr ""
+"Das heißt, daß wir nicht bestimmen konnten, ob Ihr Linuxsystem kompatibel "
+"mit diese CD-ROM ist. Falls Sie die untenstehende Option „Beheben“ wählen, "
+"wird das Gerät als lesbar markiert und der Test wird erneut durchgeführt.\n"
+
+msgid "This menu has been partially installed."
+msgstr "Dies Menü wurde teilweise installiert."
+
+msgid "This menu is active."
+msgstr "Dies Menü ist aktiv."
+
+msgid "This menu is disabled."
+msgstr "Dies Menü ist deaktiviert."
+
+msgid "This operation must be run as root:\n"
+msgstr "Diese Aufgabe muß als Root gemacht werden:\n"
+
+msgid ""
+"This operation will completely remove %s from your system.\n"
+"\n"
+"Before uninstalling %s, make sure to uninstall it from each user's "
+"environment by running '%s' in their account."
+msgstr ""
+"Diese Operation wird %s vollständig von Ihrem System entfernen.\n"
+"\n"
+"Bevor Sie %s deinstallieren, stellen Sie sicher, daß es aus der Umgebung "
+"aller Nutzer entfernt wurde, indem Sie „%s“ in deren Accounts aufrufen."
+
+msgid "This operation will remove all files created by %s in your account."
+msgstr ""
+"Diese Operation wird alle Dateien, die von %s in Ihrem Benutzerkonto "
+"erstellt wurden, entfernen."
+
+msgid "This operation will remove your %s Ssh key and settings.\n"
+msgstr ""
+"Diese Operation wird Ihren %s SSH-Schlüssel und Ihre Einstellungen "
+"entfernen.\n"
+
+msgid ""
+"This plugin file was created by a previous version of CrossOver Plugin.  If "
+"that version of CrossOver is still installed, this file may still be a "
+"useful part of your browser.\n"
+msgstr ""
+"Diese Plugin-Datei wurde von einer vorherigen Version von CrossOver Plugin "
+"generiert. Wenn diese Version noch installiert ist, kann es immer noch von "
+"Ihrem Browser benutzt werden.\n"
+
+msgid ""
+"This product is already registered.\n"
+"\n"
+"Thank you for your support!"
+msgstr ""
+"Dies Produkt ist bereits registriert.\n"
+"\n"
+"Vielen Dank für Ihre Unterstützung!"
+
+msgid ""
+"This product is covered by one or more of the following patents: United "
+"States Patent 5,155,805, United States Patent 5,325,479, and United States "
+"Patent 5,159,668. Canada: Patented 2000. United Kingdom: Patent 2232861. "
+"France: Brevet No. 90 05712."
+msgstr ""
+"Dieses Produkt wird von einem oder mehreren der folgenden Patente abgedeckt: "
+"United States Patent 5,155,805, United States Patent 5,325,479 und United "
+"States Patent 5,159,668. Canada: Patented 2000. United Kingdom: Patent "
+"2232861. France: Brevet No. 90 05712."
+
+msgid "This runtime can be installed as a prerequisite for several games."
+msgstr "Diese Laufzeitbibliothek wird für verschiedene Spiele benötigt."
+
+msgid ""
+"This will download and install Service Pack 1 for Office 2003.  Make sure "
+"your original Office 2003 CD is inserted before you continue."
+msgstr ""
+"Mit dieser Option wird Service Pack 1 für Office 2003 heruntergeladen und "
+"installiert. Stellen Sie sicher, daß Ihre originale Office-2003-CD eingelegt "
+"ist, bevor Sie fortfahren."
+
+msgid ""
+"This will download and install Service Pack 1 for Office XP.  Make sure your "
+"original Office XP CD is inserted before you continue."
+msgstr ""
+"Mit dieser Option wird Service Pack 1 für Office XP heruntergeladen und "
+"installiert. Stellen Sie sicher, daß Ihre originale Office-XP-CD eingelegt "
+"ist, bevor Sie fortfahren."
+
+msgid ""
+"This will download and install Service Pack 2 for Office XP. Make sure your "
+"original Office XP CD is inserted before you continue."
+msgstr ""
+"Mit dieser Option wird Service Pack 2 für Office XP heruntergeladen und "
+"installiert. Stellen Sie sicher, daß Ihre originale Office-XP-CD eingelegt "
+"ist, bevor Sie fortfahren."
+
+msgid ""
+"This will download and install Service Pack 3 for Office 2003.  Make sure "
+"your original Office 2003 CD is inserted before you continue."
+msgstr ""
+"Mit dieser Option wird Service Pack 3 für Office 2003 heruntergeladen und "
+"installiert. Stellen Sie sicher, daß Ihre originale Office-2003-CD eingelegt "
+"ist, bevor Sie fortfahren."
+
+msgid "This will download and install Service Release 1 for Office 97."
+msgstr ""
+"Mit dieser Option wird Service Release 1 für Office 97 heruntergeladen und "
+"installiert."
+
+msgid "This will download and install Service Release 2b for Office 97."
+msgstr ""
+"Mit dieser Option wird Service Release 2b für Office 97 heruntergeladen und "
+"installiert."
+
+msgid "This will download and install the EVE Online game client."
+msgstr "Dies lädt den EVE-Onlinespiele-Client herunter und installiert ihn."
+
+msgid "This will download and install the Guild Wars game client."
+msgstr "Dies lädt den Guild-Wars-Spieleclient herunter und installiert ihn."
+
+msgid ""
+"This will download and install the Service Release for Office 2000.  Make "
+"sure your original Office 2000 CD is inserted before you continue."
+msgstr ""
+"Mit dieser Option wird das Service Release für Office 2000 heruntergeladen "
+"und installiert. Stellen Sie sicher, daß Ihre original Office-2000-CD "
+"eingelegt ist, bevor Sie fortfahren."
+
+msgid ""
+"This will download and install the Steam game delivery platform from Valve "
+"software.  Steam allows you to download and run games such as the Half-Life "
+"series."
+msgstr ""
+"Die Option installiert die Steam-Spiele-Platform von Valve-Software. Steam "
+"erlaubt es Ihnen, Spiele wie die Half-Life-Serie herunterzuladen und zu "
+"starten."
+
+msgid ""
+"This will download the .cab files needed to install Internet Explorer.  "
+"However, this package does not install Internet Explorer -- for that you "
+"want the 'Internet Explorer 6.0' package.  Note that use of this package "
+"requires a valid Windows or Internet Explorer license."
+msgstr ""
+"Diese Option lädt die .cab-Daten herunter, die zur Installation des Internet "
+"Explorers nötig sind. Dies Paket installiert jedoch nicht Internet Explorer; "
+"dafür müssen Sie das Paket „Internet Explorer 6.0“ auswählen. Beachten Sie, "
+"daß Sie für dies Paket eine gültige Windows- oder Internet Explorer-Lizenz."
+
+msgid ""
+"This will download the upgrade package and upgrade EndNote 8.0.0 or 8.0.1 to "
+"version 8.0.2.  This upgrade fixes many serious problems with EndNote."
+msgstr ""
+"Diese Option lädt und installiert ein Paket, das EndNote 8.0.0 oder 8.0.1 "
+"auf Version 8.0.2 aktualisiert. Diese Aktualisierung behebt mehrere schwere "
+"Probleme mit EndNote."
+
+msgid ""
+"This will install CrossOver's HTML rendering engine.  In some cases, this "
+"may be used as a replacement for Internet Explorer."
+msgstr ""
+"Dies installiert die CrossOver-HTML-Anzeigebibliothek. In manchen Fällen "
+"kann diese als Ersatz für den Internet Explorer verwendet werden."
+
+msgid ""
+"This will install DCOM98, Microsoft's COM implementation for Windows 98.  "
+"Installing this package may resolve some bugs with older Microsoft "
+"programs.  Note that you must have a valid Windows license to use this "
+"software."
+msgstr ""
+"Diese Option installiert DCOM98, die COM-Implementation von Microsoft für "
+"Windows 98. Dies Paket könnte einige Fehler mit älteren Microsoft-Programmen "
+"lösen. Beachten Sie, daß Sie eine gültige Windowslizenz besitzen müssen, um "
+"diese Software benutzen zu dürfen."
+
+msgid ""
+"This will install Microsoft's COM implementation for Windows 95.  Note that "
+"you must have a valid license to use this software, and it is your "
+"responsibility to read the EULA carefully to insure this."
+msgstr ""
+"Mit dieser Option wird Microsofts COM-Implementierung für Windows 95 "
+"installiert. Beachten Sie, daß Sie eine gültige Lizenz benötigen, um die "
+"Software zu verwenden und daß es Ihre in Ihrer Verantwortung liegt, die EULA "
+"zu lesen, um dies sicherzustellen."
+
+msgid ""
+"This will install Microsoft's COM implementation for Windows 95.  This is "
+"required for installing Internet Explorer; it is also installed by Microsoft "
+"Office.  Note that you must have a valid license to use this software, and "
+"it is your responsibility to read the EULA carefully to insure this."
+msgstr ""
+"Mit dieser Option wird Microsofts COM-Implementierung für Windows 95 "
+"installiert. Sie wird für die Installation des Internet Explorers gebraucht "
+"und wird auch bei Microsoft Office installiert. Beachten Sie, daß Sie eine "
+"gültige Lizenz benötigen, um die Software zu verwenden und daß es Ihre in "
+"Ihrer Verantwortung liegt, die EULA zu lesen, um dies sicherzustellen."
+
+msgid ""
+"This will install Microsoft's installer implementation for Windows 98.  This "
+"component is required for the PowerPoint 2003 viewer.  Note that you must "
+"have a valid Windows license to use this software."
+msgstr ""
+"Diese Option installiert den Microsoft Installer für Windows 98. Diese "
+"Komponente wird für den PowerPoint-2003-Betrachter benötigt. Beachten Sie, "
+"daß Sie eine gültige Windows-Lizenz besitzen müssen, um die Software zu "
+"verwenden."
+
+msgid ""
+"This will install Microsoft's msls31 dll.  Note that you must have a valid "
+"Windows license to use this software."
+msgstr ""
+"Die Option installiert Microsofts msls31-DLL. Beachten Sie, daß Sie eine "
+"gültige Windowslizenz zum Benutzer der Software benötigen."
+
+msgid "This will install Steam games from a CD or DVD."
+msgstr "Dies installiert Steam-Spiele von CD oder DVD."
+
+msgid ""
+"This will install an obsolete version of Microsoft's COM implementation for "
+"Windows 95.  A more recent version is now available for download.  To "
+"install, go back to the selection panel and choose 'DCOM95'."
+msgstr ""
+"Diese Option installiert eine veraltete Version von Microsofts COM-"
+"Implementierung für Windows 95. Eine neuere Version ist jetzt zum "
+"Herunterladen verfügbar. Um diese zu installieren, gehen Sie zum Auswahlfeld "
+"zurück und wählen Sie „DCOM95“ aus."
+
+msgid ""
+"This will install several DLLs which may assist in the running of ActiveX "
+"controls."
+msgstr ""
+"Dies installiert mehrere DLLs, die das Ausführen von ActiveX-Elementen "
+"unterstützen können."
+
+msgid ""
+"This will install the ocx control for the Flash 9 player.  This will add "
+"support for Flash in Internet Explorer and other OCX-enabled applications."
+msgstr ""
+"Dies installiert die OCX-Control des Flash-9-Players. Damit wird Flash im "
+"Internet Explorer und in anderen OXC-aktivierten Anwendungen unterstützt."
+
+msgid "This will remove %s from your system."
+msgstr "Diese Aktion entfernt %s von Ihrem System."
+
+msgid "This will remove %s from your system.\n"
+msgstr "Diese Aktion entfernt %s von Ihrem System.\n"
+
+msgid ""
+"This wizard will download and install the complete set of Microsoft TrueType "
+"core fonts.  There are %d fonts remaining to be installed.\n"
+"\n"
+"After the first font downloads (%s), you will be asked to agree to a license "
+"agreement.  The terms of that license apply to each font that follows."
+msgstr ""
+"Dieser Wizard lädt den kompletten Satz der Microsoft-TrueType-Core-Schriften "
+"herunter und installiert sie. Es sind noch %d Schriften zu installieren.\n"
+"\n"
+"Nachdem die ersten Schriften (%s) heruntergeladen wurden, wird eine "
+"Lizenzvereinbarung angezeigt. Diese gilt für alle Schriften, die dann "
+"installiert werden."
+
+msgid ""
+"This wizard will help you create custom client software installers. After "
+"answering a few questions on the next panel, the appropriate client "
+"installation files will be placed in the directory of your choice.\n"
+"\n"
+"Click 'Next' to continue."
+msgstr ""
+"Dieser Wizard hilft Ihnen beim Erstellen benutzerdefinierter Client-Software-"
+"Installationsprogramme. Nach dem Beantworten einiger Fragen im nächsten "
+"Panel werden die passenden Client-Installationsdateien im Verzeichnis Ihrer "
+"Wahl gespeichert.\n"
+"\n"
+"Zum Fortfahren klicken Sie auf „Weiter“."
+
+msgid "To add new software, click 'Install'."
+msgstr "Zum Hinzufügen von neuer Software klicken Sie auf „Installieren“."
+
+msgid "To buy a full version of %s, visit:"
+msgstr "Um eine Vollversion von %s zu kaufen, besuchen Sie:"
+
+msgid "To configure the server settings at a later date, run '%s'."
+msgstr "Um die Servereinstellungen später zu ändern, rufen Sie „%s“ auf."
+
+msgid ""
+"To install unsupported software, CrossOver runs the same installer that "
+"would be used on Windows.  For many CD-ROM installers you can simply select "
+"the disk location and CrossOver will locate a proper installer."
+msgstr ""
+"Um nicht unterstützte Software zu installieren, startet CrossOver dasselbe "
+"Installationsprogramm, daß unter Windows verwendet würde. Bei vielen "
+"Installations-CD-ROMs können Sie einfach das Laufwerk auswählen und "
+"CrossOver findet das richtige Installationsprogramm."
+
+msgid "Trial expired"
+msgstr "Testzeit abgelaufen"
+
+msgid "TrueType font: Andale Mono"
+msgstr "TrueType-Schriftart: Andale Mono"
+
+msgid "TrueType font: Arial"
+msgstr "TrueType-Schriftart: Arial"
+
+msgid "TrueType font: Arial (in bottle)"
+msgstr "TrueType-Schriftart: Arial (in Flasche)"
+
+msgid "TrueType font: ArialBlack"
+msgstr "TrueType-Schriftart: Arial Black"
+
+msgid "TrueType font: ComicSans"
+msgstr "TrueType-Schriftart: ComicSans"
+
+msgid "TrueType font: Courier New"
+msgstr "TrueType-Schriftart: Courier New"
+
+msgid "TrueType font: Georgia"
+msgstr "TrueType-Schriftart: Georgia"
+
+msgid "TrueType font: Impact"
+msgstr "TrueType-Schriftart: Impact"
+
+msgid "TrueType font: Times New Roman"
+msgstr "TrueType-Schriftart: Times New Roman"
+
+msgid "TrueType font: Trebuchet MS"
+msgstr "TrueType-Schriftart: Trebuchet MS"
+
+msgid "TrueType font: Verdana"
+msgstr "TrueType-Schriftart: Verdana"
+
+msgid "TrueType font: Webdings"
+msgstr "TrueType-Schriftart: Webdings"
+
+msgid "Try Again"
+msgstr "Noch einmal versuchen"
+
+msgid "ULimit Warning"
+msgstr "ULimit-Warnung"
+
+msgid ""
+"Unable to add the key to ssh-agent.\n"
+"Incorrect key or passphrase?\n"
+"\n"
+"%s"
+msgstr ""
+"Hinzufügen des Schlüssels zum ssh-agent nicht möglich.\n"
+"Schlüssel oder Paßwort ungültig?\n"
+"%s"
+
+msgid ""
+"Unable to archive the bottle '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Die Flasche „%s“ konnte nicht archiviert werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to configure bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Flasche konnte nicht konfiguriert werden:\n"
+"\n"
+"%s"
+
+msgid "Unable to connect to the new ssh-agent process."
+msgstr "Verbinden mit dem neuen ssh-agent-Prozeß nicht möglich."
+
+msgid ""
+"Unable to connect to the server '%s'.\n"
+"Check the server name:\n"
+"\n"
+"%s"
+msgstr ""
+"Verbinden mit dem Server„%s“ nicht möglich.\n"
+"Überprüfen Sie den Servernamen:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to connect to the server '%s'.\n"
+"It appears the server is down or there is a network connection problem:\n"
+"\n"
+"%s"
+msgstr ""
+"Verbinden mit dem Server„%s“ nicht möglich.\n"
+"Es scheint, der Server ist ausgeschaltet oder es gibt ein Netzwerkproblem:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to connect to the server '%s'.\n"
+"It appears your key '%s' is no longer being accepted for logging in as '%s'"
+msgstr ""
+"Verbinden mit dem Server „%s“ nicht möglich:\n"
+"Es scheint, daß Ihr Schlüssel „%s“ nicht mehr zum Einloggen als „%s“ "
+"akzeptiert wird"
+
+msgid ""
+"Unable to connect to the server '%s'.\n"
+"The server did not recognize your password:\n"
+"\n"
+"%s"
+msgstr ""
+"Verbinden mit dem Server „%s“ nicht möglich:\n"
+"Der Server akzeptierte Ihre Paßwort nicht:\n"
+"\n"
+"%s"
+
+msgid "Unable to connect to the server '%s':\n"
+msgstr "Verbinden mit dem Server „%s“ nicht möglich:\n"
+
+msgid ""
+"Unable to contact crossover.codeweavers.com.\n"
+"\n"
+"Make sure you have a stable connection to the internet, and try again.\n"
+"\n"
+"%s"
+msgstr ""
+"Kontaktieren von crossover.codeweavers.com nicht möglich.\n"
+"\n"
+"Stellen Sie sicher, daß Sie eine stable Internetverbindung haben und "
+"versuchen Sie es noch einmal.\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to copy '%s' to '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Fehler beim Kopieren der Datei „%s“ nach „%s“:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to create '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"„%s“ konnte nicht erstellt werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to create RPM:\n"
+"\n"
+"%s"
+msgstr ""
+"Die RPM konnte nicht erstellt werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to create leading directories:\n"
+"%s"
+msgstr ""
+"Übergeordnete Verzeichnisse konnten nicht erstellt werden:\n"
+"%s"
+
+msgid ""
+"Unable to create the '%s' bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Die Flasche „%s“ konnte nicht erstellt werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to create the ssh key.\n"
+"The passphrase you entered is too short:\n"
+"\n"
+"%s"
+msgstr ""
+"SSH-Schlüssel kann nicht erstellt werden.\n"
+"Das eingegebene Paßwort ist zu kurz:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to delete '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Datei „%s“ konnte nicht gelöscht werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to delete the '%s' bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Die Flasche „%s“ konnte nicht gelöscht werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to delete the '%s' client bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Die Client-Flasche „%s“ konnte nicht gelöscht werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to determine if '%s' is accessible from the server:\n"
+"\n"
+"%s"
+msgstr ""
+"Nicht feststellbar, ob auf „%s“ vom Server zugegriffen werden kann:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to determine if Windows applications are running in the '%s' bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Es kann nicht festgestellt werden, ob Windowsanwendungen in der „%s“ Flasche "
+"laufen:\n"
+"\n"
+"%s"
+
+msgid "Unable to determine the status of this association."
+msgstr "Der Status dieser Zuordnung konnte nicht bestimmt werden."
+
+msgid ""
+"Unable to eject '%s':\n"
+"%s"
+msgstr ""
+"„%s“ konnte nicht ausgeworfen werden:\n"
+"%s"
+
+msgid "Unable to exec '%s'"
+msgstr "„%s“ konnte nicht ausgeführt werden"
+
+msgid "Unable to find '%s' in '%s'"
+msgstr "„%s“ konnte in „%s“ nicht gefunden werden"
+
+msgid "Unable to find '%s' in '%s'."
+msgstr "„%s“ konnte in „%s“ nicht gefunden werden."
+
+msgid "Unable to find WinePrefix"
+msgstr "WinePrefix konnte nicht gefunden werden"
+
+msgid "Unable to find a suitable terminal emulator"
+msgstr "Kein passender Terminal-Emulator gefunden"
+
+msgid ""
+"Unable to fork:\n"
+"\n"
+"%s"
+msgstr ""
+"Konnte „%s“ nicht starten (fork):\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to get Unix paths:\n"
+"\n"
+"%s\n"
+"%s"
+msgstr ""
+"Unix-Pfade konnten nicht bestimmt werden:\n"
+"\n"
+"%s\n"
+"%s"
+
+msgid ""
+"Unable to get Wine paths:\n"
+"\n"
+"%s\n"
+"%s"
+msgstr ""
+"Wine-Pfade konnten nicht bestimmt werden:\n"
+"\n"
+"%s\n"
+"%s"
+
+msgid ""
+"Unable to get associations list:\n"
+"\n"
+"%s"
+msgstr ""
+"Laden der Zuordnungsliste nicht möglich:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to get initial associations:\n"
+"\n"
+"%s"
+msgstr ""
+"Laden der ursprünglichen Zuordnungen nicht möglich:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to get list of installed applications:\n"
+"\n"
+"%s"
+msgstr ""
+"Liste der installierten Anwendungen konnte nicht geholt werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to get list of installed fonts:\n"
+"\n"
+"%s"
+msgstr ""
+"Liste der installierten Schriften konnte nicht geholt werden:\n"
+"\n"
+"%s"
+
+msgid "Unable to install"
+msgstr "Installieren nicht möglich"
+
+msgid ""
+"Unable to install the archive '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Das Archiv „%s“ konnte nicht installiert werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to launch '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"„%s“ konnte nicht gestartet werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to launch your web browser. The document you have requested is "
+"available at:\n"
+"\n"
+"%s"
+msgstr ""
+"Ihr Webbrowser konnte nicht gestartet werden. Das angeforderte Dokument ist "
+"erhältlich unter\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to locate a suitable terminal emulator.\n"
+"Please add xterm or rxvt to your path."
+msgstr ""
+"Es konnte kein passender Terminal-Emulator gefunden werden.\n"
+"Fügen Sie Ihrem Pfad xterm oder rxvt hinzu."
+
+msgid ""
+"Unable to locate an upgrader for %s.\n"
+"\n"
+"%s"
+msgstr ""
+"Aktualiserungsprogramm für %s kann nicht gefunden werden\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to locate installer file.  Try going back, selecting 'Other *.exe "
+"file' and browsing to the installer file by hand."
+msgstr ""
+"Die Datei des Installationsprogramms konnte nicht gefunden werden. Gehen Sie "
+"zurück, wählen Sie „Andere *.exe-Datei“ und gehen Sie manuell zur Datei des "
+"Installationsprogramms."
+
+msgid ""
+"Unable to make '%s' executable:\n"
+"\n"
+"%s"
+msgstr ""
+"Fehler beim Setzen des Ausführbar-Flags von „%s“:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to make the bottle default '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Als Standard setzen der Flasche „%s“ nicht möglich:\n"
+"\n"
+"%s"
+
+msgid "Unable to open '%s' for reading."
+msgstr "Fehler beim Öffnen von „%s“ zum Lesen."
+
+msgid "Unable to open '%s' for writing."
+msgstr "Fehler beim Öffnen von „%s“ zum Schreiben."
+
+msgid ""
+"Unable to refresh the control panel:\n"
+"\n"
+"%s"
+msgstr ""
+"Die Systemsteuerung konnte nicht aktualisiert werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to refresh the list of associations:\n"
+"\n"
+"%s"
+msgstr ""
+"Zuordnungsliste konnte nicht aktualisiert werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to refresh the menu list:\n"
+"\n"
+"%s"
+msgstr ""
+"Die Menü-Liste konnte nicht aktualisiert werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to refresh the user list:\n"
+"\n"
+"%s"
+msgstr ""
+"Die Benutzerliste konnte nicht aktualisiert werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to rename '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"„%s“ konnte nicht umbenannt werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to restore the archive '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Das Archiv „%s“ konnte nicht wiederhergestellt werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to retrieve the result of %s from '%s':\n"
+"%s"
+msgstr ""
+"Das Ergebnis von %s von „%s“ kann nicht erhalten werden:\n"
+"%s"
+
+msgid ""
+"Unable to start '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"„%s“ kann nicht gestartet werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to stop the Windows Applications in bottle '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Stoppen der Windowsanwendungen in der Flasche „%s“ nicht möglich:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to uninstall the '%s' client bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Deinstallation der Client-Flasche „%s“ nicht möglich:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to update bottle:\n"
+"\n"
+"%s"
+msgstr ""
+"Flasche konnte nicht aktualisiert werden:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to update the Wine registry:\n"
+"\n"
+"%s"
+msgstr ""
+"Das Aktualisieren der Wine-Registratur ist fehlgeschlagen:\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to validate your username and password.\n"
+"\n"
+"Visit store.codeweavers.com to make sure you have a valid login, and try "
+"again.\n"
+"\n"
+"%s"
+msgstr ""
+"Konnte Ihren Benutzernamen und Paßwort nicht verifizieren.\n"
+"\n"
+"Bitte gehen Sie zu store.codeweavers.com und stellen sicher, daß Sie dort "
+"ein gültiges Konto haben; versuchen Sie es dann noch einmal.\n"
+"\n"
+"%s"
+
+msgid ""
+"Unable to write to '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Nach „%s“ konnte nicht geschrieben werden:\n"
+"\n"
+"%s"
+
+msgid "Uninstall"
+msgstr "Deinstallieren"
+
+msgid "Uninstall CrossOver"
+msgstr "CrossOver deinstallieren"
+
+msgid "Uninstall and delete bottles"
+msgstr "Flaschen deinstallieren und löschen"
+
+msgid "Uninstall but keep bottles"
+msgstr "Flaschen deinstallieren aber behalten"
+
+msgid "Uninstalling"
+msgstr "Deinstallation"
+
+msgid "Uninstalling %s"
+msgstr "%s wird deinstalliert"
+
+msgid "Unknown command '%s'"
+msgstr "Unbekannter Befehl: „%s“"
+
+msgid ""
+"Unknown value for XTransport '%s'.\n"
+"Using ssh instead."
+msgstr ""
+"Unbekannter Wert für XTransport „%s“.\n"
+"Benutze SSH stattdessen."
+
+msgid "Unsupported"
+msgstr "NichtUnterstuetzt"
+
+msgid "Unsupported software"
+msgstr "Nicht unterstützte Software"
+
+msgid "Update"
+msgstr "Aktualisiern"
+
+msgid "Update active status"
+msgstr "Aktiv-Status wird aktualisiert"
+
+msgid "Update user list"
+msgstr "Benutzerliste wird aktualisiert"
+
+msgid "Updating %s"
+msgstr "%s wird aktualisiert"
+
+msgid "Updating associations..."
+msgstr "Zuordnungen werden aktualisiert..."
+
+msgid "Updating menus..."
+msgstr "Menüs werden aktualisiert ..."
+
+msgid "Updating the application list"
+msgstr "Anwendungsliste wird aktualisiert"
+
+msgid "Updating the registry"
+msgstr "Registratur wird aktualisiert"
+
+msgid "Upgrade Error"
+msgstr "Upgrade-Fehler"
+
+msgid "Upgrade successful!"
+msgstr "Aktualisieren erfolgreich!"
+
+msgid "Upgrading to CrossOver Plugin 2.x"
+msgstr "Aktualisiere auf CrossOver Plugin 2.x"
+
+msgid "Use CrossOver's ssh tools if available"
+msgstr "Benutze die CrossOvers SSH-Tools falls verfügbar"
+
+msgid "Use HTTP proxy"
+msgstr "HTTP-Proxy verwenden"
+
+msgid "Use bottle:"
+msgstr "Benutze Flasche:"
+
+msgid "Use this login on server:"
+msgstr "Benutze diesen Benutzernamen auf dem Server:"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "Users"
+msgstr "Benutzer"
+
+msgid "VP3 for QuickTime 5"
+msgstr "VP3 für QuickTime 5"
+
+msgid ""
+"View Movies encoded in the open-source VP3 format directly in QuickTime."
+msgstr ""
+"Direktes Anzeigen von Filmen in QuickTime, die im Open Source VP3-Format "
+"verschlüsselt sind."
+
+msgid ""
+"View QuickTime movies and animations with QuickTime 6.5. Includes support "
+"for Sorenson encoded video."
+msgstr ""
+"Anzeigen von QuickTime-Filmen und -Animationen mit QuickTime 6.5. Beinhaltet "
+"die Unterstützung für Sorenson-kodierte Videos."
+
+msgid "View QuickTime movies and animations with QuickTime 7."
+msgstr "Anzeigen von QuickTime-Filmen und -Animationen mit QuickTime 7."
+
+msgid "View Windows Media Player movies and streaming video."
+msgstr "Anzeigen von Windows Media Player-Filmen und -Streaming Videos"
+
+msgid "View dynamic and 360 degree immersive images in iPIX format."
+msgstr ""
+"Anzeigen von dynamischen und um 360 Grad drehbaren Bildern im iPIX-Format."
+
+msgid "View installed associations"
+msgstr "Installierte Zuordnungen anzeigen"
+
+msgid "Vocaloid 2"
+msgstr "Vocaloid 2"
+
+msgid "WARNING"
+msgstr "WARNUNG"
+
+msgid ""
+"WARNING\n"
+"\n"
+"You are installing this package into the '%s' bottle.  The configuration of "
+"this bottle is incompatible with this package, and installing here is likely "
+"to produce errors."
+msgstr ""
+"WARNUNG\n"
+"\n"
+"Sie installieren dieses Paket in die Flasche „%s“. Die Konfiguration dieser "
+"ist unverträglich mit diesem Paket, so daß die Installation wahrscheinlich "
+"fehlschlägt."
+
+msgid ""
+"WARNING: The extension of the '%s' document does not match the expected MIME "
+"type: %s. This could indicate malicious activity.\n"
+"\n"
+"Click on 'Continue' to ignore the document extension and open it as a %s "
+"file, or click on 'Abort' to stop now."
+msgstr ""
+"WARNUNG: Die Dateiendung des „%s“-Dokuments entspricht nicht dem erwarteten "
+"MIME-Typ: %s. Das kann auf eine bösartige Aktivität hindeuten.\n"
+"\n"
+"Clicken Sie auf „Fortfahren“, um die Dateiendung zu ignorieren und als %s-"
+"Datei zu öffnen, oder drücken Sie auf „Abbrechen“ zum Stoppen."
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid ""
+"We have tested your Linux CD drive configuration for compatibility with "
+"Windows CD-ROMs.\n"
+msgstr ""
+"Ihre CD-ROM-Konfiguration unter Linux wurde auf Kompatibilität mit Windows-"
+"CD-ROMs getestet.\n"
+
+msgid ""
+"We noticed that you already have CrossOver Plugin 1.x installed. Note that "
+"CrossOver Plugin 2.x does not upgrade your 1.x installation.\n"
+"Instead both versions are now installed side by side, letting you migrate "
+"from 1.x to 2.x progressively. As you install new plugins and applications "
+"in the 2.x tree, they will supersede their counterpart from the 1.x tree. "
+"Once you have reinstalled all the plugins and applications and they work to "
+"your satisfaction in 2.x, you can uninstall the 1.x version."
+msgstr ""
+"Wir haben festgestellt, daß Sie bereits CrossOver Plugin 1.x installiert "
+"haben. Beachten Sie, daß CrossOver Plugin 2.x Ihre 1.x-Installation nicht "
+"aktualisiert.\n"
+"Stattdessen sind jetzt beide Versionen nebeneinander installiert, so daß Sie "
+"schrittweise von 1.x auf 2.x wechseln können; neue in 2.x installierte "
+"Anwendungen und Plugins ersetzten ihr Äquivalent aus dem 1.x-Baum. Nachdem "
+"Sie alle Plugins und Anwendungen neu installiert haben und sie "
+"funktionieren, können Sie die 1.x-Version deinstallieren."
+
+msgid ""
+"We recommend that you use the Linux Flash plugin unless you specifically "
+"need this CrossOver plugin."
+msgstr ""
+"Wir empfehlen die Verwendung des Linux Flash-Plugins, wenn Sie nicht "
+"unbedingt dieses CrossOver-Plugin benötigen."
+
+msgid "WebPost"
+msgstr "WebPost"
+
+msgid "Welcome"
+msgstr "Willkommen"
+
+msgid ""
+"Welcome!\n"
+"\n"
+"It looks like this is the first time you are running CrossOver Office Client "
+"on this machine. This means we have some setting up to do so that you can "
+"start Windows applications on the server without typing passwords all the "
+"time.\n"
+"\n"
+"But to do so we will need you to enter your password a couple of times. We "
+"may also need to create a new Ssh key and ask you to choose a CrossOver "
+"Office passphrase."
+msgstr ""
+"Willkommen!\n"
+"\n"
+"Sie scheinen zum ersten Mal den CrossOver Office Client auf dieser Maschine "
+"zu starten. Das heißt, wir müssen einige Einstellungen aktualisieren, so daß "
+"man Windows-Anwendungen auf dem Server starten kann, ohne das Paßwort immer "
+"eingeben zu müssen.\n"
+"\n"
+"Um dies zu tun, müssen Sie mehrfach Ihr Paßwort eingeben. Wir müssen ggf. "
+"auch eine neuen SSH-Schlüssel erstellen und Sie dann bitten, ein Paßwort für "
+"CrossOver Office einzugeben."
+
+msgid "Windows Applications"
+msgstr "Windows-Anwendungen"
+
+msgid "Windows Installer 2.0 Redistributable"
+msgstr "Windows Installer 2.0 (weiterverteilbar)"
+
+msgid "Windows Media Player 6.4"
+msgstr "Windows Media Player 6.4"
+
+msgid "Windows Media Player 9"
+msgstr "Windows Media Player 9"
+
+msgid "Windows OLE components"
+msgstr "Windows-OLE-Komponenten"
+
+msgid "Windows OLE components (part 2)"
+msgstr "Windows-OLE-Komponenten (Teil 2)"
+
+msgid ""
+"Windows applications and C: drives are contained in bottles. Some of these "
+"bottles are maybe used system-wide, so removing them will impact each user.\n"
+msgstr ""
+"Windows-Anwendungen und C:-Laufwerke sind in Flaschen enthalten. Einige "
+"dieser könnten systemweit verwendet sein; ein Löschen dieser betrifft alle "
+"Benutzer.\n"
+
+msgid "Wine error"
+msgstr "Wine-Fehler"
+
+msgid ""
+"With this option,  CrossOver runs the same installer that would be used on "
+"Windows.  For many CD-ROM installers you can simply select the disk location "
+"and CrossOver will locate a proper installer."
+msgstr ""
+"Mit dieser Option startet CrossOver dasselbe Installationsprogramm, daß "
+"unter Windows verwendet würde. Bei vielen Installations-CD-ROMs können Sie "
+"einfach das Laufwerk auswählen und CrossOver findet das richtige "
+"Installationsprogramm."
+
+msgid "Wizard"
+msgstr "Wizard"
+
+msgid "World of Warcraft"
+msgstr "World of Warcraft"
+
+msgid "Write packages to:"
+msgstr "Pakete schreiben nach:"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid ""
+"You are about to delete the '%s' bottle. This operation will remove all the "
+"Windows applications it contains, as well as any document stored in that "
+"bottle's C: drive."
+msgstr ""
+"Sie sind dabei die Flasche „%s“ zu löschen. Dabei werden alle "
+"Windowsprogramme und alle Daten, die auf dem C:-Laufwerk der Flasche "
+"gespeichert sind, gelöscht."
+
+msgid "You are about to delete the '%s' client bottle."
+msgstr "Sie sind dabei die Client-Flasche „%s“ zu löschen."
+
+msgid ""
+"You are about to delete the '%s' client bottle.  Once a client bottle is "
+"removed, you will no longer be able to run the applications it contains."
+msgstr ""
+"Sie sind dabei die „%s“-Client-Flasche zu löschen. Nachdem eine Client-"
+"Flasche entfernt wurde, kann keine der enthaltenen Anwendungen mehr "
+"gestartet werden."
+
+msgid ""
+"You are about to install %s for Solaris.\n"
+"\n"
+"Do you wish to proceed?"
+msgstr ""
+"Sie sind dabei %s für Solaris zu installieren.\n"
+"\n"
+"Möchten Sie fortfahren?"
+
+msgid ""
+"You are about to replace your current installation of this product with a "
+"demo version, which may impose a time limit or other restrictions on your "
+"existing version of CrossOver. This is almost certainly a bad idea!  Are you "
+"sure you want to do this?"
+msgstr ""
+"Sie sind dabei, Ihre gegenwärtige Installation dieses Produkt durch eine "
+"Demoversion zu ersetzen, welche die Benutzung zeitlich oder andersweitig "
+"einschränkt. Das ist definitiv eine schlechte Idee! Wollen Sie das wirklich "
+"tun?"
+
+msgid ""
+"You are about to run a Windows application or open a document which appears "
+"to come from an untrusted source (most likely an email attachment):\n"
+"\n"
+"%s\n"
+"\n"
+"If this is a virus, running it could put your computer at risk.\n"
+"Click on 'Abort' to stop the launch process before any harm has been done. "
+"Click on 'Continue' to open the above application or document, or click on "
+"'Always Continue' to continue and not get asked this question again."
+msgstr ""
+"Sie sind dabei, eine Windowsanwendung zu starten oder ein Dokument zu "
+"öffnen, das aus einer nicht vertrauenswürdigen Quelle zu stammen scheint "
+"(wahrscheinlichst einem E-Mail-Anhang):\n"
+"\n"
+"%s\n"
+"\n"
+"Wenn dies ein Virus ist, gefährden Sie Ihren Computer.\n"
+"Drücken Sie auf „Abbrechen“, um die Ausführung zu unterbrechen bevor ein "
+"Schaden verursacht wurde, auf „Fortsetzen“, um die Windowsanwendung zu "
+"starten, oder auf „Immer fortfahren“, um fortzusetzen und nie mehr die Frage "
+"gestellt zu bekommen."
+
+msgid ""
+"You can find the installation log here:<P></P><P><a href=\"file://%s\">%s</"
+"a></P>"
+msgstr ""
+"Sie finden das Installationslog hier:<P></P><P><a href=file://%s>%s</a></P>"
+
+msgid ""
+"You have made changes to your CrossOver settings.\n"
+"\n"
+"Apply changes before installing?"
+msgstr ""
+"Sie haben Ihre Einstellungen für CrossOver geändert.\n"
+"\n"
+"Sollen die Änderungen vor der Installation angewendet werden?"
+
+msgid "You have to specify the path to the CD-ROM."
+msgstr "Geben Sie den Pfad zur CD-ROM an."
+
+msgid "You have to specify the path to the installer."
+msgstr "Geben Sie den Pfad zum Installationsprogramm an."
+
+msgid "You must be root to install %s."
+msgstr "Um %s zu installieren, müssen Sie root sein."
+
+msgid ""
+"You will be taken to the Advanced dialog, where you can download the file "
+"manually."
+msgstr ""
+"Der Erweitert-Dialog wird geöffnet, wo Sie die Datei manuell herunterladen "
+"können."
+
+msgid ""
+"Your %s ulimit is: <P></P><P><b>%s</b></P><P>This value is likely to "
+"interfere with the proper operation of %s.  The proper solution for this "
+"problem varies by distribution; typically you will want to set your ulimit "
+"to 'unlimited'.</P><P>Click <a href=\"http://crossover.codeweavers.com/links/"
+"faq_ulimit\">here</a> for more details.</P>"
+msgstr ""
+"Ihre %s ulimit ist: <P></P><P><b>%s</b></P><P>Dieser Wert macht "
+"wahrscheinlich Probleme beim Verwenden von %s. Die richtige Lösung hängt von "
+"der Distribution ab; normalerweise ist „unlimited“ das richtige.</"
+"P><P>Klicken Sie für weitere Informationen <a href=http://crossover."
+"codeweavers.com/links/faq_ulimit>hier</a>.</P>"
+
+msgid ""
+"Your anti-virus does not seem to be working.\n"
+"Do you want to continue anyway?\n"
+"\n"
+"%s"
+msgstr ""
+"Ihre Antivirensoftware scheint nicht zu funktionieren.\n"
+"Trotzdem fortfahren?\n"
+"\n"
+"%s"
+
+msgid "Your old fstab will be backed up to '%s'\n"
+msgstr "Ihre alte fstab wird gesichert unter „%s“\n"
+
+msgid "Your personal %s environment has been removed.\n"
+msgstr "Ihre persönliche Umgebung %s wurde entfernt.\n"
+
+msgid "assoc: (unknown)"
+msgstr "assoc: (unbekannt)"
+
+msgid "assoc: alternative"
+msgstr "assoc: alternativ"
+
+msgid "assoc: default"
+msgstr "assoc: Standard"
+
+msgid "assoc: ignore"
+msgstr "assoc: ignorieren"
+
+msgid "assoc: mime"
+msgstr "assoc: MIME"
+
+msgid "default"
+msgstr "Standard"
+
+msgid "default bottle"
+msgstr "Standard-Flasche"
+
+msgid "doc/en"
+msgstr "doc/en"
+
+msgid "ebrary Reader"
+msgstr "ebrary Reader"
+
+msgid ""
+"ebrary Reader is a plugin that makes it possible to browse eBooks in the "
+"ebrary format."
+msgstr ""
+"ebrary Reader ist ein Plugin, das es ermöglicht durch eBooks im ebrary "
+"Format zu stöbern."
+
+msgid "iPIX Netscape Plugin Viewer"
+msgstr "iPIX Netscape Plugin Viewer"
+
+msgid "iTunes"
+msgstr "iTunes"
+
+msgid "managed"
+msgstr "verwaltet"
+
+msgid "mfc42.dll"
+msgstr "mfc42.dll"
+
+msgid "mfc42u.dll"
+msgstr "mfc42u.dll"
+
+msgid "msls31"
+msgstr "msls31"
+
+msgid "newbottle"
+msgstr "neueFlasche"
+
+msgid "version %s"
+msgstr "版本 %s"
+
+msgid "yes"
+msgstr "ja"

@@ -1,0 +1,26 @@
+DestroyModuleConfig MacMenu: *
+*MacMenu: Pixmap macosx/dock_center2.png
+*MacMenu: Colorset 5
+*MacMenu: Rows 22
+*MacMenu: Columns 1280
+*MacMenu: Frame 0
+*MacMenu: Font "Shadow=1 se:xft:WenQuanYi Bitmap Song:encoding=zh_CN.UTF-8:size=9"
+*MacMenu: (46x22, Padding 0, Icon macosx/main2.png, ActionOnPress, Action(Mouse 1) `Menu MenuFvwmRoot Rectangle +$left+22 0 0m')
+*MacMenu: (55x22, Padding 0, Title(Side) "Archlive", ActionOnPress, Action(Mouse 1) `Menu MenuFvwmArchlive Rectangle +$left+22 0 0m' )
+*MacMenu: (45x22, Padding 0, Title(Side) "设置", ActionOnPress, Action(Mouse 1) 'Menu MenuFvwmConfig Rectangle +$left+22 0 0m' )
+*MacMenu: (45x22, Padding 0, Title(Side) "位置", ActionOnPress, Action(Mouse 1) 'Menu MenuPlaces Rectangle +$left+22 0 0m' )
+*MacMenu: (720x22)
+*MacMenu: (50x22, Swallow (Respawn) "MemUse" 'Module FvwmScript $[fvwm_script_path]/MemUse')
+*MacMenu: (65x22, Swallow (Respawn) "MemLeft" 'Module FvwmScript $[fvwm_script_path]/MemLeft')
+*MacMenu: (65x22, Swallow "Wifi" 'Module FvwmScript $[fvwm_script_path]/Wifi')
+*MacMenu: (5x22)
+*MacMenu: (24x22, Swallow  "Battery" 'Module FvwmScript $[fvwm_script_path]/Battery')
+*MacMenu: (5x22)
+*MacMenu: (27x22, Padding 0, Icon macosx/rew.png, Action(Mouse 1) `Exec exec mpc prev`)
+*MacMenu: (22x22, Padding 0, Icon macosx/stop.png, Action(Mouse 1) `Exec exec mpc stop`)
+*MacMenu: (22x22, Padding 0, Icon macosx/play.png, Action(Mouse 1) `Exec exec mpc play`)
+*MacMenu: (22x22, Padding 0, Icon macosx/playpause.png, Action(Mouse 1) `Exec exec mpc pause`)
+*MacMenu: (26x22, Padding 0, Icon macosx/fwd.png, Action(Mouse 1) `Exec exec mpc next`)
+*MacMenu: (5x22)
+*MacMenu: (40x22, Swallow (Respawn) "Clock" 'Module FvwmScript $[fvwm_script_path]/Clock')
+*MacMenu: (46x22, Padding 0, Icon macosx/search.png, ActionOnPress, Action(Mouse 1) Exec exec beagle-search)

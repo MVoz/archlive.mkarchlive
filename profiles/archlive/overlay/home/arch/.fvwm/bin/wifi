@@ -1,0 +1,3 @@
+#!/bin/bash
+#echo "Wi-Fi: "$(grep ath0 /proc/net/wireless | awk {'print $3'})""
+echo "$(sed -n '3p' /proc/net/wireless | awk {'print $1" "$3'})0%"

@@ -1,0 +1,115 @@
+### 自定义 IceWM 设置 
+## 设置 XFT 字体 (下面的字体设置适合 Xft.dpi:96 的情况，可以在 ~/.Xresources 写入 Xft.dpi:96 ) 
+TitleFontNameXft      =   Wenquanyi ZenHei:size=12
+MenuFontNameXft         =   Wenquanyi ZenHei:size=15
+MinimizedWindowFontNameXft   =   Wenquanyi ZenHei:size=12
+ActiveButtonFontNameXft      =   Wenquanyi ZenHei:size=13
+NormalButtonFontNameXft      =   Wenquanyi ZenHei:size=13
+ToolButtonFontNameXft      =   Wenquanyi ZenHei:size=13
+NormalWorkspaceFontNameXft   =   Wenquanyi ZenHei:size=13
+ActiveWorkspaceFontNameXft   =   Wenquanyi ZenHei:size=13
+QuickSwitchFontNameXft      =   Wenquanyi ZenHei:size=13
+ListBoxFontNameXft      =   Wenquanyi ZenHei:size=13
+StatusFontNameXft      =   Wenquanyi ZenHei:size=13
+ToolTipFontNameXft      =   Wenquanyi ZenHei:size=13
+ActiveTaskBarFontNameXft   =   Wenquanyi ZenHei:size=13
+NormalTaskBarFontNameXft   =   Wenquanyi ZenHei:size=13
+ClockFontNameXft      =   Wenquanyi ZenHei:size=16:bold
+InputFontNameXft      =   Wenquanyi ZenHei:size=13
+
+MenuIconSize=16
+SmallIconSize=16 #sets toolbar height, too.
+LargeIconSize=24
+HugeIconSize=32 
+
+# meXft="yahei:size=9,AR PL ShanHeiSun Uni:size=11" 
+#meXft="yahei:size=11" 
+#MenuFontNameXft="yahei:size=11" 
+#StatusFontNameXft="yahei:size=11" 
+#QuickSwitchFontNameXft="yahei:size=11" 
+#NormalButtonFontNameXft="yahei:size=11" 
+#ActiveButtonFontNameXft="yahei:size=11" 
+#NormalTaskBarFontNameXft="yahei:size=11" 
+#ActiveTaskBarFontNameXft="yahei:size=11" 
+#MinimizedWindowFontNameXft="yahei:size=11" 
+#ListBoxFontNameXft="yahei:size=11" 
+#ToolTipFontNameXft="yahei:size=11" 
+#ClockFontNameXft="yahei:size=11" 
+#ApmFontNameXft="yahei:size=11" 
+#LabelFontNameXft="yahei:size=11" 
+##TitleFontNameXft="yahei:size=11:bold" 
+#TitleFontNameXft="yahei:size=11" 
+#ActiveTitleFontNameXft="yahei:size=11:bold" 
+
+### 设置个人偏好
+### 配置任务条 
+
+#TaskBarShowMailboxStatus=0
+#MailCheckDelay=0 
+
+NetworkStatusDevice="eth0 eth1 ath0 wlan0"
+
+## 显示 APM 状态 (电池监控) 
+TaskBarShowAPMStatus=1
+## LED 方式显示时间,显示格式为"时:分:秒" TaskBarClockLeds=1 
+TimeFormat="%D %H:%M:%S 第%W周" ShowAbout=1 
+ShowRun=1
+
+## 桌面背景 
+#DesktopBackgroundColor="rgb:00/20/40" 
+#DesktopBackgroundImage="/usr/share/wallpapers/green5.jpg"
+#DesktopBackgroundImage="/usr/share/wallpapers/Tiger_Blue.jpg"
+DesktopBackgroundCenter=0
+SupportSemitransparency=1
+
+## 虚拟桌面 
+WorkspaceNames="海", "納","百","川" #EdgeSwitch=1
+
+#讓工具列出現。
+ShowTaskBar=1
+
+## 鼠标移动到屏幕边缘切换虚拟桌面 
+EdgeSwitch=0 
+ContinuousEdgeSwitch=0 
+EdgeResistance=50 
+EdgeSwitchDelay=600
+
+### 窗口选项 
+## 不透明移动和改变窗口大小 
+OpaqueMove=0 
+OpaqueResize=0 
+
+## 新窗口显示后不自动取得焦点 （ 类似 KDE/Gnome 风格 ） 
+FocusOnMap=0 
+
+## 菜单追踪鼠标动作 （类似 KDE/Gnome 菜单 ） 
+MenuMouseTracking=1
+
+## Support mouse wheel 
+UseMouseWheel=1
+
+## 锁住屏幕的程序 
+LockCommand="xlock -mode blank"
+
+#为什么开始菜单有两个 ‘’程序‘’项？
+ShowProgramsMenu=0
+
+## 关机命令 
+ShutdownCommand="sudo halt -p"
+## 重启命令 
+RebootCommand="sudo reboot" 
+# 注销不要确认对话框
+ConfirmLogout=0
+
+# 任务栏 
+TaskBarDoubleHeight=0 
+MinimizeToDesktop=0 
+TaskBarWorkspacesLeft=1 
+
+TaskBarShowWindowListMenu=1 
+TaskBarShowShowDesktopButton=1
+TaskBarShowTray=1
+TrayShowAllWindows=1
+TaskBarShowAllWindows=1
+TaskBarShowWindowIcons=1
+TaskBarShowStartMenu=1

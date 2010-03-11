@@ -1,0 +1,31 @@
+DestroyFunc arsen-decor
+AddToFunc   arsen-decor
++ I TitleStyle AllActive ( Colorset 13 )
++ I TitleStyle AllInactive ( Colorset 13 )
++ I TitleStyle RightJustified
++ I ButtonStyle All Simple -- UseTitleStyle 
+arsen-decor
+
+AddButtonStyle 1 \
+    ActiveUp   (Pixmap decoration/act.png ) \
+    ActiveDown (Pixmap decoration/act.png ) \
+    Inactive   (Pixmap decoration/inact.png )
+AddButtonStyle 6 \
+    ActiveUp   (Pixmap decoration/active6.png ) \
+    ActiveDown (Pixmap decoration/active6.png ) \
+    Inactive   (Pixmap decoration/inactive.png )
+AddButtonStyle 4 \
+    ActiveUp   (Pixmap decoration/active4.png ) \
+    ActiveDown (Pixmap decoration/active4.png ) \
+    Inactive   (Pixmap decoration/inactive.png )
+AddButtonStyle 2 \
+    ActiveUp   (Pixmap decoration/active2.png ) \
+    ActiveDown (Pixmap decoration/active2.png ) \
+    Inactive   (Pixmap decoration/inactive.png )
+
+AddToFunc   arsen-decor-reload
++ I BorderStyle Simple -- HiddenHandles NoInset
++ I TitleStyle  -- Flat
++ I ButtonStyle All -- Flat
++ I TitleStyle Height 19
+arsen-decor-reload

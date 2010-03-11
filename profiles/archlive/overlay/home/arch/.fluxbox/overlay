@@ -1,0 +1,46 @@
+# 菜单标题的字体
+
+menu.title.font: Simsun-10
+
+# 菜单组标题的对齐方式
+
+menu.title.justify: center
+
+# 菜单项目的字体
+
+menu.frame.font: Simsun-10
+
+# 菜单项目的对齐方式
+
+menu.frame.justify: left
+
+# 窗口标题栏文字的字体
+
+window.font: Simsun-10
+
+# 窗口标题栏文字的对齐方式
+
+window.justify: center
+
+# 窗口标题聚焦时的背景颜色|5/5/f
+
+window.label.focus.color: rgb:4e/8f/cf
+
+window.label.focus.colorTo: rgb:4e/8f/cf
+
+# 时钟的字体
+
+toolbar.clock.font: Simsun-10
+
+# 工作区名称的字体
+
+#toolbar.workspace.font: Simsun
+
+# 图标栏的字体
+
+toolbar.iconbar.focused.font: Simsun-10
+
+toolbar.iconbar.unfocused.font: Simsun-10
+
+字体名称后面-11为字体大小，再后面跟:bold表示黑体显示，中间都没有空格。
+Comments Off   

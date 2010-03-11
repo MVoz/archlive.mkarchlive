@@ -1,0 +1,99 @@
+<!ENTITY torbutton.prefs.title "Επιλογές του Torbutton">
+<!ENTITY torbutton.prefs.display_settings "Ρυθμίσεις εμφάνισης">
+<!ENTITY torbutton.prefs.display_panel "Εμφάνιση της ρύθμισης του διαμεσολαβητή Tor στην γραμμή κατάστασης">
+<!ENTITY torbutton.prefs.panel_format "Προβολή στη γραμμή κατάστασης με :">
+<!ENTITY torbutton.prefs.panel_text_format "Κείμενο">
+<!ENTITY torbutton.prefs.panel_icon_format "Εικονοδίο">
+<!ENTITY torbutton.prefs.tor_settings "Ρυθμίσεις διαμεσολαβητή">
+<!ENTITY torbutton.prefs.recommended_settings "Χρήση των προτεινόμενων ρυθμίσεων για την τρέχουσα έκδοση του Firefox">
+<!ENTITY torbutton.prefs.use_privoxy "Χρήση του Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.custom_settings "Χρήση προσαρμοσμένων ρυθμίσεων διαμεσολαβητή">
+<!ENTITY torbutton.prefs.proxy.host.http "Διαμεσολαβητής HTTP :">
+<!ENTITY torbutton.prefs.proxy.host.https "Διαμεσολαβητής SSL :">
+<!ENTITY torbutton.prefs.proxy.host.ftp "Διαμεσολαβητής FTP :">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Διαμεσολαβητής Gopher :">
+<!ENTITY torbutton.prefs.proxy.host.socks "Κεντρικός υπολογιστής SOCKS :">
+<!ENTITY torbutton.prefs.proxy.port "Θύρα :">
+<!ENTITY torbutton.about.title "Περί Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Απενεργοποιήστε το Torbutton για να αλλάξετε αυτές τις ρυθμίσεις.">
+<!ENTITY torbutton.pref_connection.more_info "Περισσότερες πληροφορίες">
+<!ENTITY torbutton.pref_connection_more_info.title "Βοήθεια">
+<!ENTITY torbutton.pref_connection_more_info.text "Το Torbutton είναι ενεργοποιημένο.Αν θέλετε να αλλάξετε τις ρυθμίσεις διαμεσολαβητή, εκτός του Tor, απενεργοποιήστε το Torbutton και επιστρέψτε εδώ. Αν θέλετε να αλλάξετε τις ρυθμίσεις για τον διαμεσολαβητή Tor, χρησιμοποιήστε το παράθυρο επιλογών του Torbutton">
+<!ENTITY torbutton.context_menu.toggle "Εναλλαγή κατάστασης λειτουργίας του Tor">
+<!ENTITY torbutton.context_menu.toggle.key "Ε">
+<!ENTITY torbutton.context_menu.preferences "Επιλογές...">
+<!ENTITY torbutton.context_menu.preferences.key "Ε">
+<!ENTITY torbutton.context_menu.about "Περί Torbutton">
+<!ENTITY torbutton.context_menu.about.key "Π">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Κάντε κλικ για να εκκίνηση του Torbutton">
+<!ENTITY torbutton.prefs.sec_settings "Ρυθμίσεις ασφαλείας">
+<!ENTITY torbutton.prefs.block_thread "Απαγόρευση ανάγνωσης ιστορικού κατά τη χρήση Tor (κρίσιμο)">
+<!ENTITY torbutton.prefs.block_thwrite "Απαγόρευση εγγραφής στο ιστορικό κατά τη χρήση Tor (συνιστάται)">
+<!ENTITY torbutton.prefs.block_nthread "Απαγόρευση ανάγνωσης ιστορικού κατά την χρήση εκτός Tor (προαιρετικό)">
+<!ENTITY torbutton.prefs.block_nthwrite "Απαγόρευση εγγραφής στο ιστορικό κατά τη χρήση εκτός Tor (προαιρετικό)">
+<!ENTITY torbutton.prefs.clear_history "Απαγόρευση χρήσης λανθάνουσας δίσκου κατά την εναλλαγή λειτουργίας (προαιρετικό)">
+<!ENTITY torbutton.prefs.clear_cache "Απαγόρευση χρήσης λανθάνουσας δίσκου κατά τη λειτουργία Tor και εκκαθάριση της στην εναλλαγή Tor">
+<!ENTITY torbutton.prefs.block_cache "Απαγόρευση λανθάνουσας μνήμης και δίσκου κατά τη λειτουργία Tor">
+<!ENTITY torbutton.prefs.cookie_jars "Αποθήκευση cookies εκτός Tor σε προστατευμένο αρχείο jar">
+<!ENTITY torbutton.prefs.mmm_cookies "Χειρωνακτική διαχείριση cookies (επικίνδυνο)">
+<!ENTITY torbutton.prefs.clear_cookies "Εκκαθάριση cookies κατά την εναλλαγή χρήσης Tor">
+<!ENTITY torbutton.prefs.disable_plugins "Απενεργοποίηση πρόσθετων λειτουργιών κατά τη χρήση Tor (κρίσιμο)">
+<!ENTITY torbutton.prefs.kill_bad_js "Αγγύρωση επικίνδυνης javascript (κρίσιμο)">
+<!ENTITY torbutton.prefs.isolate_content "Απομόνωση δυναμικού περιεχόμενου ανά κατάσταση λειτουργίας Tor (κρίσιμο)">
+<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
+<!ENTITY torbutton.prefs.set_uagent "Ορισμός user agent για χρήση  Tor (κρίσιμο)">
+<!ENTITY torbutton.prefs.dynamic "Δυναμικό περιεχόμενο">
+<!ENTITY torbutton.prefs.cookies "Cookies">
+<!ENTITY torbutton.prefs.cache "Λανθάνουσα">
+<!ENTITY torbutton.prefs.history "Ιστορικό">
+<!ENTITY torbutton.prefs.no_search "Απενεργοποίηση συμβουλών αναζήτησης κατά τη χρήση Tor (συνιστάται)">
+<!ENTITY torbutton.prefs.shutdown "Κλείσιμο">
+<!ENTITY torbutton.prefs.tor_shutdown "Εκκαθάριση cookies από Tor κατά το κλείσιμο του περιηγητή με ενεργό το Tor">
+<!ENTITY torbutton.prefs.all_shutdown "Εκκαθάριση cookies πάντα κατά το κλείσιμο του περιηγητή">
+<!ENTITY torbutton.prefs.no_shutdown "Να μην γίνει εκκαθάριση cookies κατά το κλείσιμο">
+<!ENTITY torbutton.prefs.disable_sessionstore "Απενεργοποίηση αποθήκευσης συνεδρίας (συνιστάται)">
+<!ENTITY torbutton.prefs.headers "Κεφαλίδες">
+<!ENTITY torbutton.prefs.spoof_english "Πλαστογράφηση γλώσσας περιηγητή (σε US English)">
+<!ENTITY torbutton.prefs.disable_referer "Να μην αποστέλεται referer κατά τη χρήση Tor (μπορεί να μην λειτουργούν σωστά ορισμένοι ιστότοποι)">
+<!ENTITY torbutton.prefs.disable_domstorage "Απενεργοποίηση αποθήκευσης DOM κατά τη χρήση Tor (κρίσιμο)">
+<!ENTITY torbutton.prefs.forms "Φόρμες">
+<!ENTITY torbutton.prefs.block_tforms "Μπλοκάρισμα κωδικών + δεδομένων φορμών κατά τη χρήση Tor (συνιστάται)">
+<!ENTITY torbutton.prefs.block_ntforms "Μπλοκάρισμα αποθήκευσης κωδικών + δεδομένων φορμών εκτός Tor (προαιρετικό)">
+<!ENTITY torbutton.prefs.tor "Tor">
+<!ENTITY torbutton.prefs.non_tor "Χωρίς Tor">
+<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Επαναφόρτωση cookie jar/ εκκαθάριση cookiew σε κατάρρευση του Firefox (συνιστάται)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "Αποθήκευση cookies από και εκτός Tor σε προστατευμένα αρχεία jar (επικίνδυνο)">
+<!ENTITY torbutton.prefs.clear_http_auth "Εκκαθάριση πιστοποιημένων  συνεδριών HTTP (συνιστάται)">
+<!ENTITY torbutton.prefs.block_js_history "Απομόνωση πρόσβασης στο ιστορικό περιήγησης ανά κατάσταση Tor (κρίσιμο)">
+<!ENTITY torbutton.prefs.resize_on_toggle "Αλλαγή μεγέθους παραθύρων σε πολλαπλάσια των 50 πίξελ κατά τη χρήση Tor (συνιστάται)">
+<!ENTITY torbutton.prefs.close_tor "Κλείσιμο όλων των παραθύρων και των καρτελών Tor κατά την εναλλαγή (προαιρετικό)">
+<!ENTITY torbutton.prefs.close_nontor "Κλείσιμο όλων των παραθύρων και των καρτελών χωρίς Tor κατά την εναλλαγή λειτουργίας (προαιρετικό)">
+<!ENTITY torbutton.prefs.block_links "Μπλοκάρισμα κλικ σε δεσμούς και ανανέωσης σελίδων από διαφορετικές καταστάσεις λειτουργίας Tor (προαιρετικό)">
+<!ENTITY torbutton.prefs.jar_certs "Αποθήκευση πιστοποιητικών SSL σε ξεχωριστά αρχεία jar για χρήση με Tor/χωρίς Tor (συνιστάται)">
+<!ENTITY torbutton.prefs.jar_ca_certs "Αποθήκευση πιστοποιητικών CA σε ξεχωριστά αρχεία jar για χρήση με Tor/χωρίς Tor (συνιστάται)">
+<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
+<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
+<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
+<!ENTITY torbutton.prefs.startup "Startup">
+<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
+<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
+<!ENTITY torbutton.prefs.test_settings "Test Settings">
+<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
+<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
+<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
+<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
+<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
+<!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
+<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
+<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
+<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">

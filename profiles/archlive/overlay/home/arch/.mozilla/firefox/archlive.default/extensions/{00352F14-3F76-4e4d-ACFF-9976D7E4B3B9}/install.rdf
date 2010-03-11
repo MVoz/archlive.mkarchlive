@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{00352F14-3F76-4e4d-ACFF-9976D7E4B3B9}</em:id>
+    <em:version>0.6.8</em:version>
+
+    <!-- Target Application this extension can install into,
+         with minimum and maximum supported versions. -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>3.0</em:minVersion>
+        <em:maxVersion>3.7a1pre</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+   
+    <!-- Front End MetaData -->
+    <em:name>MacOSX Theme</em:name>
+    <em:description>FMacOSX theme for Firefox 3</em:description>
+    <em:creator>GOLF-AT</em:creator>
+    <em:contributor>Based on original Firefox 3.0 MacOS themes.</em:contributor>
+    <em:homepageURL>https://addons.mozilla.org/en-US/firefox/addon/7172</em:homepageURL>
+    <em:internalName>MacOSX</em:internalName>
+
+  </Description>     
+</RDF>

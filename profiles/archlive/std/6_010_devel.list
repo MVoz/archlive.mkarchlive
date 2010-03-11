@@ -1,0 +1,24 @@
+#base-devel
+autoconf
+automake
+bin86
+fakeroot
+gcc
+libtool
+m4
+make
+patch
+pkgconfig
+#
+pkgtools
+abs
+yaourt
+aurvote
+#
+bzr
+#A decentralized revision control system
+subversion
+mercurial
+git
+#
+cmake

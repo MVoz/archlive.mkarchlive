@@ -1,0 +1,3 @@
+prog urxvt终端 /usr/share/pixmaps/rxvt-unicode.png urxvt
+prog Sakura终端 /usr/share/pixmaps/terminal-tango.png sakura
+prog Lxterminal终端 /usr/share/pixmaps/lxterminal.png lxterminal

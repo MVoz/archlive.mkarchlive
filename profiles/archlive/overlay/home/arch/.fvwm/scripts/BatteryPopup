@@ -1,0 +1,28 @@
+WindowTitle     {BatteryPopup}
+WindowSize      350 25
+WindowPosition	 958 22
+Font            "Shadow=0 se:xft:WenQuanYi Bitmap Song:encoding=zh_CN.UTF-8:size=10"
+Colorset        2
+
+Init
+Begin
+	Set $acpi = (GetOutput {acpi} 1 -1)
+	ChangeTitle 1 $acpi
+End
+
+PeriodicTasks
+Begin
+End
+
+Widget                  1
+Property
+        Type            ItemDraw
+        Size            350 25
+        Position        0 7
+        Flags           NoFocus NoReliefString Middle
+Main
+Case message of
+	SingleClic:
+	Begin
+	End
+End

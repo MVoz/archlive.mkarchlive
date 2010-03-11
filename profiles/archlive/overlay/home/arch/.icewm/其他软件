@@ -1,0 +1,7 @@
+prog "进程查看" /usr/share/pixmaps/htop.png urxvt -e htop
+prog "SpoonWep2无线网络密码破解" /usr/share/pixmaps/crack.png spoonwep
+prog "SpoonWpa2无线网络密码破解" /usr/share/pixmaps/crack.png spoonwpa
+prog "GAdmin-Rsync文件及文件夹自动备份" /usr/share/pixmaps/gadmin-rsync.png gadmin-rsync
+prog "RP-PPPoE拨号程序" /usr/share/pixmaps/pppoe.xpm sudo tkpppoe
+prog "网络配置向导" /usr/share/pixmaps/wizard16.xpm sudo net-setup.sh
+prog GAdmin-Rsync自动备份 /usr/share/pixmaps/gadmin-rsync.png gadmin-rsync

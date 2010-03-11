@@ -1,0 +1,175 @@
+#!/bin/busybox ash
+# Archlive 启动脚本
+
+# 创建busybox包含程序的链接
+# Install busybox's applets as symlinks
+/bin/busybox --install -s
+
+export PATH=.:/:/usr/sbin:/usr/bin:/sbin:/bin
+
+. /init_functions
+
+clear
+
+echo
+hg "                   Welcome to Archlive ! 欢迎使用 Archlive ! $boot_version"
+hl "*******************************************************************************"
+echo
+echo -e  "${EMY}  Archlive${RST}, ${EMG}live system ${RST}base on ${EMY}Arch GNU/Linux${RST}."
+echo -e  "${EMY}  Archlive${RST}, 基于${EMY}Arch GNU/Linux${RST}的${EMG}live系统${RST}."
+echo 
+hr "  此系统基于GNU通用发布协议(GPL)发行"
+hr "  Distributed under the GNU General Public License (GPL)"  
+hl "*******************************************************************************"
+echo
+
+/bin/mount -t proc proc /proc
+/bin/mount -t sysfs sys /sys
+
+read CMDLINE </proc/cmdline
+export CMDLINE
+
+export cmd_line=$@
+
+# Checking boot paremeters 检查启动参数
+for cmd in ${CMDLINE}; do
+    case "${cmd}" in
+        \#*) break ;; # ignore everything after a # in the commandline
+        # The kernel passes those to the kernel on its own
+        [0123456Ss]) ;;
+        [0-9]*) ;;
+        single) ;;
+        rw) readwrite="yes" ;;
+        ro) readwrite="no" ;;
+        # only export stuff that does work with ash :)
+        *=*) rhs="$(echo "${cmd}" | cut -d= -f2-)"
+             cmd="$(echo "${cmd}" | cut -d= -f1 | sed 's|\.|_|g')"
+             cmd="$(echo "${cmd}" | sed 's|-|_|g')=${rhs}"
+             (echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}"
+             ;;
+        *)   cmd="$(echo "${cmd}" | sed 's|\.|_|g')"
+             cmd="$(echo "${cmd}" | sed 's|-|_|g')"
+             (echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}=y"
+             ;;
+    esac
+done
+
+if [ "$cn" = "y" ]; then
+	msg "现在开始启动 ..."
+else
+	msg "Now start to boot..."
+fi
+
+export cmd_line="$@"
+
+#mount -n -o remount,rw /         # for the case we forgot rw boot option
+ln -sf /proc/mounts /etc/mtab    # this allows us to use umount -a
+
+. /usr/lib/liblinuxlive # it requires proc to be mounted
+
+# 不输出内核启动相关信息到终端
+echo "0" > /proc/sys/kernel/printk
+
+# Used so hooks can override params to kinit
+export kinit_params=""
+export root=""
+echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
+
+# 调试用测试点
+debug_shell
+
+# if available, start udevd at this stage
+if [ -x /sbin/udevd ]; then
+    if [ "$cn" = "y" ]; then
+	msg -n "开始启动 udevd..."
+    else
+	msg -n "Starting udevd..."
+    fi
+    echo > /proc/sys/kernel/hotplug
+    /sbin/udevd --daemon --resolve-names=never >/dev/null
+    if [ "$cn" = "y" ]; then
+	msg "完成."
+    else
+	msg "done."
+    fi
+fi
+
+# 启动参数通过 disablehooks="a,b" 来禁止运行启动脚本 a 和 b
+if [ -n "${disablehooks}" ]; then
+    for d in $(echo "${disablehooks}" | sed 's|,| |g'); do
+        export "hook_${d}=disabled"
+    done
+fi
+
+# Special for plymouth 启动参数有 splash 时才启动 plymouth
+[ "$splash" != "y" ] && export "hook_plymouth=disabled"
+
+# 启动参数通过 disablemodules="a,b" 来禁止装载内核模块 a 和 b
+if [ -n "${disablemodules}" ]; then
+    for d in $(echo "${disablemodules}" | sed 's|,| |g'); do
+        export "mod_${d}=disabled"
+    done
+fi
+
+# 启动参数通过 earlymodules="a,b" 来优先装载内核模块 a 和 b
+if [ -n "${earlymodules}" ]; then
+    for m in $(echo "${earlymodules}" | sed 's|,| |g'); do
+        /sbin/modprobe -q ${m} > /dev/null 2>&1
+    done
+fi
+
+# 载入启动配置文件：需要装载的内核模块(MODULES参数)，运行的启动模块(HOOKS参数)等
+. /config
+
+# 装载启动配置文件中指定的内核模块
+for m in ${MODULES}; do
+    TST=""
+    eval "TST=\$mod_${m}"
+    if [ "${TST}" != "disabled" ]; then
+        /sbin/modprobe -q ${m} > /dev/null 2>&1
+    fi
+done
+
+# If rootdelay is empty or not a non-negative integer, set it to 10
+if [ -z "${rootdelay}" ] || ! [ "${rootdelay}" -ge 0 ]; then
+    export rootdelay=10
+fi
+
+# 运行启动配置文件中指定的启动脚本
+# live 系统通过在启动脚本中加入 exec init 或者 pivot_root 或者 chroot 来离开此启动脚本并切换到 root
+if [ -e "/hooks" ]; then
+    for h in ${HOOKS}; do
+        TST=""
+        eval "TST=\$hook_${h}"
+        if [ "${TST}" != "disabled" ]; then
+            run_hook () { info "${h}: no run function defined"; }
+            if [ -e "/hooks/${h}" ]; then
+               . /hooks/${h}
+               if [ "$cn" = "y" ]; then
+			info "运行启动脚本 $EMW[$G${h}$EMW]"
+               else
+			info "Running Hook $EMW[$G${h}$EMW]"
+               fi
+               run_hook
+            fi
+        fi
+    done
+fi
+
+#Special handling if udev is running
+udevpid=$(/bin/pidof udevd 2>/dev/null)
+if [ -n "${udevpid}" ]; then
+    # Settle pending uevents, then kill udev
+    /sbin/udevadm settle >/dev/null 2>&1
+    /bin/kill -9 ${udevpid} > /dev/null 2>&1
+    /bin/sleep 0.01
+fi
+
+umount /proc >/dev/null 2>&1
+umount /sys >/dev/null 2>&1
+
+[ -z "${init}" ] && init="/sbin/init"
+
+debug_shell
+
+exec /sbin/switch_root -c /dev/console /new_root ${init} "$@"

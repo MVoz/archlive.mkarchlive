@@ -1,0 +1,84 @@
+# Archlive Fluxbox菜单 Carbon Jiao <http://archlive.googlecode.com>
+
+[begin] (Archlive主菜单)
+[encoding] {UTF-8}
+      [exec] (运行)			{fbrun } 
+      [exec] (Htop进程状态)		{urxvt -e htop} 
+      [exec] (urxvt命令行工具)	{urxvt} 
+      [exec] (文件管理器)		{pcmanfm} 
+      [exec] (Firefox中文版)	{firefox} 
+
+[submenu] (网络工具)
+      [exec]   (Firefox中文版)	{firefox} 
+#     [exec]   (Opera中国版)	{env QT_XFT=true opera} 
+      [exec]   (Pidgin聊天)	{pidgin} 
+      [exec]   (QQ聊天)		{qq} 
+      [exec]   (xchat交流)		{xchat} 
+      [exec]   (Skype聊天)		{skype} 
+      [exec]   (amule下载)		{amule} 
+      [exec]   (Grdc远程桌面客户端) {grdc} 
+      [exec]   (RP-PPPoE拨号程序) {gksudo tkpppoe} 
+      [exec]   (FTP工具)		{urxvt -e ftp} 
+      [exec]   (Gadmin Samba管理器)	{gksudo gadmin-samba} 
+[end]
+
+[submenu] (编辑器)
+      [exec]   (Leafpad)		{leafpad} 
+      [exec]   (jed)		{urxvt -e jed} 
+[end]
+[submenu] (图像工具)
+      [exec]   (Comix图像浏览器)	{comix %f} 
+      [exec]   (Gpicview图像浏览器)	{gpicview %f} 
+      [exec]   (Gsnapshot抓屏工具)	{gsnapshot} 
+      [exec]   (Xfce4抓屏工具)	{xfce4-screenshooter} 
+      [exec]   (mtPaint图像编辑器)	{mtPaint} 
+#     [exec]   (Gimp图像编辑器)	{gimp} 
+[end]
+[submenu] (影音工具)
+      [exec]   (alsamixer) {urxvt -e alsamixer} 
+      [exec]   (gtv) {gtv} 
+      [exec]   (gmplayer) {gmplayer} 
+      [exec]   (VLC媒体播放器) {vlc %U} 
+[end]
+[submenu] (Fluxbox设置)
+      [config] (基本设置) 
+[submenu] (系统自带风格) {选择一个系统风格...}
+      [stylesdir] (/usr/share/fluxbox/styles) 
+[end]
+[submenu] (用户自定义风格) {Choose a style...}
+      [stylesdir] (~/.fluxbox/styles) 
+[end]
+      [workspaces] (工作区) 
+[submenu] (Fluxbox工具)
+      [exec] (Fluxbox配置编辑器)	{fluxconf} 
+      [exec] (快捷键设置)		{fluxkeys} 
+      [exec] (菜单设置)		{fluxmenu} 
+      [exec] (窗口名称)		{xprop WM_CLASS|cut -d \" -f 2|gxmessage -file - -center} 
+      [exec] (抓屏 - JPG)		{import screenshot.jpg && display -resize 50% screenshot.jpg} 
+      [exec] (抓屏 - PNG)		{import screenshot.png && display -resize 50% screenshot.png} 
+      [exec] (运行)			{fbrun } 
+      [exec] (重新生成Fluxbox菜单——慎用) {fluxbox-generate_menu } 
+[end]
+[submenu] (其它窗口管理器)
+      [restart] (切换到icewm) {icewm} 
+      [restart] (切换到enlightenment) {enlightenment} </usr/share/enlightenment/doc/enlightenment.png>
+      [restart] (切换到openbox) {openbox} 
+      [restart] (切换到xfce4) {startxfce4} 
+[end]
+      [exec] (锁屏) {xlock} 
+      [commanddialog] (Fluxbox命令) 
+      [reconfig] (恢复默认配置) 
+      [exec] (关于) {(fluxbox -v; fluxbox -info | sed 1d) | xmessage -file - -center} 
+[end]
+[separator] 
+      [exec] (硬盘分区) 			{/usr/sbin/gparted %f} 
+      [exec] (Larchin安装程序)	{larchin.py} 
+      [exec] (Archlive安装程序)	{/opt/archlive-installer/bin/archlive-installer} 
+[separator] 
+      [exec] (Fadmin-Rsync备份) 		{gksudo gadmin-rsync} 
+[separator] 
+      [exec] (锁屏) {xlock} 
+      [exit] (退出Fluxbox) 
+      [restart] (重新启动) 
+[endencoding]
+[end]

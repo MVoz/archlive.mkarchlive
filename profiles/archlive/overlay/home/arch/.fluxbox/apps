@@ -1,0 +1,10 @@
+[startup]  {wicd-client}
+[startup]  {fcitx}
+[startup]  {wbar}
+[app] (name=fbrun)
+  [Position]	(CENTER)	{0 0}
+  [Layer]	{2}
+[end]
+[app] (name=pcmanfm) (class=Pcmanfm)
+  [Alpha]	{255 254}
+[end]

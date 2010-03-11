@@ -1,0 +1,57 @@
+ #!/bin/sh 
+
+### IceWM 自动加载项目 
+
+### 您可以在下面加入您想让 IceWM 启动时候自动加载的程序，每行用 & 结束 
+
+## 启动 Rox 来显示桌面图标和桌面背景
+# rox-filer --pinboard=PIN
+
+### KDE 相关 
+## 启动 KDE 服务 kdeinit
+## 假如您需要在 IceWM 里跑 KDE 程式，那这个能够加快 KDE 程式初次启动速度
+# kdeinit &
+## 启动 Kdesktop 来显示桌面图标和桌面背景
+# kdesktop &
+### Gnome 相关
+## 启动 gnome-settings-daemon 来配置 Gnome 程式主题,字体等
+# gnome-settings-daemon &
+## 启动 nautilus 来显示桌面图标和桌面背景 ( 要启动 gnome-settings-daemon )
+# nautilus &
+## 用 gnome-volume-manager 来自动挂载 U 盘等
+# gnome-volume-manager &
+### 启动其他您想让 IceWM 自动启动的程式
+# stardict -h &
+# kmix &
+## xscreensaver 屏幕保护程式
+# xscreensaver & 
+
+
+#hsetroot -tile "/usr/share/wallpapers/green5.jpg" &
+
+#icewmbg &#背景服务，开启加壁纸
+feh --bg-scale /usr/share/wallpapers/Tiger_Blue.jpg
+
+#killall icewmtray
+icewmtray &
+
+#killall xcompmgr >/dev/null
+xcompmgr -Ss -n -Cc -fF -I-10 -O-10 -D1 -t-3 -l-4 -r4 &
+
+#killall wicd-client
+wicd-client &
+
+#killall gdeskcal
+gdeskcal &
+
+#killall fcitx
+fcitx &
+
+#killall wbar
+wbar &
+
+#小键盘软件，台式机去掉#
+#numlockx &
+
+#killall conky
+sleep 10 && conky -c /etc/xdg/conkyrc.openbox &

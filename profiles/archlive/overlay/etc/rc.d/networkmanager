@@ -1,0 +1,74 @@
+#!/bin/bash
+
+prefix=/usr
+exec_prefix=/usr
+sbindir=${exec_prefix}/sbin
+
+NETWORKMANAGER_BIN=${sbindir}/NetworkManager
+
+# general config
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+# Sanity checks.
+[ -x $NETWORKMANAGER_BIN ] || exit 0
+
+PID=`pidof -o %PPID $NETWORKMANAGER_BIN`
+case "$1" in
+	start)
+		if [ "${msg_lang}" = "cn" ]; then
+			stat_busy "正在 启动网络管理器"
+		else
+			stat_busy "Starting NetworkManager"
+		fi
+		if [ -z "$PID" ]; then
+			$NETWORKMANAGER_BIN
+		fi
+		if [ ! -z "$PID" -o $? -gt 0 ]; then
+			stat_fail
+		else
+			add_daemon networkmanager
+			stat_done
+		fi
+		;;
+	stop)
+		if [ "${msg_lang}" = "cn" ]; then
+			stat_busy "正在 关闭网络管理器"
+		else
+			stat_busy "Stopping NetworkManager"
+		fi
+			[ ! -z "$PID" ] && kill $PID &> /dev/null
+		if [ $? -gt 0 ]; then
+			stat_fail
+		else
+			rm_daemon networkmanager
+			stat_done
+		fi
+		;;
+	restart)
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+	sleep)
+		/usr/bin/dbus-send --system \
+		--dest=org.freedesktop.NetworkManager \
+		--type=method_call \
+		/org/freedesktop/NetworkManager \
+		org.freedesktop.NetworkManager.sleep
+		;;
+	wake)
+		/usr/bin/dbus-send --system \
+		--dest=org.freedesktop.NetworkManager \
+		--type=method_call \
+		/org/freedesktop/NetworkManager \
+		org.freedesktop.NetworkManager.wake
+		;;
+	*)
+		echo "usage: $0 {start|stop|restart|sleep|wake}"
+		;;
+esac
+exit 0
+
+
+

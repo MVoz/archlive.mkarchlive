@@ -1,0 +1,16 @@
+#### Panel ###
+
+DestroyModuleConfig Panel: *
+*Panel: Colorset 0
+*Panel: ActiveColorset 11
+*Panel: Padding 0 0
+*Panel: Frame 0
+*Panel: Rows 32
+*Panel: (32x32, Icon dock/terminal.png, Action(Mouse 1) `Exec exec $[fvwm_terminal]`)
+*Panel: (32x32, Icon dock/firefox.png, Action(Mouse 1) `Exec exec firefox`)
+#*Panel: (32x32, Icon dock/ichat.png, Action(Mouse 1) `Exec exec dbus-launch pidgin`)
+*Panel: (32x32, Icon dock/video.png, Action(Mouse 1) `Exec exec gmplayer`)
+*Panel: (32x32, Icon dock/rox.png, Action(Mouse 1) `Exec exec pcmanfm`)
+*Panel: (32x32, Icon dock/phones.png, Action(Mouse 1) `Exec exec $[fvwm_ncmpc] -e ncmpc`)
+#*Panel: (32x32, Icon dock/gimp.png, Action(Mouse 1) `Exec exec gimp`)
+*Panel: (32x32, Icon dock/fvwm.png, Action(Mouse 1) `Exec urxvt -g 100x40 -e nano -c ":set tw=200" ~/.fvwm/`)

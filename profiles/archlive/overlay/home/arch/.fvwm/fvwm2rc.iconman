@@ -1,0 +1,27 @@
+*FvwmIconMan: Resolution Desk
+*FvwmIconMan: UseWinList True
+*FvwmIconMan: MaxButtonWidth 100
+*FvwmIconMan: DrawIcons Always
+*FvwmIconMan: ShowOnlyIcons false
+*FvwmIconMan: Sort none
+*FvwmIconMan: FollowFocus false
+#*FvwmIconMan: Format "%t"
+*FvwmIconMan: Format "%D %T"
+*FvwmIconMan: Title ""
+
+*FvwmIconMan: ButtonGeometry 1x27
+*FvwmIconMan: ManagerGeometry 800x1+125-0
+*FvwmIconMan: Font "Shadow=0 se:xft:WenQuanYi Bitmap Song:encoding=zh_CN.UTF-8:size=9"
+
+*FvwmIconMan: PlainButton flat
+*FvwmIconMan: FocusButton flat
+*FvwmIconMan: SelectButton flat
+*FvwmIconMan: FocusAndSelectButton flat
+*FvwmIconMan: IconButton flat
+
+*FvwmIconMan: Colorset 6
+*FvwmIconMan: PlainColorset 8
+*FvwmIconMan: FocusColorset 5
+*FvwmIconMan: SelectColorset 8
+*FvwmIconMan: FocusAndSelectColorset 5
+*FvwmIconMan: IconColorset 8

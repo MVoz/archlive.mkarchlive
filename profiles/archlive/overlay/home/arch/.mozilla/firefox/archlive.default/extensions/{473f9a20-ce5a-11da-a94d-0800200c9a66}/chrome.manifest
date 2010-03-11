@@ -1,0 +1,7 @@
+content	gbookmarks	jar:chrome/gbookmarks.jar!/content/gbookmarks/
+overlay	chrome://browser/content/browser.xul	chrome://gbookmarks/content/gbookmarksOverlay.xul
+
+locale	gbookmarks	en-US	jar:chrome/gbookmarks.jar!/locale/gbookmarks/en-US/
+
+skin	gbookmarks	classic/1.0	jar:chrome/gbookmarks.jar!/skin/classic/gbookmarks/
+

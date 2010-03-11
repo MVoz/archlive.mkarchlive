@@ -1,0 +1,13 @@
+DeskTopSize 2x2
+
+DestroyModuleConfig FvwmPager: *
+*FvwmPager: Colorset * 12
+*FvwmPager: HilightColorset 3 2
+*FvwmPager: WindowColorsets 0 1
+*FvwmPager: BalloonColorset * 1
+*FvwmPager: Font none
+*FvwmPager: UseSkipList
+*FvwmPager: SmallFont none
+*FvwmPager: MoveThreshold 0
+*FvwmPager: SolidSeparators
+*FvwmPager: WindowBorderWidth 0

@@ -1,0 +1,24 @@
+content speeddial jar:chrome/speeddial.jar!/content/
+overlay	chrome://browser/content/browser.xul chrome://speeddial/content/speeddialOverlay.xul
+override chrome://speeddial/content/settings/settings.xul chrome://speeddial/content/settings/fennec-settings.xul application={a23983c0-fd0e-11dc-95ff-0800200c9a66}
+skin speeddial classic/1.0 jar:chrome/speeddial.jar!/skin/classic/speeddial/
+style chrome://global/content/customizeToolbar.xul chrome://speeddial/skin/toolbar.css
+locale speeddial ar jar:chrome/speeddial.jar!/locale/ar/speeddial/
+locale speeddial ca-AD jar:chrome/speeddial.jar!/locale/ca-AD/speeddial/
+locale speeddial da-DK jar:chrome/speeddial.jar!/locale/da-DK/speeddial/
+locale speeddial de-DE jar:chrome/speeddial.jar!/locale/de-DE/speeddial/
+locale speeddial en-US jar:chrome/speeddial.jar!/locale/en-US/speeddial/
+locale speeddial es jar:chrome/speeddial.jar!/locale/es/speeddial/
+locale speeddial he-IL jar:chrome/speeddial.jar!/locale/he-IL/speeddial/
+locale speeddial hu-HU jar:chrome/speeddial.jar!/locale/hu-HU/speeddial/
+locale speeddial ja-JP jar:chrome/speeddial.jar!/locale/ja-JP/speeddial/
+locale speeddial ko-KR jar:chrome/speeddial.jar!/locale/ko-KR/speeddial/
+locale speeddial lt-LT jar:chrome/speeddial.jar!/locale/lt-LT/speeddial/
+locale speeddial nl-NL jar:chrome/speeddial.jar!/locale/nl-NL/speeddial/
+locale speeddial pl-PL jar:chrome/speeddial.jar!/locale/pl-PL/speeddial/
+locale speeddial ro-RO jar:chrome/speeddial.jar!/locale/ro-RO/speeddial/
+locale speeddial sk-SK jar:chrome/speeddial.jar!/locale/sk-SK/speeddial/
+locale speeddial uk-UA jar:chrome/speeddial.jar!/locale/uk-UA/speeddial/
+locale speeddial zh-CN jar:chrome/speeddial.jar!/locale/zh-CN/speeddial/
+locale speeddial zh-TW jar:chrome/speeddial.jar!/locale/zh-TW/speeddial/
+override chrome://dotnetassistant/content/bootstrap.xul data:text/xml,<nada/>

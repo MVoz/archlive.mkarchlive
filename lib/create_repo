@@ -1,0 +1,184 @@
+#!/bin/bash
+
+# 该脚本在指定文件夹创建Arch软件仓
+
+APPNAME=$(basename "${0}")
+REPO_DB_FILE_FORMAT="tar.gz"
+#REPO_DB_FILE_FORMAT="tar.bz2"
+#REPO_DB_FILE_FORMAT="tar.xz"
+
+QUIET=1
+
+usage ()
+{
+    echo " 用法:  ${APPNAME} <REPO_DIR> <REPO_NAME>"
+    echo "      在<REPO_DIR>下创建名为<REPO_NAME>的软件仓"
+    exit $1
+}
+
+info() {
+	echo "$@"
+}
+msg() {
+	local mesg=$1; shift
+	printf "==> ${mesg}\n" "$@" >&1
+}
+
+msg2() {
+	(( QUIET )) && return
+	local mesg=$1; shift
+	printf "  -> ${mesg}\n" "$@" >&1
+}
+
+warning() {
+	local mesg=$1; shift
+	printf "==> WARNING: ${mesg}\n" "$@" >&2
+}
+
+error() {
+	local mesg=$1; shift
+	printf "==> ERROR: ${mesg}\n" "$@" >&2
+}
+# write a list entry
+#		arg1 - Entry name
+#		arg2 - List
+#		arg3 - File to write to
+write_list_entry() {
+	if [[ -n $2 ]]; then
+		echo "%$1%" >>$3
+		echo -e $2 >>$3
+	fi
+}
+
+# write an entry to the pacman database
+#   arg1 - path to package  pkg文件绝对路径
+db_write_entry()
+{
+	# blank out all variables
+	local pkgfile="$1"
+	local pkgname pkgver pkgdesc csize size md5sum url arch builddate packager force \
+		_groups _licenses _replaces _depends _conflicts _provides _optdepends
+
+	local OLDIFS="$IFS"
+	# IFS (field separator) is only the newline character
+	IFS="
+"
+
+	# read info from the zipped package
+	local line var val
+	for line in $(bsdtar -xOqf "$pkgfile" .PKGINFO |
+			grep -v '^#' | sed 's|\(\w*\)\s*=\s*\(.*\)|\1 \2|'); do
+		# bash awesomeness here- var is always one word, val is everything else
+		var=${line%% *}
+		val=${line#* }
+		declare $var="$val"
+		case "$var" in
+			group)    _groups="$_groups$group\n" ;;
+			license)  _licenses="$_licenses$license\n" ;;
+			replaces) _replaces="$_replaces$replaces\n" ;;
+			depend)   _depends="$_depends$depend\n" ;;
+			conflict) _conflicts="$_conflicts$conflict\n" ;;
+			provides) _provides="$_provides$provides\n" ;;
+			optdepend) _optdepends="$_optdepends$optdepend\n" ;;
+		esac
+	done
+
+	IFS=$OLDIFS
+
+	# get md5sum and compressed size of package
+	md5sum="$(openssl dgst -md5 "$pkgfile")"
+	md5sum="${md5sum##* }"
+	csize=$(stat -L -c %s "$pkgfile")
+
+	# ensure $pkgname and $pkgver variables were found
+	if [[ -z $pkgname || -z $pkgver ]]; then
+		error "Invalid package file '%s'." "$pkgfile"
+		return 1
+	fi
+
+	cd "$tmpdir"
+
+	msg "Creating entry for $(basename "$1")..."
+
+	# create package directory
+	[ -d $pkgname-$pkgver ] && rm -rf $pkgname-$pkgver
+	mkdir "$pkgname-$pkgver"
+	cd "$pkgname-$pkgver"
+
+	# create desc entry
+	msg2 "Creating 'desc' db entry..."
+	echo -e "%FILENAME%\n$(basename "$1")\n" >>desc
+	echo -e "%NAME%\n$pkgname\n" >>desc
+	[[ -n $pkgbase ]] && echo -e "%BASE%\n$pkgbase\n" >>desc
+	echo -e "%VERSION%\n$pkgver\n" >>desc
+	[[ -n $pkgdesc ]] && echo -e "%DESC%\n$pkgdesc\n" >>desc
+	write_list_entry "GROUPS" "$_groups" "desc"
+	[[ -n $csize ]] && echo -e "%CSIZE%\n$csize\n" >>desc
+	[[ -n $size ]] && echo -e "%ISIZE%\n$size\n" >>desc
+
+	# compute checksums
+	msg2 "Computing md5 checksums..."
+	echo -e "%MD5SUM%\n$md5sum\n" >>desc
+
+	[[ -n $url ]] && echo -e "%URL%\n$url\n" >>desc
+	write_list_entry "LICENSE" "$_licenses" "desc"
+	[[ -n $arch ]] && echo -e "%ARCH%\n$arch\n" >>desc
+	[[ -n $builddate ]] && echo -e "%BUILDDATE%\n$builddate\n" >>desc
+	[[ -n $packager ]] && echo -e "%PACKAGER%\n$packager\n" >>desc
+	write_list_entry "REPLACES" "$_replaces" "desc"
+	[[ -n $force ]] && echo -e "%FORCE%\n" >>desc
+
+	# create depends entry
+	msg2 "Creating 'depends' db entry..."
+	# create the file even if it will remain empty
+	touch "depends"
+	write_list_entry "DEPENDS" "$_depends" "depends"
+	write_list_entry "CONFLICTS" "$_conflicts" "depends"
+	write_list_entry "PROVIDES" "$_provides" "depends"
+	write_list_entry "OPTDEPENDS" "$_optdepends" "depends"
+
+	cd "$startdir"
+
+	return 0
+} # end db_write_entry
+
+################### Start here
+startdir="$PWD"
+
+REPO_DIR="${1}"
+REPO_NAME="${2}"
+info "在${REPO_DIR}下创建名为${REPO_NAME}的软件仓"
+info "${REPO_DIR}下软件包个数： `ls ${REPO_DIR}/*.pkg.tar.gz | wc -l`"
+info "5妙后继续，Ctrl+C 终止程序"
+sleep 5
+
+case "$REPO_DB_FILE_FORMAT" in
+	*tar.gz)  TAR_OPT="z" ;;
+	*tar.bz2) TAR_OPT="j" ;;
+	*tar.xz)  TAR_OPT="J" ;;
+esac
+
+REPO_DB_FILE="${REPO_DIR}/${REPO_NAME}.db.${REPO_DB_FILE_FORMAT}"
+
+filename=$(basename "$REPO_DB_FILE")
+
+tmpdir=$(mktemp -d /tmp/repo-tools.XXXXXXXXXX)
+
+for pkg_file in $(ls ${REPO_DIR}/*.pkg.tar.*); do
+	db_write_entry "${pkg_file}"
+done
+
+cd "$tmpdir"
+if [[ -n $(ls) ]]; then
+	bsdtar -c${TAR_OPT}f "$filename" *
+else
+	# we have no packages remaining? zip up some emptyness
+	warning "$(gettext "No packages remain, creating empty database.")"
+	bsdtar -c${TAR_OPT}f "$filename" -T /dev/null
+fi
+cd "$startdir"
+
+[[ -f $REPO_DB_FILE ]] && mv -f "$REPO_DB_FILE" "${REPO_DB_FILE}.old"
+[[ -f $tmpdir/$filename ]] && mv "$tmpdir/$filename" "$REPO_DB_FILE" && rm -rf $tmpdir
+
+info "创建完毕！"

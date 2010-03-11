@@ -1,0 +1,46 @@
+#!/bin/bash
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+PID=`pidof -o %PPID /usr/sbin/cupsd`
+case "$1" in
+  start)
+	if [ "${msg_lang}" = "cn" ]; then
+		stat_busy "正在启动 CUPS后台守护进程"
+	else
+		stat_busy "Starting CUPS Daemon"
+	fi
+    [ -z "$PID" ] && /usr/sbin/cupsd
+    if [ $? -gt 0 ]; then
+      stat_fail
+    else
+      echo $(pidof -o %PPID -x /usr/sbin/cupsd) > /var/run/cups.pid
+      add_daemon cups
+      stat_done
+    fi
+    ;;
+  stop)
+	if [ "${msg_lang}" = "cn" ]; then
+		stat_busy "正在关闭 CUPS后台守护进程"
+	else
+		stat_busy "Stopping CUPS Daemon"
+	fi
+    [ ! -z "$PID" ]  && kill $PID &> /dev/null
+    if [ $? -gt 0 ]; then
+      stat_fail
+    else
+      rm /var/run/cups.pid
+      rm_daemon cups
+      stat_done
+    fi
+    ;;
+  restart)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    echo "usage: $0 {start|stop|restart}"  
+esac
+exit 0

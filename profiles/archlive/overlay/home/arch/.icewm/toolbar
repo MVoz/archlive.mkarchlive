@@ -1,0 +1,22 @@
+
+# This is an example for IceWM's toolbar definition file. 
+
+# 
+
+# Place your variants in /etc/X11/icewm or in $HOME/.icewm 
+
+# since modifications to this file will be discarded when you 
+
+# (re)install icewm. 
+
+# 
+
+## 配置 IceWM 的快速启动栏，下面是示例格式 
+
+prog Firefox网络浏览 /usr/share/pixmaps/firefox.png firefox
+prog 腾讯QQ /usr/share/tencent/qq/qq.png qq
+prog Skype网络聊天 /usr/share/pixmaps/skype.png skype
+prog Leafpad文本编辑器 /usr/share/pixmaps/leafpad.png leafpad
+prog PCManFM /usr/share/pixmaps/pcmanfm.png pcmanfm
+prog Lxterminal终端 /usr/share/pixmaps/lxterminal.png lxterminal
+prog Gsnapshot抓屏工具 /usr/share/pixmaps/gsnapshot.png gsnapshot

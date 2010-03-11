@@ -1,0 +1,6 @@
+#!/bin/bash
+echo $1
+#habak -ms $1 && rm ~/.fvwm/wallpapers/* && cp $1 ~/.fvwm/wallpapers/
+#feh --bg-scale /usr/share/wallpapers/green5.jpg
+#feh --bg-scale $1
+feh --bg-scale /usr/share/wallpapers/Tiger_Blue.jpg
