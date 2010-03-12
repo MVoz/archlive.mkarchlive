@@ -1,0 +1,240 @@
+ddrescue
+# GNU data recovery tool   0.12MB
+
+#heimdal
+openssh
+# A Secure SHell server/client  1.85MB
+
+dnsutils
+# Various DNS utilities - dig host nslookup nsupdate  5.50MB
+
+gnu-netcat
+# GNU rewrite of netcat, the network piping application  0.09MB
+
+# elinks
+#lua libidn nspr spidermonkey
+# An advanced and well-established feature-rich text mode web browser.
+
+# irssi
+#Modular text mode IRC client with Perl scripting   3.89MB
+
+#lua
+#nmap
+# A network exploration tool and security/port scanner  0.12MB
+
+#rdiff-backup
+# librsync
+#A utility for local/remote mirroring and incremental backups  1.50MB
+
+#rsnapshot
+# A remote filesystem snapshot utility 0.27MB
+
+lsof
+# lsof (LiSt Open Files) lists information about files that are open by the running processes  0.19MB
+
+#gmime
+# Core mime parsing library  1.28MB
+
+tcpdump
+# A tool for network monitoring and data acquisition  1.23MB
+
+tcpflow
+# Captures data transmitted as part of TCP connections then stores the data conveniently. 0.04MB
+
+#tor
+# TOR Client 依赖于libevent 3.21MB
+
+#xcb-proto
+#xproto
+#libxdmcp
+#libxau
+#libxcb
+#kbproto
+#libx11
+#xextproto
+#libxext
+#libice
+#libsm
+#libxt
+#libxmu
+#libnet
+#libnids
+#dsniff
+# Collection of tools for network auditing and penetration testing. 4.23MB
+
+#ipcheck
+# A simple python script to register your dynamic IP address using the NIC V2.0 protocol  0.17MB
+
+#ipguard
+# ipguard - arp<->ip relation checking tool  0.07MB
+
+macchanger
+# A small utility to change you NIC's MAC address  0.23MB
+
+netcount
+# network statistic and monitor tools  0.11MB
+#
+netbrake
+# Netbrake is an utility to limit the bandwidth used by a process 0.04MB
+
+vnstat
+# network traffic monitor for Linux that keeps a log of daily network traffic for the selected interface(s)  0.20MB
+
+#rtorrent
+# libsigc++2.0-2.2.3-1  libtorrent-0.12.2-2  xmlrpc-c
+#  Ncurses BitTorrent client based on libTorrent  19.48MB
+
+#aesfix
+# A tool to find AES key in RAM  0.07 MB
+
+#aeskeyfind
+# A tool to find AES key in RAM  0.04MB
+
+aircrack-ng
+# Wifi security suite - WEP / WPA crack tools -- with SQLite3.  1.25MB
+
+airoscript
+# Shell script designed to ease the use of aircrack-ng  0.38MB
+
+#autopsy
+# The Autopsy Forensic Browser is a GUI for The Sleuth Kit. 1.27MB
+
+#bob-the-butcher
+# a distributed password cracker package  0.40MB
+
+#chntpw
+# Utility to (re)set the password of any user that has a valid (local) account on Windows NT/2K/XP system  0.11MB
+
+#cmospwd
+# CmosPwd decrypts password stored in cmos used to access BIOS SETUP. 0.04MB
+
+cowpatty
+# Wireless WPA/WPA2 PSK handshake cracking utility  0.04MB
+
+#elettra
+# libmcrypt mhash
+# Encryption utility by Julia Identity   0.88MB
+
+#g72x++
+# Decoder for the g72x++ codec  0.04MB
+
+#iodine
+# Lets you tunnel IPv4 data through a DNS server. 0.10MB
+
+#kismet-newcore-svn
+# libcap
+# Next generation of the wireless network sniffer  3.76MB
+
+#lorcon
+# Create what libradiate could have been: A generic library for injecting 802.11 frames, capable of injection via multiple driver frameworks, without
+# forcing modification of the application code.  0.24MB
+
+#lynis
+# Lynis is an auditing tool for Unix (specialists)  0.51MB
+
+#matahari
+# pycrypto 
+# A reverse HTTP shell to execute commands on remote machines behind firewalls.  0.71MB
+
+mdk3
+# WLAN penetration tool 0.12MB
+
+#memfetch
+# dumps any userspace process memory without affecting its execution  0.03MB
+
+#netdiscover
+# libnet 
+# Netdiscover is an active/passive address reconnaissance tool, mainly developed for those wireless networks without dhcp server, when you are
+# wardriving. It can be also used on hub/switched networks.  0.85MB
+
+#nikto
+# perl-net-ssleay
+# Nikto is a web server scanner which performs comprehensive tests against web servers for multiple items 3.40MB
+
+#p0f
+# passive OS fingerprinting tool  0.15MB
+
+#passcracking
+# A little python script for sending hashes to passcracking.com and milw0rm  0.02MB
+
+#radare-hg
+# A collection of tools with the aim to create a complete, portable, multi-architecture, unix-like toolchain for reverse engineering.
+#  2.30MB
+
+#rainbowcrack
+# Password cracker based on the faster time-memory trade-off. Additional patches (NTLM, MD2, MD4, RIPEMD160, MySQL and Cisco PIX) included.
+# 0.20MB
+
+#ratproxy
+# A passive web application security assessment tool 0.23MB
+
+#rsakeyfind
+# A tool to find RSA key in RAM 0.04MB
+
+#samdump2
+# Dump password hashes from a Windows NT/2k/XP installation 0.04MB
+
+#sqlmap
+#  sqlmap is an automatic SQL injection tool developed in Python 1.52MB
+
+#clamav
+# Anti-virus toolkit for Unix. 2.71MB
+
+#foldingathome
+# Folding@Home is a distributed computing project which studies protein folding, misfolding, aggregation, and related diseases.
+#  0.30MB
+############### WEB 服务器
+#apache
+# apr libsasl libldap unixodbc apr-util
+# A high performance Unix-based HTTP server  9.67MB
+#
+
+lighttpd
+# libsasl libldap
+# a secure, fast, compliant and very flexible web-server  0.86MB
+
+#gnump3d
+# A streaming server for MP3s, OGG vorbis files, movies and other media formats. 2.39MB
+
+############   SQL相关 (数据库相关）
+#libmysqlclient
+# MySQL client libraries   31.12MB
+
+#mysql-clients
+# MySQL client tools   0.63MB
+
+#mysql-python
+# MySQL support for Python 0.31MB
+
+#postgresql-libs
+# Libraries for use with PostgreSQL 1.41MB
+###########  其他
+#espeak
+# libsndfile jack-audio-connection-kit portaudio
+#Text to Speech engine for good quality English, with support for other languages  5.55MB
+
+#aspell-en
+# aspell
+# A spell checker designed to eventually replace Ispell, English dictionary for aspell
+#
+#weechat
+# ruby libtasn1 gnutls
+# Fast, light & extensible IRC client (curses UI)  66.99MB
+#
+wgetpaste
+
+cdargs
+# A replacement for 'cd' that includes bookmarks/browsing for faster navigation
+
+hping
+# hping is a command-line oriented TCP/IP packet assembler/analyzer.
+
+#lftp
+# 依赖于 libtash1 gnutls   总7.75MB
+# Sophisticated command line based FTP client   1.29MB
+
+cdrkit
+
+htop
+
+screen

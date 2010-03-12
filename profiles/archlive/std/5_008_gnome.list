@@ -1,0 +1,32 @@
+# 以下被gdm gnome-session依赖安装 （最基本安装级别）
+gnome-desktop
+libgnomecanvas
+gnome-mime-data
+gnome-vfs
+gnome-panel
+gnome-session
+#gdm
+
+# metacity 可以不安装，但会出现任何窗口的左上角位于0,0
+metacity
+
+# gnome-setting-daemon 可以不安装，但gdm工作不正常——图标、主题无法使用 （4.78MB）
+gnome-settings-daemon
+
+# 主题引擎及主题
+#nimbus
+
+# 如果不装，gdm图标不正常，其余正常
+gnome-icon-theme
+
+# gnome-control-center 也可以不安装，但无法设置新主题 （10.98MB）
+gnome-control-center
+
+#gnome-media
+#gnome-mount
+#gnome-screensaver
+#gnome-volume-manager
+#gnome-python-desktop
+#gnome2-user-docs
+#nautilus
+#gconf-editor

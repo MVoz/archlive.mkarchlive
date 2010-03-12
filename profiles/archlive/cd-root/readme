@@ -1,0 +1,39 @@
+﻿使用说明：
+
+1、Archlive基于GPL发布，修改后必须基于GPL开放，否则必须征得本人同意。
+2、制作自己的Archlive 工具 http://mkarchlive.archlive.googlecode.com/hg 
+3、Archlive 启动可用参数
+ramsize=60%      Archlive文件系统启动后占用内存大小(划分部分内存作为硬盘使用)
+sgn=[]           查找Archlive基本文件夹base位置的标的，默认archlive.list （Archlive的软件清单）
+from=[]          Archlive 数据模块文件夹base相对设备根目录的位置(通过$sgn指定的文件来判断位置，此文件跟base option changes modules等文件夹放在同一文件夹下)
+		from=/dev/sda1/archlive 从本地硬盘sda1分区archlive目录下启动（sgn标的、base等目录都在该目录下）
+		如果直接将标准iso写到光盘或者USB（UltraISO U+方式），启动参数无需参数指定。但如果改变了目录相对位置或者名称，则需要指定相应from参数  from=基本模块上级目录名
+		如果直接将模块目录 base option modules 等放在iso或者USB根目录下，无需指定任何from参数		
+
+cifs="//192.168.0.252/share" user="archlive" pass="archlive"  从windows或者samba共享启动
+			可以跟 from 接合使用，表示archlive数据模块文件夹base放在192.168.0.252的主机共享文件夹share下的 from 目录中
+
+ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+                      PXE启动专用
+
+vga=[791, ...]        设置启动后分辨率，vga=791设置为1024x768，其余参考相应wiki
+
+passwd=ask            需要自己重新设置root用户密码则在内核参数加上此参数
+
+ldconfig              启动过程中更新动态库，新模块加入时在内核参数中加入此参数
+
+numlock=on            打开数字键盘(台式机)
+
+session=[fvwm2, icewm, awesome, fluxbox, openbox, xfce, e17, gnome,kde]        
+                      可选其中之一作为启动默认桌面环境。这个依赖于你选择并加载的模块。
+
+autologin=<用户名>    如果用户名不是root或者arch，则新建立一个用户并用此用户登录，默认以root用户登录
+
+nomodeset             Archlive默认启用了KMS，使用该选项关闭。
+
+splash                启用plymouth启动界面，如果不需要则删除此参数
+
+cn                    启动过程中显示中文提示信息，无此参数则显示英文信息
+
+rootcopy		启动时装载archlive下rootcopy目录
+changes		用于保存修改

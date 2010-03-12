@@ -1,0 +1,44 @@
+#!/bin/bash
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+case "$1" in
+  start)
+    if [ "${msg_lang}" = "cn" ]; then
+	stat_busy "正在启动 GDM"
+    else
+	stat_busy "Starting GDM"
+    fi
+    /usr/sbin/gdm &
+    if [ $? -gt 0 ]; then
+      stat_fail
+    else
+      
+      add_daemon gdm
+      stat_done
+    fi
+    ;;
+  stop)
+    if [ "${msg_lang}" = "cn" ]; then
+	stat_busy "正在关闭 GDM"
+    else
+	stat_busy "Stopping GDM"
+    fi
+    [ -f /var/run/gdm.pid ] && kill `cat /var/run/gdm.pid` &> /dev/null
+    if [ $? -gt 0 ]; then
+      stat_fail
+    else
+      rm_daemon gdm
+      stat_done
+    fi
+    ;;
+  restart)
+    $0 stop
+    sleep 2
+    $0 start
+    ;;
+  *)
+    echo "usage: $0 {start|stop|restart}"  
+esac
+exit 0

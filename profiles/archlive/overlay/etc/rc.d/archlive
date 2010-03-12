@@ -1,0 +1,104 @@
+#!/bin/bash
+
+#
+# Special for Archlive
+
+. /etc/rc.d/functions
+
+# 需要自己重新设置root用户密码在内核参数加上 newrootpass 参数
+if [ "$newrootpass" = "y" ]; then
+    echo -ne "\n请输入root用户新密码: "
+    read -s newrootpass
+    if [ "x$newrootpass" != "x" ]; then
+	echo "root:$newrootpass" | /usr/sbin/chpasswd
+    fi
+fi
+
+# 需要系统在启动前执行命令，加上autoexec="" 参数(中间用空格隔开)
+if [ "x$autoexec" != "x" ]; then
+   AUTOCMD=$(echo "$autoexec" | tr "~" " ")
+   echo "正在自动执行命令: su --login -c \"$AUTOCMD\""
+   su --login -c "$AUTOCMD"
+fi
+
+# 新模块加入时在内核参数中加入 ldconfig
+if [ "$ldconfig" = "y" ]; then  
+    [[ -x /sbin/ldconfig ]] && /sbin/ldconfig
+fi
+
+generate_initial_config() {
+		if [ "${msg_lang}" = "cn" ]; then
+			stat_busy "正在初始化 /etc/X11/xorg.conf"
+		else
+			stat_busy "Intilize /etc/X11/xorg.conf"
+		fi
+		sleep 3
+		LANG=C /usr/bin/Xorg -configure > /tmp/xorg_detection.log 2>&1
+		mv /xorg.conf.new /etc/X11/xorg.conf
+cat <<EOF >> /etc/X11/xorg.conf
+Section "Extensions"
+	Option "Composite" "Enable"
+	Option "RENDER" "Enable"
+EndSection
+
+Section "ServerFlags"
+	Option	"DontZap" "false"
+	Option 	 "AllowMouseOpenFail"  "true"	
+ 	Option 	 "AutoAddDevices" "true"
+EndSection
+
+EOF
+		stat_done
+}
+
+if [ "$noxconf" != "y" ] && [ ! -e /etc/X11/xorg.conf ]; then
+	if [ "$nonfree" = "y" ]; then
+  		/etc/rc.d/xakra-nonfree start
+	elif [ "$xakra" = "y" ]; then
+			/etc/rc.d/xakra start
+			sed -i 's|"vga"|"vesa"|g' /etc/X11/xorg.conf
+#	else
+		#generate_initial_config
+		# Ctrl + Alt + Backspace 已经完全无效了！
+	fi
+fi
+
+# lang: 重新设置语言
+if [ "x$lang" != "x" ] && [ "$lang" != "cn" ]; then
+    locale-gen
+fi
+
+# keyb: 重新设置键盘布局
+if [ "x$keyb" != "x" ] && [ "$keyb" != "us" ]; then
+   if [ -x /bin/loadkeys ]; then
+ 	/bin/loadkeys $keyb
+   fi
+fi
+
+chmod 0440 /etc/sudoers
+if [ "x$root" = "x" ]; then
+	if [ -x /usr/bin/update-desktop-database ]; then
+		update-desktop-database -q
+	fi
+	chown arch:users -R /home/arch
+	chown root:root -R /root
+	chmod 755 /etc
+fi
+
+# VBOX虚拟机
+if [ "$vbox" = "y" ]; then
+	/etc/rc.d/vboxadd start
+	/etc/rc.d/vboxadd-service start
+	#modprobe vboxadd
+	#modprobe vboxvfs
+	#modprobe vboxvideo
+	#chown root:vboxusers /dev/vboxdrv
+	cp -f /etc/X11/vbox_xorg.conf /etc/X11/xorg.conf
+fi
+
+# 如果想登入你想要的桌面环境，加入相应内核参数，比如"session=fvwm2" 
+if [ "x$session" != "x" ]; then
+	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/X11/xinit/xinitrc
+	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/skel/.xinitrc
+	startx
+fi

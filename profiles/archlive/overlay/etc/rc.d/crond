@@ -1,0 +1,45 @@
+#!/bin/bash
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+PID=`pidof -o %PPID /usr/sbin/crond`
+case "$1" in
+  start)
+	if [ "${msg_lang}" = "cn" ]; then
+		stat_busy "正在启动 Cron 后台服务"
+	else
+		stat_busy "Starting Cron Daemon"
+	fi
+    [ -z "$PID" ] && /usr/sbin/crond >>/var/log/crond 2>&1
+    if [ $? -gt 0 ]; then
+      stat_fail
+    else
+      PID=`pidof -o %PPID /usr/sbin/crond`
+      echo $PID >/var/run/crond.pid
+      add_daemon crond
+      stat_done
+    fi
+    ;;
+  stop)
+	if [ "${msg_lang}" = "cn" ]; then
+		stat_busy "正在关闭 Cron 后台服务"
+	else
+		stat_busy "Stopping Cron Daemon"
+	fi
+    [ ! -z "$PID" ]  && kill $PID &>/dev/null
+    if [ $? -gt 0 ]; then
+      stat_fail
+    else
+      rm_daemon crond
+      stat_done
+    fi
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo "usage: $0 {start|stop|restart}"  
+esac
+exit 0
