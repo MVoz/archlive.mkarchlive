@@ -83,7 +83,6 @@ xorg-video-drivers
 #
 virtualbox-additions
 # Archlive定制，2.6.33-ARCH
-# archlive 作为virtualbox的客户机的时候的内核模块及X驱动
 #
 #chakra-hardware-detection
 #xakra
@@ -101,8 +100,6 @@ wqy-bitmapfont
 # 18.46MB
 #wqy-zenhei
 # 12.71MB
-wqy-microhei
-# 4.96MB
 
 #fontsconf
 
@@ -315,5 +312,4 @@ gsnapshot
 gvfs
 # lxde 等小型桌面环境下使用pcmanfm2来访问网上邻居
 
-gnome-ppp
-# 拨号上网程序
+gmrun

@@ -8,6 +8,13 @@ openssh
 dnsutils
 # Various DNS utilities - dig host nslookup nsupdate  5.50MB
 
+iptraf
+#An IP network monitor
+
+nethogs
+# Archlive 编译包
+# A net top tool which displays traffic used per process instead of per IP or interface
+
 gnu-netcat
 # GNU rewrite of netcat, the network piping application  0.09MB
 
@@ -19,8 +26,11 @@ gnu-netcat
 #Modular text mode IRC client with Perl scripting   3.89MB
 
 #lua
-#nmap
+nmap
 # A network exploration tool and security/port scanner  0.12MB
+
+bridge-utils
+#  Utilities for configuring the Linux ethernet bridge   0.09MB
 
 #rdiff-backup
 # librsync
@@ -229,12 +239,23 @@ cdargs
 hping
 # hping is a command-line oriented TCP/IP packet assembler/analyzer.
 
-#lftp
+lftp
 # 依赖于 libtash1 gnutls   总7.75MB
 # Sophisticated command line based FTP client   1.29MB
+
+tftp-hpa
+# Official tftp server
 
 cdrkit
 
 htop
+iotop
 
 screen
+tree
+vifm
+sshfs
+parted
+wvdial
+
+codecs

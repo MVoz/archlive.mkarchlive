@@ -7,10 +7,10 @@
 export msg_lang
 if [ "$cn" = "y" ]; then
 	msg_lang="cn"
-elif [ "$en" = "y" ]; then
-	msg_lang="en"
-elif [ "${LOCALE%_*}x" = "zhx" ]; then
-	msg_lang="cn"
+#elif [ "$en" = "y" ]; then
+#	msg_lang="en"
+#elif [ "${LOCALE%_*}x" = "zhx" ]; then
+#	msg_lang="cn"
 else
 	msg_lang="en"
 fi

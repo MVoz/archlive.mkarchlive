@@ -174,7 +174,8 @@ start_notice ()
 
 check_host_aufs ()
 {
-   if [ "${KERNEL_KEY_FS_INCLUDED}" = "n" ]; then
+   #if [ "${KERNEL_KEY_FS_INCLUDED}" = "n" ]; then
+	#注释掉以上，强行检查
 	case "$cmdline" in *all*|*install*|*solemodules*)
 		# 挂载aufs文件系统并判断是否已经挂载成功
 		modprobe aufs
@@ -182,7 +183,7 @@ check_host_aufs ()
 		rmmod aufs
 		;;
 	esac
-   fi
+   #fi
 }
 check_host_cmd ()
 {

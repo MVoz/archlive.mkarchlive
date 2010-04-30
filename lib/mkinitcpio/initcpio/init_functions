@@ -1,6 +1,6 @@
 # This file contains common functions used in init and in hooks
 
-boot_version=Ver.20100311
+boot_version=Ver.20100430
 
 RST="\033[1;0m"
 
