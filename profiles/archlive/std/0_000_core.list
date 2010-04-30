@@ -8,7 +8,7 @@
 #
 -d madwifi-utils
 -d madwifi
-# 2.6.33-ARCH 版的
+# 2.6.33-ARCH 版的  依赖于HAL
 #
 # 以下驱动与内核版本关系不大
 -d rt2x00-rt61-fw
@@ -21,3 +21,6 @@
 -d ipw2200-fw
 -d tiacx-firmware
 -d zd1211-firmware
+-d aufs2
+# 官方内核需要该包，Archlive 定制内核注释掉
+-d aufs2-util

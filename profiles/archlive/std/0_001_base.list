@@ -24,12 +24,12 @@ coreutils
 
 cpio
 
-#device-mapper
+device-mapper
 #libgpg-error
 #libgcrypt
 #popt
-#util-linux-ng
-#e2fsprogs
+util-linux-ng
+e2fsprogs
 cryptsetup
 
 dash
