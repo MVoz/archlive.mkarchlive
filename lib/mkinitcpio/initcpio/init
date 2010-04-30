@@ -9,20 +9,6 @@ export PATH=.:/:/usr/sbin:/usr/bin:/sbin:/bin
 
 . /init_functions
 
-clear
-
-echo
-hg "                   Welcome to Archlive ! 欢迎使用 Archlive ! $boot_version"
-hl "*******************************************************************************"
-echo
-echo -e  "${EMY}  Archlive${RST}, ${EMG}live system ${RST}base on ${EMY}Arch GNU/Linux${RST}."
-echo -e  "${EMY}  Archlive${RST}, 基于${EMY}Arch GNU/Linux${RST}的${EMG}live系统${RST}."
-echo 
-hr "  此系统基于GNU通用发布协议(GPL)发行"
-hr "  Distributed under the GNU General Public License (GPL)"  
-hl "*******************************************************************************"
-echo
-
 /bin/mount -t proc proc /proc
 /bin/mount -t sysfs sys /sys
 
@@ -53,6 +39,31 @@ for cmd in ${CMDLINE}; do
              ;;
     esac
 done
+
+clear
+echo
+if [ "$cn" = "y" ]; then
+	hg "                   欢迎使用 Archlive ! $boot_version"
+else
+	hg "                   Welcome to Archlive ! $boot_version"	
+fi
+hl "*******************************************************************************"
+echo
+if [ "$cn" = "y" ]; then
+	echo -e  "${EMY}  Archlive${RST}, 基于${EMY}Arch GNU/Linux${RST}的${EMG}live系统${RST}."
+else
+	echo -e  "${EMY}  Archlive${RST}, ${EMG}live system ${RST}base on ${EMY}Arch GNU/Linux${RST}."
+fi
+
+echo
+
+if [ "$cn" = "y" ]; then
+	hr "  此系统基于GNU通用发布协议(GPL)发行"
+else
+	hr "  Distributed under the GNU General Public License (GPL)"  
+fi
+hl "*******************************************************************************"
+echo
 
 if [ "$cn" = "y" ]; then
 	msg "现在开始启动 ..."
