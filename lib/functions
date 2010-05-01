@@ -1270,8 +1270,8 @@ cmd_img () {
 	target_bootfile_dir=${IMGROOT}/isolinux
 	[ ! -d ${target_bootfile_dir} ] && mkdir -p ${target_bootfile_dir}
 	#boot_mod=$(basename "$(grep "syslinux" `find ${PACKLIST} -name "*.new"` |head -1)" ".new:syslinux")
-	#boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "mod_") | awk -F. '{print $1}')
-	boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "mod_")  ".new:syslinux")
+	#boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "\/mod_") | awk -F. '{print $1}')
+	boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "\/mod_")  ".new:syslinux")
 	[ "${boot_mod}" = ".new:syslinux" ] && warn "目标系统中没有选择安装syslinux"
 	bootfile_dir=${MODULEDIR}/${boot_mod}/usr/lib/syslinux
 
