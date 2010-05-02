@@ -902,7 +902,8 @@ cmd_install ()
 		fs_system="aufs squashfs"
 		case ${ZIP_MODE} in 1|2) fs_system="${fs_system} sqlzma unlzma";; esac
 		for fs_type in ${fs_system}; do
-			if [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "${fs_type}.ko")" = "x" ]; then
+			#if [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "${fs_type}.ko")" = "x" ]; then
+			if [ "x$(grep "${fs_type}.ko" ${UNION}/lib/modules/*/modules.dep)" = "x" ]; then
 				if [ "${KERNEL_KEY_FS_INCLUDED}" != "y" ]; then
 					error "目标系统不包含必须的${fs_type}文件系统模块, 请修改${PROFILE_DIR}/$LISTDIR/${mod}.list" | tee -a ${LOG}
 					exit 1
