@@ -894,6 +894,7 @@ cmd_install ()
 	fi
 	# 检测包含内核的模块中，文件系统模块是否齐全
 	if [ -d ${MODULEDIR}/${mod}/lib/modules ] && [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "*.ko")" != "x" ]; then
+		chroot $UNION depmod -a
 		msg2 -n "检查目标系统是否有足够的文件系统模块: aufs,squashfs等..." | tee -a ${LOG}
 		if [ $(ls ${MODULEDIR}/${mod}/lib/modules | wc -l) -ge 2 ]; then
 			error "目标系统中内核模块有两个或者两个以上的版本" | tee -a ${LOG}

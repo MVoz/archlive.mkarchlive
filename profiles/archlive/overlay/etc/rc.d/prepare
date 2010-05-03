@@ -16,3 +16,13 @@ if [ "$nomount" != "y" ]; then
 	stat_done
 fi
 
+if [ "${msg_lang}" = "cn" ]; then
+	opt=cn
+else
+	opt=en
+fi
+
+pushd /etc
+rm -f /etc/issue
+ln -sf /etc/issue.$opt /etc/issue
+popd
