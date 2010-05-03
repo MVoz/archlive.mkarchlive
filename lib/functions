@@ -894,17 +894,22 @@ cmd_install ()
 	fi
 	# 检测包含内核的模块中，文件系统模块是否齐全
 	if [ -d ${MODULEDIR}/${mod}/lib/modules ] && [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "*.ko")" != "x" ]; then
-		chroot $UNION depmod -a
 		msg2 -n "检查目标系统是否有足够的文件系统模块: aufs,squashfs等..." | tee -a ${LOG}
 		if [ $(ls ${MODULEDIR}/${mod}/lib/modules | wc -l) -ge 2 ]; then
 			error "目标系统中内核模块有两个或者两个以上的版本" | tee -a ${LOG}
 			exit 1
 		fi
+		# 更新内核模块依赖关系
+		local mod_file fs_system kernel_ver
+		mod_file="${UNION}/lib/modules/*/modules.dep"
+		kernel_ver="$(basename $(dirname ${mod_file}))"
+		depmod -a -b ${UNION} {kernel_ver}
+		# 检查核心模块
 		fs_system="aufs squashfs"
 		case ${ZIP_MODE} in 1|2) fs_system="${fs_system} sqlzma unlzma";; esac
 		for fs_type in ${fs_system}; do
 			#if [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "${fs_type}.ko")" = "x" ]; then
-			if [ "x$(grep "${fs_type}.ko" ${UNION}/lib/modules/*/modules.dep)" = "x" ]; then
+			if [ "x$(grep "${fs_type}.ko" ${mod_file})" = "x" ]; then
 				if [ "${KERNEL_KEY_FS_INCLUDED}" != "y" ]; then
 					error "目标系统不包含必须的${fs_type}文件系统模块, 请修改${PROFILE_DIR}/$LISTDIR/${mod}.list" | tee -a ${LOG}
 					exit 1
