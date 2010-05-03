@@ -6,6 +6,8 @@
 . /etc/rc.conf
 . /etc/rc.d/functions
 
+run_hook shutdown_start
+
 # avoid staircase effect
 /bin/stty onlcr
 
@@ -43,31 +45,13 @@ while [ $i -ge 0 ]; do
 	let i=i-1
 done
 
-if [ "$PREVLEVEL" = "3" -o "$PREVLEVEL" = "5" ]; then
-	# Shutdown daemons
-	let i=${#DAEMONS[@]}
-	while [ $i -ge 0 ]; do
-		if [ "${DAEMONS[$i]:0:1}" != '!' ]; then
-			ck_daemon ${DAEMONS[$i]#@} || stop_daemon ${DAEMONS[$i]#@}
-		fi
-		let i=i-1
-	done
-	# find any leftover daemons and shut them down in reverse order
-	if [ -d /var/run/daemons ]; then
-		for daemon in $(/bin/ls -1t /var/run/daemons); do
-			stop_daemon $daemon
-		done
-	fi
-fi
-
-run_hook shutdown_prekillall
-
 # Terminate all processes
 if [ "${msg_lang}" = "cn" ]; then
 	stat_busy "正在结束 未停止进程..."
 else
 	stat_busy "Sending SIGTERM To Processes"
 fi
+run_hook shutdown_prekillall
 /sbin/killall5 -15 &> /dev/null
 /bin/sleep 5
 stat_done
@@ -80,6 +64,8 @@ fi
 /sbin/killall5 -9 &> /dev/null
 /bin/sleep 1
 stat_done
+
+run_hook shutdown_postkillall
 
 if [ "${msg_lang}" = "cn" ]; then
 	stat_busy "正在保存 随机种子..."
@@ -109,16 +95,17 @@ if [ "$TIMEZONE" != "" -a -e "/usr/share/zoneinfo/$TIMEZONE" ]; then
 	/bin/cp "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime
 fi
 
-HWCLOCK_PARAMS="--systohc --localtime"
-#if [ "$HARDWARECLOCK" = "UTC" ]; then
-#	HWCLOCK_PARAMS="$HWCLOCK_PARAMS --utc"
-#else
-#	HWCLOCK_PARAMS="$HWCLOCK_PARAMS --localtime"
-#fi
-#if [ "$USEDIRECTISA" = "yes" -o "$USEDIRECTISA" = "YES" ]; then
-#	HWCLOCK_PARAMS="$HWCLOCK_PARAMS --directisa"
-#fi
-/sbin/hwclock $HWCLOCK_PARAMS
+HWCLOCK_PARAMS="--systohc"
+if [ "$HARDWARECLOCK" = "UTC" ]; then
+	HWCLOCK_PARAMS="$HWCLOCK_PARAMS --utc"
+elif [ "$HARDWARECLOCK" = "localtime" ]; then
+	HWCLOCK_PARAMS="$HWCLOCK_PARAMS --localtime"
+else
+	HWCLOCK_PARAMS=""
+fi
+if [ -n "$HWCLOCK_PARAMS" ]; then
+	/sbin/hwclock $HWCLOCK_PARAMS
+fi
 stat_done
 
 # removing psmouse module to fix some reboot issues on newer laptops
@@ -140,7 +127,7 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	stat_busy "Unmounting Filesystems"
 fi
-/bin/umount -a -r -t noramfs,notmpfs,nosysfs,noproc
+/bin/umount -a -r -t noramfs,notmpfs,nosysfs,noproc -O no_netdev
 stat_done
 
 # Kill non-root encrypted partition mappings
@@ -153,12 +140,14 @@ if [ -f /etc/crypttab -a -n "$(/bin/grep -v ^# /etc/crypttab | /bin/grep -v ^$)"
 	CS=/sbin/cryptsetup.static
 	do_uncrypt() {
 		if [ $# -ge 3 ]; then
-			stat_append "${1}.."
-			$CS remove $1 >/dev/null 2>&1
-			if [ $? -ne 0 ]; then
-				stat_append "failed "
-			else
-				stat_append "ok "
+			if [ -b /dev/mapper/$1 ] ;then
+				stat_append "${1}.."
+				$CS remove $1 >/dev/null 2>&1
+				if [ $? -ne 0 ]; then
+					stat_append "failed "
+				else
+					stat_append "ok "
+				fi
 			fi
 		fi
 	}
