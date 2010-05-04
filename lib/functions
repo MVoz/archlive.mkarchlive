@@ -804,11 +804,15 @@ cmd_install ()
 	remount_aufs_w "${MODULEDIR}/${mod}" "${LOG}"
 	
 	plain -n "将模块软件清单整理后输出（去除被#注释的）" | tee -a ${LOG}
- 	cat "${PROFILE_DIR}/$LISTDIR/${mod}.list" | sed -r "s/#.*//g" | sed -r "/^$/d" >${PACKLIST}/${mod}.new
+	local old_list new_list
+	old_list="${PROFILE_DIR}/$LISTDIR/${mod}.list"
+	new_list="${PACKLIST}/${mod}.new"
+	[ "x$(tail -1 ${old_list})" = "x" ] || (echo >>"${old_list}")
+ 	cat "${old_list}" | sed -r "s/#.*//g" | sed -r "/^$/d" >${new_list}
 	green "完成!" | tee -a ${LOG}
 
 	msg2 -n "检查 ${mod} 软件清单中软件是否存在于设定的软件仓中..." | tee -a ${LOG}
-	cat ${PACKLIST}/${mod}.new | while read pkgname; do
+	cat ${new_list} | while read pkgname; do
 		pkgname=${pkgname#-d }
 		if grep " $pkgname " ${PACKLIST}/available.list >/dev/null; then
 			continue
@@ -845,7 +849,7 @@ cmd_install ()
 		# 无-d选项的
 		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${mod}.old ${PACKLIST}/${mod}.new.tmp | grep -v "\-d")
 		for pkgname in ${newpkgname}; do
-			if $PACMAN -Q $pkgname -r ${UNION} >/dev/null;then continue; fi
+			if $PACMAN -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
 			[ "x$pkgname" != "x" ] && continue
 			plain "$pkgname 是新添加的(需要检测依赖关系)，需要安装..." | tee -a ${LOG}
 			pac_install
@@ -853,7 +857,7 @@ cmd_install ()
 		# 有 -d 选项的
 		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${mod}.old ${PACKLIST}/${mod}.new.tmp | grep "\-d")
 		for pkgname in ${newpkgname}; do
-			if $PACMAN -Q $pkgname -r ${UNION} >/dev/null;then continue; fi
+			if $PACMAN -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
 			[ "x$pkgname" != "x" ] && continue
 			plain "$pkgname 是新添加的(需要检测依赖关系)，需要安装..." | tee -a ${LOG}
 			pac_install
