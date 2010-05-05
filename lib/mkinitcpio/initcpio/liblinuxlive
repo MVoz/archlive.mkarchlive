@@ -191,8 +191,13 @@ show_debug_banner()
 {
    echo
    echo "====="
-   echo ": Debug 模式开启，此处开启root权限的命令行模式."
-   echo ": Ctrl+D 退出该模式继续."
+   if [ "$cn" = "y" ]; then
+	echo ": Debug 模式开启，此处开启root权限的命令行模式."
+	echo ": Ctrl+D 退出该模式继续."
+   else
+	echo ": Debugging started. Here is the root shell for you."
+	echo ": Type your desired commands or hit Ctrl+D to continue booting."
+   fi
    echo
 }
 
@@ -213,15 +218,19 @@ debug_shell()
 #
 header()
 {
-#   echo "[0;1m""$@""[0;0m"
    echo -e "\033[0;1m""$@""\033[0;0m"
 }
 
 fatal()
 {
    echolog
-   header "出现致命错误 - $1"
-   echolog "Ctrl+Alt+Delete 重新启动电脑..."
+   if [ "$cn" = "y" ]; then
+	header "出现致命错误 - $1"
+	echolog "Ctrl+Alt+Delete 重新启动电脑..."
+   else
+	header "Fatal error occured - $1"
+	echolog "Please reboot your computer with Ctrl+Alt+Delete ..."
+   fi
    echolog
    ash < /dev/console 2>/dev/null
 }
@@ -230,7 +239,11 @@ allow_only_root()
 {
   # test if the script is started by root user. If not, exit
   if [ "0$UID" -ne 0 ]; then
-     echo "只有root用户可执行 $(basename $0)"; exit 1
+	if [ "$cn" = "y" ]; then
+		echo "只有root用户可执行 $(basename $0)"; exit 1
+	else
+		echo "Only root can run $(basename $0)"; exit 1
+	fi
   fi
 }
 
@@ -704,9 +717,23 @@ union_insert_module()
    if ismountpoint $TARGET; then return 1; fi # skip already used modules
    mkdir -p $TARGET
    mount_module $2 $TARGET
-   if [ $? -ne 0 ]; then echo "无法读取模块. 下载的文件不完整?" >&2; return 1; fi
+   if [ $? -ne 0 ]; then
+	if [ "$cn" = "y" ]; then
+		echo "无法读取模块. 下载的文件不完整?" >&2;
+	else
+		echo "Cannot read module data. corrupted download?" >&2
+	fi
+	return 1
+   fi
    union_insert_dir $1 $TARGET
-   if [ $? -ne 0 ]; then echo "无法挂载模块到union" >&2; return 2; fi
+   if [ $? -ne 0 ]; then
+	if [ "$cn" = "y" ]; then
+		echo "无法挂载模块到union" >&2
+	else
+		echo "can't insert module to union" >&2
+	fi
+	return 2
+   fi
    echo "$2" | cut -b $(($4+1))-
    echolog "$2" >/dev/null
    return 0
@@ -741,7 +768,13 @@ copy_to_ram()
       TARGET=$(dirname "$MODULE" | cut -b ${#1}- | cut -b 2-)
       mkdir -p "$2/$TARGET"
       cp "$MODULE" "$2/$TARGET"
-      if [ $? -ne 0 ]; then fatal "无足够内存，使用 ramsize=$RAMSIZE"; fi
+      if [ $? -ne 0 ]; then
+		if [ "$cn" = "y" ]; then
+			fatal "无足够内存，使用 ramsize=$RAMSIZE"
+		else
+			fatal "Not enough memory. Using ramsize=$RAMSIZE"
+		fi
+      fi
    done
 }
 
@@ -1007,7 +1040,11 @@ find_n_run_scripts()
 mdev_start_hotplug()
 {
    debug_log "mdev_start_hotplug" "$*"
-   echolog "在/dev目录下创建块设备文件"
+   if [ "$cn" = "y" ]; then
+	echolog "在/dev目录下创建块设备文件"
+   else
+	echolog "Creating /dev entries for block devices"
+   fi
    mdev -s
    #rm /dev/pty??* /dev/tty??* # remove unneeded pty and tty devices
    echo mdev > /proc/sys/kernel/hotplug # use mdev as a hotplug handler
@@ -1016,7 +1053,11 @@ mdev_start_hotplug()
 udev_start_hotplug()
 {
    debug_log "mdev_start_hotplug" "$*"
-   echolog "在/dev目录下创建块设备文件"
+   if [ "$cn" = "y" ]; then
+	echolog "在/dev目录下创建块设备文件"
+   else
+	echolog "Creating /dev entries for block devices"
+   fi
    echo > /proc/sys/kernel/hotplug
    /sbin/udevd --daemon #Starting UDev Daemon
    /sbin/udevadm trigger #"Triggering UDev uevents"
@@ -1029,7 +1070,11 @@ modprobe_essential_modules()
 {
    debug_log "modprobe_essential_modules" "$*"
 
-   echolog "装载文件系统模块 ..."
+   if [ "$cn" = "y" ]; then
+	echolog "装载文件系统模块 ..."
+   else
+	echolog "Loading filesystems modules ..."
+   fi
    modprobe_module loop
    modprobe_module isofs
    modprobe_module squashfs
@@ -1060,7 +1105,11 @@ modprobe_usb_modules()
       return 0
    fi
 
-   echolog "装载USB模块 ..."
+   if [ "$cn" = "y" ]; then
+	echolog "装载USB模块 ..."
+   else
+	echolog "Loading USB modules ..."
+   fi
    if [ "$(echo $LSPCI | grep -i ehci)" != "" ]; then
       modprobe_module ehci-hcd
    fi
@@ -1083,7 +1132,11 @@ modprobe_pcmcia_modules()
    #if [ "$(cmdline_parameter nohotplug)" ]; then return 0; fi
    if [ "x$nohotplug" != "x" ]; then return 0; fi 
 
-   echolog "装载PCMCIA CardBus模块 ..."
+   if [ "$cn" = "y" ]; then
+	echolog "装载PCMCIA CardBus模块 ..."
+   else
+	echolog "Loading PCMCIA CardBus modules ..."
+   fi
    modprobe_module pcmcia_core
    modprobe_module pcmcia
    modprobe_module rsrc_nonstatic
