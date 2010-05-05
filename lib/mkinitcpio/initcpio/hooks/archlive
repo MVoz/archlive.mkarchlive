@@ -12,7 +12,11 @@ find_by_folder ()
    debug_log "DATAFROM=$DATAFROM"
    if [ "$DATAFROM" ]; then
 	if [ "$(find_modules $DATAFROM)" != "" ]; then
-		echolog "在$DATAFROM找到模块文件"
+		if [ "$cn" = "y" ]; then
+			echolog "在$DATAFROM找到模块文件"
+		else
+			echolog "Found modules in $DATAFROM."
+		fi
 		DATA=$DATAFROM
 		debug_log "DATA=$DATA"
 	fi
@@ -51,7 +55,11 @@ run_hook ()
 	# 启动参数可以通过sgn=...来定义搜索标的，该文件同一目录下的文件夹即为模块文件夹
 	SGN=$sgn
 	if [ "x$SGN" = "x" ]; then SGN=$LIVECDNAME.list; fi
-	echolog "搜索$LIVECDNAME模块(根据$SGN定位)"
+	if [ "$cn" = "y" ]; then
+		echolog "搜索$LIVECDNAME模块(根据$SGN定位)"
+	else
+		echolog "Search modules of $LIVECDNAME by target: $SGN"
+	fi
 
 	# 在启动参数中加入from="..." cifs="..." 或者 ip="..." 可以加快查找基本模块
 	# 指定方式:  A. ip=[]  B. from=[]  C. cifs=[]
@@ -77,7 +85,11 @@ run_hook ()
 
 	if [ "$DATAFROM" ]; then
    		if [ "$(echo $DATAFROM | cut -b 1-7 | tr "[:upper:]" "[:lower:]")" = "http://" ]; then
-		debug_log "PXE启动：from=$DATAFROM"
+		if [ "$cn" = "y" ]; then
+			debug_log "PXE启动：from=$DATAFROM"
+		else
+			debug_log "PXE BOOT：from=$DATAFROM"
+		fi
 		# 如果启动参数中指定了 ip, 则初始化网络并从网络启动
 			# 初始化网络，加载网卡驱动模块
 			# 如果启动参数中 essid="A" pass="00000000001" 则使用密码"0000000001" 登录无线AP "A"
@@ -91,7 +103,11 @@ run_hook ()
 
 		# cifs 或者 samba 共享启动
 		elif [ "x$cifs" != "x" ]; then
-			debug_log "挂载共享分区并启动：from=$DATAFROM"
+			if [ "$cn" = "y" ]; then
+				debug_log "挂载共享分区并启动：from=$DATAFROM"
+			else
+				debug_log "Mount CIFS share and boot：from=$DATAFROM"
+			fi
 			init_dhcp $(modprobe_network_modules)
 
 			# 挂载cifs文件系统到 $MOUNTDIR/cifs
@@ -101,25 +117,41 @@ run_hook ()
 
 		# 从from指定的分区启动，比如from=/dev/sda1/archlive DATAFROM=$from
 		elif [ -b $(dirname $DATAFROM) ]; then
-			debug_log "根据from=$DATAFROM来查找模块"
+			if [ "$cn" = "y" ]; then
+				debug_log "根据from=$DATAFROM来查找模块"
+			else
+				debug_log "Search modules by term: from=$DATAFROM"
+			fi
 			DATA=$(find_filepath  "$(dirname $DATAFROM)" "$(basename $DATAFROM)/$SGN")
 			debug_log "DATA=$DATA"
 			DATA="$(dirname $DATA)"
 			if [ "$DATA" -a "$(find_modules $DATA)" != "" ]; then
-				echolog "在指定的$DATAFROM找到模块文件"
+				if [ "$cn" = "y" ]; then
+					echolog "在指定的$DATAFROM找到模块文件"
+				else
+					echolog "Found modules in $DATAFROM"
+				fi
 				DATA="$DATA"
 			fi
 			debug_log "DATA=$DATA"
 
 		# from 只指定了相对目录  (自行修改了iso或者USB中基本模块上级目录的名称）
 		else
-			debug_log "根据$DATAFROM来查找模块文件"
+			if [ "$cn" = "y" ]; then
+				debug_log "根据$DATAFROM来查找模块文件"
+			else
+				debug_log "Search modules by term: DATAFROM=$DATAFROM"
+			fi
 			find_by_folder $DATAFROM
    		fi
 
 	# 如果启动参数没有指定任何参数，程序自动从本地所有资源按照默认目录结构查找
 	else
-		debug_log "按照$LIVECDNAME默认方式从本地所有资源查找$SGN"
+		if [ "$cn" = "y" ]; then
+			debug_log "按照$LIVECDNAME默认方式从本地所有资源查找$SGN"
+		else
+			debug_log "Search $LIVECDNAME modules by target $SGN in local as default."
+		fi
 		find_by_folder $LIVECDNAME
 	fi
 
@@ -128,7 +160,11 @@ run_hook ()
 
 	# 以上方式均无法找到（iso或者写到USB后目录结构调整过，或者from ip 或者 其他参数无效时）
 	if [ "$DATA" = "" ]; then
-		debug_log "根据启动参数无法找到$SGN，再次从本地所有资源查找"
+		if [ "$cn" = "y" ]; then
+			debug_log "根据启动参数无法找到$SGN，再次从本地所有资源查找"
+		else
+			debug_log "Can't found target $SGN by boot arguments，search modules again"
+		fi
 		# from= is not used or it didn't contain valid data
 		DATA=$(find_in_computer $LIVECDNAME/$SGN)
 		DATA=$(dirname $DATA 2>/dev/null)
@@ -137,14 +173,26 @@ run_hook ()
 	# 调试用测试点
 	debug_shell
 
-	if [ "$DATA" = "" ]; then fatal \
+	if [ "$DATA" = "" ]; then
+	  if [ "$cn" = "y" ]; then
+		fatal \
 		"没有找到 $LIVECDNAME 的程序模块. 查找标的$SGN被误删除? 
-		可能使用了不被支持的启动设备(比如 SCSI或者老的PCMCIA).
-		解决办法: 将$LIVECDNAME目录从你的启动设备拷贝到IDE/SATA盘，比如拷贝到
+		可能使用了不被支持的启动设备(比如 SCSI或者老的PCMCIA). 
+		解决办法: 将$LIVECDNAME目录从你的启动设备拷贝到IDE/SATA盘，比如拷贝到 
 		/mnt/hda1/$LIVECDNAME 或者 C:\\$LIVECDNAME. 然后重新启动."
+	  else
+		fatal \
+		"Can't found $LIVECDNAME modules. Target file $SGN was deleted? 
+		Or you are using an unsupported boot device (eg. old SCSI, old PCMCIA).
+		Solutions: Copy the directory $LIVECDNAME from your boot device to an 
+		IDE/SATA disk, eg. to /mnt/hda1/$LIVECDNAME or C:\\$LIVECDNAME, then reboot."
 	fi
 
-	echolog "从$DATA 启动 $LIVECDNAME"
+	if [ "$cn" = "y" ]; then
+		echolog "从$DATA 启动 $LIVECDNAME"
+	else
+		echolog "Booting $LIVECDNAME from $DATA..."
+	fi
 
 	# 调试用测试点
 	debug_shell
@@ -152,7 +200,11 @@ run_hook ()
 
 	CHANGESVAL=$changes
 	if [ "$CHANGESVAL" ]; then
-		echolog "设置$changes保存修改..."
+		if [ "$cn" = "y" ]; then
+			echolog "设置$changes保存修改..."
+		else
+			echolog "Setting up directory $changes for changes ..."
+		fi
 		CHANGESMNT=$(find_in_computer $CHANGESVAL)
 		echolog $CHANGESMNT
 	fi
@@ -169,7 +221,13 @@ run_hook ()
 	# 如果changes无法被正确挂载或者其不可写，则用默认的tmpfs
 	if [ $? -ne 0 ]; then
 		if [ "$CHANGESVAL" ]; then
-			echolog "启动参数$changes设置的目标不可用或者不可写，使用内存存储，重启将丢失修改的内容."
+			if [ "$cn" = "y" ]; then
+				echolog "启动参数$changes设置的目标不可用或者不可写, 使用内存存储,
+					重启将丢失修改的内容."
+			else
+				echolog "Changes not used or not writable, using memory only,
+					changes will be lost after reboot."
+			fi
 		fi
 		fumount $MEMORY
 		mkdir -p $MEMORY # mount_device might removed it
@@ -186,7 +244,11 @@ run_hook ()
 		# So it is writable, we will keep the filesystem mounted.
 		# Check if it supports links and chmod.
 		# If not, overmount CHANGES using posixovl
-		echolog "检测文件系统的posix兼容性 ..."
+		if [ "$cn" = "y" ]; then
+			echolog "检测文件系统的posix兼容性 ..."
+		else
+			echolog "Testing the filesystem for posix compatibility ..."
+		fi
 		touch $MEMORY/.empty1 && \
 		ln -sf $MEMORY/.empty1 $MEMORY/.empty2 2>/dev/null && \
 		chmod +x $MEMORY/.empty1 2>/dev/null  && \
@@ -196,7 +258,11 @@ run_hook ()
 		rm $MEMORY/.empty1 $MEMORY/.empty2 2>/dev/null
 
 		if [ $? -ne 0 ]; then
-			echolog "不兼容 - 开启 posiovl"
+			if [ "$cn" = "y" ]; then
+				echolog "不兼容 - 开启 posiovl"
+			else
+				echolog "Not compatible - starting posixovl"
+			fi
 			rm $MEMORY/.empty1 $MEMORY/.empty2 2>/dev/null
 			mkdir -p $CHANGES
 			posixovl -F $CHANGES -- -o attr_timeout=300,entry_timeout=300,negative_timeout=300,kernel_cache,allow_other
@@ -205,9 +271,17 @@ run_hook ()
 	fi
 
 	# $UNION 将被作为root系统, 模块都将挂载在此目录
-	echolog "设置$UNION目录 (使用aufs)"
+	if [ "$cn" = "y" ]; then
+		echolog "设置$UNION目录 (使用aufs)"
+	else
+		echolog "Setup $UNION directory (using aufs)"
+	fi
 
-	debug_log "IMAGES保存模块的路径: IMAGES=$IMAGES"
+	if [ "$cn" = "y" ]; then
+		debug_log "IMAGES保存模块的路径: IMAGES=$IMAGES"
+	else
+		debug_log "Modules were mounted on: IMAGES=$IMAGES"
+	fi
 	mkdir -p $CHANGES
 	mkdir -p $IMAGES
 
@@ -231,7 +305,11 @@ run_hook ()
 	# (skip modules from /optional/ which are not listed in load= boot option)
 	# Finaly modify DATA variable so it will point to correct directory
 	if [ "$(cmdline_parameter toram)" != "" -o "$(cmdline_parameter copy2ram)" != "" ]; then
-		echolog "拷贝$LIVECDNAME数据到内存，请稍候..."
+		if [ "$cn" = "y" ]; then
+			echolog "拷贝$LIVECDNAME数据到内存，请稍候..."
+		else
+			echolog "copying $LIVECDNAME data to RAM, this may take some time..."
+		fi
 		mkdir -p $COPY2RAM
 
 		# make sure it's in RAM even with changes= parameter
@@ -251,8 +329,14 @@ run_hook ()
 
 	# DATA包含archlive里面的base目录，模块目录，可选模块目录
 	# 现在挂载到aufs文件系统中
-	echolog "装载模块:"
-	debug_log "将$DATA下的模块挂载到$IMAGES，文件系统挂载到$UNION"
+	if [ "$cn" = "y" ]; then
+		echolog "装载模块:"
+		debug_log "将$DATA下的模块挂载到$IMAGES，文件系统挂载到$UNION"
+	else
+		echolog "Loading modules:"
+		debug_log "Mount modules under $DATA to $IMAGES，mount root filesystem to $UNION"
+	fi
+	
 	union_insert_modules $UNION $DATA $IMAGES
 
 	# the $MEMORY directory can contain $MEMORY/modules too
@@ -264,21 +348,33 @@ run_hook ()
 	# 调试用测试点
 	debug_shell
 
-	# 装载$LIVECDNAME 中 rootcopy目录
-	if [ $(cmdline_parameter rootcopy) ]; then
-		echolog "将rootcopy内容拷贝到$UNION"
-		cp -af $DATA/rootcopy/* $UNION 2>/dev/null # may be empty
-	else
-		echolog "启动参数无rootcopy"
+	# 默认装载$LIVECDNAME 中 rootcopy目录(只要存在， 除非有norootcopy参数)
+	if [ $(cmdline_parameter norootcopy) ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "启动参数有norootcopy"
+		else
+			echolog "Has argument: norootcopy, then not using rootcopy."
+		fi
+	elif [ -d $DATA/rootcopy ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "将$DATA/rootcopy下内容拷贝到$UNION"
+		else
+			echolog "Copying content of rootcopy directory"
+		fi
+		cp -af $DATA/rootcopy/* $UNION 2>/dev/null
 	fi
 
-	debug_log "拷贝liblinuxlive库到$UNION/usr/lib/"
+	# 拷贝liblinuxlive库到$UNION/usr/lib/
 	cp -af /usr/lib/liblinuxlive $UNION/usr/lib/
 
 	# 调试用测试点
 	debug_shell
 
-	echolog "更新 /etc/fstab 和硬盘分区挂载目录/mnt/... "
+	if [ "$cn" = "y" ]; then
+		echolog "更新 /etc/fstab 和硬盘分区挂载目录/mnt/... "
+	else
+		echolog "Update /etc/fstab and mount_directories /mnt/... "
+	fi
 	touch $UNION/etc/fstab
 	rmdir $UNION/mnt/* 2>/dev/null
 	#fstab_update $UNION
@@ -326,7 +422,11 @@ run_hook ()
 	# Union contains all the files and directories unioned from all modules.
 	# Change root directory to it, and move initrd's root to /mnt/live/initramdisk
 	# Finaly execute /sbin/init to start the distribution.
-	echolog "切换root目录到$UNION..."
+	if [ "$cn" = "y" ]; then
+		echolog "切换root目录到$UNION..."
+	else
+		echolog "Changing root directory to $UNION..."
+	fi
 
 	cd $UNION
 
@@ -346,7 +446,11 @@ run_hook ()
 
 	if [ -x bin/init ]; then INIT=bin/init; fi
 	if [ -x sbin/init ]; then INIT=sbin/init; fi
-	if [ "$INIT" = "" ]; then fatal "没有找到init命令"; fi
+	if [ "$cn" = "y" ]; then
+		if [ "$INIT" = "" ]; then fatal "没有找到init命令"; fi
+	else
+		if [ "$INIT" = "" ]; then fatal "Can't find executable init command"; fi
+	fi
 
 	debug_shell
 #	mount -n -o remount,ro aufs .
@@ -354,7 +458,11 @@ run_hook ()
 #	debug_shell
 
 	# killall udevd
-	echolog "清理udevd进程..."
+	if [ "$cn" = "y" ]; then
+		echolog "清理udevd进程..."
+	else
+		echolog "Kill UDev Daemon..."
+	fi
 	udevpid=$(pidof udevd 2>/dev/null)
 	if [ "x${udevpid}" != "x" ]; then
 		# Settle pending uevents, then kill udev
@@ -363,5 +471,9 @@ run_hook ()
 		kill -9 ${udevpid} > /dev/null 2>&1
 		sleep 0.01
 	fi
-	debug_log "archlive启动脚本运行完成."
+	if [ "$cn" = "y" ]; then
+		debug_log "archlive启动脚本运行完成."
+	else
+		debug_log "Finished run hook: archlive."
+	fi
 }
