@@ -186,6 +186,7 @@ run_hook ()
 		Or you are using an unsupported boot device (eg. old SCSI, old PCMCIA).
 		Solutions: Copy the directory $LIVECDNAME from your boot device to an 
 		IDE/SATA disk, eg. to /mnt/hda1/$LIVECDNAME or C:\\$LIVECDNAME, then reboot."
+	  fi
 	fi
 
 	if [ "$cn" = "y" ]; then
