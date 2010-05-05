@@ -1,0 +1,46 @@
+URxvt*imlocale: zh_CN.UTF8
+Urxvt.inputMethod: scim
+URxvt.preeditType:Root
+mrxvt*imlocale: zh_CN.UTF8
+mrxvt.inputMethod: scim
+mrxvt.preeditType:Root
+!====Set font ====
+!Xft.dpi: 96
+Xft.dpi: 90
+Xft.hinting: 1
+!Xft.antialias: 1
+Xft.hintstyle: hintmedium
+!Xft.hintstyle: hintfull
+Xft.rgba: rgb
+
+XTerm*VT100*font: -misc-fixed-medium-r-normal--14-*-*-*-*-*-iso10646-1
+XTerm*VT100*boldFont: -misc-fixed-bold-r-normal--14-*-*-*-*-*-iso10646-1
+XTerm*VT100*wideFont: -misc-simsun-medium-r-normal--14-*-*-*-*-*-iso10646-1
+XTerm*VT100*wideBoldFont: -misc-simsun-medium-r-normal--14-*-*-*-*-*-iso10646-1
+XTerm*VT100*ximFont: -misc-simsun-medium-r-normal--14-*-*-*-*-*-iso10646-1
+XTerm*VT100*cjkWidth: true
+
+!xrdb -merge ~/.Xresources 
+!
+!
+!
+!Xft.dpi: 96
+fontforge.FontView.FontFamily:wenquanyi bitmap song
+!! RXVT setting
+Rxvt.background:black
+Rxvt.foreground:white
+Rxvt.colorBD:yellow
+Rxvt.colorUL:green
+!!Rxvt.multichar_encoding:gb2312
+Rxvt.scrollBar:True
+Rxvt.scrollBar_right:True
+Rxvt.scrollBar_floating: False
+Rxvt.scrollstyle:plain
+Rxvt.saveLines:3000
+Rxvt.color12:DodgerBlue
+!!Rxvt.font:-wenquanyi-wenquanyi bitmap song-medium-r-normal--12-120-75-75-p-80-iso10646-1
+!!Rxvt.font:xft:AR PL ShanHeiSun Uni
+Rxvt.font:xft:DejaVu Serif,xft:serif
+URxvt.font:xft:serif
+!Rxvt.menu:/etc/X11/rxvt.menu
+Rxvt.preeditType:Root
