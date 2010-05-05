@@ -203,3 +203,7 @@ wpa_actiond
 ifplugd
 
 nfs-utils
+
+atop
+
+archlinux-installer

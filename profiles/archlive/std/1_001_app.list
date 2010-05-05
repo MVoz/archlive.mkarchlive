@@ -233,6 +233,9 @@ lighttpd
 #
 wgetpaste
 
+pastebin
+# Pastes FILE to http://pastebin.archlinux.fr
+
 cdargs
 # A replacement for 'cd' that includes bookmarks/browsing for faster navigation
 
