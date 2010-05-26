@@ -75,6 +75,8 @@ if [ "x$keyb" != "x" ] && [ "$keyb" != "us" ]; then
    fi
 fi
 
+debug_shell
+
 chmod 0440 /etc/sudoers
 if [ "x$root" = "x" ]; then
 	if [ -x /usr/bin/update-desktop-database ]; then

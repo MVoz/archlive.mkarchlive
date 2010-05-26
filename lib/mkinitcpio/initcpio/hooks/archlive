@@ -6,7 +6,11 @@
 # 此中方式避免$SGN错误指定导致无法找到基本模块的情况
 find_by_folder ()
 {
-   debug_log "根据基本模块的上级目录名$1来查找"
+   if [ "$cn" = "y" ]; then
+	debug_log "根据基本模块的上级目录名$1来查找"
+   else
+	debug_log "Search the modules by the directory name $1 of them..."
+   fi
    debug_log "find_by_foler $1"
    DATAFROM=$(find_in_computer $1)
    debug_log "DATAFROM=$DATAFROM"
@@ -33,6 +37,15 @@ run_hook ()
 	# Load essential drivers, like CDROM drivers, aufs/squashfs etc,
 	# use mdev to create /dev/ devices and setup it as a hotplug-handler
 	modprobe_essential_modules
+
+	# 挂载 squashfs 压缩的驱动及usr 目录（如果有）
+	# /usr and some drivers are compressed in initrd 
+	# so it must be mounted from .lzm files
+	mount_initrd_loops
+
+	# 硬件初始化程序  busybox自带的mdev 或者 udev
+	mdev_start_hotplug
+	#udev_start_hotplug
 
 	# 初始化USB、PCMCIA等模块
 	modprobe_usb_modules
@@ -197,7 +210,6 @@ run_hook ()
 
 	# 调试用测试点
 	debug_shell
-
 
 	CHANGESVAL=$changes
 	if [ "$CHANGESVAL" ]; then
@@ -453,11 +465,6 @@ run_hook ()
 		if [ "$INIT" = "" ]; then fatal "Can't find executable init command"; fi
 	fi
 
-	debug_shell
-#	mount -n -o remount,ro aufs .
-#	cp -af $INIT /bin
-#	debug_shell
-
 	# killall udevd
 	if [ "$cn" = "y" ]; then
 		echolog "清理udevd进程..."
@@ -472,9 +479,17 @@ run_hook ()
 		kill -9 ${udevpid} > /dev/null 2>&1
 		sleep 0.01
 	fi
+
+	umount /proc >/dev/null 2>&1
+	umount /sys >/dev/null 2>&1
+
 	if [ "$cn" = "y" ]; then
-		debug_log "archlive启动脚本运行完成."
+		debug_log "切换到 $UNION启动."
 	else
-		debug_log "Finished run hook: archlive."
+		debug_log "switch_root to $UNION"
 	fi
+	debug_shell
+	exec /sbin/switch_root -c /dev/console /${UNION} ${INIT} "$@"
+
+	debug_log "看到此消息switch_root失败"
 }

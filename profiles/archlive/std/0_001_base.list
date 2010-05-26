@@ -127,7 +127,7 @@ pciutils
 pcmciautils
 
 ppp
-procinfo
+procinfo-ng
 procps
 psmisc
 
@@ -207,3 +207,5 @@ nfs-utils
 atop
 
 archlinux-installer
+libui-sh
+aif

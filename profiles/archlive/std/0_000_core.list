@@ -1,5 +1,5 @@
 -d kernel26
--d kernel26-firmware
+-d linux-firmware
 -d kernel26-headers
 -d linux-api-headers
 ##################### 常用网卡驱动程序
@@ -9,15 +9,5 @@
 -d madwifi-utils
 -d madwifi
 # 2.6.33-ARCH 版的
-#
-# 以下驱动与内核版本关系不大
--d rt2x00-rt61-fw
--d rt2x00-rt71w-fw
--d iwlwifi-3945-ucode
--d iwlwifi-4965-ucode
--d iwlwifi-5000-ucode
--d b43-fwcutter
--d ipw2100-fw
--d ipw2200-fw
--d tiacx-firmware
--d zd1211-firmware
+-d aufs2
+-d aufs2-util

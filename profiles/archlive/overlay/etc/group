@@ -35,5 +35,4 @@ camera:x:97:
 tor:x:43:
 gdm:x:120:
 lpadmin:x:121:arch
-nm-openconnect:x:104:
 policykit:x:102:
