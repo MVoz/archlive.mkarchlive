@@ -94,7 +94,7 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	stat_busy "Starting UDev Daemon"
 fi
-/sbin/udevd --daemon
+/sbin/udevd --daemon 2>&1 >/dev/null
 stat_done
 
 run_hook sysinit_udevlaunched
@@ -106,8 +106,8 @@ if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
 	else
 		stat_busy "Triggering UDev uevents"
 	fi
-	/sbin/udevadm control --property=STARTUP=1
-	/sbin/udevadm trigger
+	/sbin/udevadm control --property=STARTUP=1 2>&1 >/dev/null
+	/sbin/udevadm trigger 2>&1 >/dev/null
 	stat_done
 fi
 

@@ -120,7 +120,7 @@ usage ()
    echo "       cp, cat, chown, chmod, head, mknod, tee, touch, sort, ln, md5sum)"
    echo "       如果制作livecd (iso格式), 还需要有cdrkit等软件(mkisofs)。"
    echo "       如果强制使用pacman.static，保宿主系统还须确保有如下程序："
-   echo "       wget tar links"
+   echo "       wget tar"
    echo "       以上程序中，括号里面的是本脚本调用的命令，确保宿主系统包含这些命令! "
    echo ""
    hgreen " 注意："
@@ -188,7 +188,7 @@ check_host_aufs ()
 check_host_cmd ()
 {
    # 检测宿主系统是否包含本脚本调用的命令
-   need_cmd="wget tar bsdtar links sed grep gawk depmod mount ldconfig find ls cut tr echo rm mkdir \
+   need_cmd="wget tar bsdtar sed grep gawk depmod mount ldconfig find ls cut tr echo rm mkdir \
 	cp cat chown chmod head mknod tee sort touch ln md5sum mkisofs openssl stat"
    host_cmd_dir=$(echo $PATH | tr ":" "\n")
    [ -f /tmp/cmd_list ] && rm -f /tmp/cmd_list
@@ -927,7 +927,7 @@ cmd_install ()
 
 	# 特别定制文件	
 	if [ "x${SP_CUSTOM_DIR}" != "x" ]; then
-		msg2 -n "拷贝特别设置${SP_CUSTOM_DIR}到目标系统..." | tee -a ${LOG}
+		msg2 "拷贝特别设置${SP_CUSTOM_DIR}到目标系统..." | tee -a ${LOG}
 		cat ${PACKLIST}/sp_custom.list | while read file; do
 			[ -f ${MODULEDIR}/$file ] && cp -f ${SP_CUSTOM_DIR}/$file $UNION/$file
 		done
@@ -1014,7 +1014,7 @@ cmd_install ()
 
 function mksquashfs_module () {
    LOG=${3}
-   plain -n "将${1} 用 $MKSQUASHFS 进行压缩..." | tee -a ${LOG}
+   plain "将${1} 用 $MKSQUASHFS 进行压缩..." | tee -a ${LOG}
    [ -d ${1}/usr/share/fonts ] && chmod 755 ${1}/usr/share/fonts
    [ -d ${1}/etc/fonts ] && chmod 755 ${1}/etc/fonts
    OPTION="-noappend ${OPTION}"

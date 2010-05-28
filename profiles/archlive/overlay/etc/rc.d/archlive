@@ -4,6 +4,7 @@
 # Special for Archlive
 
 . /etc/rc.d/functions
+. /usr/lib/liblinuxlive
 
 # 需要自己重新设置root用户密码在内核参数加上 newrootpass 参数
 if [ "$newrootpass" = "y" ]; then

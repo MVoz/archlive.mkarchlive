@@ -44,7 +44,7 @@ run_hook ()
 	mount_initrd_loops
 
 	# 硬件初始化程序  busybox自带的mdev 或者 udev
-	mdev_start_hotplug
+	#mdev_start_hotplug
 	#udev_start_hotplug
 
 	# 初始化USB、PCMCIA等模块
@@ -472,13 +472,17 @@ run_hook ()
 		echolog "Kill UDev Daemon..."
 	fi
 	udevpid=$(pidof udevd 2>/dev/null)
+	debug_log "udevpid=$udevpid"
 	if [ "x${udevpid}" != "x" ]; then
 		# Settle pending uevents, then kill udev
 		udevadm settle >/dev/null 2>&1
-		udevpid=$(echo ${udevpid} | cut -d " " -f1)
-		kill -9 ${udevpid} > /dev/null 2>&1
+		for i in $udevpid; do
+			kill -9 ${udevpid} > /dev/null 2>&1
+		done
 		sleep 0.01
 	fi
+	udevpid=$(pidof udevd 2>/dev/null)
+	debug_log "udevpid=$udevpid"
 
 	umount /proc >/dev/null 2>&1
 	umount /sys >/dev/null 2>&1
