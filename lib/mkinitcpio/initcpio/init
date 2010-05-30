@@ -40,6 +40,27 @@ for cmd in ${CMDLINE}; do
     esac
 done
 
+# if available, start udevd at this stage
+if [ -x /sbin/udevd ]; then
+#    if [ "$cn" = "y" ]; then
+#	msg -n "开始启动 udevd..."
+#    else
+#	msg -n "Starting udevd..."
+#    fi
+    echo > /proc/sys/kernel/hotplug
+    /sbin/udevd --daemon --resolve-names=never 2>&1 >/dev/null
+    export udevd_running=1
+    /sbin/udevadm trigger 2>&1 >/dev/null
+    /sbin/udevadm settle 2>&1 >/dev/null
+#    if [ "$cn" = "y" ]; then
+#	msg "完成."
+#    else
+#	msg "done."
+#    fi
+else
+    export udevd_running=0
+fi
+
 clear
 echo
 if [ "$cn" = "y" ]; then
@@ -54,8 +75,6 @@ if [ "$cn" = "y" ]; then
 else
 	echo -e  "${EMY}  Archlive${RST}, ${EMG}live system ${RST}base on ${EMY}Arch GNU/Linux${RST}."
 fi
-
-echo
 
 if [ "$cn" = "y" ]; then
 	hr "  此系统基于GNU通用发布协议(GPL)发行"
@@ -74,7 +93,7 @@ fi
 export cmd_line="$@"
 
 #mount -n -o remount,rw /         # for the case we forgot rw boot option
-ln -sf /proc/mounts /etc/mtab    # this allows us to use umount -a
+#ln -sf /proc/mounts /etc/mtab    # this allows us to use umount -a
 
 . /usr/lib/liblinuxlive # it requires proc to be mounted
 
@@ -84,26 +103,14 @@ echo "0" > /proc/sys/kernel/printk
 # Used so hooks can override params to kinit
 export kinit_params=""
 export root=""
+export init=""
 echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
+
+# set default mount handler
+mount_handler="default_mount_handler"
 
 # 调试用测试点
 debug_shell
-
-# if available, start udevd at this stage
-if [ -x /sbin/udevd ]; then
-    if [ "$cn" = "y" ]; then
-	msg -n "开始启动 udevd..."
-    else
-	msg -n "Starting udevd..."
-    fi
-    echo > /proc/sys/kernel/hotplug
-    /sbin/udevd --daemon --resolve-names=never >/dev/null
-    if [ "$cn" = "y" ]; then
-	msg "完成."
-    else
-	msg "done."
-    fi
-fi
 
 # 启动参数通过 disablehooks="a,b" 来禁止运行启动脚本 a 和 b
 if [ -n "${disablehooks}" ]; then

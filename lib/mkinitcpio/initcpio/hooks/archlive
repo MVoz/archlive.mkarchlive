@@ -49,7 +49,7 @@ run_hook ()
 
 	# 初始化USB、PCMCIA等模块
 	modprobe_usb_modules
-	modprobe_pcmcia_modules
+	[ "$pcmcia" = "y" ] && (modprobe_pcmcia_modules)
 
 	# 调试用测试点
 	debug_shell
@@ -98,12 +98,12 @@ run_hook ()
 
 	if [ "$DATAFROM" ]; then
    		if [ "$(echo $DATAFROM | cut -b 1-7 | tr "[:upper:]" "[:lower:]")" = "http://" ]; then
-		if [ "$cn" = "y" ]; then
-			debug_log "PXE启动：from=$DATAFROM"
-		else
-			debug_log "PXE BOOT：from=$DATAFROM"
-		fi
-		# 如果启动参数中指定了 ip, 则初始化网络并从网络启动
+			if [ "$cn" = "y" ]; then
+				debug_log "PXE启动：from=$DATAFROM"
+			else
+				debug_log "PXE BOOT：from=$DATAFROM"
+			fi
+			# 如果启动参数中指定了 ip, 则初始化网络并从网络启动
 			# 初始化网络，加载网卡驱动模块
 			# 如果启动参数中 essid="A" pass="00000000001" 则使用密码"0000000001" 登录无线AP "A"
 			# 如果启动参数中 essid="A" pass="s:aaa" 则使用字符密码 "aaa"登录无线AP "A"
@@ -129,15 +129,20 @@ run_hook ()
 			[ ! -f $DATA/$SGN ] && [ ! -d $DATA/base ] && export DATA=""
 
 		# 从from指定的分区启动，比如from=/dev/sda1/archlive DATAFROM=$from
-		elif [ -b $(dirname $DATAFROM) ]; then
+		#elif [ -b $(dirname $DATAFROM 2>/dev/null) ]; then
+		elif [ "${DATAFROM/dev/}" !=  "${DATAFROM}" ]; then
 			if [ "$cn" = "y" ]; then
 				debug_log "根据from=$DATAFROM来查找模块"
 			else
 				debug_log "Search modules by term: from=$DATAFROM"
 			fi
-			DATA=$(find_filepath  "$(dirname $DATAFROM)" "$(basename $DATAFROM)/$SGN")
+			if [ "${DATAFROM:9:1}" = "/" ]; then
+				DATA=$(find_filepath "${DATAFROM::10}" "${DATAFROM:10}/$SGN")
+			elif [ "${DATAFROM:8:1}" = "/" ]; then
+				DATA=$(find_filepath "${DATAFROM::9}" "${DATAFROM:9}/$SGN")
+			fi
 			debug_log "DATA=$DATA"
-			DATA="$(dirname $DATA)"
+			DATA="$(dirname $DATA 2>/dev/null)"
 			if [ "$DATA" -a "$(find_modules $DATA)" != "" ]; then
 				if [ "$cn" = "y" ]; then
 					echolog "在指定的$DATAFROM找到模块文件"
@@ -390,9 +395,21 @@ run_hook ()
 	fi
 	touch $UNION/etc/fstab
 	rmdir $UNION/mnt/* 2>/dev/null
-	#fstab_update $UNION
+	echo "rootfs / rootfs rw 0 0" >$UNION/etc/mtab
+
+	fstab_update $UNION
 	#cp -f $UNION/etc/fstab $UNION/etc/mtab
 	#[ ! -f /etc/mtab ] && cp -f $UNION/etc/fstab /etc/mtab
+	
+	# 此时如果从硬盘、USB或者光盘启动，则需要将对应行从fstab中注释掉，以免正式启动后出现重复挂载
+	if [ "$(grep "/dev/" /proc/mounts)" != "x" ]; then
+		modules_device="$(grep "/dev/" /proc/mounts | head -1 | cut -d " " -f1)"
+		modules_mountdir="$(grep "/dev/" /proc/mounts | head -1 | cut -d " " -f2)"
+		case $DATA in ${modules_mountdir}*) 
+			sed -i "s|${modules_device}|\#${modules_device}|g" $UNION/etc/fstab 2>/dev/null
+			mount -o bind "${modules_mountdir}" "$UNION/${modules_mountdir}"	
+			;; esac
+	fi
 
 	# everything is ready now, so we may unload unused kernel modules
 	# and do some cleanup, unmount few things which are no longer needed.
@@ -406,14 +423,18 @@ run_hook ()
 	mkdir -p $UNION/proc
 	mkdir -p $UNION/sys
 	mkdir -p $UNION/dev
-	mkdir -p $UNION/var/{log,tmp}
+	mkdir -p $UNION/var/log
+	mkdir -p -m 1777 $UNION/var/tmp
+	mkdir -p -m 1777 $UNION/var/lock
 	mkdir -p $UNION/tmp
 	chmod 1777 $UNION/tmp
 	chmod 1777 $UNION/var/tmp
-
-	# Boot will contain whatever was in ./boot directory in the bootable media
-	# Error output goes to null, as nothing is mounted with copy2ram
-	#mount -n -o rbind $(dirname $DATA)/boot $UNION/boot 2>/dev/null
+	mknod $UNION/dev/console c 5 1
+	:>$UNION/var/log/wtmp
+	:>$UNION/var/log/utmp
+	:>$UNION/var/log/lastlog
+	:>$UNION/var/log/btmp
+	chmod 0600 $UNION/var/log/btmp
 
 	# 调试用测试点
 	debug_shell
@@ -424,7 +445,7 @@ run_hook ()
 		if [ -f "$UNION/etc/rc.conf" ]; then
 			sed -i -e "s/^ *\(LOCALE=\).*$/\1"$lang.utf8"/" $UNION/etc/rc.conf
 			touch $UNION/etc/locale.gen
-			echo "$lang.UTF-8 UTF-8" > $UNION/etc/locale.gen
+			echo "$lang.UTF-8 UTF-8" >> $UNION/etc/locale.gen
 			echo "$lang ISO-8859-1" >> $UNION/etc/locale.gen
 		fi
 	fi
@@ -432,9 +453,6 @@ run_hook ()
 	# 调试用测试点
 	debug_shell
 
-	# Union contains all the files and directories unioned from all modules.
-	# Change root directory to it, and move initrd's root to /mnt/live/initramdisk
-	# Finaly execute /sbin/init to start the distribution.
 	if [ "$cn" = "y" ]; then
 		echolog "切换root目录到$UNION..."
 	else
@@ -443,13 +461,14 @@ run_hook ()
 
 	cd $UNION
 
-	mkdir -p $INITRAMDISK
-
 	# Copy all dev files (found by mdev) to unioned dev directory
 	# so at least disk devices exist (your Linux may need them).
 	# Two exceptions, do not copy pty* and tty* devs.
 	if [ ! -e /dev/console ]; then mknod /dev/console c 5 1; fi
 	cp -fdR /dev . 2>/dev/null
+
+	# 调试用测试点
+	debug_shell
 
 	# time to end Linux Live scripts and start the distribution itself,
 	# using /sbin/init or whatever was found.
@@ -492,8 +511,13 @@ run_hook ()
 	else
 		debug_log "switch_root to $UNION"
 	fi
+
+	# Boot log
+	debug_log "BOOT_LOG=${BOOT_LOG}"
+	cp -f "${BOOT_LOG}" "/${UNION}${BOOT_LOG}"
 	debug_shell
-	exec /sbin/switch_root -c /dev/console /${UNION} ${INIT} "$@"
+
+	exec /sbin/switch_root -c /dev/console /${UNION} ${INIT} ${CMDLINE}
 
 	debug_log "看到此消息switch_root失败"
 }

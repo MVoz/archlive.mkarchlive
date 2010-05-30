@@ -4,10 +4,8 @@
 -d linux-api-headers
 ##################### 常用网卡驱动程序
 -d ndiswrapper
-# Archlive 编译包, 内核驱动模块及ndiswrapper-utils  For 2.6.33
-#
 -d madwifi-utils
 -d madwifi
-# 2.6.33-ARCH 版的
--d aufs2
+#-d aufs2
 -d aufs2-util
+

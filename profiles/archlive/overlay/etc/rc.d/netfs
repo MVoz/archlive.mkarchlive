@@ -9,7 +9,7 @@ rc=0
 case "$1" in
 	start)
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在挂载 网络文件系统"
+			stat_busy "挂载 网络文件系统"
 		else
 			stat_busy "Mounting Network Filesystems"
 		fi
@@ -26,7 +26,7 @@ case "$1" in
 		;;
 	stop)
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在卸载 网络文件系统"
+			stat_busy "卸载 网络文件系统"
 		else
 			stat_busy "Unmounting Network Filesystems"
 		fi

@@ -7,7 +7,7 @@ PID=`pidof -o %PPID /usr/sbin/cupsd`
 case "$1" in
   start)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在启动 CUPS后台守护进程"
+		stat_busy "启动 CUPS后台守护进程"
 	else
 		stat_busy "Starting CUPS Daemon"
 	fi
@@ -22,7 +22,7 @@ case "$1" in
     ;;
   stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在关闭 CUPS后台守护进程"
+		stat_busy "关闭 CUPS后台守护进程"
 	else
 		stat_busy "Stopping CUPS Daemon"
 	fi

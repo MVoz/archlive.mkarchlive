@@ -27,7 +27,7 @@ pathmunge () {
 
 USE_IBUS=0   #use ibus input 
 USE_SCIM=0   #use scim input
-USE_FCITX=0
+USE_FCITX=1
 #=======================================
 if [ ${USE_SCIM} -eq 1 ] ;then
     export XIM=scim

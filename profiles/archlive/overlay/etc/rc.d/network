@@ -175,7 +175,7 @@ case "$1" in
 		fi
 
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在启动 Network"
+			stat_busy "启动 Network"
 		else
 			stat_busy "Starting Network"
 		fi
@@ -210,7 +210,7 @@ case "$1" in
 		#fi
 
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在关闭 Network"
+			stat_busy "关闭 Network"
 		else
 			stat_busy "Stopping Network"
 		fi

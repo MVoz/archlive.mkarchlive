@@ -12,7 +12,7 @@ get_pid() {
 case "$1" in
   start)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在开启 $daemon_name 后台服务"
+		stat_busy "开启 $daemon_name 后台服务"
 	else
 		stat_busy "Starting $daemon_name daemon"
 	fi
@@ -38,7 +38,7 @@ case "$1" in
 
   stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在关闭 $daemon_name 后台服务"
+		stat_busy "关闭 $daemon_name 后台服务"
 	else
 		stat_busy "Stopping $daemon_name daemon"
 	fi
@@ -64,7 +64,7 @@ case "$1" in
 
   status)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在检查 $daemon_name 运行状态";
+		stat_busy "检查 $daemon_name 运行状态";
 	else
 		stat_busy "Checking $daemon_name status";
 	fi

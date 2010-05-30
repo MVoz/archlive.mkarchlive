@@ -7,7 +7,7 @@ PID=`pidof -o %PPID /usr/sbin/crond`
 case "$1" in
   start)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在启动 Cron 后台服务"
+		stat_busy "启动 Cron 后台服务"
 	else
 		stat_busy "Starting Cron Daemon"
 	fi
@@ -23,7 +23,7 @@ case "$1" in
     ;;
   stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在关闭 Cron 后台服务"
+		stat_busy "关闭 Cron 后台服务"
 	else
 		stat_busy "Stopping Cron Daemon"
 	fi

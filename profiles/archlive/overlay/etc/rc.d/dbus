@@ -7,7 +7,7 @@
 case "$1" in
     start)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在开启 D-BUS 系统消息总线"
+		stat_busy "开启 D-BUS 系统消息总线"
 	else
 		stat_busy "Starting D-BUS system messagebus"
 	fi
@@ -28,7 +28,7 @@ case "$1" in
         ;;
     stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在关闭 D-BUS 系统消息总线"
+		stat_busy "关闭 D-BUS 系统消息总线"
 	else
 		stat_busy "Stopping D-BUS system messagebus"
 	fi
@@ -48,7 +48,7 @@ case "$1" in
         ;;
     reload)
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在重新载入 D-BUS 设置"
+			stat_busy "重新载入 D-BUS 设置"
 		else
 			stat_busy "Reloading D-BUS configuration"
 		fi

@@ -10,14 +10,14 @@ load_alsa_mixer() {
   if ! cat /proc/cmdline | grep -w nosound >/dev/null 2>/dev/null; then
     if [ -r /etc/asound.state ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		echo "正在 进行ALSA混音设置:/usr/sbin/alsactl restore"
+		echo "设置ALSA混音..."
 	else
-		echo "Loading ALSA mixer settings:  /usr/sbin/alsactl restore"
+		echo "Loading ALSA mixer settings..."
 	fi
       /usr/sbin/alsactl restore
     else
 	if [ "${msg_lang}" = "cn" ]; then
-		echo "正在 设置音量: 71%"
+		echo "设置音量: 71%"
 	else
 		echo "Setting sound volume: 71%"
 	fi
@@ -32,7 +32,7 @@ load_alsa_mixer() {
 load_alsa_oss_modules() {
   if ! cat /proc/modules | tr _ - | grep -wq snd-pcm-oss ; then
 	if [ "${msg_lang}" = "cn" ]; then
-		echo "正在 装载ALSA的OSS兼容模块."
+		echo "装载ALSA的OSS兼容模块."
       else
 		echo "Loading OSS compatibility modules for ALSA."
 	fi
@@ -49,7 +49,7 @@ load_alsa()
 if [ "${a8tc}" = "y" ]; then
 	if ! grep "options snd-hda-intel model=6stack" /etc/modprobe.d/modprobe.conf; then
 		if [ "${msg_lang}" = "cn" ]; then
-			echo "正在 配置Asus A8Tc声卡"
+			echo "配置Asus A8Tc声卡"
       	else
 			echo "Configure for Asus A8Tc sound card."
 		fi
@@ -70,7 +70,7 @@ else
   DRIVERS=`modprobe -c | grep -E "^[[:space:]]*alias[[:space:]]+snd-card-[[:digit:]]" | awk '{ print $3 }'`
   if [ ! "$DRIVERS" = "" ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		echo "正在 装载ALSA模块."
+		echo "装载ALSA模块."
 	else
 		echo "Loading ALSA kernel modules."
 	fi
@@ -116,7 +116,7 @@ case "$1" in
     ;;
   stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在保存音量设置"
+		stat_busy "保存音量设置"
 	else
 		stat_busy "Saving ALSA Levels"
 	fi

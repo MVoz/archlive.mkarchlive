@@ -6,7 +6,7 @@
 case "$1" in
   start)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在启动 ADSL宽带拨号"
+		stat_busy "启动 ADSL宽带拨号"
 	else
 		stat_busy "Starting ADSL Connection"
     fi
@@ -20,7 +20,7 @@ case "$1" in
     ;;
   stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在关闭 ADSL宽带连接"
+		stat_busy "关闭 ADSL宽带连接"
 	else
 		stat_busy "Stopping ADSL Connection"
 	fi

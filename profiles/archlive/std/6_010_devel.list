@@ -8,7 +8,8 @@ libtool
 m4
 make
 patch
-pkgconfig
+#pkgconfig
+pkg-config
 #
 pkgtools
 abs

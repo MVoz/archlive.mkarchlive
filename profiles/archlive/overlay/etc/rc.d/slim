@@ -7,7 +7,7 @@ PID=`pidof -o %PPID /usr/bin/slim`
 case "$1" in
   start)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在启用 Slim登录管理器"
+		stat_busy "启用 Slim登录管理器"
 	else
 		stat_busy "Starting Simple Login Manager"
 	fi
@@ -21,7 +21,7 @@ case "$1" in
     ;;
   stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在关闭 Slim登录管理器"
+		stat_busy "关闭 Slim登录管理器"
 	else
 		stat_busy "Stopping Simple Login Manager"
 	fi

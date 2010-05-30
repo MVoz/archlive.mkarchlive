@@ -18,18 +18,18 @@ fi
 # 需要系统在启动前执行命令，加上autoexec="" 参数(中间用空格隔开)
 if [ "x$autoexec" != "x" ]; then
    AUTOCMD=$(echo "$autoexec" | tr "~" " ")
-   echo "正在自动执行命令: su --login -c \"$AUTOCMD\""
+   echo "自动执行命令: su --login -c \"$AUTOCMD\""
    su --login -c "$AUTOCMD"
 fi
 
 # 新模块加入时在内核参数中加入 ldconfig
 if [ "$ldconfig" = "y" ]; then  
-    [[ -x /sbin/ldconfig ]] && /sbin/ldconfig
+    [[ -x /sbin/ldconfig ]] && /sbin/ldconfig >/dev/null
 fi
 
 generate_initial_config() {
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在初始化 /etc/X11/xorg.conf"
+			stat_busy "初始化 /etc/X11/xorg.conf"
 		else
 			stat_busy "Intilize /etc/X11/xorg.conf"
 		fi
@@ -78,14 +78,18 @@ fi
 
 debug_shell
 
-chmod 0440 /etc/sudoers
+chmod 0440 /etc/sudoers 2>&1 >/dev/null
+chmod 0644 /etc/passwd 2>&1 >/dev/null
+
+
 if [ "x$root" = "x" ]; then
 	if [ -x /usr/bin/update-desktop-database ]; then
 		update-desktop-database -q
 	fi
-	chown arch:users -R /home/arch
-	chown root:root -R /root
-	chmod 755 /etc
+	#usermod -g users -u 1001 -d /home/arch arch 2>&1 >/dev/null
+	chown arch:users -R /home/arch 2>&1 >/dev/null
+	chown root:root -R /root 2>&1 >/dev/null
+	chmod 755 /etc 2>&1 >/dev/null
 fi
 
 # VBOX虚拟机
@@ -103,5 +107,32 @@ fi
 if [ "x$session" != "x" ]; then
 	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/X11/xinit/xinitrc
 	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/skel/.xinitrc
-	startx
 fi
+
+# ALSA or OSS4 ?
+# 启动时会自动选择加载内核自带的声卡驱动模块
+if [ "$oss" = "y" -o "$oss4" = "y" ]; then
+	tar -czvpf /lib/modules/`uname -r`/kernel/sound /lib/modules/`uname -r`/kernel_sound_backup.tgz
+	rm -rf /lib/modules/`uname -r`/kernel/sound
+	depmod -a
+	/etc/rc.d/oss* start
+fi
+
+rm -f /etc/issue
+if [ "${msg_lang}" = "cn" ]; then
+	ln -sf /etc/issue.cn /etc/issue
+else
+	ln -sf /etc/issue.en /etc/issue
+fi
+
+NEW_BOOT_OPT=""
+if which ossinfo 2>/dev/null >/dev/null; then
+	NEW_BOOT_OPT="${NEW_BOOT_OPT} @oss4"
+fi
+if which cupsctl 2>/dev/null >/dev/null; then
+	NEW_BOOT_OPT="${NEW_BOOT_OPT} @cups"
+fi
+
+sed -i 's/^.*DAEMONS.*/DAEMONS=(syslog-ng hal @networkmanager ${NEW_BOOT_OPT})/' /etc/rc.conf 
+chmod -x /etc/rc.d/archlive
+su arch -l -c "/bin/sh --login -c /usr/bin/startx > /dev/null 2>/dev/null"

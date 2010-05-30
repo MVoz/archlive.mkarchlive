@@ -5,7 +5,7 @@
 . /etc/rc.d/functions
 
 if [ "${msg_lang}" = "cn" ]; then
-	stat_busy "正在解析 policykit权限设置"
+	stat_busy "解析 policykit权限设置"
 else
 	stat_busy "Parsing groups for policykit handling"
 fi

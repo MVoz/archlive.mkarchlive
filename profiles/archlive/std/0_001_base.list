@@ -79,7 +79,7 @@ jfsutils
 
 less
 
-xz-utils
+xz
 openssl
 libarchive
 
@@ -209,3 +209,4 @@ atop
 archlinux-installer
 libui-sh
 aif
+

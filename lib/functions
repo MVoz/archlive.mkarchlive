@@ -214,7 +214,7 @@ host_isnot_arch ()
    ARCH_HOST="n"
    host_pacman_version=""
    if [ -d /var/lib/pacman/local ]; then
-	if which pacman >/dev/null; then
+	if which pacman 2>/dev/null >/dev/null; then
 		ARCH_HOST="y"
 		host_pacman_version=$(pacman -V | grep "Pacman" | head -1 | tr -s " " | cut -d " " -f4)
 	fi
@@ -1019,7 +1019,7 @@ function mksquashfs_module () {
    [ -d ${1}/etc/fonts ] && chmod 755 ${1}/etc/fonts
    OPTION="-noappend ${OPTION}"
    if [ "${QUIET}" = "y" ]; then
-	   $MKSQUASHFS ${1} ${2} ${OPTION} | tee -a ${LOG} >/dev/null
+	   $MKSQUASHFS ${1} ${2} ${OPTION} >> ${LOG}
    else
 	$MKSQUASHFS ${1} ${2} ${OPTION} | tee -a ${LOG}
    fi

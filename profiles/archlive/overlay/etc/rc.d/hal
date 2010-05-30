@@ -12,7 +12,7 @@ case "$1" in
 		ck_daemon acpid && /etc/rc.d/acpid start
 	fi
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在启动 硬件抽象层HAL..."
+		stat_busy "启动 硬件抽象层HAL..."
 	else
 		stat_busy "Starting Hardware Abstraction Layer"
 	fi
@@ -38,7 +38,7 @@ case "$1" in
         ;;
     stop)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在关闭 硬件抽象层HAL..."
+		stat_busy "关闭 硬件抽象层HAL..."
 	else
 		stat_busy "Stopping Hardware Abstraction Layer"
 	fi

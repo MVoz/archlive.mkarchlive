@@ -90,7 +90,7 @@ fi
 echo > /proc/sys/kernel/hotplug
 
 if [ "${msg_lang}" = "cn" ]; then
-	stat_busy "正在启动 UDev服务..."
+	stat_busy "启动 UDev后台服务..."
 else
 	stat_busy "Starting UDev Daemon"
 fi
@@ -102,7 +102,7 @@ run_hook sysinit_udevlaunched
 # Trigger udev uevents
 if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在激活 UDev事件..."
+		stat_busy "激活 UDev事件..."
 	else
 		stat_busy "Triggering UDev uevents"
 	fi
@@ -115,9 +115,9 @@ fi
 if ! [ "$load_modules" = "off" ]; then
 	if [ -f /proc/modules ]; then
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在启动 UDev服务..."
+			stat_busy "载入 驱动模块..."
 		else
-			stat_busy "Starting UDev Daemon"
+			stat_busy "Loading Modules"
 		fi
 		for mod in "${MODULES[@]}"; do
 			if [ "$mod" = "${mod#!}" ]; then
@@ -131,7 +131,7 @@ fi
 # Wait for udev uevents
 if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在加载 UDev事件..."
+		stat_busy "等待 UDev事件加载完成..."
 	else
 		stat_busy "Waiting for UDev uevents to be processed"
 	fi
@@ -145,7 +145,7 @@ run_hook sysinit_udevsettled
 # bring up the loopback interface
 if [ -d /sys/class/net/lo ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在配置 网络回环接口..."
+		stat_busy "配置 网络回环接口..."
 	else
 		stat_busy "Bringing up loopback interface"
 	fi
@@ -160,7 +160,7 @@ fi
 # If necessary, find md devices and manually assemble RAID arrays
 if [ -f /etc/mdadm.conf -a "$(/bin/grep ^ARRAY /etc/mdadm.conf 2>/dev/null)" ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		status "正在激活 RAID整列"
+		status "激活 RAID整列"
 	else
 		status "Activating RAID arrays"
 	fi
@@ -172,7 +172,7 @@ if [ "$USELVM" = "yes" -o "$USELVM" = "YES" ]; then
 		# Kernel 2.6.x, LVM2 groups
 		/sbin/modprobe -q dm-mod 2>/dev/null
 		if [ "${msg_lang}" = "cn" ]; then
-			stat_busy "正在激活 LVM2 加密卷管理..."
+			stat_busy "激活 LVM2 加密卷管理..."
 		else
 			stat_busy "Activating LVM2 groups"
 		fi
@@ -190,7 +190,7 @@ fi
 if [ -f /etc/crypttab -a -n "$(/bin/grep -v ^# /etc/crypttab | /bin/grep -v ^$)" ]; then
 	/sbin/modprobe -q dm-mod 2>/dev/null
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在解锁 加密卷:"
+		stat_busy "解锁 加密卷:"
 	else
 		stat_busy "Unlocking encrypted volumes:"
 	fi
@@ -265,11 +265,11 @@ if [ -f /etc/crypttab -a -n "$(/bin/grep -v ^# /etc/crypttab | /bin/grep -v ^$)"
 fi
 
 if [ "${msg_lang}" = "cn" ]; then
-	status "正在挂载 Root分区为只读..."
+	status "挂载 Root分区为只读..."
 else
 	status "Mounting Root Read-only"
 fi
-/bin/mount -n -o remount,ro /
+/bin/mount -n -o remount,ro / 2>&1 >/dev/null
 
 FORCEFSCK=
 [ -f /forcefsck ] && FORCEFSCK="-- -f"
@@ -277,7 +277,7 @@ NETFS="nonfs,nonfs4,nosmbfs,nocifs,nocodafs,noncpfs,nosysfs,noshfs,nofuse,nofuse
 
 fsck_reboot() {
 	if [ "${msg_lang}" = "cn" ]; then
-		echo "正要自动重新启动系统 ..."
+		echo "自动重新启动系统 ..."
 	else
 		echo "Automatic reboot in progress..."
 	fi
@@ -289,7 +289,7 @@ fsck_reboot() {
 
 if [ -x /sbin/fsck ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在检查 文件系统..."
+		stat_busy "检查 文件系统..."
 	else
 		stat_busy "Checking Filesystems"
 	fi
@@ -330,11 +330,11 @@ if [ -x /sbin/fsck ]; then
 fi
 
 if [ "${msg_lang}" = "cn" ]; then
-	stat_busy "正在挂载 本地文件系统..."
+	stat_busy "挂载 本地文件系统..."
 else
 	stat_busy "Mounting Local Filesystems"
 fi
-/bin/mount -n -o remount,rw /
+/bin/mount -n -o remount,rw / 2>&1 >/dev/null
 : >| /etc/mtab
 
 # make sure / gets written to /etc/mtab
@@ -347,19 +347,19 @@ fi
 run_hook sysinit_premount
 
 # now mount all the local filesystems
-/bin/mount -a -t $NETFS -O no_netdev
+/bin/mount -a -t $NETFS -O no_netdev 2>&1 >/dev/null
 stat_done
 
 if [ "${msg_lang}" = "cn" ]; then
-	status "正在激活 交换分区..."
+	status "激活 交换分区..."
 else
 	status "Activating Swap"
 fi
-/sbin/swapon -a
+/sbin/swapon -a 2>&1 >/dev/null
 stat_done
 
 if [ "${msg_lang}" = "cn" ]; then
-	stat_busy "正在配置 系统时钟..."
+	stat_busy "配置 系统时钟..."
 else
 	stat_busy "Configuring System Clock"
 fi
@@ -387,7 +387,7 @@ stat_done
 RANDOM_SEED=/var/lib/misc/random-seed
 if [ -f $RANDOM_SEED ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在初始 随机种子..."
+		stat_busy "初始 随机种子..."
 	else
 		stat_busy "Initializing Random Seed"
 	fi
@@ -396,7 +396,7 @@ if [ -f $RANDOM_SEED ]; then
 fi
 
 if [ "${msg_lang}" = "cn" ]; then
-	stat_busy "正在删除 多余文件..."
+	stat_busy "删除 多余文件..."
 else
 	stat_busy "Removing Leftover Files"
 fi
@@ -417,7 +417,7 @@ stat_done
 
 if [ "$HOSTNAME" != "" ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		status "正在设置 主机名: $HOSTNAME" 
+		status "设置 主机名: $HOSTNAME" 
 	else
 		status "Setting Hostname: $HOSTNAME"
 	fi
@@ -428,7 +428,7 @@ fi
 [ -f /etc/conf.d/nisdomainname ] && . /etc/conf.d/nisdomainname
 if [ "$NISDOMAINNAME" != "" ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		status "正在设置 NIS域名: $NISDOMAINNAME"
+		status "设置 NIS域名: $NISDOMAINNAME"
 	else
 		status "Setting NIS Domain Name: $NISDOMAINNAME"
 	fi
@@ -436,7 +436,7 @@ if [ "$NISDOMAINNAME" != "" ]; then
 fi
 
 if [ "${msg_lang}" = "cn" ]; then
-	status "正在更新 模块依赖关系..." 
+	status "更新 模块依赖关系..." 
 else
 	status "Updating Module Dependencies"
 fi
@@ -448,7 +448,7 @@ fi
 # Set user defined locale
 [ -z "$LOCALE" ] && LOCALE="en_US"
 if [ "${msg_lang}" = "cn" ]; then
-	stat_busy "正在设置 语言地区信息: $LOCALE"
+	stat_busy "设置 语言地区信息: $LOCALE"
 else
 	stat_busy "Setting Locale: $LOCALE"
 fi
@@ -457,7 +457,7 @@ stat_done
 
 if echo "$LOCALE" | /bin/grep -qi utf ; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在设置 控制台为UTF-8模式..."
+		stat_busy "设置 控制台为UTF-8模式..."
 	else
 		stat_busy "Setting Consoles to UTF-8 mode"
 	fi
@@ -473,7 +473,7 @@ if echo "$LOCALE" | /bin/grep -qi utf ; then
 	stat_done
 	if [ -n "$KEYMAP" ]; then
 		if [ "${msg_lang}" = "cn" ]; then
-			status "正在设置 键盘布局: $KEYMAP"
+			status "设置 键盘布局: $KEYMAP"
 		else
 			status "Loading Keyboard Map: $KEYMAP"
 		fi
@@ -481,7 +481,7 @@ if echo "$LOCALE" | /bin/grep -qi utf ; then
 	fi
 else
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在设置 控制台为传统模式"
+		stat_busy "设置 控制台为传统模式"
 	else
 		stat_busy "Setting Consoles to legacy mode"
 	fi
@@ -495,7 +495,7 @@ else
 	stat_done
 	if [ -n "$KEYMAP" ]; then
 		if [ "${msg_lang}" = "cn" ]; then
-			status "正在设置 键盘布局: $KEYMAP" 
+			status "设置 键盘布局: $KEYMAP" 
 		else
 			status "Loading Keyboard Map: $KEYMAP"
 		fi
@@ -505,7 +505,7 @@ fi
 
 if [ -n "$CONSOLEFONT" ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在加载 控制台字体: $CONSOLEFONT"
+		stat_busy "加载 控制台字体: $CONSOLEFONT"
 	else
 		stat_busy "Loading Console Font: $CONSOLEFONT"
 	fi
@@ -535,7 +535,7 @@ fi
 # Adding persistent network/cdrom generated rules
 if [ -f "/dev/.udev/tmp-rules--70-persistent-cd.rules" ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在保存 cdrom挂载规则: $CONSOLEFONT"
+		stat_busy "保存 cdrom挂载规则: $CONSOLEFONT"
 	else
 		stat_busy "Adding persistent cdrom udev rules"
 	fi
@@ -544,7 +544,7 @@ if [ -f "/dev/.udev/tmp-rules--70-persistent-cd.rules" ]; then
 fi
 if [ -f "/dev/.udev/tmp-rules--70-persistent-net.rules" ]; then
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在保存 网络挂载规则: $CONSOLEFONT"
+		stat_busy "保存 网络挂载规则: $CONSOLEFONT"
 	else
 		stat_busy "Adding persistent network udev rules"
 	fi

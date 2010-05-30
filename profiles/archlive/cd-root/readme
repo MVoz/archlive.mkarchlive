@@ -36,4 +36,7 @@ splash                启用plymouth启动界面，如果不需要则删除此�
 cn                    启动过程中显示中文提示信息，无此参数则显示英文信息
 
 rootcopy		启动时装载archlive下rootcopy目录
+
 changes		用于保存修改
+
+oss		用oss4声音驱动，而不用内核自带的oss/alsa

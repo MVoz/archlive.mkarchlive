@@ -6,6 +6,9 @@
 # Author: Tomas M. <http://www.linux-live.org>
 #
 
+
+export BOOT_LOG="/var/log/live_boot.log"
+
 RST="\033[1;0m"
 
 # regular colors
@@ -183,7 +186,7 @@ echolog()
 # store given text in /var/log/livedbg
 log()
 {
-   echo "$@" 2>/dev/null >>/var/log/livedbg
+   echo "$@" 2>/dev/null >>${BOOT_LOG}
 }
 
 # show information about the debug shell
@@ -258,7 +261,7 @@ allow_only_root()
 cmdline_parameter()
 {
    debug_log "cmdline_parameter" "$*"
-   log "searching for bootparam: $1"
+   log "            searching for bootparam: $1"
    egrep -o "(^|[[:space:]])$1([[:space:]]|\$)" /proc/cmdline | tr -d " " | tail -n 1
 }
 
@@ -269,7 +272,7 @@ cmdline_parameter()
 cmdline_value()
 {
    debug_log "cmdline_value" "$*"
-   log "searching for bootparam value: $1"
+   log "            searching for bootparam value: $1"
    egrep -o "(^|[[:space:]])$1=[^[:space:]]+" /proc/cmdline | cut -d "=" -f 2- | tail -n 1
 }
 
@@ -474,10 +477,10 @@ fs_options()
    fi
 
    if [ "$1" = "fuse.ntfs" -o "$1" = "ntfs" ]; then
-      echo -n ",gid=100,fmask=0113,dmask=0002"
-      if [ "$IOCHARSET" ]; then
-         echo ",locale=$IOCHARSET"
-      fi
+      echo -n ",gid=100,fmask=0113,dmask=0002,utf8"
+#      if [ "$IOCHARSET" ]; then
+#         echo ",locale=$IOCHARSET"
+#      fi
    fi
 
    if [ "$1" = "ntfs-3g" ]; then
@@ -540,36 +543,53 @@ mount_device()
    if [ -d "$DEV" ]; then OPTIONS="$OPTIONS,rbind"; fi
    if [ "$3" ]; then OPTIONS="$OPTIONS,$3"; fi
    OPTIONS=$(echo "$OPTIONS" | sed -r "s/^,+//")
+   OPTIONS="-o $OPTIONS"
+
+   debug_log "OPTIONS=$OPTIONS"
 
    if [ "$FS" = "-t ntfs-3g" ]; then
-      ntfsmount "$DEV" "$2" -o $OPTIONS >/dev/null 2>&1
+      debug_log "ntfsmount "$DEV" "$2" $OPTIONS"
+      ntfsmount "$DEV" "$2" $OPTIONS >/dev/null 2>&1
       ERR=$?
    else
-      mount -n -o $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
+      debug_log "mount $OPTIONS $FS "$DEV" "$2""
+      mount $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
       ERR=$?
    fi
 
    # not enough loop devices? try to create one.
    if [ $ERR -eq 2 ]; then
+       debug_log "没有足够loop设备，尝试创建并重新挂载"
+       debug_log "not enough loop devices? try to create one."
+
        LOOPDEV=$(mknod_next_loop_dev)
        OPTIONS=$(echo "$OPTIONS" | sed -r "s/,loop//g")
        losetup "$LOOPDEV" "$DEV" 2>/dev/null # busybox's losetup doesn't support -r
        if [ $? -ne 0 ]; then
           losetup -r "$LOOPDEV" "$DEV" 2>/dev/null # force read-only in case of error
        fi
-       mount -n -o $OPTIONS $FS "$LOOPDEV" "$2" >/dev/null 2>&1
+       debug_log "OPTIONS=$OPTIONS"
+       debug_log "mount $OPTIONS $FS "$LOOPDEV" "$2""
+       mount $OPTIONS $FS "$LOOPDEV" "$2" >/dev/null 2>&1
        ERR=$?
    fi
 
-   debug_log "OPTIONS=$OPTIONS"
 
    # if nothing works, try to force read-only mount
    if [ $ERR -ne 0 ]; then
-       mount -n -r -o $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
+       debug_log "以上办法都无法挂载，尝试强行只读挂载."
+       debug_log "None of above actions works! try to force read-only mount"
+       debug_log "mount -r $OPTIONS $FS "$DEV" "$2""
+       mount -r $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
        ERR=$?
    fi
 
    if [ $ERR -ne 0 ]; then rmdir $2 2>/dev/null; fi
+
+   if [ $ERR -eq 0 ]; then
+	debug_log "$1 成功挂载到 $2"
+	debug_log "$1 mounted to $2"
+   fi
    return $ERR
 }
 
@@ -907,7 +927,7 @@ find_filepath()
    if [ $? -eq 0 ]; then
       PRESERVE="true"
    else
-      mount_device $1 $DIR ro
+      mount_device $1 $DIR rw
       if [ $? -ne 0 ]; then rmdir $DIR 2>/dev/null; return 1; fi
       PRESERVE=""
    fi

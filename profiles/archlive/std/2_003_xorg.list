@@ -143,23 +143,6 @@ xdg-utils
 
 startup-notification
 # Monitor and display application startup   0.14MB
-
-hicolor-icon-theme
-# Freedesktop.org Hicolor icon theme  1.26MB
-#
-#tango-icon-theme
-# The Tango Desktop Project exists to create a consistent user experience   13.03MB
-#tango-icon-theme-extras
-# Extra icons for Tango  2.48MB
-#gnome-icon-theme
-# Default icon theme for GNOME2
-### gnome-icon-theme 依赖于以下包，总 21.30MB
-
-#perl-xml-simple
-# Simple XML parser for perl   0.17MB
-#
-#icon-naming-utils
-#Maps the new names of icons for Tango to the legacy names used by the GNOME and KDE desktops.  0.08MB
 #
 xdialog
 #A drop-in replacement for the 'dialog' or 'cdialog' programs  0.91MB
@@ -259,11 +242,35 @@ menu-cache
 lxappearance
 openbox
 pcmanfm
-
+leafpad
 gpicview
 
 #libfm
 pcmanfm2
+
+xcompmgr
+
+#icon-naming-utils
+#Maps the new names of icons for Tango to the legacy names used by the GNOME and KDE desktops.  0.08MB
+#
+hicolor-icon-theme
+# Freedesktop.org Hicolor icon theme  1.26MB
+#
+#tango-icon-theme
+# The Tango Desktop Project exists to create a consistent user experience   13.03MB
+#tango-icon-theme-extras
+# Extra icons for Tango  2.48MB
+#gnome-icon-theme
+# Default icon theme for GNOME2
+### gnome-icon-theme 依赖于以下包，总 21.30MB
+
+gtk-engine-equinox
+# A heavily modified version of the beautiful Aurora engine
+gtk-theme-equinox
+# gtk theme for equinox engine
+
+vattery
+# aur 包， archlive编译
 
 #rox
 # A small and fast file manager which can optionally manage the desktop background and panels.

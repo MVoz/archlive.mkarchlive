@@ -5,7 +5,7 @@ install ()
     MODULES=""
     BINARIES=""
     FILES=" /etc/udev/udev.conf"
-    SCRIPT="udev"
+    #SCRIPT="udev"
     add_binary /sbin/udevd
     add_binary /sbin/udevadm
     for rules in 50-firmware.rules 50-udev-default.rules 60-persistent-storage.rules 80-drivers.rules; do

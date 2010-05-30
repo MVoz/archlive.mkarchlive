@@ -4,7 +4,7 @@
 case "$1" in
  start)
 	if [ "${msg_lang}" = "cn" ]; then
-		stat_busy "正在启动 OSS 开源驱动"
+		stat_busy "启动 OSS 开源驱动"
 	else
 		stat_busy "Starting OSS/Open source driver"
 	fi
@@ -26,7 +26,7 @@ case "$1" in
    ;;
  stop)
    if [ "${msg_lang}" = "cn" ]; then
-   	stat_busy "正在保存 OSS 设置"
+   	stat_busy "保存 OSS 设置"
    else
    	stat_busy "Saving OSS mixer"
    fi
@@ -42,7 +42,7 @@ case "$1" in
      rmmod \"cuckoo\"
    fi
    if [ "${msg_lang}" = "cn" ]; then
-   	stat_busy "正在关闭 OSS 开源驱动"
+   	stat_busy "关闭 OSS 开源驱动"
    else
    	stat_busy "Stopping OSS/Open source driver"
    fi
