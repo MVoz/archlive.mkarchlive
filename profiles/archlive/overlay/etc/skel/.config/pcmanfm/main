@@ -1,0 +1,13 @@
+[General]
+show_hidden_files=1
+view_mode=2
+terminal=lxterminal
+
+[Window]
+width=1276
+height=749
+splitter_pos=160
+maximized=0
+
+[Desktop]
+[Interface]

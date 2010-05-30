@@ -19,10 +19,4 @@ exec /etc/X11/xinit/xinitrc.openbox
 #exec /etc/X11/xinit/xinitrc.lxde
 #exec /etc/X11/xinit/xinitrc.icewm
 #exec /etc/X11/xinit/xinitrc.awesome
-#exec /etc/X11/xinit/xinitrc.gnome
-#exec /etc/X11/xinit/xinitrc.kde
-#exec ck-launch-session fvwm2
-#exec ck-launch-session startkde
-#exec ck-launch-session startlxde
-#exec /etc/X11/xinit/xinitrc.openbox
-#exec ck-launch-session gnome-session
+#exec fvwm2

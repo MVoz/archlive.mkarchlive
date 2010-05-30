@@ -1,0 +1,10 @@
+
+[GTK]
+sNet/ThemeName=Mac4Lin_GTK_v1.0_RC
+sNet/IconThemeName=Mac4Lin_Icons_v1.0_RC
+sGtk/FontName=华文黑体 10
+iGtk/ToolbarStyle=3
+sGtk/FileChooserBackend=
+iGtk/ButtonImages=1
+iGtk/MenuImages=1
+iXft/Antialias=1
