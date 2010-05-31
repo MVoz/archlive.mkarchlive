@@ -152,6 +152,7 @@
     <!--
      ######################################################################################
   -->
+
     <keybind key="Print">
       <action name="Execute">
         <execute>scrot -b -d 3 '/home/arch/Desktop/%Y%m%d_%H%M%S_$wx$h.png' -e 'gpicview $f'</execute>
@@ -160,6 +161,8 @@
     <keybind key="A-Print">
       <action name="Execute">
         <execute>scrot -b -s '/home/arch/Desktop/%Y%m%d_%H%M%S_$wx$h.png' -e 'gpicview $f'</execute>
+      </action>
+    </keybind>
 
     <!--
     <keybind key="A-Print">
