@@ -1,4 +1,3 @@
-
 export XAUTHORITY="/tmp/${USER}.Xauthority"
 export RXVT_SOCKET="/tmp/.rxvtc-unicode-`uname -n`"
 export GTK2_RC_FILES=$HOME/.gtkrc-2.0
@@ -27,6 +26,7 @@ pathmunge () {
 
 USE_IBUS=0   #use ibus input 
 USE_SCIM=0   #use scim input
+USE_YONG=0
 USE_FCITX=1
 #=======================================
 if [ ${USE_SCIM} -eq 1 ] ;then
@@ -47,7 +47,16 @@ if [ ${USE_IBUS} -eq 1 ] ;then
     #ibus-deamon&
     #ibus&
 fi
-
+#=======================================
+if [ ${USE_YONG} -eq 1 ] ;then
+    export XIM=yong
+    export XMODIFIERS="@im=yong"
+    export XIM_PROGRAM="/usr/bin/yong"
+    export GTK_IM_MODULE="xim"
+    export QT_IM_MODULE="xim"
+    export XIM_ARGS="-d"
+fi
+#=======================================
 if [ ${USE_FCITX} -eq 1 ] ;then
     export XIM="fcitx"
     export XMODIFIERS="@im=fcitx"
@@ -56,25 +65,26 @@ if [ ${USE_FCITX} -eq 1 ] ;then
     export QT_IM_MODULE="fcitx"
     export XIM_ARGS="-d"
 fi
+#=======================================
 
 function myntp() {
-    sudo ntpdate -u clock.nc.fukuoka-u.ac.jp
-    #sudo ntpdate -u ntp.ubuntu.com
-    #sudo ntpdate -u ntp.ubuntu.com.cn
+    sudo ntpdate -u clock.nc.fukuoka-u.ac.jp &>/dev/null
+    #sudo ntpdate -u ntp.ubuntu.com &>/dev/null
+    #sudo ntpdate -u ntp.ubuntu.com.cn &>/dev/null
 
     if [ "0" = $? ] ; then
         echo "ntpdate update ok"
-        sudo hwclock --systohc
-        #sudo hwclock -w
+        sudo hwclock --systohc &>/dev/null
+        #sudo hwclock -w &>/dev/null
         if [ "0" = $? ] ; then
             echo "hwclock --sytohc OK"
         else
             echo "hwclock --sytohc OK"
         fi
     else
-        sudo ntpdate -u ntp.ubuntu.com
+        sudo ntpdate -u ntp.ubuntu.com &>/dev/null
         if [ "0" = $? ] ; then
-            sudo hwclock --systohc
+            sudo hwclock --systohc &>/dev/null
         else
             echo "ntpdate update error"
         fi
