@@ -1,9 +1,0 @@
-[Global]
-ShowFrame=false
-Rows=1
-
-[Applications]
-wicd-client.py=false
-xfce4-power-manager=false
-orage=false
-

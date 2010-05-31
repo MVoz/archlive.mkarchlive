@@ -8,6 +8,21 @@ if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
        eval `dbus-launch --sh-syntax --exit-with-session`
 fi
 
+USE_IBUS=1
+#=======================================
+if [ ${USE_IBUS} -eq 1 ] ;then
+    export XMODIFIERS="@im=ibus"
+    export GTK_IM_MODULE="ibus"
+    export QT_IM_MODULE="ibus"
+    export XIM=ibus
+    export XIM_PROGRAM=/usr/bin/ibus-daemon
+    export XIM_ARGS="-d -x"
+    pkill -9 ibus-daemon
+    ibus-daemon -d -x 
+    #ibus&
+fi
+#=======================================
+
 # Make GTK apps look and behave how they were set up in the gnome config tools
 [ -f /usr/libexec/gnome-settings-daemon ] && eval `/usr/libexec/gnome-settings-daemon & >/dev/null 2>&1` 
 
