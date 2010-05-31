@@ -135,4 +135,8 @@ fi
 
 sed -i 's/^.*DAEMONS.*/DAEMONS=(syslog-ng hal @networkmanager ${NEW_BOOT_OPT})/' /etc/rc.conf 
 chmod -x /etc/rc.d/archlive
-su arch -l -c "/bin/sh --login -c /usr/bin/startx > /dev/null 2>/dev/null"
+
+# 自动登录到默认的 DE
+if [ "$nox" != "y" ]; then
+	su arch -l -c "/bin/sh --login -c /usr/bin/startx > /dev/null 2>/dev/null"
+fi
