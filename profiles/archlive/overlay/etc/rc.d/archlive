@@ -78,18 +78,18 @@ fi
 
 debug_shell
 
-chmod 0440 /etc/sudoers 2>&1 >/dev/null
-chmod 0644 /etc/passwd 2>&1 >/dev/null
+chmod 0440 /etc/sudoers &>/dev/null
+chmod 0644 /etc/passwd &>/dev/null
 
 
 if [ "x$root" = "x" ]; then
 	if [ -x /usr/bin/update-desktop-database ]; then
 		update-desktop-database -q
 	fi
-	#usermod -g users -u 1001 -d /home/arch arch 2>&1 >/dev/null
-	chown arch:users -R /home/arch 2>&1 >/dev/null
-	chown root:root -R /root 2>&1 >/dev/null
-	chmod 755 /etc 2>&1 >/dev/null
+	#usermod -g users -u 1001 -d /home/arch arch &>/dev/null
+	chown arch:users -R /home/arch &>/dev/null
+	chown root:root -R /root &>/dev/null
+	chmod 755 /etc &>/dev/null
 fi
 
 # VBOX虚拟机

@@ -94,7 +94,7 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	stat_busy "Starting UDev Daemon"
 fi
-/sbin/udevd --daemon 2>&1 >/dev/null
+/sbin/udevd --daemon &>/dev/null
 stat_done
 
 run_hook sysinit_udevlaunched
@@ -106,8 +106,8 @@ if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
 	else
 		stat_busy "Triggering UDev uevents"
 	fi
-	/sbin/udevadm control --property=STARTUP=1 2>&1 >/dev/null
-	/sbin/udevadm trigger 2>&1 >/dev/null
+	/sbin/udevadm control --property=STARTUP=1 &>/dev/null
+	/sbin/udevadm trigger &>/dev/null
 	stat_done
 fi
 
@@ -269,7 +269,7 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	status "Mounting Root Read-only"
 fi
-/bin/mount -n -o remount,ro / 2>&1 >/dev/null
+/bin/mount -n -o remount,ro / &>/dev/null
 
 FORCEFSCK=
 [ -f /forcefsck ] && FORCEFSCK="-- -f"
@@ -334,7 +334,7 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	stat_busy "Mounting Local Filesystems"
 fi
-/bin/mount -n -o remount,rw / 2>&1 >/dev/null
+/bin/mount -n -o remount,rw / &>/dev/null
 : >| /etc/mtab
 
 # make sure / gets written to /etc/mtab
@@ -347,7 +347,7 @@ fi
 run_hook sysinit_premount
 
 # now mount all the local filesystems
-/bin/mount -a -t $NETFS -O no_netdev 2>&1 >/dev/null
+/bin/mount -a -t $NETFS -O no_netdev &>/dev/null
 stat_done
 
 if [ "${msg_lang}" = "cn" ]; then
@@ -355,7 +355,7 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	status "Activating Swap"
 fi
-/sbin/swapon -a 2>&1 >/dev/null
+/sbin/swapon -a &>/dev/null
 stat_done
 
 if [ "${msg_lang}" = "cn" ]; then
