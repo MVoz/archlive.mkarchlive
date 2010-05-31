@@ -262,4 +262,6 @@ parted
 wvdial
 
 codecs
+gdisk
+tmux
 

@@ -31,3 +31,5 @@ alias tee='tee -a'
 
 alias ls='ls --color=auto'
 echo -e "\033[1;33mWelcome to Archlive!\033[1;0m"
+#set -o vi
+#set -o emacs

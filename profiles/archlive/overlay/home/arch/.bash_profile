@@ -57,3 +57,27 @@ if [ ${USE_FCITX} -eq 1 ] ;then
     export XIM_ARGS="-d"
 fi
 
+function myntp() {
+    sudo ntpdate -u clock.nc.fukuoka-u.ac.jp
+    #sudo ntpdate -u ntp.ubuntu.com
+    #sudo ntpdate -u ntp.ubuntu.com.cn
+
+    if [ "0" = $? ] ; then
+        echo "ntpdate update ok"
+        sudo hwclock --systohc
+        #sudo hwclock -w
+        if [ "0" = $? ] ; then
+            echo "hwclock --sytohc OK"
+        else
+            echo "hwclock --sytohc OK"
+        fi
+    else
+        sudo ntpdate -u ntp.ubuntu.com
+        if [ "0" = $? ] ; then
+            sudo hwclock --systohc
+        else
+            echo "ntpdate update error"
+        fi
+    fi
+}
+
