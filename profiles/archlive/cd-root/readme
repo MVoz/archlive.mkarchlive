@@ -3,6 +3,8 @@
 1、Archlive基于GPL发布，修改后必须基于GPL开放，否则必须征得本人同意。
 2、制作自己的Archlive 工具 http://mkarchlive.archlive.googlecode.com/hg 
 3、Archlive 启动可用参数
+nox		不启动图形界面
+		默认arch用户自动登录到openbox环境
 ramsize=60%      Archlive文件系统启动后占用内存大小(划分部分内存作为硬盘使用)
 sgn=[]           查找Archlive基本文件夹base位置的标的，默认archlive.list （Archlive的软件清单）
 from=[]          Archlive 数据模块文件夹base相对设备根目录的位置(通过$sgn指定的文件来判断位置，此文件跟base option changes modules等文件夹放在同一文件夹下)
