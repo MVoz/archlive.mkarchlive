@@ -611,6 +611,8 @@ function pac_remove () {
 }
 
 function rm_tmp () {
+
+	tmp="$@"
 	if [ "x$tmp" != "x" ]; then
 		echo $tmp >>${CLEANED_LIST}
 		rm -rf $tmp
@@ -625,40 +627,47 @@ function pac_clean () {
    [ -f ${CLEANED_LIST} ] && rm -f ${CLEANED_LIST}
 
    plain -n "清理aufs文件系统临时文件.wh.* " | tee -a ${CLEANED_LIST}
-   for tmp in "$(find ${MODULEDIR} -type f -name .wh.* )"; do rm_tmp; done
+   for tmp in "$(find ${MODULEDIR} -type f -name .wh.* )"; do rm_tmp $tmp; done
    green "完成!" | tee -a ${CLEANED_LIST}
 
    if [ "${CMD_NAME}" != "solemodules" ]; then
 	plain -n "删除为宿主系统创建的内核镜像文件..." | tee -a ${CLEANED_LIST}
 	default_image=$(grep "default_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
 	fallback_image=$(grep "fallback_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
-	for tmp in ${default_image} ${fallback_image}; do rm_tmp; done
+	for tmp in ${default_image} ${fallback_image}; do rm_tmp $tmp; done
 	green "完成!" | tee -a ${CLEANED_LIST}
    fi
 
    plain -n "删除pamcan产生的垃圾文件..." | tee -a ${CLEANED_LIST}
-   for tmp in "$(find ${MODULEDIR} -name *.pacnew -name *.pacsave -name *.pacorig)"; do rm_tmp; done
+   for tmp in "$(find ${MODULEDIR} -name *.pacnew -name *.pacsave -name *.pacorig)"; do rm_tmp $tmp; done
    green "完成!" | tee -a ${CLEANED_LIST}
 
    plain -n "删除指定的文件夹..." | tee -a ${CLEANED_LIST}
    kill_dirs="dev var/cache/man var/cache/pacman var/log/* var/mail tmp/* initrd ${DELDIR}"
    for tmp_dir in ${kill_dirs}; do
 	for mod in ${MODULES}; do
-		tmp=${MODULEDIR}/${mod}/${tmp_dir}
-		rm_tmp
+		rm_tmp ${MODULEDIR}/${mod}/${tmp_dir}
 	done
    done
    green "完成!" | tee -a ${CLEANED_LIST}
 
    plain -n "删除图标缓存文件..." | tee -a ${CLEANED_LIST}
-   for tmp in "$(find ${MODULEDIR} -type f -name *.cache)"; do rm_tmp; done
+   for tmp in "$(find ${MODULEDIR} -type f -name *.cache)"; do rm_tmp $tmp; done
    green "完成!" | tee -a ${CLEANED_LIST}
 
    if [ "${CUT_LOCALE}" = "y" ]; then
-	plain -n "删除${REMAIN_LOCALE}外的语言文件、帮助文件、X语言文件..." | tee -a ${CLEANED_LIST}
+	plain "删除${REMAIN_LOCALE}外的语言文件、帮助文件、X语言文件..." | tee -a ${CLEANED_LIST}
 	for tmpdir in $(find ${MODULEDIR} -type d -name "locale"); do
 		[ "x$(ls $tmpdir)" = "x" ] && continue
-		for tmp in "$(find $tmpdir/* -maxdepth 0 -type d | grep -v "[${REMAIN_LOCALE}]$")"; do rm_tmp; done
+		find $tmpdir/* -maxdepth 0 -type d >/tmp/locale_file_list
+		cat /tmp/locale_file_list  | while read tmp; do
+			[ "x$tmp" = "x" ] && continue
+			keep="n"
+			for i in ${REMAIN_LOCALE}; do
+				case $tmp in */$i*) keep="y" && break;; esac
+			done
+			[ "$keep" != "y" ] && rm_tmp $tmp
+		done
 	done
    	green "完成!" | tee -a ${CLEANED_LIST}
    fi
