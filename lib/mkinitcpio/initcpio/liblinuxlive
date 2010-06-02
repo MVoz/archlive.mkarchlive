@@ -499,7 +499,7 @@ device_filesystem()
 
    #if [ -e /usr/bin/ntfsmount ]; then NTFS="fuse.ntfs"; else NTFS="ntfs-3g"; fi
    if [ -e ntfs-3g ]; then NTFS="ntfs-3g"; else NTFS="ntfs"; fi
-   /sbin/blkid -s TYPE "$1" -o value | sed "s/msdos/vfat/" | sed "s/ntfs/$NTFS/"
+   blkid -s TYPE "$1" -o value | sed "s/msdos/vfat/" | sed "s/ntfs/$NTFS/"
 }
 
 # tell us if the given filesystem is supported
@@ -1079,9 +1079,9 @@ udev_start_hotplug()
 	echolog "Creating /dev entries for block devices"
    fi
    echo > /proc/sys/kernel/hotplug
-   /sbin/udevd --daemon #Starting UDev Daemon
-   /sbin/udevadm trigger #"Triggering UDev uevents"
-   echo /sbin/udevd > /proc/sys/kernel/hotplug # use udevd as a hotplug handler
+   udevd --daemon #Starting UDev Daemon
+   udevadm trigger #"Triggering UDev uevents"
+   echo udevd > /proc/sys/kernel/hotplug # use udevd as a hotplug handler
 }
 
 # Modprobe kernel modules needed for the LiveCD
@@ -1120,7 +1120,7 @@ modprobe_usb_modules()
    # skip module loading if nohotplug bootparam is present
    if [ "$(cmdline_parameter nohotplug)" ]; then return 0; fi
 
-   LSPCI=$(/sbin/lspci -v | grep -i prog-if)
+   LSPCI=$(lspci -v | grep -i prog-if)
    if [ "$(echo $LSPCI | egrep -i [eou]hci)" = "" ]; then
       return 0
    fi
@@ -1233,7 +1233,7 @@ mount_cifs()
    if [ "x$user" != "x" ]; then
 	option="$option,username=$user,password=$pass"
    fi
-   /sbin/mount.cifs $1 $2 $option
+   mount.cifs $1 $2 $option
    if [ $? -eq 0 ]; then export DATA="$2"; else export DATA=""; fi
 }
 
