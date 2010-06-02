@@ -10,29 +10,31 @@
     <focusNew>yes</focusNew>
     <!-- always try to focus new windows when they appear. other rules do
        apply -->
+    <followMouse>no</followMouse>
+    <!-- move focus to a window when you move the mouse into it -->
     <focusLast>yes</focusLast>
     <!-- focus the last used window when changing desktops, instead of the one
        under the mouse pointer. when followMouse is enabled -->
-    <followMouse>no</followMouse>
-    <!-- move focus to a window when you move the mouse into it -->
+    <underMouse>no</underMouse>
+    <!-- move focus under the mouse, even when the mouse is not moving -->
     <focusDelay>200</focusDelay>
     <!-- when followMouse is enabled, the mouse must be inside the window for
        this many milliseconds (1000 = 1 sec) before moving focus to it -->
     <raiseOnFocus>no</raiseOnFocus>
     <!-- when followMouse is enabled, and a window is given focus by moving the
        mouse into it, also raise the window -->
-    <underMouse>no</underMouse>
   </focus>
   <placement>
     <policy>Smart</policy>
     <!-- 'Smart' or 'UnderMouse' -->
     <center>yes</center>
+    <!-- whether to place windows in the center of the free area found or
+       the top left corner -->
     <monitor>Any</monitor>
   </placement>
   <theme>
     <name>Onyx</name>
-    <titleLayout>NSDLIMC</titleLayout>
-    <!--<titleLayout>CIMLDSN</titleLayout>-->
+    <titleLayout>CIMLDSN</titleLayout>
     <!--
       avaible characters are NDSLIMC, each can occur at most once.
       N: window icon
@@ -42,24 +44,20 @@
       C: close
       S: shade (roll up/down)
       D: omnipresent (on all desktops).
-     
-      Tahoma
-      Liberation Sans
-      Verdana
   -->
     <keepBorder>yes</keepBorder>
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
-      <name>Verdana</name>
+      <name>Droid Sans Fallback</name>
       <size>10</size>
       <!-- font size in points -->
-      <weight>Normal</weight>
+      <weight>Bold</weight>
       <!-- 'bold' or 'normal' -->
       <slant>Normal</slant>
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveWindow">
-      <name>Verdana</name>
+      <name>Droid Sans Fallback</name>
       <size>10</size>
       <!-- font size in points -->
       <weight>Normal</weight>
@@ -68,8 +66,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="MenuHeader">
-      <name>Verdana</name>
-      <size>10</size>
+      <name>Droid Sans Fallback</name>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -77,8 +75,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="MenuItem">
-      <name>Verdana</name>
-      <size>10</size>
+      <name>Droid Sans Fallback</name>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -86,8 +84,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="OnScreenDisplay">
-      <name>Verdana</name>
-      <size>10</size>
+      <name>Droid Sans Fallback</name>
+      <size>9</size>
       <!-- font size in points -->
       <weight>Normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -104,17 +102,17 @@
 
        use obconf if you want to change these without having to log out
        and back in -->
-    <number>6</number>
+    <number>4</number>
     <firstdesk>1</firstdesk>
     <names>
-      <name>Desktop 1</name>
-      <name>Desktop 2</name>
-      <name>Desktop 3</name>
-      <name>Desktop 4</name>
-      <name>Desktop 5</name>
-      <name>Desktop 6</name>
+      <name>春</name>
+      <name>夏</name>
+      <name>秋</name>
+      <name>冬</name>
     </names>
     <popupTime>875</popupTime>
+    <!-- The number of milliseconds to show the popup for when switching
+       desktops.  Set this to 0 to disable the popup. -->
   </desktops>
   <resize>
     <drawContents>yes</drawContents>
@@ -127,19 +125,28 @@
       <y>0</y>
     </popupFixedPosition>
   </resize>
+  <!-- You can reserve a portion of your screen where windows will not cover when
+     they are maximized, or when they are initially placed.
+     Many programs reserve space automatically, but you can use this in other
+     cases. -->
+  <margins>
+    <top>0</top>
+    <bottom>0</bottom>
+    <left>0</left>
+    <right>0</right>
+  </margins>
   <dock>
     <position>TopLeft</position>
-    <!-- <position>Top</position> -->
     <!-- (Top|Bottom)(Left|Right|)|Top|Bottom|Left|Right|Floating -->
     <floatingX>0</floatingX>
     <floatingY>0</floatingY>
-    <noStrut>yes</noStrut>
+    <noStrut>no</noStrut>
     <stacking>Above</stacking>
     <!-- 'Above', 'Normal', or 'Below' -->
-    <direction>Horizontal</direction>
+    <direction>Vertical</direction>
     <!-- 'Vertical' or 'Horizontal' -->
-    <autoHide>yes</autoHide>
-    <hideDelay>500</hideDelay>
+    <autoHide>no</autoHide>
+    <hideDelay>300</hideDelay>
     <!-- in milliseconds (1000 = 1 second) -->
     <showDelay>300</showDelay>
     <!-- in milliseconds (1000 = 1 second) -->
@@ -147,12 +154,139 @@
     <!-- 'Left', 'Middle', 'Right' -->
   </dock>
   <keyboard>
-    <chainQuitKey>C-g</chainQuitKey>
-    <!-- Keybindings for desktop switching -->
-    <!--
-     ######################################################################################
-  -->
+    <!-- Keybindings for windows -->
+    <keybind key="A-Escape">
+      <action name="Lower"/>
+      <action name="FocusToBottom"/>
+      <action name="Unfocus"/>
+    </keybind>
+    <keybind key="A-space">
+      <action name="ShowMenu">
+        <menu>client-menu</menu>
+      </action>
+    </keybind>
+    <!--Switch Windows-->
+    <keybind key="A-Tab">
+      <action name="NextWindow"/>
+    </keybind>
+    <keybind key="A-S-Tab">
+      <action name="PreviousWindow"/>
+    </keybind>
+    <keybind key="C-A-Tab">
+      <action name="NextWindow">
+        <panels>yes</panels>
+        <desktop>yes</desktop>
+      </action>
+    </keybind>
 
+    <!-- PCM adjustment -->
+    <keybind key="XF86AudioLowerVolume">
+      <action name="Execute">
+        <execute>amixer -q set PCM 5%-</execute>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioRaiseVolume">
+      <action name="Execute">
+        <execute>amixer -q set PCM 5%+</execute>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioMute">
+      <action name="Execute">
+        <execute>amixer -q set PCM toggle</execute>
+      </action>
+    </keybind>
+
+    <!-- backlight adjustment level 2  -->
+    <keybind key="W-A-Up">
+      <action name="Execute">
+        <execute>xbacklight -inc 10</execute>
+      </action>
+    </keybind>
+    <keybind key="W-A-Down">
+      <action name="Execute">
+        <execute>xbacklight -dec 10</execute>
+      </action>
+    </keybind>
+
+    <!-- Lanuch Programs -->
+    <keybind key="A-F2">
+      <action name="execute">
+        <execute>gmrun</execute>
+      </action>
+    </keybind>
+    <keybind key="W-1">
+      <action name="Execute">
+        <execute>gnome-terminal</execute>
+      </action>
+    </keybind>
+    <keybind key="W-2">
+      <action name="Execute">
+        <execute>nautilus --no-desktop --browser</execute>
+      </action>
+    </keybind>
+    <keybind key="W-3">
+      <action name="Execute">
+        <execute>firefox</execute>
+      </action>
+    </keybind>
+    <keybind key="W-p">
+      <action name="Execute">
+        <execute>pidgin</execute>
+      </action>
+    </keybind>
+    <keybind key="W-a-b">
+      <action name="ToggleDecorations"/>
+    </keybind>
+    <keybind key="W-c">
+      <action name="Close"/>
+    </keybind>
+    <keybind key="W-x">
+      <action name="ToggleMaximizeFull"/>
+    </keybind>
+    <keybind key="W-z">
+      <action name="Iconify"/>
+    </keybind>
+    <keybind key="W-d">
+      <action name="ToggleShowDesktop"/>
+    </keybind>
+    <keybind key="W-a">
+      <action name="ToggleAlwaysOnTop"/>
+    </keybind>
+    <keybind key="W-q">
+      <action name="Execute">
+        <execute>qq</execute>
+      </action>
+    </keybind>
+    <keybind key="W-s">
+      <action name="Execute">
+        <execute>stardict</execute>
+      </action>
+    </keybind>
+    <keybind key="W-v">
+      <action name="Execute">
+        <execute>gvim</execute>
+      </action>
+    </keybind>
+    <keybind key="W-u">
+      <action name="Execute">
+        <execute>urxvt -e alsamixer</execute>
+      </action>
+    </keybind>
+    <keybind key="C-A-l">
+      <action name="Execute">
+        <execute>xtrlock</execute>
+      </action>
+    </keybind>
+    <keybind key="XF86WWW">
+      <action name="Execute">
+        <execute>gvim</execute>
+      </action>
+    </keybind>
+    <keybind key="XF86Sleep">
+      <action name="Execute">
+        <execute>xset dpms force off</execute>
+      </action>
+    </keybind>
     <keybind key="Print">
       <action name="Execute">
         <execute>scrot -b -d 3 '/home/arch/Desktop/%Y%m%d_%H%M%S_$wx$h.png' -e 'gpicview $f'</execute>
@@ -163,790 +297,30 @@
         <execute>scrot -b -s '/home/arch/Desktop/%Y%m%d_%H%M%S_$wx$h.png' -e 'gpicview $f'</execute>
       </action>
     </keybind>
-
-    <!--
-    <keybind key="A-Print">
-      <action name="Execute">
-        <execute>scrot  -d 5 '%Y-%m-%d_%S_$wx$h_scrot.png'</execute>
-      </action>
-    </keybind>
-     ######################################################################################
-    <keybind key="W-F12">
-      <action name="SessionLogout">
-        <prompt>yes</prompt>
-      </action>
-    </keybind>
-  -->
-    <keybind key="A-F1">
-      <action name="ToggleDecorations"/>
-    </keybind>
-    <keybind key="A-F2">
-      <action name="Iconify"/>
-    </keybind>
-    <!--
-    <keybind key="A-F3">
-      <action name=""/>
-    </keybind>
-
-    <keybind key="A-F8">
-      <action name=""/>
-    </keybind>
-
-    <keybind key="A-F12">
-      <action name=""/>
-    </keybind>
-
-    -->
-    <keybind key="W-F5">
-      <action name="ToggleAlwaysOnBottom"/>
-    </keybind>
-    <keybind key="W-F6">
-      <action name="SendToBottomLayer"/>
-    </keybind>
-    <keybind key="W-F7">
-      <action name="SendToTopLayer"/>
-    </keybind>
-    <keybind key="W-F8">
-      <action name="ToggleAlwaysOnTop"/>
-    </keybind>
-    <keybind key="W-F10">
-      <action name="SendToNormalLayer"/>
-    </keybind>
-    <keybind key="W-F11">
-      <action name="RemoveDesktopLast"/>
-    </keybind>
-    <keybind key="W-F12">
-      <action name="AddDesktopLast"/>
-    </keybind>
-    <keybind key="W-m">
-      <action name="MoveToCenter"/>
-    </keybind>
-    <!--
-    <keybind key="W-m">
-        <action name="ToggleMaximizeFull"/>
-    </keybind>
-    -->
-    <keybind key="W-r">
-      <action name="UnshadeRaise"/>
-    </keybind>
-    <keybind key="A-F4">
-      <action name="Close"/>
-    </keybind>
-    <keybind key="W-S-C">
-      <action name="Close"/>
-    </keybind>
-    <keybind key="C-S-d">
-      <action name="Decorate"/>
-    </keybind>
-    <keybind key="W-S-1">
-      <action name="SendToDesktop">
-        <desktop>1</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-S-2">
-      <action name="SendToDesktop">
-        <desktop>2</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-S-3">
-      <action name="SendToDesktop">
-        <desktop>3</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-S-4">
-      <action name="SendToDesktop">
-        <desktop>4</desktop>
-      </action>
-    </keybind>
-    <keybind key="A-F5">
-      <action name="ToggleMaximizeVert"/>
-    </keybind>
-    <keybind key="A-F6">
-      <action name="ToggleMaximizeHorz"/>
-    </keybind>
-    <keybind key="A-F7">
-      <action name="ToggleMaximizeFull"/>
-    </keybind>
-    <keybind key="A-F9">
-      <action name="Move"/>
-    </keybind>
-    <keybind key="A-F10">
-      <action name="Resize"/>
-    </keybind>
-    <keybind key="A-F11">
-      <action name="ToggleFullscreen"/>
-    </keybind>
-    <keybind key="XF86AudioMute">
-      <action name="Execute">
-        <execute>amixer -q set Master toggle</execute>
-      </action>
-    </keybind>
-    <keybind key="XF86AudioLowerVolume">
-      <action name="Execute">
-        <execute>amixer -q set Master 1-</execute>
-      </action>
-    </keybind>
-    <keybind key="XF86AudioRaiseVolume">
-      <action name="Execute">
-        <execute>amixer -q set Master 1+</execute>
-      </action>
-    </keybind>
-    <keybind key="A-XF86AudioLowerVolume">
-      <action name="Execute">
-        <execute>amixer -q set PCM 1-</execute>
-      </action>
-    </keybind>
-    <keybind key="A-XF86AudioRaiseVolume">
-      <action name="Execute">
-        <execute>amixer -q set PCM 1+</execute>
-      </action>
-    </keybind>
-    <keybind key="C-XF86AudioMute">
-      <action name="Execute">
-        <execute>mpc toggle</execute>
-      </action>
-    </keybind>
-    <keybind key="C-XF86AudioLowerVolume">
-      <action name="Execute">
-        <execute>mpc prev</execute>
-      </action>
-    </keybind>
-    <keybind key="C-XF86AudioRaiseVolume">
-      <action name="Execute">
-        <execute>mpc next</execute>
-      </action>
-    </keybind>
-    <!--
-    <keybind key="W-b">
-      <action name="ShowMenu">
-        <menu>client-menu</menu>
-      </action>
-    </keybind>
-    -->
-    <keybind key="W-n">
-      <action name="ShowMenu">
-        <menu>client-list-menu</menu>
-      </action>
-    </keybind>
-    <!--
-    <keybind key="W-m">
-      <action name="ShowMenu">
-        <menu>root-menu</menu>
-      </action>
-    </keybind>
-
-    <keybind key="W-j">
-      <action name="ShowMenu">
-        <menu>OfficeMenu</menu>
-      </action>
-    </keybind>
-
-
-
-    -->
-    <keybind key="A-S-Escape">
-      <action name="ToggleShade"/>
-    </keybind>
-    <keybind key="W-A-S-q">
-      <action name="Exit"/>
-    </keybind>
-    <!--
-    <keybind key="W-m">
-      <action name="ShowMenu">
-        <menu>mpdMenu</menu>
-      </action>
-    </keybind>
-    -->
-    <keybind key="W-S-b">
-      <action name="ToggleDecorations"/>
-    </keybind>
-    <keybind key="W-a">
-      <action name="ShowMenu">
-        <menu>应用程序</menu>
-      </action>
-    </keybind>
-    <!--
-     ######################################################################################
-  -->
-    <!--  start
-      <action name="DesktopLeft">
-        <wrap>yes</wrap>
-      <action name="DesktopRight">
-        <wrap>yes</wrap>
-    -->
-    <keybind key="A-bracketleft">
-      <action name="DesktopPrevious"/>
-    </keybind>
-    <keybind key="A-bracketright">
-      <action name="DesktopNext"/>
-    </keybind>
-    <keybind key="S-A-bracketleft">
-      <action name="SendToDesktopLeft">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="S-A-bracketright">
-      <action name="SendToDesktopRight">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="A-L">
-      <action name="MoveRelative">
-        <x>80</x>
-        <y>0</y>
-      </action>
-    </keybind>
-    <keybind key="A-S-L">
-      <action name="MoveRelative">
-        <x>160</x>
-        <y>0</y>
-      </action>
-    </keybind>
-    <keybind key="A-H">
-      <action name="MoveRelative">
-        <x>-80</x>
-        <y>0</y>
-      </action>
-    </keybind>
-    <keybind key="A-S-H">
-      <action name="MoveRelative">
-        <x>-160</x>
-        <y>0</y>
-      </action>
-    </keybind>
-    <keybind key="A-K">
-      <action name="MoveRelative">
-        <x>0</x>
-        <y>-80</y>
-      </action>
-    </keybind>
-    <keybind key="A-S-K">
-      <action name="MoveRelative">
-        <x>0</x>
-        <y>-160</y>
-      </action>
-    </keybind>
-    <keybind key="A-J">
-      <action name="MoveRelative">
-        <x>0</x>
-        <y>80</y>
-      </action>
-    </keybind>
-    <keybind key="A-S-J">
-      <action name="MoveRelative">
-        <x>0</x>
-        <y>160</y>
-      </action>
-    </keybind>
-    <!--
-    <keybind key="W-Right">
-      <action name="MoveRelative">
-        <x>60</x>
-        <y>0</y>
-      </action>
-    </keybind>
-    <keybind key="W-Left">
-      <action name="MoveRelative">
-        <x>-60</x>
-        <y>0</y>
-      </action>
-    </keybind>
-    <keybind key="W-Up">
-      <action name="MoveRelative">
-        <x>0</x>
-        <y>-60</y>
-      </action>
-    </keybind>
-    <keybind key="W-Down">
-      <action name="MoveRelative">
-        <x>0</x>
-        <y>60</y>
-      </action>
-    </keybind>
-    -->
-    <!--  end
-    -->
-    <keybind key="C-A-Delete">
-      <action name="Restart"/>
-    </keybind>
-    <keybind key="C-A-Left">
-      <action name="DesktopLeft">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-A-Right">
-      <action name="DesktopRight">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <!--
-    <keybind key="C-A-Up">
-      <action name="DesktopUp">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-A-Down">
-      <action name="DesktopDown">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    -->
-    <keybind key="S-A-Left">
-      <action name="SendToDesktopLeft">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="S-A-Right">
-      <action name="SendToDesktopRight">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="S-A-Up">
-      <action name="SendToDesktopUp">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="S-A-Down">
-      <action name="SendToDesktopDown">
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <!--
-    ==================================================
-    -->
-    <keybind key="W-1">
-      <action name="Desktop">
-        <desktop>1</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-2">
-      <action name="Desktop">
-        <desktop>2</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-3">
-      <action name="Desktop">
-        <desktop>3</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-4">
-      <action name="Desktop">
-        <desktop>4</desktop>
-      </action>
-    </keybind>
-    <!--
-    ==================================================
-    -->
-    <!--
-    <keybind key="W-5">
-      <action name="Desktop">
-        <desktop>5</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-6">
-      <action name="Desktop">
-        <desktop>6</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-7">
-      <action name="Desktop">
-        <desktop>7</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-8">
-      <action name="Desktop">
-        <desktop>8</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-9">
-      <action name="Desktop">
-        <desktop>9</desktop>
-      </action>
-    </keybind>
-    -->
-    <!--
-    ==================================================
-    -->
-    <!--
-    ==================================================
-    -->
-    <keybind key="W-F1">
-      <action name="Desktop">
-        <desktop>1</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-F2">
-      <action name="Desktop">
-        <desktop>2</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-F3">
-      <action name="Desktop">
-        <desktop>3</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-F4">
-      <action name="Desktop">
-        <desktop>4</desktop>
-      </action>
-    </keybind>
-    <keybind key="W-d">
-      <action name="ToggleShowDesktop"/>
-    </keybind>
-    <!-- Keybindings for windows -->
-    <keybind key="A-F4">
-      <action name="Close"/>
-    </keybind>
-    <keybind key="W-j">
-      <!--
-        <panels>yes</panels>
-        <desktop>yes</desktop>
-        <dialog>yes</dialog>
-        <bar>no</bar>
-        -->
-      <action name="NextWindow"/>
-    </keybind>
-    <keybind key="W-k">
-      <action name="PreviousWindow"/>
-    </keybind>
-    <!--
-    <keybind key="W-j">
-      <action name="Lower"/>
-      <action name="FocusToBottom"/>
-      <action name="Unfocus"/>
-    </keybind>
-    <keybind key="W-k">
-      <action name="Lower"/>
-      <action name="FocusToBottom"/>
-      <action name="Unfocus"/>
-    </keybind>
-    -->
-    <keybind key="A-Escape">
-      <action name="Lower"/>
-      <action name="FocusToBottom"/>
-      <action name="Unfocus"/>
-    </keybind>
-    <keybind key="W-A-space">
-      <action name="ShowMenu">
-        <menu>client-menu</menu>
-      </action>
-    </keybind>
-    <keybind key="A-space">
-      <action name="ShowMenu">
-        <menu>root-menu</menu>
-      </action>
-    </keybind>
-    <!-- Keybindings for window switching -->
-    <keybind key="A-Tab">
-      <!--
-        <panels>yes</panels>
-        <desktop>yes</desktop>
-        <dialog>yes</dialog>
-        <bar>no</bar>
-        -->
-      <action name="NextWindow"/>
-    </keybind>
-    <keybind key="A-S-Tab">
-      <action name="PreviousWindow"/>
-    </keybind>
-    <keybind key="W-m">
-      <action name="ToggleMaximizeFull"/>
-    </keybind>
-    <keybind key="A-equal">
-      <action name="ToggleMaximizeFull"/>
-    </keybind>
-    <keybind key="A-S-BackSpace">
-      <action name="Close"/>
-    </keybind>
-    <keybind key="A-Z">
-      <action name="Iconify"/>
-    </keybind>
-    <keybind key="A-X">
-      <action name="ToggleMaximizeFull"/>
-    </keybind>
-    <keybind key="A-Q">
-      <action name="Close"/>
-    </keybind>
-    <keybind key="A-minus">
-      <action name="Iconify"/>
-    </keybind>
-    <keybind key="C-A-Tab">
-      <action name="NextWindow">
-        <panels>yes</panels>
-        <desktop>yes</desktop>
-      </action>
-    </keybind>
-    <!-- Keybindings for running applications -->
-    <!-- Keybindings custom -->
-    <!-- SC like -->
-    <keybind key="W-s">
-      <action name="ShowMenu">
-        <menu>client-list-combined-menu</menu>
-      </action>
-    </keybind>
-    <keybind key="W-e">
-      <action name="Execute">
-        <execute>rox</execute>
-      </action>
-    </keybind>
-    <keybind key="W-c">
-      <action name="Execute">
-        <execute>conky</execute>
-      </action>
-    </keybind>
-    <keybind key="W-x">
-      <action name="Execute">
-        <execute>killall conky</execute>
-      </action>
-    </keybind>
-
-
-    <!--
-    <keybind key="W-b">
-      <action name="Execute">
-        <execute>~/.config/openbox/scripts/kill-all-panel.sh</execute>
-      </action>
-    </keybind>
-
-    <keybind key="W-c">
-      <action name="Execute">
-        <execute>~/.config/openbox/scripts/run-conky.sh</execute>
-      </action>
-    </keybind>
-    <keybind key="W-i">
-      <action name="Execute">
-        <execute>fbpanel -p myfbpanel</execute>
-        <execute>~/.config/openbox/scripts/run-gnome-panel.sh</execute>
-      </action>
-    </keybind>
-    <keybind key="W-p">
-      <action name="Execute">
-        <execute>fbpanel -p myfbpanel</execute>
-        <execute>~/.config/openbox/scripts/run-xfce4-panel.sh</execute>
-      </action>
-    </keybind>
-    <keybind key="W-o">
-      <action name="Execute">
-        <execute>killall fbpanel</execute>
-        <execute>~/.config/openbox/scripts/run-fbpanel.sh</execute>
-      </action>
-    </keybind>
-    -->
-
-
-    <keybind key="W-1">
-      <action name="Execute">
-        <execute>urxvtc</execute>
-      </action>
-    </keybind>
-    <keybind key="W-2">
-      <action name="Execute">
-        <execute>rox</execute>
-      </action>
-    </keybind>
-    <keybind key="W-3">
-      <action name="Execute">
-        <execute>firefox</execute>
-      </action>
-    </keybind>
-    <keybind key="W-4">
-      <action name="Execute">
-        <execute>audacious</execute>
-      </action>
-    </keybind>
-    <keybind key="W-5">
-      <action name="Execute">
-        <execute>stardict</execute>
-      </action>
-    </keybind>
-
-    -->
-    <keybind key="A-S-d">
-      <action name="ToggleDecorations"/>
-    </keybind>
-    <keybind key="W-F">
-      <action name="ToggleFullscreen"/>
-    </keybind>
-    <keybind key="C-A-d">
-      <action name="ToggleDockAutohide"/>
-    </keybind>
-    <keybind key="A-S-grave">
-      <action name="Execute">
-        <execute>urxvtc</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-v">
-      <action name="Execute">
-        <execute>xfce4-mixer</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-m">
-      <action name="Execute">
-        <execute>sylpheed</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-e">
-      <action name="Execute">
-        <execute>eva</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-x">
-      <action name="Execute">
-        <execute>rox</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-g">
-      <action name="Execute">
-        <execute>gvim</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-f">
-      <action name="Execute">
-        <execute>firefox</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-r">
-      <action name="Execute">
-        <execute>gmrun</execute>
-      </action>
-    </keybind>
-    <!--
-    <keybind key="W-l">
-      <action name="ShadeLower"/>
-    </keybind>
-    -->
-    <keybind key="W-Right">
-      <action name="GrowToEdgeEast"/>
-    </keybind>
-    <keybind key="W-Left">
-      <action name="GrowToEdgeWest"/>
-    </keybind>
-    <keybind key="C-Down">
-      <action name="GrowToEdgeSouth"/>
-    </keybind>
-    <keybind key="C-Up">
-      <action name="GrowToEdgeNorth"/>
-    </keybind>
-    <keybind key="W-Up">
-      <action name="DirectionalTargetNorth"/>
-    </keybind>
-    <keybind key="W-Down">
-      <action name="DirectionalFocusSouth"/>
-    </keybind>
-    <keybind key="W-space">
-      <action name="DesktopLast"/>
-    </keybind>
-    <keybind key="W-Escape">
-      <action name="DesktopLast"/>
-    </keybind>
-    <!--
-    <keybind key="W-S-Up">
-      <action name="DirectionalTargetNorth">
-        <finalactions>
-            <action name="Focus"> 
-          <action name="Unshade">
-        </finalactions>
-      </action>
-    </keybind>
-
-    -->
-    <!--
-    <keybind key="W-r">
-      <action name="Execute">
-        <execute>gmrun</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-T">
-      <action name="Execute">
-        <execute>termianl</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-x">
-      <action name="Execute">
-        <execute>rox</execute>
-      </action>
-    </keybind>
-
-    -->
-    <keybind key="A-S-T">
-      <action name="Execute">
-        <execute>lxterminal</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-x">
-      <action name="Execute">
-        <execute>pcmanfm</execute>
-      </action>
-    </keybind>
-    <keybind key="C-0">
-      <action name="Reconfigure"/>
-    </keybind>
-    <keybind key="C-Right">
-      <action name="Execute">
-        <execute>aumix -v+5</execute>
-      </action>
-    </keybind>
-    <keybind key="C-Left">
-      <action name="Execute">
-        <execute>aumix -v-5</execute>
-      </action>
-    </keybind>
-    <!--
-
-    <keybind key="C-Up">
-      <action name="Execute">
-        <execute>aumix -w +5</execute>
-      </action>
-    </keybind>
-    <keybind key="C-Down">
-      <action name="Execute">
-        <execute>aumix -w-5</execute>
-      </action>
-    </keybind>
-
-    -->
-    <keybind key="C-minus">
-      <action name="Execute">
-        <execute>amixer set PCM 2%-</execute>
-      </action>
-    </keybind>
-    <keybind key="C-equal">
-      <action name="Execute">
-        <execute>amixer set PCM 2%+</execute>
-      </action>
-    </keybind>
-    <keybind key="A-S-F12">
-      <action name="Execute">
-        <execute>~/MultiConfigDir/openbox/scripts/lcdoff.sh</execute>
-      </action>
-    </keybind>
-    <keybind key="Sys_Req">
-      <action name="Execute">
-        <execute>scrot  -d 5 '%Y-%m-%d_%S_$wx$h_scrot.png'</execute>
-      </action>
-    </keybind>
   </keyboard>
   <mouse>
     <dragThreshold>3</dragThreshold>
     <!-- number of pixels the mouse must move before a drag begins -->
-    <doubleClickTime>300</doubleClickTime>
+    <doubleCickTime>800</doubleCickTime>
     <!-- in milliseconds (1000 = 1 second) -->
+    <screenEdgeWarpTime>400</screenEdgeWarpTime>
+    <!-- Time before changing desktops when the pointer touches the edge of the
+       screen while moving a window, in milliseconds (1000 = 1 second).
+       Set this to 0 to disable warping -->
     <context name="Frame">
-      <mousebind button="W-Left" action="Click">
+      <mousebind button="Mod4-Left" action="Click">
         <action name="ShowMenu">
           <menu>root-menu</menu>
         </action>
       </mousebind>
-      <!--
-      <mousebind button="C-Left" action="Click">
+      <mousebind button="Mod4-Middle" action="Click">
         <action name="ShowMenu">
-          <menu>root-menu</menu>
+          <menu>client-list-combined-menu</menu>
         </action>
       </mousebind>
-      -->
-      <mousebind button="A-C-Left" action="Click">
+      <mousebind button="Mod4-Right" action="Click">
         <action name="ShowMenu">
-          <menu>应用程序</menu>
+          <menu>root-menu</menu>
         </action>
       </mousebind>
       <mousebind button="A-Left" action="Press">
@@ -954,10 +328,8 @@
         <action name="Raise"/>
       </mousebind>
       <mousebind button="A-Left" action="Click">
-        <action name="Unshade"/>
-      </mousebind>
-      <mousebind button="W-Left" action="Drag">
-        <action name="Move"/>
+        <!-- comment this stm so i can hold alt key in Warcraft III :) -->
+        <!--<action name="Unshade"/>-->
       </mousebind>
       <mousebind button="A-Left" action="Drag">
         <action name="Move"/>
@@ -968,9 +340,6 @@
         <action name="Unshade"/>
       </mousebind>
       <mousebind button="A-Right" action="Drag">
-        <action name="Resize"/>
-      </mousebind>
-      <mousebind button="W-Right" action="Drag">
         <action name="Resize"/>
       </mousebind>
       <mousebind button="A-Middle" action="Press">
@@ -985,10 +354,10 @@
         <action name="DesktopNext"/>
       </mousebind>
       <mousebind button="C-A-Up" action="Click">
-        <action name="DesktopPrevious"/>
+        <action name="SendToDesktopPrevious"/>
       </mousebind>
       <mousebind button="C-A-Down" action="Click">
-        <action name="DesktopNext"/>
+        <action name="SendToDesktopNext"/>
       </mousebind>
       <mousebind button="A-S-Up" action="Click">
         <action name="SendToDesktopPrevious"/>
@@ -1002,14 +371,11 @@
         <action name="Focus"/>
         <action name="Raise"/>
       </mousebind>
-      <mousebind button="Left" action="Click">
-        <action name="Unshade"/>
-      </mousebind>
       <mousebind button="Left" action="Drag">
         <action name="Move"/>
       </mousebind>
       <mousebind button="Left" action="DoubleClick">
-        <action name="ToggleMaximizeFull"/>
+        <action name="ToggleShade"/>
       </mousebind>
       <mousebind button="Middle" action="Press">
         <action name="Lower"/>
@@ -1020,9 +386,11 @@
         <action name="Shade"/>
         <action name="FocusToBottom"/>
         <action name="Unfocus"/>
+        <action name="Lower"/>
       </mousebind>
       <mousebind button="Down" action="Click">
         <action name="Unshade"/>
+        <action name="Raise"/>
       </mousebind>
       <mousebind button="Right" action="Press">
         <action name="Focus"/>
@@ -1223,66 +591,42 @@
       </mousebind>
     </context>
     <context name="Desktop">
-      <mousebind button="C-Left" action="Press">
-        <action name="ShowMenu">
-          <menu>root-menu</menu>
-        </action>
-      </mousebind>
-      <mousebind button="W-Left" action="Press">
-        <action name="ShowMenu">
-          <menu>root-menu</menu>
-        </action>
-      </mousebind>
-      <mousebind button="A-C-Left" action="Click">
-        <action name="ShowMenu">
-          <menu>应用程序</menu>
-        </action>
-      </mousebind>
-      <!--
-
-      <mousebind button="Right" action="Press">
-        <action name="ShowMenu">
-          <menu>root-menu</menu>
-        </action>
-      </mousebind>
-
-
-      #######################################################
-      <mousebind button="Left" action="Press">
-        <action name="Execute">
-            <execute>xfdesktop -menu</execute>
-        </action>
-      </mousebind>
-
-      <mousebind button="Left" action="Press">
-        <action name="ShowMenu">
-          <menu>root-menu</menu>
-        </action>
-      </mousebind>
-
-      #######################################################
-      -->
-      <mousebind button="Up" action="Press">
+      <mousebind button="Up" action="Click">
         <action name="DesktopPrevious"/>
       </mousebind>
-      <mousebind button="Down" action="Press">
+      <mousebind button="Down" action="Click">
         <action name="DesktopNext"/>
       </mousebind>
-      <mousebind button="A-Up" action="Press">
+      <mousebind button="A-Up" action="Click">
         <action name="DesktopPrevious"/>
       </mousebind>
-      <mousebind button="A-Down" action="Press">
+      <mousebind button="A-Down" action="Click">
         <action name="DesktopNext"/>
       </mousebind>
-      <mousebind button="C-A-Up" action="Press">
+      <mousebind button="C-A-Up" action="Click">
         <action name="DesktopPrevious"/>
       </mousebind>
-      <mousebind button="C-A-Down" action="Press">
+      <mousebind button="C-A-Down" action="Click">
         <action name="DesktopNext"/>
       </mousebind>
       <mousebind button="Left" action="Press">
         <action name="Focus"/>
         <action name="Raise"/>
+      </mousebind>
+      <mousebind button="Mod4-Left" action="Click">
+        <action name="ShowMenu">
+          <menu>root-menu</menu>
+        </action>
+      </mousebind>
+      <mousebind button="Mod4-Middle" action="Click">
+        <action name="ShowMenu">
+          <menu>client-list-combined-menu</menu>
+        </action>
+      </mousebind>
+      <mousebind button="Mod4-Right" action="Click">
+        <action name="ShowMenu">
+          <menu>root-menu</menu>
+        </action>
       </mousebind>
     </context>
     <context name="Root">
@@ -1292,64 +636,37 @@
           <menu>client-list-combined-menu</menu>
         </action>
       </mousebind>
-      <mousebind button="C-Left" action="Press">
-        <action name="ShowMenu">
-          <menu>root-menu</menu>
-        </action>
-      </mousebind>
       <mousebind button="Right" action="Press">
         <action name="ShowMenu">
           <menu>root-menu</menu>
         </action>
       </mousebind>
-      <mousebind button="Left" action="Press">
+      <!--<mousebind button="Left" action="Press">
         <action name="ShowMenu">
           <menu>root-menu</menu>
         </action>
-      </mousebind>
-      <!--
-
-      <mousebind button="W-Left" action="Click">
-        <action name="ShowMenu">
-          <menu>root-menu</menu>
-        </action>
-      </mousebind>
-
-      -->
-      <mousebind button="A-C-Left" action="Click">
-        <action name="ShowMenu">
-          <menu>应用程序</menu>
-        </action>
-      </mousebind>
+      </mousebind>-->
     </context>
     <context name="MoveResize">
-      <mousebind button="Up" action="Press">
+      <mousebind button="Up" action="Click">
         <action name="DesktopPrevious"/>
       </mousebind>
-      <mousebind button="Down" action="Press">
+      <mousebind button="Down" action="Click">
         <action name="DesktopNext"/>
       </mousebind>
-      <mousebind button="A-Up" action="Press">
+      <mousebind button="A-Up" action="Click">
         <action name="DesktopPrevious"/>
       </mousebind>
-      <mousebind button="A-Down" action="Press">
+      <mousebind button="A-Down" action="Click">
         <action name="DesktopNext"/>
       </mousebind>
     </context>
-    <screenEdgeWarpTime>400</screenEdgeWarpTime>
+    <doubleClickTime>200</doubleClickTime>
   </mouse>
   <menu>
     <!-- You can specify more than one menu file in here and they are all loaded,
        just don't make menu ids clash or, well, it'll be kind of pointless -->
     <!-- default menu file (or custom one in $HOME/.config/openbox/) -->
-    <!-- 
-    <file>~/.config/openbox/menu_dir/applications.xml</file>
-    <file>~/.config/openbox/menu_dir/preferences.xml</file>
-    <file>~/.config/openbox/menu_dir/settings.xml</file>
-     -->
-    <!--
-    <file>/var/lib/openbox/debian-menu.xml</file>
-    -->
     <file>menu.xml</file>
     <hideDelay>200</hideDelay>
     <middle>no</middle>
@@ -1358,92 +675,14 @@
     <manageDesktops>no</manageDesktops>
   </menu>
   <applications>
-    <!--
-      http://icculus.org/openbox/index.php/Help:Applications
-      <<<<<Finding the class, name and role parameters>>>>
-       Per-application settings let you match on what we call class, name and role. The first two are set in the WM_CLASS property 
-       which you can find by running xprop WM_CLASS and clicking on the window you want to make a rule for. The output will look like
-         run xprop software get it
-
-       WM_CLASS(STRING) = "urxvt", "URxvt"
-
-       The first of the strings, "urxvt", is the name, and the second, "URxvt", is the class. You have to specify one of these, but 
-       you can also specify both. The role is in a separate property and not all apps set it, but it's useful if you want a property 
-       set on the main window of an app but not all the dialogs. To find it, you run xprop WM_WINDOW_ROLE. If it tells you there is 
-       no such atom, then the application doesn't use roles on its windows. The role parameter is optional.
-       <<<Matching windows with wildcards>>>
-
-       When specifying the name, class, or role for a rule, you can use simple wildcard matching with the "*" and "?" characters. 
-       A "*" matches any number of characters and a "?" matches any single character. 
-      -->
-    <!--
-       <application class="Firefox">
-           <decor>yes</decor>
-           <desktop>2</desktop>
-       </application>
-       <application class="Eva">
-           <decor>yes</decor>
-           <desktop>3</desktop>
-       </application>
- 
-       <application class="Xchat">
-           <decor>yes</decor>
-           <desktop>3</desktop>
-       </application>
-       <application class="Pidgin">
-           <desktop>3</desktop>
-       </application>
-       <application class="rdesktop">
-           <decor>no</decor>
-           <desktop>3</desktop>
-       </application>
-       <application class="Gkrellm">
-           <decor>yes</decor>
-           <layer>above</layer>
-           <iconic>yes</iconic>
-           <shade>yes</shade>
-       </application>
-       
-       <application class="Gvim">
-           <iconic>no</iconic>
-           <decor>yes</decor>
-           <layer>above</layer>
-           
-       </application>
-       -->
-    <!--
-       -->
-    <!--
-      xprop WM_CLASS
-      Per-application settings let you match on what we call class, name and role. The first two are set in 
-      the WM_CLASS property which you can find by running xprop WM_CLASS and clicking on the window you want to make 
-      a rule for. The output will look like
-      ################################################
-  <application class="gkrellm">
-    <decor>yes</decor>
-  </application>
-  <application name="gvim">
-    <decor>yes</decor>
-    <layer>above</layer>
-  </application>
-
-      ################################################
-      -->
-    <!--
+  </applications>
+  <!--
   # this is an example with comments through out. use these to make your
   # own rules, but without the comments of course.
 
   <application name="first element of window's WM_CLASS property (see xprop)"
               class="second element of window's WM_CLASS property (see xprop)"
                role="the window's WM_WINDOW_ROLE property (see xprop)">
-
-  <application name="the window's _OB_NAME property (see obprop)"
-              class="the window's _OB_CLASS property (see obprop)"
-               role="the window's _OB_ROLE property (see obprop)"
-               type="the window's _NET_WM_WINDOW_TYPE (see obprob)..
-                      (if unspecified, then it is 'dialog' for child windows)">
-
-
   # the name or the class can be set, or both. this is used to match
   # windows when they appear. role can optionally be set as well, to
   # further restrict your matches.
@@ -1469,9 +708,10 @@
       # the position is only used if both an x and y coordinate are provided
       # (and not set to 'default')
       <x>center</x>
-      # a number like 50, or 'center' to center on screen
+      # a number like 50, or 'center' to center on screen. use a negative number
+      # to start from the right (or bottom for <y>), ie -50 is 50 pixels from the
+      # right edge (or bottom).
       <y>200</y>
-      # a number like 50, or 'center' to center on screen
       <monitor>1</monitor>
       # specifies the monitor in a xinerama setup.
       # 1 is the first head, or 'mouse' for wherever the mouse is
@@ -1507,11 +747,4 @@
 
   # end of the example
 -->
-  </applications>
-  <margins>
-    <left>0</left>
-    <right>0</right>
-    <top>0</top>
-    <bottom>0</bottom>
-  </margins>
 </openbox_config>
