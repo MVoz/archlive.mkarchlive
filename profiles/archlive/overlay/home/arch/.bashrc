@@ -22,6 +22,10 @@ else
     #echo "/usr/share/cdargs/cdargs-bash.sh not found!"
 fi
 
+screen_program=$(type -p screen)
+if [ -z $screen_program ] ; then
+    alias screen="tmux"
+fi
 alias ls='ls --color=auto'
 alias mv='mv -i'
 alias rm='rm -i'
