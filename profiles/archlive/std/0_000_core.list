@@ -6,6 +6,6 @@
 -d ndiswrapper
 -d madwifi-utils
 -d madwifi
-#-d aufs2
+-d aufs2
 -d aufs2-util
 
