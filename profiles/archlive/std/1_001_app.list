@@ -32,6 +32,9 @@ nmap
 bridge-utils
 #  Utilities for configuring the Linux ethernet bridge   0.09MB
 
+rsync
+# A file transfer program to keep remote files in sync
+
 #rdiff-backup
 # librsync
 #A utility for local/remote mirroring and incremental backups  1.50MB
@@ -246,6 +249,9 @@ lftp
 # 依赖于 libtash1 gnutls   总7.75MB
 # Sophisticated command line based FTP client   1.29MB
 
+ntp
+# NTP (Network Time Protocol) tries to keep servers in sync
+
 tftp-hpa
 # Official tftp server
 
@@ -262,4 +268,3 @@ parted
 wvdial
 
 codecs
-

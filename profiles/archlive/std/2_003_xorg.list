@@ -81,7 +81,11 @@ tdfx-dri
 #trident-dri
 xorg-video-drivers
 #
-virtualbox-additions
+# Archlive 作为Virtualbox的客户机时相关驱动等
+virtualbox-modules
+virtualbox-ose-additions-modules
+virtualbox-ose-additions
+#virtualbox-additions
 # Archlive定制，2.6.33-ARCH
 #
 #chakra-hardware-detection
@@ -101,30 +105,9 @@ wqy-bitmapfont
 #wqy-zenhei
 # 12.71MB
 
-#fontsconf
-
 iso-codes
 # 8.69MB
 
-atk
-# 被gtk2所依赖
-
-#libpng
-cairo
-# 被linuxqq pycairo等所依赖
-
-#libxft
-pango
-# 被 awesome gtk2 linuxqq openbox等所依赖
-
-libjpeg
-libtiff
-# 被 imlib imlib2 libcups qt rawstudio 等所依赖
-
-libtasn1
-gnutls
-libcups
-# 被 epdfview fox gtk2等所依赖
 ######
 shared-mime-info
 # Freedesktop.org Shared MIME Info  2.64MB
@@ -158,10 +141,6 @@ gksu
 
 gamin
 #Gamin is a file and directory monitoring system defined to be a subset of the FAM (File Alteration Monitor) system.
-
-libgnome-keyring
-#GNOME keyring client library 0.65MB
-# pcmanfm中 以管理员身份打开文件夹
 
 slim-archlive
 # Desktop-independent graphical login manager for X11  0.50MB
@@ -238,7 +217,6 @@ lxmenu-data
 lxpanel
 lxsession-lite  
 lxterminal
-menu-cache
 lxappearance
 openbox
 pcmanfm
@@ -322,3 +300,4 @@ gvfs
 gmrun
 
 mpg123
+

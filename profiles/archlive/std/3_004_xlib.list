@@ -45,6 +45,8 @@ finch
 pidgin
 # Archlive定制包
 
+openfetion
+
 #grsync
 #### pan,  A powerful Newsgroup Article reader based on GTK2   8.15MB
 ## hunspell enchant gtkspell   
@@ -64,11 +66,8 @@ pidgin
 #
 foxitreader
 # Archlive编译包  5.49MB
-leafpad
 #geany
 #####  geany  5.96MB
-xarchiver
-#  1.57MB
 #
 #xchm
 # chmlib wxgtk

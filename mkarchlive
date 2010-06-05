@@ -88,6 +88,7 @@ case "${CMD_NAME}" in
    bootimage) WORK_DIR="${2}";;
    img) WORK_DIR="${2}";;
    all) WORK_DIR="${2}";;
+   clean) WORK_DIR="${2}";;
    *) error "无效命令 '${CMD_NAME}'"; usage 1 ;;
 esac
 
@@ -95,6 +96,7 @@ esac
 #START_DIR=$(pwd)
 START_DIR=.
 PROFILE_DIR="${START_DIR}/${PROFILE_DIR}"
+LIBS="${START_DIR}/lib/mkinitcpio/initcpio/liblinuxlive"
 MKINITCPIO="${START_DIR}/lib/mkinitcpio/mkinitcpio"
 PACMAN_STATIC="${START_DIR}/lib/bin/pacman.static"
 
@@ -151,6 +153,13 @@ sed -i "s%.*CacheDir.*%CacheDir = $CACHE%g" $PACMANCONF
 # 目标镜像启动内核镜像配置文件
 if [ "x${CPIOCONFIG}" = "x" ]; then
    CPIOCONFIG="${PROFILE_DIR}/archlive-mkinitcpio.conf"
+fi
+
+# 目标系统是否支持必须的文件系统：aufs squashfs
+if [ "${KERNEL_KEY_FS_INCLUDED}" = "y" ]; then
+	SUPPORT_ESSENTIAL_MODULES="y"
+else
+	SUPPORT_ESSENTIAL_MODULES="n"
 fi
 
 case $IMG_TYPE in
@@ -233,12 +242,11 @@ BUILDLOG="${WORK_DIR}/log"
 # 该目录下
 #  -errors.log 为对应模块安装错误日志
 
-# 安装清理删除的文件、目录
-CLEANED_LIST=${PACKLIST}/cleaned.list
+# 安装清理删除的文件、目录的备份目录
+CLEANED_BACKUP_DIR="${WORK_DIR}/Cleaned_files_backup"
 
 # 将宿主系统可用执行程序排序输出到工作目录下
 [ -d ${PACKLIST} ] && sort /tmp/cmd_list > "${PACKLIST}/host_cmd_list"
-
 
 sleep $time
 
@@ -247,6 +255,7 @@ case "${CMD_NAME}" in
    prepare) DESCRIPTION="准备工作: 准备安装程序，准备镜像目录结构，Overlay目录等.";;
    solemodules) DESCRIPTION="在工作目录 ${WORK_DIR} 下制作独立程序模块：安装后用 mksquash 压缩." ;; 
    install) DESCRIPTION="将程序清单或者附加模块指定的程序安装到工作目录${UNION},放置于${MODULEDIR}." ;;
+   clean) DESCRIPTION="根据配置文件清理${MODULEDIR}，删除或者移动运行时无需的文件." ;;
    squash) DESCRIPTION="将${MODULEDIR}目录用 mksquash 压缩为模块." ;;
    bootimage) DESCRIPTION="从指定目录 ${MODULEDIR}/${KERNEL_MOD} 制作 archlive 启动内核模块及基本模块等" ;;
    img) DESCRIPTION="将目录 ${IMGROOT} 制作为 ${IMG_TYPE} 镜像." ;;
@@ -313,11 +322,12 @@ echo ""
 case ${CMD_NAME} in
 	prepare) cmd_prepare ;;
 	install) cmd_prepare; cmd_install ;;
+	clean) cmd_clean ;;
 	solemodules) prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash ;;
 	squash) cmd_squash ;;
 	bootimage) cmd_boot_kernel_image ;;
 	img) cmd_img ;;
-	all) cmd_prepare; cmd_install; cmd_squash; cmd_boot_kernel_image; cmd_img ;;
+	all) cmd_prepare; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image; cmd_img ;;
 	*) error "错误的命令" && usage 1 ;;
 esac
 msg "程序执行 ${APPNAME} $cmdline 结束!"

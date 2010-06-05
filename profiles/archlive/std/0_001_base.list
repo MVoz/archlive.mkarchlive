@@ -193,8 +193,6 @@ networkmanager-vpnc
 #openconnect
 networkmanager-openconnect
 #
-aufs2-util
-# 必须
 syslinux
 #
 #

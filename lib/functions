@@ -423,9 +423,9 @@ cmd_prepare (){
    [ ! -d ${BUILDLOG} ] && mkdir -p "${BUILDLOG}"
 
    if [ "${_CUSTOM_REPO}" = "y" -a "x$REPO_Name" != "x" -a "x$REPO" != "x" ]; then
-       msg2 -n "建立自定义软件仓..." | tee -a ${LOG}
+       msg2 "建立自定义软件仓..." | tee -a ${LOG}
        custom_repo "${REPO}" "${REPO_Name}"
-       green "完成!" | tee -a ${LOG}
+       green "自定义软件仓创建完成!" | tee -a ${LOG}
        if ! is_in_pacmanconf; then add_customrepo2pacmanconf "${LOG}"; fi
    fi
 
@@ -466,6 +466,17 @@ cmd_prepare (){
 	green "完成！" | tee -a ${LOG}
    fi
 
+   # 如果使用overlay，也使用了SP_CUSTOM_DIR，则将后者合并到前者中
+   if [ "${USE_OVERLAY}" = "y" ]; then
+	if [ "x${SP_CUSTOM_DIR}" != "x" ]; then
+		msg2 -n "合并${SP_CUSTOM_DIR}到${OVERLAY}..." | tee -a ${LOG}
+		cat ${PACKLIST}/sp_custom.list | while read file; do
+			[ "x$file" = "x" ] && continue
+			cp -f ${SP_CUSTOM_DIR}/$file ${OVERLAY}/$file
+		done
+		green "完成!" | tee -a ${LOG}
+	fi
+   fi
    msg "mkarchlive准备工作完成" | tee -a ${LOG}
 }
 function mount_aufs_w () {
@@ -558,10 +569,11 @@ function sync_database () {
 }
 function pac_install () {
 
-	[ ! -d $UNION/dev ] && mkdir -p $UNION/dev
-	[ ! -c $UNION/dev/console ] && mknod $UNION/dev/console c 5 1 >/dev/null
-	[ ! -c $UNION/dev/null ] && mknod $UNION/dev/null c 1 3 >/dev/null
-	[ ! -c $UNION/dev/zero ] && mknod $UNION/dev/zero c 1 5 >/dev/null
+    if [ ! "$pkgname" ]; then return 1; fi
+    [ ! -d $UNION/dev ] && mkdir -p $UNION/dev
+    [ ! -c $UNION/dev/console ] && mknod $UNION/dev/console c 5 1 >/dev/null
+    [ ! -c $UNION/dev/null ] && mknod $UNION/dev/null c 1 3 >/dev/null
+    [ ! -c $UNION/dev/zero ] && mknod $UNION/dev/zero c 1 5 >/dev/null
 
     while true; do
 	LOG="${BUILDLOG}/${mod}.log"
@@ -595,6 +607,7 @@ function pac_install () {
 
 function pac_remove () {
 
+    if [ ! "$pkgname" ]; then return 1; fi
     while true; do
 	LOG=${BUILDLOG}/${mod}.log
 	if [ "${QUIET}" = "y" ]; then
@@ -612,105 +625,54 @@ function pac_remove () {
 
 function rm_tmp () {
 
-	tmp="$@"
-	if [ "x$tmp" != "x" ]; then
-		echo $tmp >>${CLEANED_LIST}
-		rm -rf $tmp
+	LOG=$LOG
+	if [ $# -gt 1 ]; then
+		for tmp in $@; do
+			rm_tmp $tmp
+		done
+	else
+		tmp="$@"
+		if [ "x$tmp" != "x" ] && [ -e $tmp ]; then
+			rm -rfv $tmp >>${LOG}
+		fi
 	fi
 }
+
 function pac_clean () {
 
    LOG="${1}"
-
    msg2 "清理无用文件..." | tee -a ${LOG}
 
-   [ -f ${CLEANED_LIST} ] && rm -f ${CLEANED_LIST}
-
-   plain -n "清理aufs文件系统临时文件.wh.* " | tee -a ${CLEANED_LIST}
+   plain "清理aufs文件系统临时文件.wh.* " | tee -a ${LOG}
    for tmp in "$(find ${MODULEDIR} -type f -name .wh.* )"; do rm_tmp $tmp; done
-   green "完成!" | tee -a ${CLEANED_LIST}
+   green "完成!" | tee -a ${LOG}
 
    if [ "${CMD_NAME}" != "solemodules" ]; then
-	plain -n "删除为宿主系统创建的内核镜像文件..." | tee -a ${CLEANED_LIST}
-	default_image=$(grep "default_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
-	fallback_image=$(grep "fallback_image" ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset | cut -d "=" -f2)
-	for tmp in ${default_image} ${fallback_image}; do rm_tmp $tmp; done
-	green "完成!" | tee -a ${CLEANED_LIST}
+	plain "删除为宿主系统创建的内核镜像文件..." | tee -a ${LOG}
+	source ${INSTROOT}/etc/mkinitcpio.d/kernel*.preset
+	for tmp in ${default_image} ${fallback_image}; do 
+		rm_tmp "${INSTROOT}$tmp"
+	done
+	green "完成!" | tee -a ${LOG}
    fi
 
-   plain -n "删除pamcan产生的垃圾文件..." | tee -a ${CLEANED_LIST}
+   plain "删除pamcan产生的垃圾文件..." | tee -a ${LOG}
    for tmp in "$(find ${MODULEDIR} -name *.pacnew -name *.pacsave -name *.pacorig)"; do rm_tmp $tmp; done
-   green "完成!" | tee -a ${CLEANED_LIST}
+   green "完成!" | tee -a ${LOG}
 
-   plain -n "删除指定的文件夹..." | tee -a ${CLEANED_LIST}
-   kill_dirs="dev var/cache/man var/cache/pacman var/log/* var/mail tmp/* initrd ${DELDIR}"
+   plain "删除图标缓存文件..." | tee -a ${LOG}
+   for tmp in "$(find ${MODULEDIR} -type f -name *.cache)"; do rm_tmp $tmp; done
+   green "完成!" | tee -a ${LOG}
+
+   plain "删除其它无用文件..." | tee -a ${LOG}
+   kill_dirs="dev var/cache/man var/cache/pacman var/log/* var/mail tmp/* initrd"
    for tmp_dir in ${kill_dirs}; do
 	for mod in ${MODULES}; do
 		rm_tmp ${MODULEDIR}/${mod}/${tmp_dir}
 	done
    done
-   green "完成!" | tee -a ${CLEANED_LIST}
-
-   plain -n "删除图标缓存文件..." | tee -a ${CLEANED_LIST}
-   for tmp in "$(find ${MODULEDIR} -type f -name *.cache)"; do rm_tmp $tmp; done
-   green "完成!" | tee -a ${CLEANED_LIST}
-
-   if [ "${CUT_LOCALE}" = "y" ]; then
-	plain "删除${REMAIN_LOCALE}外的语言文件、帮助文件、X语言文件..." | tee -a ${CLEANED_LIST}
-	for tmpdir in $(find ${MODULEDIR} -type d -name "locale"); do
-		[ "x$(ls $tmpdir)" = "x" ] && continue
-		find $tmpdir/* -maxdepth 0 -type d >/tmp/locale_file_list
-		cat /tmp/locale_file_list  | while read tmp; do
-			[ "x$tmp" = "x" ] && continue
-			keep="n"
-			for i in ${REMAIN_LOCALE}; do
-				case $tmp in */$i*) keep="y" && break;; esac
-			done
-			[ "$keep" != "y" ] && rm_tmp $tmp
-		done
-	done
-   	green "完成!" | tee -a ${CLEANED_LIST}
-   fi
-
-   # 合并日志
-   cat ${CLEANED_LIST} >> ${LOG}
-
-   if [ "${_move_devel}" = "y" ]; then
-	msg2 "整理编译所需库文件、源码等(运行时无需)..." | tee -a ${LOG}
-	local target mod file dir
-	if [ "x${_move_devel_target}" != "x" ]; then
-		target="${MODULEDIR}/${_move_devel_target}"
-	else
-		target="${WORK_DIR}/mkarchlive_tmp"
-		[ -d $target ] && rm -rf $target && mkdir -p $target
-	fi
-	for mod in ${MODULES}; do
-		[ "${_move_devel_target}" = "${mod}" ] && continue
-		for dir in ${_move_devel_dir}; do
-			[ ! -d ${MODULEDIR}/${mod}/$dir ] && continue
-			[ ! -d $target/$dir ] && mkdir -p $target/$dir
-			plain -n "将${MODULEDIR}/${mod}/$dir/ 移到$target/$dir..." | tee -a ${LOG}
-			mv -f ${MODULEDIR}/${mod}/$dir/* $target/$dir
-			green "完成!" | tee -a ${LOG}
-		done
-		for file in $(find ${MODULEDIR}/${mod} -type f -name "*${_move_devel_file_type}"); do
-			dir=$(dirname $file)
-			[ ! -d ${MODULEDIR}/${mod}/$dir ] && continue
-			[ ! -d $target/$dir ] && mkdir -p $target/$dir
-			plain -n "将${MODULEDIR}/${mod}/$dir/$(basename $file) 移到$target/$dir/..." | tee -a ${LOG}
-			mv -f "${MODULEDIR}/${mod}/$dir/$(basename $file)" "$target/$dir/"
-			green "完成!" | tee -a ${LOG}
-		done
-	done
-   fi
-
-   if [ -d ${WORK_DIR}/mkarchlive_tmp ]; then
-	plain -n "删除临时文件夹${WORK_DIR}/mkarchlive_tmp..." | tee -a ${LOG}
-	rm -rf ${WORK_DIR}/mkarchlive_tmp
-	green "完成!" | tee -a ${LOG}
-   fi
+   green "完成!" | tee -a ${LOG}
 }
-
 cmd_extramodules_install () {
 
    # 日志文件
@@ -765,9 +727,6 @@ cmd_extramodules_install () {
    # 卸载UNION
    msg2 "卸载aufs件系统 ${UNION}." | tee -a ${LOG}
    umount -l ${UNION}
-
-   # 模块清理，删除不需要的文件
-   pac_clean "${LOG}"
 }
 
 function get_pkgname () {
@@ -905,50 +864,9 @@ cmd_install ()
 			fi
         	fi
 	fi
-	# 检测包含内核的模块中，文件系统模块是否齐全
-	if [ -d ${MODULEDIR}/${mod}/lib/modules ] && [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "*.ko")" != "x" ]; then
-		msg2 -n "检查目标系统是否有足够的文件系统模块: aufs,squashfs等..." | tee -a ${LOG}
-		if [ $(ls ${MODULEDIR}/${mod}/lib/modules | wc -l) -ge 2 ]; then
-			error "目标系统中内核模块有两个或者两个以上的版本" | tee -a ${LOG}
-			exit 1
-		fi
-		# 更新内核模块依赖关系
-		local mod_file fs_system kernel_ver
-		mod_file="${UNION}/lib/modules/*/modules.dep"
-		kernel_ver="$(basename $(dirname ${mod_file}))"
-		depmod -a -b ${UNION} {kernel_ver}
-		# 检查核心模块
-		fs_system="aufs squashfs"
-		case ${ZIP_MODE} in 1|2) fs_system="${fs_system} sqlzma unlzma";; esac
-		for fs_type in ${fs_system}; do
-			#if [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "${fs_type}.ko")" = "x" ]; then
-			if [ "x$(grep "${fs_type}.ko" ${mod_file})" = "x" ]; then
-				if [ "${KERNEL_KEY_FS_INCLUDED}" != "y" ]; then
-					error "目标系统不包含必须的${fs_type}文件系统模块, 请修改${PROFILE_DIR}/$LISTDIR/${mod}.list" | tee -a ${LOG}
-					exit 1
-				else
-					warn "目标系统必须的${fs_type}被编入了内核，在制作启动镜像的时候忽略${fs_type}找不到的错误." | tee -a ${LOG}
-				fi
-			fi
-		done
-		green "完成!" | tee -a ${LOG}
-	fi
 
-	# 特别定制文件	
-	if [ "x${SP_CUSTOM_DIR}" != "x" ]; then
-		msg2 "拷贝特别设置${SP_CUSTOM_DIR}到目标系统..." | tee -a ${LOG}
-		cat ${PACKLIST}/sp_custom.list | while read file; do
-			[ -f ${MODULEDIR}/$file ] && cp -f ${SP_CUSTOM_DIR}/$file $UNION/$file
-		done
-		if [ "x$(ls ${MODULEDIR}/${mod}/var/lib/pacman/local | grep "glibc-")" != "x" ]; then
-			[ -d ${SP_CUSTOM_DIR}/etc ] && cp -rf ${SP_CUSTOM_DIR}/etc/* $UNION/etc/
-			[ -f ${SP_CUSTOM_DIR}/etc/locale.gen ] && chroot $UNION locale-gen
-		fi
-		[ -f ${MODULEDIR}/${mod}/etc/sudoers ] && chmod 0440 ${MODULEDIR}/${mod}/etc/sudoers
-		green "完成!" | tee -a ${LOG}
-	fi
-
-      [ -e "${UNION}/etc/ld.so.conf" ] && chroot $UNION ldconfig
+	[ -e "${UNION}/etc/ld.so.conf" ] && chroot $UNION ldconfig
+	[ -f ${MODULEDIR}/${mod}/etc/sudoers ] && chmod 0440 ${MODULEDIR}/${mod}/etc/sudoers
 
 	msg2 -n "导出最新模块已安装软件清单..." | tee -a ${LOG}
 	$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/mod_${mod}.new
@@ -966,27 +884,87 @@ cmd_install ()
 
 	if [ -f ${MODULEDIR}/${mod}/etc/pacman.conf ]; then
 		msg2 -n "拷贝对应Arch的源配置文件到目标系统..." | tee -a ${LOG}
+		if [ "${USE_OVERLAY}" = "y" ]; then
+			conf_target="${OVERLAY}"; 
+		else
+			conf_target="${MODULEDIR}/${mod}"
+		fi
 		rm -f ${MODULEDIR}/${mod}/etc/pacman.conf
 		rm -f ${MODULEDIR}/${mod}/etc/pacman.d/mirrorlist
-		cp -f ${PACMANCONF} ${MODULEDIR}/${mod}/etc/pacman.conf
-		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist%g" ${MODULEDIR}/${mod}/etc/pacman.conf
-		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${MODULEDIR}/${mod}/etc/pacman.conf
-		cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${MODULEDIR}/${mod}/etc/pacman.d/mirrorlist
+		cp -f ${PACMANCONF} ${conf_target}/etc/pacman.conf
+		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist%g" ${conf_target}/etc/pacman.conf
+		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${conf_target}/etc/pacman.conf
+		cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist
 		green "完成!" | tee -a ${LOG}
 	fi
 
 	if [ -f ${MODULEDIR}/${mod}/etc/rc.conf ]; then
 		# 备份Arch原始启动关机脚本，以便Larchin安装
-		plain "备份Arch原始启动关机脚本，以便Larchin安装" | tee -a ${LOG}
+		plain -n "备份Arch原始启动关机脚本，以便Larchin安装" | tee -a ${LOG}
 		for larchsavefile in ${MODULEDIR}/${mod}/etc/{rc.sysinit,rc.shutdown,rc.local}; do
 			cp -f ${larchsavefile} ${larchsavefile}.larchsave
 		done
 		green "完成!" | tee -a ${LOG}
   	fi
 
+	# 当glibc 已经安装则检查是否有特别定制的locale.gen(可以在overlay下也可以在${SP_CUSTOM_DIR}下), 有则产生locale文件
+	if [ "x$(ls ${MODULEDIR}/${mod}/var/lib/pacman/local | grep "glibc-")" != "x" ]; then
+		if [ "${USE_OVERLAY}" = "y" ]; then
+			locale_gen_file="${OVERLAY}/etc/locale.gen"
+		else
+			locale_gen_file="${SP_CUSTOM_DIR}/etc/locale.gen"
+		fi
+		if [ -f "${locale_gen_file}" ]; then
+			cp -f ${locale_gen_file} $UNION/etc/
+			plain -n "根据定制的locale.gen文件生成locale文件"
+			chroot $UNION locale-gen
+			green "完成!" | tee -a ${LOG}
+		fi
+	fi
+
+	# 如果没有使用Overlay，则直接合并到目标系统(每个模块中都有)
+	if [ "${USE_OVERLAY}" != "y" ]; then
+		plain -n "没有选择使用Overlay, 将${SP_CUSTOM_DIR}中文件合并到目标系统中"
+		cat ${PACKLIST}/sp_custom.list | while read file; do
+			[ "x$file" = "x" ] && continue
+			cp -f ${SP_CUSTOM_DIR}/$file ${UNION}/
+		done
+		green "完成!" | tee -a ${LOG}
+	fi
+
 	# 重新只读挂载以进行下一个模块
 	remount_aufs_r "${MODULEDIR}/${mod}" "${LOG}"
    done
+
+   [ -x $UNION/sbin/depmod ] && (chroot $UNION depmod -a)
+
+   # 引入全局变量 SUPPORT_ESSENTIAL_MODULES 以免每个含有内核模块的均检测, 另：如果已经编入到内核而不作为模块则不需检测
+   # 检测包含内核的模块中，文件系统模块是否齐全
+   if [ "${SUPPORT_ESSENTIAL_MODULES}" = "n" ] && [ -d ${MODULEDIR}/${mod}/lib/modules ] && [ "x$(find ${UNION}/lib/modules -type f -name "*.ko")" != "x" ]; then
+	msg2 -n "检查目标系统是否有足够的文件系统模块: aufs,squashfs等..." | tee -a ${LOG}
+	if [ $(ls ${UNION}/${mod}/lib/modules | wc -l) -ge 2 ]; then
+		error "目标系统中内核模块有两个或者两个以上的版本" | tee -a ${LOG}
+		exit 1
+	fi
+	# 更新内核模块依赖关系
+	local mod_file fs_system kernel_ver
+	mod_file="${UNION}/lib/modules/*/modules.dep"
+	kernel_ver="$(basename $(dirname ${mod_file}))"
+	#depmod -a -b ${UNION} {kernel_ver}
+	# 检查核心模块
+	fs_system="aufs squashfs"
+	case ${ZIP_MODE} in 1|2) fs_system="${fs_system} sqlzma unlzma";; esac
+	for fs_type in ${fs_system}; do
+		#if [ "x$(find ${MODULEDIR}/${mod}/lib/modules -type f -name "${fs_type}.ko")" = "x" ]; then
+		if [ "x$(grep "${fs_type}.ko" ${mod_file})" = "x" ]; then
+				error "目标系统不包含必须的${fs_type}文件系统模块, 请修改${PROFILE_DIR}/$LISTDIR/${mod}.list" | tee -a ${LOG}
+				error "如果${fs_system}文件系统已经编入内核而不是作为模块，则将${CONFIG_FILE}中KERNEL_KEY_FS_INCLUDED值改为y" | tee -a ${LOG}
+				exit 1
+		fi
+	done
+	SUPPORT_ESSENTIAL_MODULES="y"
+	green "完成!" | tee -a ${LOG}
+   fi
 
    msg2 -n "导出已经安装的软件清单..." | tee -a ${LOG}
    $PACMAN -Q -r ${UNION} > ${PKGFILE}
@@ -1018,7 +996,125 @@ cmd_install ()
    fi
 
    # 清理不需要的文件
-   [ ! -f ${CLEANED_LIST} ] && pac_clean "${LOG}"
+   pac_clean "${LOG}"
+}
+
+# $1 源文件/目录 source file/directory
+# $2 基于目录basedir (trim $2 from $1)
+# $3 目标目录  target directory
+# $4 日志 log
+mv_to () {
+
+    local source basedir target log i
+    source=$1
+    basedir=$2
+    target=$3
+    log=$4
+    if [ -e "$source" ]; then
+	if [ -d $target/${source#$basedir} ]; then
+		for i in $(ls -A1 $source); do
+			[ "x$i" = "x" ] && continue
+			mv_to "$source/$i" "$basedir" "$target" "$log"
+		done
+	else
+		target_dir="$(dirname "$target/${source#$basedir}")"
+		[ -d "${target_dir}" ] || (mkdir -p "${target_dir}")
+		mv -fv "$source" "$target/${source#$basedir}" >>"$log"
+		return 0
+	fi
+    fi
+}
+
+# 模块清理，删除指定的文件
+cmd_clean () {
+
+   # 日志文件
+   [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
+   LOG=${BUILDLOG}/clean_files.log
+   [ -f ${LOG} ] && rm -f ${LOG}
+
+   plain "删除指定的文件夹..." | tee -a ${LOG}
+   for tmp_dir in ${DELDIR}; do
+	for mod in ${MODULES}; do
+		mv_to "${MODULEDIR}/${mod}/${tmp_dir}" "${MODULEDIR}/${mod}" "${CLEANED_BACKUP_DIR}" "$LOG"
+	done
+   done
+   green "完成!" | tee -a ${LOG}
+
+   if [ "${CUT_LOCALE}" = "y" ]; then
+	plain "删除${REMAIN_LOCALE}外的语言文件、帮助文件、X语言文件..." | tee -a $LOG
+	for mod in ${MODULES}; do
+		clean_dir=$(find ${MODULEDIR}/${mod} -type d -name "locale")
+		clean_dir="${clean_dir} $(find ${MODULEDIR}/${mod} -type f -name "*.qm")"
+		clean_dir="${clean_dir} $(find ${MODULEDIR}/${mod} -type f -name "*.ts")"
+		clean_dir="${clean_dir} ${MODULEDIR}/${mod}/usr/share/man"
+		for tmpdir in "${clean_dir}" ; do
+			[ "x$(ls $tmpdir)" = "x" ] && continue
+			find $tmpdir/* -maxdepth 0 -type d >/tmp/locale_file_list
+			cat /tmp/locale_file_list  | while read tmp; do
+				[ "x$tmp" = "x" ] && continue
+				keep="n"
+				case $tmp in *man*) keep="y";;
+					      *) 
+							for i in ${REMAIN_LOCALE}; do
+								case $tmp in */$i*) keep="y" && break;; esac
+							done
+					      ;;
+				esac
+				[ "$keep" != "y" ] && (mv_to "$tmp" "${MODULEDIR}/${mod}" "${CLEANED_BACKUP_DIR}" "$LOG")
+			done
+		done
+   		green "完成!" | tee -a $LOG
+	done
+   fi
+
+   if [ "${_move_devel}" = "y" ]; then
+	msg2 "整理编译所需库文件、源码等(运行时无需)..." | tee -a ${LOG}
+	local target mod file dir file_type
+	if [ "x${_move_devel_target}" != "x" ]; then
+		target="${MODULEDIR}/${_move_devel_target}"
+	else
+		target="${WORK_DIR}/mkarchlive_tmp"
+		[ -d "$target" ] && rm -rf "$target" && mkdir -p "$target"
+	fi
+	for mod in ${MODULES}; do
+		[ "${_move_devel_target}" = "${mod}" ] && continue
+		for dir in ${_move_devel_dir}; do
+			[ "x$dir" = "x" ] && continue
+			#plain "将${MODULEDIR}/${mod}/$dir下内容移到$target..." | tee -a ${LOG}
+			mv_to "${MODULEDIR}/${mod}/$dir" "${MODULEDIR}/${mod}" "$target" "${LOG}"
+			#green "完成!" | tee -a ${LOG}
+		done
+		for file_type in ${_move_devel_file_type}; do
+			[ "x$file_type" = "x" ] && continue
+			#plain "将${MODULEDIR}/${mod}/下扩展名为${file_type}的文件移动到$target..." | tee -a ${LOG}
+			for file in $(find ${MODULEDIR}/${mod} -type f -name "*${_move_devel_file_type}"); do
+				[ "x$file" = "x" ] && continue
+				mv_to "$file" "${MODULEDIR}/${mod}" "$target" "${LOG}"
+			done
+			#green "完成!" | tee -a ${LOG}
+		done			
+	done
+   fi
+   if [ "${_move_help}" = "y" ]; then
+	msg2 "整理帮助文件(一般运行无需)..." | tee -a ${LOG}
+	local target mod file dir file_type
+	if [ "x${_move_help_target}" != "x" ]; then
+		target="${MODULEDIR}/${_move_help_target}"
+	else
+		target="${WORK_DIR}/mkarchlive_tmp"
+		[ -d "$target" ] && rm -rf "$target" && mkdir -p "$target"
+	fi
+	for mod in ${MODULES}; do
+		[ "${_move_help_target}" = "${mod}" ] && continue
+		for dir in ${_move_help_dir}; do
+			[ "x$dir" = "x" ] && continue
+			#plain "将${MODULEDIR}/${mod}/$dir下内容移到$target..." | tee -a ${LOG}
+			mv_to "${MODULEDIR}/${mod}/$dir" "${MODULEDIR}/${mod}" "$target" "${LOG}"
+			#green "完成!" | tee -a ${LOG}
+		done
+	done
+   fi
 }
 
 function mksquashfs_module () {
@@ -1355,7 +1451,8 @@ cmd_img () {
             -A "${CDNAME}" -V "${CDNAME}" \
             -o "${IMGNAME}" "${IMGROOT}"
         if [ $? -eq 0 ]; then
-		perl ./lib/isohybrid "${IMGNAME}"
+		#perl ./lib/isohybrid "${IMGNAME}"
+		./lib/isohybrid "${IMGNAME}"
 		md5sum "${IMGNAME}" > "${IMGNAME}".md5
 		iso_size=$(isosize ${IMGNAME} 2>/dev/null)
 		if [ "x${iso_size}" = "x" ]; then

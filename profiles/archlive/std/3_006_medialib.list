@@ -4,7 +4,7 @@
 # libdv audiofile esound libidl2 orbit2 libsasl libldap gconf 
 # wavpack taglib libproxy libsoup libv4l libcaca 
 # 总共 180MB
-gstreamer0.10-base-plugins
+# gstreamer0.10-base-plugins 被 libpurple 依赖安装
 gstreamer0.10-good-plugins
 #
 #cdparanoia libvisual
@@ -19,7 +19,6 @@ gstreamer0.10-bad-plugins
 # gstreamer0.10-ugly libmpeg2 a52dec libsidplay libcddb libcdio
 gstreamer0.10-ugly-plugins
 #
-gstreamer0.10-python
 gstreamer0.10-ffmpeg
 # Gstreamer FFMpeg Plugin  5.85MB
 #

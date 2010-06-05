@@ -17,27 +17,27 @@ usage ()
 }
 
 info() {
-	echo "$@"
+	echo "      $@"
 }
 msg() {
 	local mesg=$1; shift
-	printf "==> ${mesg}\n" "$@" >&1
+	printf "      ==> ${mesg}\n" "$@" >&1
 }
 
 msg2() {
 	(( QUIET )) && return
 	local mesg=$1; shift
-	printf "  -> ${mesg}\n" "$@" >&1
+	printf "      -> ${mesg}\n" "$@" >&1
 }
 
 warning() {
 	local mesg=$1; shift
-	printf "==> WARNING: ${mesg}\n" "$@" >&2
+	printf "      ==> WARNING: ${mesg}\n" "$@" >&2
 }
 
 error() {
 	local mesg=$1; shift
-	printf "==> ERROR: ${mesg}\n" "$@" >&2
+	printf "      ==> ERROR: ${mesg}\n" "$@" >&2
 }
 # write a list entry
 #		arg1 - Entry name
@@ -98,7 +98,7 @@ db_write_entry()
 
 	cd "$tmpdir"
 
-	msg "Creating entry for $(basename "$1")..."
+	msg "添加 $(basename "$1")..."
 
 	# create package directory
 	[ -d $pkgname-$pkgver ] && rm -rf $pkgname-$pkgver
@@ -106,7 +106,7 @@ db_write_entry()
 	cd "$pkgname-$pkgver"
 
 	# create desc entry
-	msg2 "Creating 'desc' db entry..."
+	msg2 "提取 'desc' 信息..."
 	echo -e "%FILENAME%\n$(basename "$1")\n" >>desc
 	echo -e "%NAME%\n$pkgname\n" >>desc
 	[[ -n $pkgbase ]] && echo -e "%BASE%\n$pkgbase\n" >>desc
@@ -117,7 +117,7 @@ db_write_entry()
 	[[ -n $size ]] && echo -e "%ISIZE%\n$size\n" >>desc
 
 	# compute checksums
-	msg2 "Computing md5 checksums..."
+	msg2 "计算 md5 校验码..."
 	echo -e "%MD5SUM%\n$md5sum\n" >>desc
 
 	[[ -n $url ]] && echo -e "%URL%\n$url\n" >>desc
@@ -129,7 +129,7 @@ db_write_entry()
 	[[ -n $force ]] && echo -e "%FORCE%\n" >>desc
 
 	# create depends entry
-	msg2 "Creating 'depends' db entry..."
+	msg2 "提取 'depends' 信息..."
 	# create the file even if it will remain empty
 	touch "depends"
 	write_list_entry "DEPENDS" "$_depends" "depends"
