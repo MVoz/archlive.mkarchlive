@@ -133,7 +133,7 @@ if which cupsctl 2>/dev/null >/dev/null; then
 	NEW_BOOT_OPT="${NEW_BOOT_OPT} @cups"
 fi
 
-sed -i 's/^.*DAEMONS.*/DAEMONS=(syslog-ng hal @networkmanager ${NEW_BOOT_OPT})/' /etc/rc.conf 
+sed -i "s/^.*DAEMONS.*/DAEMONS=(syslog-ng @networkmanager ${NEW_BOOT_OPT})" /etc/rc.conf 
 chmod -x /etc/rc.d/archlive
 
 # 自动登录到默认的 DE

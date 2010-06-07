@@ -564,7 +564,12 @@ function sync_database () {
    green "完成!" | tee -a ${LOG}
 
    plain -n "导出软件仓软件组信息到${PACKLIST}/group_detail.list" | tee -a ${LOG}
-   $PACMAN -Qg >${PACKLIST}/group_detail.list
+   [ -d /tmp/pacman_tmp ] && rm -rf /tmp/pacman_tmp && mkdir -p /tmp/pacman_tmp/var/lib/pacman/local
+   for i in $(ls -A1 ${UNION}/var/lib/pacman/sync); do
+	cp -rf ${UNION}/var/lib/pacman/sync/$i/* /tmp/pacman_tmp/var/lib/pacman/local/ 2>/dev/null
+   done
+   $PACMAN -Qg -r ${UNION}>${PACKLIST}/group_detail.list
+   rm -rf /tmp/pacman_tmp
    green "完成!" | tee -a ${LOG}
 }
 function pac_install () {
@@ -908,7 +913,8 @@ cmd_install ()
   	fi
 
 	# 当glibc 已经安装则检查是否有特别定制的locale.gen(可以在overlay下也可以在${SP_CUSTOM_DIR}下), 有则产生locale文件
-	if [ "x$(ls ${MODULEDIR}/${mod}/var/lib/pacman/local | grep "glibc-")" != "x" ]; then
+	if [ -d ${MODULEDIR}/${mod}/var/lib/pacman/local ] && \
+		[ "x$(ls ${MODULEDIR}/${mod}/var/lib/pacman/local | grep "glibc-")" != "x" ]; then
 		if [ "${USE_OVERLAY}" = "y" ]; then
 			locale_gen_file="${OVERLAY}/etc/locale.gen"
 		else
@@ -932,25 +938,29 @@ cmd_install ()
 		green "完成!" | tee -a ${LOG}
 	fi
 
+	# 更新内核模块依赖关系
+	if [ -d ${MODULEDIR}/${mod}/lib/modules ]; then
+		if [ $(ls ${UNION}/${mod}/lib/modules | wc -l) -ge 2 ]; then
+			error "目标系统中内核模块有两个或者两个以上的版本" | tee -a ${LOG}
+			exit 1
+		fi
+		local mod_file kernel_ver
+		mod_file="${UNION}/lib/modules/*/modules.dep"
+		kernel_ver="$(basename $(dirname ${mod_file}))"
+		#depmod -a -b ${UNION} {kernel_ver}
+		depmod -a -b ${UNION} {kernel_ver}
+	fi
+
 	# 重新只读挂载以进行下一个模块
 	remount_aufs_r "${MODULEDIR}/${mod}" "${LOG}"
    done
-
-   [ -x $UNION/sbin/depmod ] && (chroot $UNION depmod -a)
 
    # 引入全局变量 SUPPORT_ESSENTIAL_MODULES 以免每个含有内核模块的均检测, 另：如果已经编入到内核而不作为模块则不需检测
    # 检测包含内核的模块中，文件系统模块是否齐全
    if [ "${SUPPORT_ESSENTIAL_MODULES}" = "n" ] && [ -d ${MODULEDIR}/${mod}/lib/modules ] && [ "x$(find ${UNION}/lib/modules -type f -name "*.ko")" != "x" ]; then
 	msg2 -n "检查目标系统是否有足够的文件系统模块: aufs,squashfs等..." | tee -a ${LOG}
-	if [ $(ls ${UNION}/${mod}/lib/modules | wc -l) -ge 2 ]; then
-		error "目标系统中内核模块有两个或者两个以上的版本" | tee -a ${LOG}
-		exit 1
-	fi
-	# 更新内核模块依赖关系
-	local mod_file fs_system kernel_ver
-	mod_file="${UNION}/lib/modules/*/modules.dep"
-	kernel_ver="$(basename $(dirname ${mod_file}))"
-	#depmod -a -b ${UNION} {kernel_ver}
+
+	local fs_system
 	# 检查核心模块
 	fs_system="aufs squashfs"
 	case ${ZIP_MODE} in 1|2) fs_system="${fs_system} sqlzma unlzma";; esac
@@ -971,21 +981,23 @@ cmd_install ()
    green "完成!" | tee -a ${LOG}
 
    #如果附加程序模块已经包含在程序清单中则不另外安装制作，除非archlive.conf中特别设置
-   if [ "${RE_EXTRAMODULES}" = "y" ]; then
-	cmd_extramodules_install "${LOG}"
-   else
-	local noinstall=""
-	$PACMAN -Q -r ${UNION} > ${PKGFILE}
-	for package in $EXTRAMODULES; do
-		if grep "^$pkgname " ${PKGFILE} >/dev/null; then
-			continue
-		else
-			noinstall="$noinstall $pkgname"
-		fi
-	done
-	if [ "x$noinstall" ! = "x" ]; then
-		EXTRAMODULES=$noinstall
+   if [ "x$EXTRAMODULES" != "x" ]; then
+	if [ "${RE_EXTRAMODULES}" = "y" ]; then
 		cmd_extramodules_install "${LOG}"
+	else
+		local noinstall=""
+		$PACMAN -Q -r ${UNION} > ${PKGFILE}
+		for package in $EXTRAMODULES; do
+			if grep "^$pkgname " ${PKGFILE} >/dev/null; then
+				continue
+			else
+				noinstall="$noinstall $pkgname"
+			fi
+		done
+		if [ "x$noinstall" ! = "x" ]; then
+			EXTRAMODULES=$noinstall
+			cmd_extramodules_install "${LOG}"
+		fi
 	fi
    fi
 
@@ -1043,29 +1055,42 @@ cmd_clean () {
 
    if [ "${CUT_LOCALE}" = "y" ]; then
 	plain "删除${REMAIN_LOCALE}外的语言文件、帮助文件、X语言文件..." | tee -a $LOG
+	clean_target_locales="${PACKLIST}/clean_target_locales"
 	for mod in ${MODULES}; do
-		clean_dir=$(find ${MODULEDIR}/${mod} -type d -name "locale")
-		clean_dir="${clean_dir} $(find ${MODULEDIR}/${mod} -type f -name "*.qm")"
-		clean_dir="${clean_dir} $(find ${MODULEDIR}/${mod} -type f -name "*.ts")"
-		clean_dir="${clean_dir} ${MODULEDIR}/${mod}/usr/share/man"
-		for tmpdir in "${clean_dir}" ; do
-			[ "x$(ls $tmpdir)" = "x" ] && continue
-			find $tmpdir/* -maxdepth 0 -type d >/tmp/locale_file_list
-			cat /tmp/locale_file_list  | while read tmp; do
-				[ "x$tmp" = "x" ] && continue
-				keep="n"
-				case $tmp in *man*) keep="y";;
-					      *) 
-							for i in ${REMAIN_LOCALE}; do
-								case $tmp in */$i*) keep="y" && break;; esac
-							done
-					      ;;
-				esac
-				[ "$keep" != "y" ] && (mv_to "$tmp" "${MODULEDIR}/${mod}" "${CLEANED_BACKUP_DIR}" "$LOG")
-			done
+		clean_target="${PACKLIST}/clean_target_locales_$mod"
+		localedir=$(find ${MODULEDIR}/${mod} -type d -name "locale")
+		if [ -d ${MODULEDIR}/${mod}/usr/share/man ]; then
+			localedir="$localedir ${MODULEDIR}/${mod}/usr/share/man"
+		fi
+		for dir in $localedir; do
+			[ "x$(ls -A1 $dir 2>/dev/null)" = "x" ] && continue
+			find $dir/* -maxdepth 0 -type d >>${clean_target}
 		done
-   		green "完成!" | tee -a $LOG
+		find ${MODULEDIR}/${mod} -type f -name "*.qm" >>${clean_target}
+		find ${MODULEDIR}/${mod} -type f -name "*.ts" >>${clean_target}
+
+		cat ${clean_target} | while read tmp; do
+			[ "x$tmp" = "x" ] && continue
+			keep="n"
+			case $tmp in
+				*/man/man*) keep="y";;
+				*/locale/*|*/man/*)
+					for i in ${REMAIN_LOCALE}; do
+						case $tmp in */$i*) keep="y" && break;; esac
+					done
+					;;
+				*.ts|*.qm)
+					for i in ${QT_KEEP_LOCALE}; do
+						case $tmp in */*_$i.*) keep="y" && break;; esac
+					done
+					;;
+			esac
+			[ "$keep" != "y" ] && (mv_to "$tmp" "${MODULEDIR}/${mod}" "${CLEANED_BACKUP_DIR}" "$LOG")
+		done
+        	cat $clean_target >>${clean_target_locales}
+		rm -f $clean_target
 	done
+   	green "完成!" | tee -a $LOG
    fi
 
    if [ "${_move_devel}" = "y" ]; then
@@ -1095,6 +1120,7 @@ cmd_clean () {
 			#green "完成!" | tee -a ${LOG}
 		done			
 	done
+	green "完成!" | tee -a ${LOG}
    fi
    if [ "${_move_help}" = "y" ]; then
 	msg2 "整理帮助文件(一般运行无需)..." | tee -a ${LOG}
@@ -1114,6 +1140,7 @@ cmd_clean () {
 			#green "完成!" | tee -a ${LOG}
 		done
 	done
+	green "完成!" | tee -a ${LOG}
    fi
 }
 
@@ -1459,6 +1486,7 @@ cmd_img () {
 			iso_size=$(grep " MB" /tmp/archlive_img.log | sed 's|.*(\(.*MB\))|\1|')
 		fi 
 		cat /tmp/archlive_img.log >>${LOG}
+		rm -f /tmp/archlive_img.log
 		green "${IMGNAME}制作成功，大小 ${iso_size}。" | tee -a ${LOG}
         fi
    fi

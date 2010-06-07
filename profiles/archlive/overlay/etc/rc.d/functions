@@ -1,8 +1,9 @@
 #
 # initscripts functions
 #
-# Special for Archlive   Base on initscripts-2009.11-1-i686.pkg.tar.gz
+# Special for Archlive   Base on initscripts-2010.06-1-i686.pkg.tar.xz
 
+#------------------- Archlive changed -------------------------
 # lang:
 export msg_lang
 if [ "$cn" = "y" ]; then
@@ -14,8 +15,10 @@ if [ "$cn" = "y" ]; then
 else
 	msg_lang="en"
 fi
+#---------------------------------------------------------------
 
 # width:
+
 STAT_COL=80
 if [ ! -t 1 ]; then
   USECOLOR=""
@@ -63,6 +66,8 @@ unset TERM_COLORS
 # clear the TZ envvar, so daemons always respect /etc/localtime
 unset TZ
 
+#------------------- Archlive changed -------------------------
+# 
 # colors:
 if [ "$USECOLOR" = "YES" -o "$USECOLOR" = "yes" ]; then
 	C_MAIN="\033[1;37;40m"      # main text 白色
@@ -81,6 +86,7 @@ if [ "$USECOLOR" = "YES" -o "$USECOLOR" = "yes" ]; then
 
 	C_CLEAR="\033[1;0m"
 fi
+#---------------------------------------------------------------
 
 if [ -t 1 ]; then
 	SAVE_POSITION="\033[s"
@@ -156,6 +162,7 @@ stat_fail() {
 	fi
 }
 
+
 stat_die() {
 	retval=1
 	[ "$1" = "" ] || retval=$1
@@ -219,14 +226,7 @@ ck_depends() {
 }
 
 start_daemon() {
-# 
-	if [ "$nox" = "y" ]; then
-		if [ $1 != "slim" ] && [ $1 != "gdm" ] && [ $1 != "xdm" ] && [ $1 != "kdm" ]; then
-			[ -x /etc/rc.d/$1 ] && /etc/rc.d/$1 start
-		fi
-	else
-		[ -x /etc/rc.d/$1 ] && /etc/rc.d/$1 start
-	fi
+	/etc/rc.d/$1 start
 }
 
 start_daemon_bkgd() {
@@ -263,6 +263,7 @@ status_stopped() {
   fi
 }
 
+
 ck_status() {
   ck_daemon $1
   if [ $? -eq 1 ]; then
@@ -271,15 +272,6 @@ ck_status() {
     status_stopped
   fi		
 }
-
-
-#Source additional functions at the end to allow overrides
-for f in /etc/rc.d/functions.d/*; do
-  if [ -e $f ]; then
-    . $f
-  fi
-done
-
 
 ###############################
 # Custom hooks in initscripts #
@@ -331,14 +323,38 @@ run_hook() {
 	done
 }
 
+# Function for setting console font if required
+set_consolefont() {
+    if [ -n "$CONSOLEFONT" ]; then
+	stat_busy "Loading Console Font: $CONSOLEFONT"
+	#CONSOLEMAP in UTF-8 shouldn't be used
+	if [ -n "$CONSOLEMAP" ] && echo "$LOCALE" | /bin/grep -qi utf ; then
+		CONSOLEMAP=""
+	fi
+	for i in /dev/tty[0-9]*; do
+		if [ -n "$CONSOLEMAP" ]; then
+			/usr/bin/setfont -m $CONSOLEMAP $CONSOLEFONT -C ${i} >/dev/null 2>&1
+		else
+			/usr/bin/setfont $CONSOLEFONT -C ${i} >/dev/null 2>&1
+		fi
+	done
+	if [ $? -ne 0 ]; then
+		stat_fail
+	else
+		if [ -n "$CONSOLEMAP" ]; then
+			echo 'if [ "$CONSOLE" = "" -a "$TERM" = "linux" -a -t 1 ]; then printf "\033(K"; fi' >>/etc/profile.d/locale.sh
+		fi
+		stat_done
+	fi
+    fi
+}
+
 # Source additional functions at the end to allow overrides
 for f in /etc/rc.d/functions.d/*; do
   if [ -e $f ]; then
     . $f
   fi
 done
-
-# End of file
 
 # End of file
 # vim: set ft=sh sw=2 ts=2 et:

@@ -1,6 +1,8 @@
 #!/bin/bash
 # $XConsortium: Xsession /main/10 1995/12/18 18:21:28 gildea $
 #
+#  Special custom for Archlive
+#  Carbon Jiao <http://archlive.googlecode.com>
 #
 # $XFree86: xc/programs/xdm/config/Xsession,v 1.2 1998/01/11 03:48:32 dawes Exp $
 # Modified for Slackware-3.5, 28-Mar-98 volkerdi
@@ -10,7 +12,8 @@
 # Fixes for $PATH (from Jim Diamond), GDM/KDM/XDM, 2003-02-07 volkerdi
 # Patched for bizzare GDM $1, 2003-09-23 volkerdi
 # Heavily modified by Jean-Philippe Guillemin for Zenwalk Linux - Wed Jul  4 19:50:38 CEST 2007
-. /usr/lib/liblinuxlive
+
+
 # redirect errors to a file in user's home directory if we can
 for errfile in "$HOME/.xsession-errors" "${TMPDIR-/tmp}/xses-$USER" "/tmp/xses-$USER"
 do
@@ -20,6 +23,15 @@ do
 		break
 	fi
 done
+
+# fix broken $UID on some system...
+if test "x$UID" = "x"; then
+	if test -x /usr/xpg4/bin/id; then
+		UID=`/usr/xpg4/bin/id -u`;
+	else
+		UID=`id -u`;
+	fi
+fi
 
 SESSION="$1"
 SESSIONS="/etc/X11/sessions"
@@ -31,6 +43,23 @@ sysmodmap=/usr/lib/X11/xinit/.Xmodmap
 
 dmrc=/var/state/dm/dmrc
 userdmrc=$HOME/.dmrc
+
+# $XDG_CONFIG_HOME defines the base directory relative to which user specific 
+# configuration files should be stored. If $XDG_CONFIG_HOME is either not set 
+# or empty, a default equal to $HOME/.config should be used.
+if test "x$XDG_CONFIG_HOME" = "x" ; then
+  XDG_CONFIG_HOME=$HOME/.config
+fi
+[ -d "$XDG_CONFIG_HOME" ] || mkdir "$XDG_CONFIG_HOME"
+
+# $XDG_CACHE_HOME defines the base directory relative to which user specific 
+# non-essential data files should be stored. If $XDG_CACHE_HOME is either not 
+# set or empty, a default equal to $HOME/.cache should be used.
+if test "x$XDG_CACHE_HOME" = "x" ; then
+  XDG_CACHE_HOME=$HOME/.cache
+fi
+[ -d "$XDG_CACHE_HOME" ] || mkdir "$XDG_CACHE_HOME"
+
 
 if [ -e $dmrc ]; then
 	localecmd="$(grep "LANG=" $dmrc 2>/dev/null)"
@@ -115,9 +144,20 @@ if [ -e $userdmrc ]; then
 	source $userdmrc 1> /dev/null 2> /dev/null
 fi
 
+# Launch xscreensaver (if available), but only as non-root user
+if test $UID -gt 0 -a -z "$VNCSESSION"; then 
+    if test x"`which xscreensaver 2>/dev/null`" != x""; then
+        xscreensaver -no-splash &
+    elif test x"`which gnome-screensaver 2>/dev/null`" != x""; then
+        gnome-screensaver &
+    fi
+fi 
+
 # We should normally get the session command from desktop files
-COMMAND="$(sed -n 's/Exec[ \t]*=[ \t]*\(.*\)$/\1/p' ${SESSIONS}/${SESSION}.desktop)"
-exec $COMMAND
+if [ "x${SESSION}" != "x" ]; then
+	COMMAND="$(sed -n 's/Exec[ \t]*=[ \t]*\(.*\)$/\1/p' ${SESSIONS}/${SESSION}.desktop)"
+	exec $COMMAND
+fi
 
 # Else we will try to do it in the old good way...
 case "$SESSION" in
@@ -129,7 +169,7 @@ xfce)
 	exec /etc/X11/xinit/xinitrc.xfce
 	;;
 lxde)
-	exec startlxde
+	exec /etc/X11/xinit/xinitrc.lxde
 	;;
 lxlauncher)
 	exec lxlauncher
@@ -150,7 +190,7 @@ gnome)
 	exec /usr/bin/gnome-session
 	;;
 fluxbox)
-	exec fluxbox
+	exec /etc/X11/xinit/xinitrc.fluxbox
 	;;
 fvwm2)
 	xsetroot -solid SteelBlue
@@ -174,13 +214,13 @@ enlightenment)
 	exec starte16
 	;;
 e17svn)
-	enlightenment_start
+	exec /etc/X11/xinit/xinitrc.e17
 	;;
-openbox)
-	exec openbox-session
+openbox*)
+	exec /etc/X11/xinit/xinitrc.openbox
 	;;
 icewm)
-	exec icewm-session
+	exec /etc/X11/xinit/xinitrc.icewm
 	;;
 twm)
 	#xclock -geometry 50x50-1+1 &
@@ -190,22 +230,15 @@ twm)
 	xsetroot -solid SteelBlue
 	exec twm
 	;;
+*)
+	if [ "x$session" != "x' ]; then
+		exec /etc/X11/xinit/xinitrc.$session
+	elif [ -x $HOME/.xinitrc ]; then
+		exec $HOME/.xinitrc
+	elif [ -x $HOME/.xsession ]; then
+		exec $HOME/.xsession $@
+	else
+		exec /etc/X11/xinit/xinitrc.openbox
+	fi
+	;;
 esac
-
-# If we aren't running from XDM/KDM/GDM and no window manager was
-# specified, then we'll run the user's $HOME/.xsession if it's
-# executable.  This must be set up to run the user's window manager.
-if [ -x $HOME/.xsession ]; then
-        exec $HOME/.xsession $@
-fi
-
-# If the user doesn't have their own xsession and none was specified in
-# $SESSION, then run the system default session type:
-session="`cmdline_value session`"
-if [ "$session" != "" ]; then
-	exec /etc/X11/xinit/xinitrc.${session}
-else
-	exec /etc/X11/xinit/xinitrc
-fi
-
-
