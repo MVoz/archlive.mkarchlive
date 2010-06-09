@@ -301,3 +301,15 @@ gmrun
 
 mpg123
 
+# Flash 插件相关
+flashplugin
+# Adobe Flash Player
+gnash-common
+# A GNU Flash movie player
+gnash-gtk
+# A GNU Flash movie player (gtk)
+libflashsupport
+# Macromedia flash plugin support lib (OSS SSL)
+
+mtasc
+# An open source flash (swf) compiler  安装后大小： 1032.00 K

@@ -115,3 +115,5 @@ gtk-recordmydesktop
 ## ilmbase openexr
 #blender
 
+swfdec
+# free library for decoding and rendering Flash animations

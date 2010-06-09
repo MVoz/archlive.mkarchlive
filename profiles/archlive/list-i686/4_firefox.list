@@ -1,3 +1,14 @@
-firefox-archlive
-# Archlive定制包
+#firefox-archlive
+# Archlive定制包 中文版，包含flash
 
+firefox
+# Standalone web browser from mozilla.org
+
+firefox-i18n
+# Language packs for Firefox
+
+totem-plugin
+# Totem mozilla/firefox plugin
+
+arch-firefox-search
+# Firefox Arch search engines (AUR, Pkgs, BBS, Wiki, etc.)
