@@ -1,0 +1,136 @@
+qt
+qtmod
+openjdk6
+jre
+smbclient
+samba
+################################################常用X应用程序
+########################网络工具
+################################################常用X应用程序
+########################网络工具
+# 远程桌面
+# libsamplerate
+rdesktop
+# libvncserver
+remmina
+# Archlive编译包
+#
+# 局域网共享
+#
+#libcdio gvfs  6.30MB
+# gogolo-svn 0.42MB
+gigolo
+# Archlive编译包, 网上邻居的最好替代品，利用gvfs文件系统
+#
+# 无线网络密码破解java图形前端   1.58 + 8.24MB
+spoonwep
+# Archlive定制包
+spoonwpa
+# Archlive定制包
+##### benliud  2.61MB
+benliud
+# Archlive定制包
+#
+#transmission-svn
+# Archlive编译包
+transmission-gtk
+#
+##### amule 32.31MB
+#wxgtk gd geoip
+#amule
+##### rapidsvn-cn svn图形工具 1.42MB
+# apr unixodbc apr-util subversion
+#rapidsvn-cn
+# Archlive定制包
+#####  xchat 6.61MB
+#xchat
+#####  linuxqq 6.08MB
+#linuxqq
+# Archlive编译包
+#
+#gadmin-rsync-cn
+# Archlive编译包
+#
+#thunderbird
+
+libpurple
+finch
+pidgin
+# Archlive定制包
+
+openfetion
+
+#grsync
+#### pan,  A powerful Newsgroup Article reader based on GTK2   8.15MB
+## hunspell enchant gtkspell   
+#pan
+#
+#gftp
+#filezilla
+##### UrlGfe is a GTK2 download manager 0.30MB
+#urlgfe
+
+#################### 应用办公
+#abiword
+#gnumeric
+#
+# poppler-glib
+#epdfview
+#
+foxitreader
+# Archlive编译包  5.49MB
+#geany
+#####  geany  5.96MB
+#
+#xchm
+# chmlib wxgtk
+# xchm 0.74MB 及其依赖 21.48MB
+#
+#brasero
+## brasero, A disc burning application for Gnome
+#
+#meld
+## meld, Visual diff and merge tool for GNOME
+#
+isomaster
+##### CD image editor written in GTK2  0.96MB
+#homebank
+#################### 系统工具
+gparted
+#
+luser
+# python-pexpect
+# 0.31MB
+#
+hardinfo
+#  0.64MB
+#shaman
+# 依赖于qt,  2.97MB
+#
+#pyrenamer
+# pyorbit libart-lgpl libgnomecanvas tdb smbclient gnome-mime-data gnome-vfs libbonobo libgnome
+# libbonoboui gnome-keyring libgnomeui gnome-python
+##### An application for the mass renaming of files  1.03MB   89.20MB
+#
+#unetbootin
+#依赖于qt gnome-keyring libgtop libgksu gksu  总93.30MB
+##### UNetbootin allows for the installation of various Linux/BSD livecd distributions to a partition or USB drive. 1.38MB
+#
+##### GTK+ Version of snes9x, a portable Emulator for the Super Nintento Entertainment System 3.48MB
+#snes9x-gtk
+#
+##### gcalctool GNOME Scientific calculator  7.78MB
+#gcalctool
+##### lmms The Linux MultiMedia Studio  24.21MB
+#lmms
+##### vym A mindmapping tool  6.46MB
+#vym
+##
+## Back In Time is a simple backup system for Linux inspired from 'flyback project' and 'TimeVault'.
+# backintime 及其依赖 99.94MB
+## python-notify libidl2 orbit2 pyorbit libart-lgpl libgnomecanvas gconf tdb smbclient gnome-mime-data
+# gnome-vfs libbonobo libgnome libbonoboui gnome-keyring libgnomeui gnome-python 
+#backintime
+#
+wine
+gmchess

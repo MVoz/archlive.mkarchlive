@@ -1,0 +1,303 @@
+##### xorg-server 及其依赖 42.41MB
+xorg-fonts-alias
+
+#libfontenc
+#freetype2
+#fontsproto
+#libxfont
+#xorg-font-utils
+xorg-fonts-encodings
+
+#xorg-fonts-100dpi
+#xorg-fonts-75dpi
+#xorg-fonts-cyrillic
+#xorg-fonts-misc
+#xorg-fonts-type1
+
+xf86-input-evdev
+xf86-input-keyboard
+xf86-input-mouse
+xf86-input-synaptics
+
+#hal-info
+#eject
+#dmidecode
+#libx86
+#vbetool
+#pm-utils
+#consolekit
+#hal
+#libdrm
+#xf86vidmodeproto
+#libxxf86vm
+#fixesproto
+#libxfixes
+#damageproto
+#libxdamage
+#libgl
+#libpciaccess
+#videoproto
+#libxv
+#pixman
+#xcursor-themes
+#libxpm
+#libxaw
+#libxkbfile
+#xorg-xkb-utils
+#xkeyboard-config
+#fontcacheproto
+#libxfontcache
+#inputproto
+#libxi
+#xf86miscproto
+#libxxf86misc
+#renderproto
+#libxrandr
+#mcpp
+#xorg-server-utils
+#fontconfig
+#xorg-fonts-misc
+#xbitmaps
+xorg-server
+#########################
+#
+xorg-xauth
+xorg-xinit
+#
+#xterm
+#
+#######################################
+# xorg-dri
+# Archlive 定制组  包含
+ati-dri
+intel-dri
+mach64-dri
+mga-dri
+#nouveau-dri
+r128-dri
+savage-dri
+sis-dri
+tdfx-dri
+#trident-dri
+xorg-video-drivers
+#
+# Archlive 作为Virtualbox的客户机时相关驱动等
+virtualbox-modules
+virtualbox-ose-additions-modules
+virtualbox-ose-additions
+#virtualbox-additions
+# Archlive定制，2.6.33-ARCH
+#
+#chakra-hardware-detection
+#xakra
+# Archlive定制包，Xorg.conf由此程序产生，来自于chakra项目
+#
+###################字体
+#ttf-openlogos
+ttf-dejavu
+##   7.88MB
+# 被vlc等依赖
+#gsfonts
+# Ghostscript standard Type1 fonts  4.86MB
+#ttf-droid
+wqy-bitmapfont
+# 18.46MB
+#wqy-zenhei
+# 12.71MB
+
+iso-codes
+# 8.69MB
+
+######
+shared-mime-info
+# Freedesktop.org Shared MIME Info  2.64MB
+#
+
+desktop-file-utils
+# Command line utilities for working with desktop entries   0.10MB
+
+xdg-utils
+# Command line tools that assist applications with a variety of desktop integration tasks.  0.18MB
+
+#archlinux-menus
+# Arch Linux specific XDG-compliant menu  0.07MB
+#archlinux-xdg-menu
+# automatic generate WM menu from xdg files  0.17MB
+
+startup-notification
+# Monitor and display application startup   0.14MB
+#
+xdialog
+#A drop-in replacement for the 'dialog' or 'cdialog' programs  0.91MB
+#
+#gtkdialog
+# Gtkdialog is a small utility for fast and easy GUI building.  0.13MB
+#
+#zenity
+# Display graphical dialog boxes from shell scripts  4.67MB
+#
+gksu
+# A graphical frontend for su    0.10MB
+
+gamin
+#Gamin is a file and directory monitoring system defined to be a subset of the FAM (File Alteration Monitor) system.
+
+slim-archlive
+# Desktop-independent graphical login manager for X11  0.50MB
+# Archlive 定制
+#
+#archlinux-themes-slim
+#Arch Linux themes for the SLiM login manager   0.50MB
+#xorg-twm
+# Tab Window Manager for the X Window System   0.23MB
+# 
+#menumaker
+#Heuristics-driven menu generator for Deskmenu, FluxBox, IceWM, OpenBox,WindowMaker and XFCE.  0.72MB
+
+scrot
+#giflib libid3tag imlib2 giblib
+# A simple command-line screenshot utility for X    0.09MB
+################## 声音相关
+# cdrdao 依赖
+alsa-lib
+alsa-utils
+#  An alternative implementation of Linux sound support  1.71MB
+alsa-oss
+# OSS compatibility library  0.13MB
+
+oss-hg
+
+#####################
+#run-parts
+#ca-certificates
+#curl
+#conky
+# 依赖于 run-parts ca-certificates curl
+# An advanced, highly configurable system monitor for X based on torsmo   0.27MB
+
+#gxmessage 
+#conky-archlive
+# Archlive定制包，conky的配置文件等，需要  lm_sensors hddtemp links gxmessage   
+
+#wbar
+# A quick launch bar developed with speed in mind.   0.59MB
+
+feh
+# feh is a fast, lightweight image viewer which uses imlib2   0.55MB
+
+rxvt-unicode
+# an unicode enabled rxvt-clone terminal emulator (urxvt)  5.09MB
+#slang
+# S-Lang is a powerful interpreted language jed依赖于此包 3.17MB
+#jed
+# JED is a freely available text editor for Unix and other OS'  2.07MB
+#
+xkeycaps
+#XKeyCaps is a graphical front-end to xmodmap.   1.04MB
+################## 小型桌面环境  fluxbox 3.71MB  awesome 2.47MB icewm 8.84MB fvwm 6.88MB
+#fluxbox
+
+#lua
+#libev
+#dbus
+#libxdg-basedir
+#awesome
+
+#gtk
+#imlib
+#icewm
+# 依赖于gtk  imlib   (Total 8.84MB)
+
+#------------------- openbox lxde -------
+#lxde
+#lxde组包含:
+lxde-common
+lxde-icon-theme
+lxmenu-data
+lxpanel
+lxsession-lite  
+lxterminal
+lxappearance
+openbox
+pcmanfm
+leafpad
+gpicview
+
+#libfm
+pcmanfm2
+
+xcompmgr
+
+#icon-naming-utils
+#Maps the new names of icons for Tango to the legacy names used by the GNOME and KDE desktops.  0.08MB
+#
+hicolor-icon-theme
+# Freedesktop.org Hicolor icon theme  1.26MB
+#
+#tango-icon-theme
+# The Tango Desktop Project exists to create a consistent user experience   13.03MB
+#tango-icon-theme-extras
+# Extra icons for Tango  2.48MB
+#gnome-icon-theme
+# Default icon theme for GNOME2
+### gnome-icon-theme 依赖于以下包，总 21.30MB
+
+gtk-engine-equinox
+# A heavily modified version of the beautiful Aurora engine
+gtk-theme-equinox
+# gtk theme for equinox engine
+
+vattery
+# aur 包， archlive编译
+
+#rox
+# A small and fast file manager which can optionally manage the desktop background and panels.
+# 3.84MB
+#----------------------------fvwm
+#habak
+#trayer
+#fvwm
+# 依赖于fribidi libstroke imlib gtk
+
+#usbview
+# USB Viewer   0.55MB
+
+#gtk-vnc
+# A VNC viewer widget for GTK   0.22MB
+
+# 锁屏程序 8.40MB
+## printproto libxp lesstif audiofile esound
+#xlockmore
+
+# fcitx-svn-ibus   56.79MB   fcitx-svn-mini 6.18MB
+fcitx-svn-mini
+# Archlive定制包,只含有智能拼音、智能双拼和五笔字型，如果需要二笔等，请用fcitx-svn-ibus 
+
+yong
+# 小小输入法
+
+#wicd
+# 依赖于'python' 'dbus-python' 'pygtk' 'dhcpcd' 'wpa_supplicant' 'wireless_tools' 'ethtool' 'shared-mime-info'
+# New and alternative wireless/wired network management utility  2.12MB
+
+network-manager-applet
+
+larchin-syscalls-svn
+# Archlive定制包，中文版
+larchin-svn
+# Archlive定制包，中文版
+
+xarchiver
+
+galculator
+
+gsnapshot
+# Archlive编译包，已汉化
+
+gvfs
+# lxde 等小型桌面环境下使用pcmanfm2来访问网上邻居
+
+gmrun
+
+mpg123
+

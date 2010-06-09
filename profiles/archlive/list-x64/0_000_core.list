@@ -1,0 +1,11 @@
+-d kernel26
+-d linux-firmware
+-d kernel26-headers
+-d linux-api-headers
+##################### 常用网卡驱动程序
+-d ndiswrapper
+-d madwifi-utils
+-d madwifi
+-d aufs2
+-d aufs2-util
+

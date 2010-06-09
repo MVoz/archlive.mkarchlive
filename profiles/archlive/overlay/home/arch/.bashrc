@@ -1,7 +1,10 @@
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
-export PS1='\[\e[1;31m\][\t]\[\e[1;34m\][\u@\h:\w]\[\e[0m\]\$ '
+export PS1='\[\e[1;31m\][\T][$(date +%D)][W$(date +%W)]\[\e[1;34m\][\u@\h:\w]\[\e[0m\]\n\$ '
+#export PS1="\[\033[s\]\[\033[1;\$((COLUMNS-24))f\]\033[1;33m[\$(date +%T)][\$(date +%D)][W\$(date +%W)]\[\033[u\]\[\e[1;31m\][\$(date +%T)][\$(date +%D)][W\$(date +%W)]\[\e[1;34m\][\u@\h:\w]\[\e[0m\]\n>"
+export PS2=">>"
+
 ## 针对同时打开多个控制台时 bash 命令历史记录覆盖问题
 ## 将命令追加到 history 中
 #shopt -s histappend
@@ -22,10 +25,6 @@ else
     #echo "/usr/share/cdargs/cdargs-bash.sh not found!"
 fi
 
-screen_program=$(type -p screen)
-if [ -z $screen_program ] ; then
-    alias screen="tmux"
-fi
 alias ls='ls --color=auto'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -35,5 +34,3 @@ alias tee='tee -a'
 
 alias ls='ls --color=auto'
 echo -e "\033[1;33mWelcome to Archlive!\033[1;0m"
-#set -o vi
-#set -o emacs
