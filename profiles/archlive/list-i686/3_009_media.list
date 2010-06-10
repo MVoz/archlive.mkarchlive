@@ -114,6 +114,11 @@ gtk-recordmydesktop
 ####blender, A fully integrated 3D graphics creation suite   42.48MB
 ## ilmbase openexr
 #blender
+gnash-common
+# A GNU Flash movie player
+gnash-gtk
+# A GNU Flash movie player (gtk)
 
 swfdec
 # free library for decoding and rendering Flash animations
+

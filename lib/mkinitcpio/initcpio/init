@@ -40,6 +40,12 @@ for cmd in ${CMDLINE}; do
     esac
 done
 
+# 双（多）模式启动判断
+# Special for dul-boot
+case $CMDLINE in *i686*) export ARCH="i686" ;;
+		*x86_64*) export ARCH="x86_64" ;;
+esac
+
 # if available, start udevd at this stage
 if [ -x /sbin/udevd ]; then
 #    if [ "$cn" = "y" ]; then

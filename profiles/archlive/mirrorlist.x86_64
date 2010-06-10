@@ -1,13 +1,13 @@
 #
 # Arch Linux repository mirrorlist
 #
-Server = http://mirror.lupaworld.com/archlinux/$repo/os/x86_64
-Server = http://mirrors.163.com/archlinux/archlinux/$repo/x86_64
-Server = ftp://public.gooth.cn/archlinux/$repo/x86_64
-Server = ftp://xde.gooth.cn/archlinux/$repo/os/x86_64 #（Gooth，网通）
-Server = http://ftp.sjtu.edu.cn/pub/mirror2/www.archlinux.org/$repo/os/x86_64 # (上海交通大学，教育网）
-Server = http://mirror.bjtu.edu.cn/ArchLinux/$repo/os/x86_64 # （北京交通大学，教育网）
-Server = http://mirror.lzjtu.edu.cn/archlinux/$repo/os/x86_64
+#Server = http://mirror.lupaworld.com/archlinux/$repo/os/x86_64
+#Server = http://mirrors.163.com/archlinux/archlinux/$repo/x86_64
+#Server = ftp://public.gooth.cn/archlinux/$repo/x86_64
+#Server = ftp://xde.gooth.cn/archlinux/$repo/os/x86_64 #（Gooth，网通）
+#Server = http://ftp.sjtu.edu.cn/pub/mirror2/www.archlinux.org/$repo/os/x86_64 # (上海交通大学，教育网）
+#Server = http://mirror.bjtu.edu.cn/ArchLinux/$repo/os/x86_64 # （北京交通大学，教育网）
+#Server = http://mirror.lzjtu.edu.cn/archlinux/$repo/os/x86_64
 # United States
 Server = ftp://ftp.archlinux.org/$repo/os/x86_64
 Server = ftp://locke.suu.edu/linux/dist/archlinux/$repo/os/x86_64

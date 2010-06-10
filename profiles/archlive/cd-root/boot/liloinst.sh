@@ -64,8 +64,8 @@ compact
 change-rules
 reset
 install=text
-image=$MYMNT/boot/vmlinuz
-initrd=$MYMNT/boot/initrd.gz
+image=$MYMNT/archlive/boot/i686-vmlinuz26
+initrd=$MYMNT/archlive/boot/i686-kernel26.img
 label=Slax
 root=/dev/ram0
 read-write

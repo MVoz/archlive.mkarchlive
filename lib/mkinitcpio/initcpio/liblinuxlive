@@ -241,7 +241,7 @@ fatal()
 allow_only_root()
 {
   # test if the script is started by root user. If not, exit
-  if [ "0$UID" -ne 0 ]; then
+  if [ "$UID" -ne 0 ]; then
 	if [ "$cn" = "y" ]; then
 		echo "只有root用户可执行 $(basename $0)"; exit 1
 	else
@@ -683,17 +683,23 @@ union_insert_dir()
 
 # Find LZM modules in given dir
 # $1 = root directory of mounted DATAdir
-#
+# $2 ARCH  i686 or x86_64
 find_modules()
 {
    debug_log "find_modules" "$*"
-   #if [ "$(cmdline_parameter baseonly)" ]; then
-   if [ "$baseonly" = "y" ]; then
-   	find "$1/base" "$1/addons" "$1/optional" -name "*.sqfs" 2>/dev/null | sort
-   	find "$1/base" "$1/addons" "$1/optional" -name "*.lzm" 2>/dev/null | sort
+   if [ "$2" = "i686"  -o "$ARCH" = "i686" ]; then
+	 append_cmd="grep -v x86_64"
+   elif [ "$2" = "x86_64" -o "$ARCH" = "x86_64" ]; then
+	append_cmd="grep -v i686"
    else
-   	find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.sqfs" 2>/dev/null | sort
-   	find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.lzm" 2>/dev/null | sort
+	append_cmd="grep -v *"
+   fi
+   if [ "$baseonly" = "y" ]; then
+   	find "$1/base" "$1/addons" "$1/optional" -name "*.sqfs" | ${append_cmd} 2>/dev/null | sort
+   	find "$1/base" "$1/addons" "$1/optional" -name "*.lzm" | ${append_cmd} 2>/dev/null | sort
+   else
+   	find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.sqfs" | ${append_cmd} 2>/dev/null | sort
+   	find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.lzm" | ${append_cmd} 2>/dev/null | sort
    fi
 }
 
@@ -712,7 +718,7 @@ list_modules()
 
    NOLOAD=$(cmdline_value noload | sed -r 's/\*/.\*/g' | sed -r 's/,|;/|/g')
    #NOLOAD=$(echo $noload | sed -r 's/\*/.\*/g' | sed -r 's/,|;/|/g')
-   find_modules "$1" | while read LINE; do
+   find_modules "$1" $ARCH | while read LINE; do
       MODNAME=$(echo $LINE | cut -b ${#1}- | cut -b 2-)
       if [ "$(echo $LINE | grep /optional/)" ]; then
          if [ ! "$LOAD" -o ! "$(echo $MODNAME | egrep -i "$LOAD")" ]; then continue; fi

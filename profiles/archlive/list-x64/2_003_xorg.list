@@ -270,8 +270,10 @@ vattery
 #xlockmore
 
 # fcitx-svn-ibus   56.79MB   fcitx-svn-mini 6.18MB
-fcitx-svn-mini
-# Archlive定制包,只含有智能拼音、智能双拼和五笔字型，如果需要二笔等，请用fcitx-svn-ibus 
+#fcitx-svn-mini
+# Archlive定制包,只含有智能拼音、智能双拼和五笔字型，如果需要二笔等，请用fcitx-svn-ibus
+
+fcitx
 
 yong
 # 小小输入法
@@ -304,12 +306,13 @@ mpg123
 # Flash 插件相关
 flashplugin
 # Adobe Flash Player
-gnash-common
+#gnash-common
 # A GNU Flash movie player
-gnash-gtk
+#gnash-gtk
 # A GNU Flash movie player (gtk)
 libflashsupport
 # Macromedia flash plugin support lib (OSS SSL)
 
 mtasc
 # An open source flash (swf) compiler  安装后大小： 1032.00 K
+
