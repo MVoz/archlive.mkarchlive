@@ -275,11 +275,15 @@ function custom_repo ()
 	usage 1
    fi
 }
+
+# $1 repo_name
+# $2 repo_location
+# $3 pacman.conf位置
 function is_in_pacmanconf () 
 {
-   a=$(cat ${PACMANCONF} | sed -r "s/#.*//")
+   a=$(cat ${3} | sed -r "s/#.*//")
    case $a in 
-	*[${REPO_Name}]*) case $a in *file://$REPO*) return 0;; esac
+	*[${1}]*) case $a in *file://${2}*) return 0;; esac
 	;;
 	esac
    return 1
@@ -287,13 +291,17 @@ function is_in_pacmanconf ()
 
 # 将自定义的软件仓加入到PACMANCONF中，默认第一优先
 # pacman.conf须是在# and they will be used before the default mirrors.行后开始定义软件仓.
+# $1 repo_name
+# $2 repo_location
+# $3 pacman.conf位置
+# $4 log
 function add_customrepo2pacmanconf ()
 {
-   LOG="${1}"
+   LOG="${4}"
    sed -i "/# and they will be used before the default mirrors./ a\
-	\ \n[${REPO_Name}]\
-	\nServer = file://$REPO" ${PACMANCONF}
-   green "将自定义软件仓加入${PACMANCONF}完成" | tee -a ${LOG}
+	\ \n[${1}]\
+	\nServer = file://$2" ${3}
+   green "将自定义软件仓加入${3}完成" | tee -a ${LOG}
 }
 
 prepare_overlay (){
@@ -422,11 +430,23 @@ cmd_prepare (){
    [ ! -d ${MODULEDIR} ] && mkdir -p "${MODULEDIR}"
    [ ! -d ${BUILDLOG} ] && mkdir -p "${BUILDLOG}"
 
-   if [ "${_CUSTOM_REPO}" = "y" -a "x$REPO_Name" != "x" -a "x$REPO" != "x" ]; then
-       msg2 "建立自定义软件仓..." | tee -a ${LOG}
-       custom_repo "${REPO}" "${REPO_Name}"
-       green "自定义软件仓创建完成!" | tee -a ${LOG}
-       if ! is_in_pacmanconf; then add_customrepo2pacmanconf "${LOG}"; fi
+   if [ "${_CUSTOM_REPO}" = "y" ]; then
+	msg2 "建立自定义软件仓..." | tee -a ${LOG}
+	# i686 自定义repo
+	if [ "x$i686_REPO_Name" != "x" -a "x$i686_REPO" != "x" ]; then
+		custom_repo "${i686_REPO}" "${i686_REPO_Name}"
+		if ! is_in_pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
+			add_customrepo2pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf" "${LOG}"
+		fi
+	fi
+	# x86_64 自定义repo
+	if [ "x$x86_64_REPO_Name" != "x" -a "x$x86_64_REPO" != "x" ]; then
+	       custom_repo "${x86_64_REPO}" "${x86_64_REPO_Name}"
+		if ! is_in_pacmanconf "${x86_64_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
+			add_customrepo2pacmanconf "${x86_64_REPO_Name}" "${x86_64_REPO}" "${PROFILE_DIR}/pacman_x86_64.conf" "${LOG}"
+		fi
+	fi
+	green "自定义软件仓创建完成!" | tee -a ${LOG}
    fi
 
    msg2 "准备目标镜像根目录结构及启动的相关配置文件" | tee -a ${LOG}
@@ -901,6 +921,7 @@ cmd_install ()
 		cp -f ${PACMANCONF} ${conf_target}/etc/pacman.conf
 		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist%g" ${conf_target}/etc/pacman.conf
 		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${conf_target}/etc/pacman.conf
+		[ -d ${conf_target}/etc/pacman.d ] || mkdir -p ${conf_target}/etc/pacman.d
 		cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist
 		green "完成!" | tee -a ${LOG}
 	fi
