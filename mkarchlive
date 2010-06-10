@@ -354,8 +354,8 @@ case ${CMD_NAME} in
 	bootimage) init_config; cmd_boot_kernel_image ;;
 	img) init_config; cmd_img ;;
 	all) init_config; cmd_prepare; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image; cmd_img ;;
-	dul) export ARCH="i686"; init_config; cmd_prepare; second_confirm; sync_database; #cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
-	     export ARCH="x86_64"; init_config; second_confirm; sync_database; #cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+	dul) export ARCH="i686"; init_config; cmd_prepare; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+	     export ARCH="x86_64"; init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
 	     cmd_img ;;
 	*) error "错误的命令" && usage 1 ;;
 esac
