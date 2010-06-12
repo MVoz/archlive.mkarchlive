@@ -130,6 +130,7 @@ usage ()
    echo ""
    hgreen " 用法：${APPNAME} [选项] 命令 <命令选项>"
    green " 一般选项:"
+   echo "       -A               指定Arch为i686或者x86_64或者dul(双模式)"
    echo "       -f               强制覆盖现有的工作目录等，全部重新制作"
    echo "       -i CPIO_CONFIG   用CONFIG 作为archlive启动内核配置文件. "
    echo "       -c CDNAME        目标镜像名. 默认: archlive"
@@ -400,6 +401,25 @@ prepare_pacman (){
    pacman_version=$($PACMAN -V | grep "Pacman" | head -1 | tr -s " " | cut -d " " -f4)
    [ "x${pacman_version}" != "x" ] && green "安装程序准备完成：$PACMAN, 版本 ${pacman_version}" | tee -a ${LOG}
 }
+prepare_imgroot () {
+
+   msg2 "准备目标镜像根目录结构及启动的相关配置文件" | tee -a ${LOG}
+   [ ! -d ${IMGROOT} ] && mkdir -p ${IMGROOT}
+   if [ -d ${PROFILE_DIR}/cd-root ]; then
+	cp -rf ${PROFILE_DIR}/cd-root/* ${IMGROOT}/
+   else
+      if [ ! -f cd-root.tgz ]; then
+		plain -n "下载Archlive光盘根目录结构文件cd-root.tgz" | tee -a ${LOG}
+		wget -q "${TGZURL}/cd-root.tgz"  2>&1 > /dev/null
+		green "完成!" | tee -a ${LOG}
+      fi
+      echo "释放Archlive光盘根目录结构cd-root.tgz" | tee -a ${LOG}
+      tar -xzvpf cd-root.tgz -C ${IMGROOT}  2>&1 > /dev/null
+   fi
+   mkdir -p ${IMGROOT}/${CDNAME}/{base,modules,optional,rootcopy}
+   msg2 "目标镜像根目录结构准备完成." | tee -a ${LOG}
+
+}
 cmd_prepare (){
 
    [ ! -d ${WORK_DIR} ] && mkdir -p ${WORK_DIR}
@@ -434,6 +454,7 @@ cmd_prepare (){
 	msg2 "建立自定义软件仓..." | tee -a ${LOG}
 	# i686 自定义repo
 	if [ "x$i686_REPO_Name" != "x" -a "x$i686_REPO" != "x" ]; then
+		echo "在$i686_REPO下建立名为$i686_REPO_Name的i686软件仓"
 		custom_repo "${i686_REPO}" "${i686_REPO_Name}"
 		if ! is_in_pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
 			add_customrepo2pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf" "${LOG}"
@@ -441,6 +462,7 @@ cmd_prepare (){
 	fi
 	# x86_64 自定义repo
 	if [ "x$x86_64_REPO_Name" != "x" -a "x$x86_64_REPO" != "x" ]; then
+		echo "在$x86_64_REPO下建立名为$x86_64_REPO_Name的i686软件仓"
 	       custom_repo "${x86_64_REPO}" "${x86_64_REPO_Name}"
 		if ! is_in_pacmanconf "${x86_64_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
 			add_customrepo2pacmanconf "${x86_64_REPO_Name}" "${x86_64_REPO}" "${PROFILE_DIR}/pacman_x86_64.conf" "${LOG}"
@@ -449,21 +471,7 @@ cmd_prepare (){
 	green "自定义软件仓创建完成!" | tee -a ${LOG}
    fi
 
-   msg2 "准备目标镜像根目录结构及启动的相关配置文件" | tee -a ${LOG}
-   [ ! -d ${IMGROOT} ] && mkdir -p ${IMGROOT}
-   if [ -d ${PROFILE_DIR}/cd-root ]; then
-	cp -rf ${PROFILE_DIR}/cd-root/* ${IMGROOT}/
-   else
-      if [ ! -f cd-root.tgz ]; then
-		plain -n "下载Archlive光盘根目录结构文件cd-root.tgz" | tee -a ${LOG}
-		wget -q "${TGZURL}/cd-root.tgz"  2>&1 > /dev/null
-		green "完成!" | tee -a ${LOG}
-      fi
-      echo "释放Archlive光盘根目录结构cd-root.tgz" | tee -a ${LOG}
-      tar -xzvpf cd-root.tgz -C ${IMGROOT}  2>&1 > /dev/null
-   fi
-   mkdir -p ${IMGROOT}/${CDNAME}/{base,modules,optional,rootcopy}
-   msg2 "目标镜像根目录结构准备完成." | tee -a ${LOG}
+   prepare_imgroot
 
    if [ "${USE_OVERLAY}" = "y" ]; then
 	prepare_overlay "${LOG}"
@@ -471,7 +479,6 @@ cmd_prepare (){
 
    # 删除下载的 tgz文件
    [ "$DELETE_TGZ" = "y" ] && rm -f ${START_DIR}/*.tgz
-
 
    # 软件清单目录
    [ -d ${PACKLIST} ] && rm -R ${PACKLIST}
@@ -1374,7 +1381,7 @@ cmd_img () {
 	case ${module_file} in */overlay.${EXT}) case ${USE_OVERLAY} in y) needed="y" && break;; esac;; esac
 	case ${module_file} in */archlive.sqfs) needed="y" && break;; esac
 	module_name=$(basename ${module_file} .${EXT})
-	if [ "${CMD_NAME}" = "dul" ]; then
+	if [ "${ARCH}" = "dul" ]; then
 		module_name=${module_name//i686-}
 		module_name=${module_name//x86_64-}
 	else
@@ -1402,6 +1409,14 @@ cmd_img () {
    msg2 -n "将软件清单放到镜像目录中..." | tee -a ${LOG}
    # ${CDNAME}.list 为默认启动标的  如果删除系统无法启动
    cat ${PKGFILE} | sort > ${IMGROOT}/${CDNAME}/${CDNAME}.list
+   if [ "$ARCH" = "dul" ]; then
+	echo "i686 & x86_64 双模式 软件清单" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	echo " i686 部分软件清单：" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	cat ${PKGFILE//dul/i686} | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	echo "************************************" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	echo " x86_64 部分软件清单：" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	cat ${PKGFILE//dul/x86_64} | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+   fi
    green "完成!" | tee -a ${LOG}
 
    msg2 "准备启动文件..." | tee -a ${LOG}
@@ -1441,6 +1456,11 @@ cmd_img () {
 	export target_bootfile_dir
 	target_bootfile_dir=${IMGROOT}/isolinux
 	[ ! -d ${target_bootfile_dir} ] && mkdir -p ${target_bootfile_dir}
+
+	# 双模式下也采用i686系统中的syslinux来启动
+	if [ "$ARCH" = "dul" ]; then
+		PACKLIST="${WORK_DIR}/i686-list"
+	fi
 	#boot_mod=$(basename "$(grep "syslinux" `find ${PACKLIST} -name "*.new"` |head -1)" ".new:syslinux")
 	#boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "\/mod_") | awk -F. '{print $1}')
 	boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "\/mod_")  ".new:syslinux")
@@ -1501,14 +1521,15 @@ cmd_img () {
         qflag=""
         [ "${QUIET}" = "y" ] && qflag="-quiet"
         mkisofs ${qflag} -J -R -D -r -l $bootflags -uid 0 -gid 0 \
-	    -input-charset utf-8 -p "${AUTHOR}" \
+		-udf -allow-limited-size -iso-level 3 \
+		-input-charset utf-8 -p "${AUTHOR}" \
             -no-emul-boot -boot-load-size 4 -boot-info-table \
             -publisher "${PUBLISHER}" -log-file /tmp/archlive_img.log \
             -A "${CDNAME}" -V "${CDNAME}" \
             -o "${IMGNAME}" "${IMGROOT}"
         if [ $? -eq 0 ]; then
 		#perl ./lib/isohybrid "${IMGNAME}"
-		./lib/isohybrid "${IMGNAME}"
+		./lib/isohybrid "${IMGNAME}" 2>&1 >>${LOG}
 		md5sum "${IMGNAME}" > "${IMGNAME}".md5
 		iso_size=$(isosize ${IMGNAME} 2>/dev/null)
 		if [ "x${iso_size}" = "x" ]; then

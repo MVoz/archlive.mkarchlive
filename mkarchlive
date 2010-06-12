@@ -18,6 +18,7 @@
 #
 # 支持全方位定制： 定制启动脚本、定制目标系统软件、定制软件仓、预配置文件。。。
 #########################################################################################
+# 2010-06-11 将双模式嵌入到每个步骤, 同一在制作配置文件中或者参数 -A 来设置
 # 2010-06-10 添加双模式制作(i686和x86_64同存在于一个iso或者img中)
 # 2010-02-20 添加功能：将devel独立出来（/usr/src等）
 # 2010-02-12 修改iso目录结构，使得使用UltraISO U+方式正确运行
@@ -60,8 +61,9 @@ export QUIET
 export FORCE
 
 # 检测、配置输入的命令
-while getopts 'i:P:b:M:m:a:t:c:nfvh' arg; do
+while getopts 'A:i:P:b:M:m:a:t:c:nfvh' arg; do
    case "${arg}" in
+	A) ARCH="${OPTARG}" ;;
 	i) CPIOCONFIG="${OPTARG}" ;;
 	b) BOOT="${OPTARG}" ;;
 	M) MODULES="${OPTARG}" ;;
@@ -80,6 +82,14 @@ shift $(($OPTIND - 1))
 
 CMD_NAME="${1}"
 
+# 检查重要参数
+case "$ARCH" in
+	i686) ;;
+	x86_64) ;;
+	dul) ;;
+	*) error "无效的ARCH $ARCH"; usage 1 ;;
+esac
+
 # 检查命令有效性
 case "${CMD_NAME}" in
    prepare) WORK_DIR="${2}";;
@@ -90,7 +100,6 @@ case "${CMD_NAME}" in
    bootimage) WORK_DIR="${2}";;
    img) WORK_DIR="${2}";;
    all) WORK_DIR="${2}";;
-   dul) WORK_DIR="${2}";;
    *) error "无效命令 '${CMD_NAME}'"; usage 1 ;;
 esac
 
@@ -191,7 +200,7 @@ if [ "x${WORK_DIR}" = "x" ]; then
 fi
 
 if [ "x${IMGNAME}" = "x" ]; then
-	if [ "${CMD_NAME}" = "dul" ]; then
+	if [ "$ARCH" = "dul" ]; then
 		IMGNAME="archlive-dul-$(date +%F).${IMG_TYPE}"
 	else
 		IMGNAME="archlive-${ARCH}-$(date +%F).${IMG_TYPE}"
@@ -201,7 +210,7 @@ IMGNAME="${WORK_DIR}/${IMGNAME}"
 
 ###---------------------------程序运行相关目录设置--------------------------------
 # 制作的Archlive镜像目录（该文件夹下所有内容全部包含于目标镜像）
-if [ "${CMD_NAME}" = "dul" ]; then
+if [ "$ARCH" = "dul" ]; then
 	IMGROOT="${WORK_DIR}/dul_img"
 else
 	IMGROOT="${WORK_DIR}/${ARCH}_img"
@@ -273,8 +282,7 @@ case "${CMD_NAME}" in
    squash) DESCRIPTION="将 ${MODULEDIR} 目录用 mksquash 压缩为模块." ;;
    bootimage) DESCRIPTION="从指定目录 ${MODULEDIR}/${KERNEL_MOD} 制作 $CDNAME 启动内核" ;;
    img) DESCRIPTION="将目录 ${IMGROOT} 制作为 ${IMG_TYPE} 镜像." ;;
-   all) DESCRIPTION="根据配置文件或者参数指定的设置制作程序模块并打包为启动镜像，i686或者x86_64单模式" ;;
-   dul) DESCRIPTION="根据配置文件或者参数指定的设置制作程序模块并打包为启动镜像, i686及x86_64双模式" ;;
+   all) DESCRIPTION="根据配置文件或者参数指定的设置制作程序模块并打包为启动镜像，i686或者x86_64或者双模式" ;;
 esac
 
 
@@ -290,40 +298,42 @@ echo ""
 echo "  宿主系统是否是Arch GNU/Linux:  ${ARCH_HOST} "
 echo "        ${APPNAME}程序执行操作:  ${CMD_NAME}"
 echo "          Archlive定制配置文件:  ${CONFIG_FILE}"
-if [ "${CMD_NAME}" = "dul" ]; then
-echo "                      目标系统:  i686 + x86_64"
+if [ "$ARCH" = "dul" ]; then
+echo "                      目标系统:  双模式(i686 + x86_64)"
 else
 echo "                      目标系统:  ${ARCH}"
 fi
 echo "                      工作目录:  ${WORK_DIR}"
-if [ "${CMD_NAME}" = "prepare" -o "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "prepare" -o "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
 echo "        目标镜像源文件存放目录:  ${IMGROOT} "
 fi
-if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
 echo "                软件包缓存目录:  ${CACHE} "
 fi
+if [ "$ARCH" != "dul" ]; then
 echo "               pacman.conf文件:  ${PACMANCONF}"
-if [ "${CMD_NAME}" = "img" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+fi
+if [ "${CMD_NAME}" = "img" -o "${CMD_NAME}" = "all" ]; then
 echo "                  目标镜像类型:  ${IMG_TYPE}"
 echo "                    目标镜像名:  ${IMGNAME}"
 echo "                      启动程序:  ${BOOT}"
 fi
-if [ "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" ]; then
 echo "                      模块类型:  ${EXT}"
 fi
-if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
 echo "  Archlive启动内核镜像配置文件:  ${CPIOCONFIG}"
 fi
-if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "bootimage" -o "${CMD_NAME}" = "all" ]; then
 echo "            包含内核程序的模块:  ${KERNEL_MOD}"
 fi
-if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
 echo "                      是否覆盖:  ${FORCE}"
 fi
-if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "all" ]; then
 echo " 需要制作的模块为: $(echo ${MODULES} | tr -s "\n" " ")"
 fi
-if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" -o "${CMD_NAME}" = "dul" ]; then
+if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "squash" -o "${CMD_NAME}" = "solemodules" -o "${CMD_NAME}" = "all" ]; then
 echo "  需要制作的附加独立程序模块为:  $(echo ${EXTRAMODULES} | tr -s "\n" " ")"
 fi
 echo "                不显示制作详情:  ${QUIET}"
@@ -336,30 +346,73 @@ echo ""
 
 function second_confirm ()
 {
-echo "------------------------------ 目前工作状态 ----------------------------------"
-echo "                           ARCH:  ${ARCH}"
-echo "               pacman.conf文件:  ${PACMANCONF}"
-hgreen "***如果以上不是你想要的，Ctrl+C 终止程序的执行，并检测相关配置文件.***"
-echo -n "                            "; yellow "5 秒后开始程序"
-echo "-----------------------------------------------------------------------------"
-sleep $time
+    echo "------------------------------ 目前工作状态 ----------------------------------"
+    echo "                           ARCH:  ${ARCH}"
+    echo "               pacman.conf文件:  ${PACMANCONF}"
+    hgreen "***如果以上不是你想要的，Ctrl+C 终止程序的执行，并检测相关配置文件.***"
+    echo -n "                            "; yellow "5 秒后开始程序"
+    echo "-----------------------------------------------------------------------------"
+    sleep $time
 }
+
 msg "现在开始执行 ${APPNAME} ${CMD_NAME}"
 echo ""
-
 ###--------------------------------------主程序调用------------------------------------------------------
 case ${CMD_NAME} in
 	prepare) init_config; cmd_prepare ;;
-	install) init_config; cmd_prepare; second_confirm; cmd_install ;;
-	clean) cmd_clean ;;
-	solemodules) init_config; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash ;;
-	squash) init_config; cmd_squash ;;
-	bootimage) init_config; cmd_boot_kernel_image ;;
-	img) init_config; cmd_img ;;
-	all) init_config; cmd_prepare; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image; cmd_img ;;
-	dul) export ARCH="i686"; init_config; cmd_prepare; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
-	     export ARCH="x86_64"; init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
-	     cmd_img ;;
+	install)
+		if [ "$ARCH" = "dul" ]; then
+			export ARCH="i686"; init_config; second_confirm; cmd_install;
+			export ARCH="x86_64"; init_config; second_confirm; cmd_install;
+		else
+			init_config; second_confirm; cmd_install;
+		fi
+		;;
+	clean)
+		if [ "$ARCH" = "dul" ]; then
+			export ARCH="i686"; init_config; second_confirm; cmd_clean;
+			export ARCH="x86_64"; init_config; second_confirm; cmd_clean;
+		else
+			init_config; second_confirm; cmd_clean;
+		fi
+		;;
+	solemodules)
+		if [ "$ARCH" = "dul" ]; then
+			export ARCH="i686"; init_config; second_confirm; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash;
+			export ARCH="x86_64"; init_config; second_confirm; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash;
+		else
+			init_config; second_confirm; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash;
+		fi
+		;;
+ 	squash)
+		if [ "$ARCH" = "dul" ]; then
+			export ARCH="i686"; init_config; second_confirm; cmd_squash;
+			export ARCH="x86_64"; init_config; second_confirm; cmd_squash;
+		else
+			init_config; second_confirm; cmd_squash; 
+		fi
+		;;
+	bootimage)
+		if [ "$ARCH" = "dul" ]; then
+			export ARCH="i686"; init_config; second_confirm; cmd_boot_kernel_image;
+			export ARCH="x86_64"; init_config; second_confirm; cmd_boot_kernel_image;
+		else
+			init_config; second_confirm; cmd_boot_kernel_image; 
+		fi
+		;;
+	img)
+		init_config; cmd_img;
+		;;
+	all)
+		if [ "$ARCH" = "dul" ]; then
+			export ARCH="i686"; init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+			export ARCH="x86_64"; init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+		else
+			init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+		fi
+		cmd_img;
+		;;
 	*) error "错误的命令" && usage 1 ;;
 esac
+
 msg "程序执行 ${APPNAME} $cmdline 结束!"
