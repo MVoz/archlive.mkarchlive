@@ -95,6 +95,7 @@ case "${CMD_NAME}" in
    prepare) WORK_DIR="${2}";;
    solemodules) WORK_DIR="${2}";;
    install) WORK_DIR="${2}";;
+   remount) WORK_DIR="${2}";;
    clean) WORK_DIR="${2}";;
    squash) WORK_DIR="${2}";;
    bootimage) WORK_DIR="${2}";;
@@ -198,6 +199,7 @@ if [ "x${WORK_DIR}" = "x" ]; then
 	#warn "配置文件也没有指定工作目录，采用默认设置${WORK_DIR}"
    fi
 fi
+WORK_DIR=${WORK_DIR%/}
 
 if [ "x${IMGNAME}" = "x" ]; then
 	if [ "$ARCH" = "dul" ]; then
@@ -233,6 +235,9 @@ function init_config ()
 {
 	# 装载archlive软件仓等相关配置
 	PACMANCONF="${PROFILE_DIR}/pacman_${ARCH}.conf"
+
+	# Arch软件仓数据库存放位置
+	SYNC="${WORK_DIR}/$ARCH-sync"
 
 	# 更新安装时候的软件缓存位置
 	sed -i "s%.*CacheDir.*%CacheDir = $CACHE%g" $PACMANCONF
@@ -279,6 +284,7 @@ case "${CMD_NAME}" in
    solemodules) DESCRIPTION="在工作目录 ${WORK_DIR} 下制作独立程序模块：安装后用 mksquash 压缩." ;; 
    install) DESCRIPTION="将程序清单或者附加模块指定的程序安装到工作目录${UNION},放置于${MODULEDIR}." ;;
    clean) DESCRIPTION="根据配置文件清理 ${MODULEDIR}，删除或者移动运行时无需的文件." ;;
+   remount) DESCRIPTION="将之前制作的模块文件夹重新可写挂载到$UNION." ;;
    squash) DESCRIPTION="将 ${MODULEDIR} 目录用 mksquash 压缩为模块." ;;
    bootimage) DESCRIPTION="从指定目录 ${MODULEDIR}/${KERNEL_MOD} 制作 $CDNAME 启动内核" ;;
    img) DESCRIPTION="将目录 ${IMGROOT} 制作为 ${IMG_TYPE} 镜像." ;;
@@ -374,6 +380,14 @@ case ${CMD_NAME} in
 			export ARCH="x86_64"; init_config; second_confirm; cmd_clean;
 		else
 			init_config; second_confirm; cmd_clean;
+		fi
+		;;
+	remount)
+		if [ "$ARCH" = "dul" ]; then
+			error "重新挂载必须用 -A 来指定 i686 或者 x86_64"
+			usage 1
+		else
+			init_config; cmd_re_mount_all;
 		fi
 		;;
 	solemodules)
