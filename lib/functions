@@ -923,13 +923,18 @@ cmd_install ()
 		else
 			conf_target="${MODULEDIR}/${mod}"
 		fi
+		[ -d ${conf_target}/etc/pacman.d ] || mkdir -p ${conf_target}/etc/pacman.d
+
 		rm -f ${MODULEDIR}/${mod}/etc/pacman.conf
 		rm -f ${MODULEDIR}/${mod}/etc/pacman.d/mirrorlist
-		cp -f ${PACMANCONF} ${conf_target}/etc/pacman.conf
-		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist%g" ${conf_target}/etc/pacman.conf
-		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${conf_target}/etc/pacman.conf
-		[ -d ${conf_target}/etc/pacman.d ] || mkdir -p ${conf_target}/etc/pacman.d
-		cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist
+		#cp -f ${PACMANCONF} ${conf_target}/etc/pacman.conf
+		#cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist
+
+		cp -f ${PACMANCONF} ${conf_target}/etc/pacman_${ARCH}.conf
+		cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist.${ARCH}
+		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist.${ARCH}%g" ${conf_target}/etc/pacman_${ARCH}.conf
+		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${conf_target}/etc/pacman_${ARCH}.conf
+
 		green "完成!" | tee -a ${LOG}
 	fi
 

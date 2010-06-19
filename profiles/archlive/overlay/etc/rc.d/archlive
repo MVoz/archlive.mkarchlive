@@ -125,6 +125,10 @@ else
 	ln -sf /etc/issue.en /etc/issue
 fi
 
+# pacman.conf
+ARCH=`uname -m`
+[ -f /etc/pacman.conf ] || ln -sf /etc/pacman_${ARCH}.conf /etc/pacman.conf
+
 NEW_BOOT_OPT=""
 if which ossinfo 2>/dev/null >/dev/null; then
 	NEW_BOOT_OPT="${NEW_BOOT_OPT} @oss4"
