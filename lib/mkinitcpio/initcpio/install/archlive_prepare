@@ -1,7 +1,7 @@
 install ()
 {
     MODULES=""
-    BINARIES="tput"
+    BINARIES=""
     FILES=""
     SCRIPT="archlive_prepare"
 }

@@ -1,0 +1,520 @@
+# Archlive 启动脚本
+# 查找基本模块位置、挂载并启动之
+
+# 根据基本模块上级目录名查找
+# $1 基本模块上级目录名
+# 此中方式避免$SGN错误指定导致无法找到基本模块的情况
+find_by_folder ()
+{
+   if [ "$cn" = "y" ]; then
+	debug_log "根据基本模块的上级目录名$1来查找"
+   else
+	debug_log "Search the modules by the directory name $1 of them..."
+   fi
+   debug_log "find_by_foler $1"
+   DATAFROM=$(find_in_computer $1)
+   debug_log "DATAFROM=$DATAFROM"
+   if [ "$DATAFROM" ]; then
+	if [ "$(find_modules $DATAFROM)" != "" ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "在$DATAFROM找到模块文件"
+		else
+			echolog "Found modules in $DATAFROM."
+		fi
+		DATA=$DATAFROM
+		debug_log "DATA=$DATA"
+	fi
+   fi
+}
+
+run_hook ()
+{
+	#. /usr/lib/liblinuxlive
+
+	[ -d /var/log ] || mkdir -p /var/log
+
+	# 挂载基本模块 (loop isofs squashfs aufs ext2 ext3 ext4 btrfs reiserfs xfs vfat fuse ntfs)
+	# Load essential drivers, like CDROM drivers, aufs/squashfs etc,
+	# use mdev to create /dev/ devices and setup it as a hotplug-handler
+	modprobe_essential_modules
+
+	# 挂载 squashfs 压缩的驱动及usr 目录（如果有）
+	# /usr and some drivers are compressed in initrd 
+	# so it must be mounted from .lzm files
+	mount_initrd_loops
+
+	# 硬件初始化程序  busybox自带的mdev 或者 udev
+	#mdev_start_hotplug
+	#udev_start_hotplug
+
+	# 初始化USB、PCMCIA等模块
+	modprobe_usb_modules
+	modprobe_pcmcia_modules
+
+	# 调试用测试点
+	debug_shell
+
+	# make sure ext3 partitions are not mounted using ext2 driver,
+	# and vfat partitions are not mounted using msdos driver
+	echo -e "ext3\next2\nvfat\n*" >/etc/filesystems
+
+	# 建立挂载点
+	mkdir -p $UNION
+	mkdir -p $MEMORY
+
+	# 调试用测试点
+	debug_shell
+
+	# 启动参数可以通过sgn=...来定义搜索标的，该文件同一目录下的文件夹即为模块文件夹
+	SGN=$sgn
+	if [ "x$SGN" = "x" ]; then SGN=$LIVECDNAME.list; fi
+	if [ "$cn" = "y" ]; then
+		echolog "搜索$LIVECDNAME模块(根据$SGN定位)"
+	else
+		echolog "Search modules of $LIVECDNAME by target: $SGN"
+	fi
+
+	# 在启动参数中加入from="..." cifs="..." 或者 ip="..." 可以加快查找基本模块
+	# 指定方式:  A. ip=[]  B. from=[]  C. cifs=[]
+
+	# 方式A.  ip=[] 参数，PXE启动。可以同时指定 from 参数
+	# ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+	# 启动参数 ip=192.168.0.144:192.168.0.252:192.168.0.1:255.255.255.0 from=archlive 则表示
+	# 启动标的 $sgn 放在 http://192.168.0.252/archlive/ 下
+	# 启动标的 $sgn 同级目录下有 base modules 等模块目录
+	if [ "x$ip" != "x" ]; then
+		if [ "x$from" != "x" ]; then
+			DATAFROM="http://"$(echo $ip | cut -d : -f 2)"/$from"
+		else
+			DATAFROM="http://"$(echo $ip | cut -d : -f 2)
+		fi
+	else
+		# 方式B. from=[] 来指定本地目录，比如 from="/dev/sda1/archlive"
+		DATAFROM=$from
+	fi
+
+	# 方式C. cifs=[] 参数，挂载共享并启动。比如 cifs="//192.168.0.252/share" user="archlive" pass="archlive"
+	if [ "x$cifs" != "x" ]; then DATAFROM="$cifs"; fi
+
+	if [ "$DATAFROM" ]; then
+   		if [ "$(echo $DATAFROM | cut -b 1-7 | tr "[:upper:]" "[:lower:]")" = "http://" ]; then
+			if [ "$cn" = "y" ]; then
+				debug_log "PXE启动：from=$DATAFROM"
+			else
+				debug_log "PXE BOOT：from=$DATAFROM"
+			fi
+			# 如果启动参数中指定了 ip, 则初始化网络并从网络启动
+			# 初始化网络，加载网卡驱动模块
+			# 如果启动参数中 essid="A" pass="00000000001" 则使用密码"0000000001" 登录无线AP "A"
+			# 如果启动参数中 essid="A" pass="s:aaa" 则使用字符密码 "aaa"登录无线AP "A"
+      			init_dhcp $(modprobe_network_modules)
+
+			# 挂载网络文件系统到$MOUNTDIR/httpfs
+			# 上例中将 http://192.168.0.252/archlive 挂载到 /union/httpfs
+      			mount_httpfs $DATAFROM $MOUNTDIR/httpfs
+      			# if mountdir/httpfs/livecdname is found, set DATA=, else umount httpfs
+
+		# cifs 或者 samba 共享启动
+		elif [ "x$cifs" != "x" ]; then
+			if [ "$cn" = "y" ]; then
+				debug_log "挂载共享分区并启动：from=$DATAFROM"
+			else
+				debug_log "Mount CIFS share and boot：from=$DATAFROM"
+			fi
+			init_dhcp $(modprobe_network_modules)
+
+			# 挂载cifs文件系统到 $MOUNTDIR/cifs
+			# 如果挂载成功则 DATA="$MOUNTDIR/cifs"
+			mount_cifs $DATAFROM $MOUNTDIR/cifs
+			[ ! -f $DATA/$SGN ] && [ ! -d $DATA/base ] && export DATA=""
+
+		# 从from指定的分区启动，比如from=/dev/sda1/archlive DATAFROM=$from
+		#elif [ -b $(dirname $DATAFROM 2>/dev/null) ]; then
+		elif [ "${DATAFROM/dev/}" !=  "${DATAFROM}" ]; then
+			if [ "$cn" = "y" ]; then
+				debug_log "根据from=$DATAFROM来查找模块"
+			else
+				debug_log "Search modules by term: from=$DATAFROM"
+			fi
+			DATA=$(find_filepath  "$DATAFROM" "$SGN")
+			debug_log "DATA=$DATA"
+			DATA="$(dirname $DATA 2>/dev/null)"
+			if [ "$DATA" -a "$(find_modules $DATA)" != "" ]; then
+				if [ "$cn" = "y" ]; then
+					echolog "在指定的$DATAFROM找到模块文件"
+				else
+					echolog "Found modules in $DATAFROM"
+				fi
+				DATA="$DATA"
+			fi
+			debug_log "DATA=$DATA"
+
+		# from 只指定了相对目录  (自行修改了iso或者USB中基本模块上级目录的名称）
+		else
+			if [ "$cn" = "y" ]; then
+				debug_log "根据$DATAFROM来查找模块文件"
+			else
+				debug_log "Search modules by term: DATAFROM=$DATAFROM"
+			fi
+			find_by_folder $DATAFROM
+   		fi
+
+	# 如果启动参数没有指定任何参数，程序自动从本地所有资源按照默认目录结构查找
+	else
+		if [ "$cn" = "y" ]; then
+			debug_log "按照$LIVECDNAME默认方式从本地所有资源查找$SGN"
+		else
+			debug_log "Search $LIVECDNAME modules by target $SGN in local as default."
+		fi
+		find_by_folder $LIVECDNAME
+	fi
+
+	# 调试用测试点
+	debug_shell
+
+	# 以上方式均无法找到（iso或者写到USB后目录结构调整过，或者from ip 或者 其他参数无效时）
+	if [ "$DATA" = "" ]; then
+		if [ "$cn" = "y" ]; then
+			debug_log "根据启动参数无法找到$SGN，再次从本地所有资源查找"
+		else
+			debug_log "Can't found target $SGN by boot arguments，search modules again"
+		fi
+		# from= is not used or it didn't contain valid data
+		DATA=$(find_in_computer $LIVECDNAME/$SGN)
+		DATA=$(dirname $DATA 2>/dev/null)
+	fi
+
+	# 调试用测试点
+	debug_shell
+
+	if [ "$DATA" = "" ]; then
+	  if [ "$cn" = "y" ]; then
+		fatal \
+		"没有找到 $LIVECDNAME 的程序模块. 查找标的$SGN被误删除? 
+		可能使用了不被支持的启动设备(比如 SCSI或者老的PCMCIA). 
+		解决办法: 将$LIVECDNAME目录从你的启动设备拷贝到IDE/SATA盘，比如拷贝到 
+		/mnt/hda1/$LIVECDNAME 或者 C:\\$LIVECDNAME. 然后重新启动."
+	  else
+		fatal \
+		"Can't found $LIVECDNAME modules. Target file $SGN was deleted? 
+		Or you are using an unsupported boot device (eg. old SCSI, old PCMCIA).
+		Solutions: Copy the directory $LIVECDNAME from your boot device to an 
+		IDE/SATA disk, eg. to /mnt/hda1/$LIVECDNAME or C:\\$LIVECDNAME, then reboot."
+	  fi
+	fi
+
+	if [ "$cn" = "y" ]; then
+		echolog "从$DATA 启动 $LIVECDNAME"
+	else
+		echolog "Booting $LIVECDNAME from $DATA..."
+	fi
+
+	# 调试用测试点
+	debug_shell
+
+	CHANGESVAL=$changes
+	if [ "$CHANGESVAL" ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "设置$changes保存修改..."
+		else
+			echolog "Setting up directory $changes for changes ..."
+		fi
+		CHANGESMNT=$(find_in_computer $CHANGESVAL)
+		echolog $CHANGESMNT
+	fi
+
+	# 调试用测试点
+	debug_shell
+
+	mount_device "$CHANGESMNT" $MEMORY # removes $MEMORY if CHANGESMNT is wrong
+
+	# 检测指定的changes是否可写
+	touch $MEMORY/empty 2>/dev/null && \
+	rm -f $MEMORY/empty 2>/dev/null
+
+	# 如果changes无法被正确挂载或者其不可写，则用默认的tmpfs
+	if [ $? -ne 0 ]; then
+		if [ "$CHANGESVAL" ]; then
+			if [ "$cn" = "y" ]; then
+				echolog "启动参数$changes设置的目标不可用或者不可写, 使用内存存储,
+					重启将丢失修改的内容."
+			else
+				echolog "Changes not used or not writable, using memory only,
+					changes will be lost after reboot."
+			fi
+		fi
+		fumount $MEMORY
+		mkdir -p $MEMORY # mount_device might removed it
+
+		# 调试用测试点
+		debug_shell
+
+		#RAMSIZE=$(cmdline_value ramsize)
+		RAMSIZE=$ramsize
+		if [ "$RAMSIZE" = "" ]; then RAMSIZE="60%"; fi
+		mount -t tmpfs -o "size=$RAMSIZE" tmpfs $MEMORY
+		XINO=$MEMORY
+	else
+		# So it is writable, we will keep the filesystem mounted.
+		# Check if it supports links and chmod.
+		# If not, overmount CHANGES using posixovl
+		if [ "$cn" = "y" ]; then
+			echolog "检测文件系统的posix兼容性 ..."
+		else
+			echolog "Testing the filesystem for posix compatibility ..."
+		fi
+		touch $MEMORY/.empty1 && \
+		ln -sf $MEMORY/.empty1 $MEMORY/.empty2 2>/dev/null && \
+		chmod +x $MEMORY/.empty1 2>/dev/null  && \
+		test -x $MEMORY/.empty1 && \
+		chmod -x $MEMORY/.empty1 2>/dev/null  && \
+		test ! -x $MEMORY/.empty1 && \
+		rm $MEMORY/.empty1 $MEMORY/.empty2 2>/dev/null
+
+		if [ $? -ne 0 ]; then
+			if [ "$cn" = "y" ]; then
+				echolog "不兼容 - 开启 posiovl"
+			else
+				echolog "Not compatible - starting posixovl"
+			fi
+			rm $MEMORY/.empty1 $MEMORY/.empty2 2>/dev/null
+			mkdir -p $CHANGES
+			posixovl -F $CHANGES -- -o attr_timeout=300,entry_timeout=300,negative_timeout=300,kernel_cache,allow_other
+			find $CHANGES >/dev/null 2>&1 # cache everything now
+		fi
+	fi
+
+	# $UNION 将被作为root系统, 模块都将挂载在此目录
+	if [ "$cn" = "y" ]; then
+		echolog "设置$UNION目录 (使用aufs)"
+	else
+		echolog "Setup $UNION directory (using aufs)"
+	fi
+
+	if [ "$cn" = "y" ]; then
+		debug_log "IMAGES保存模块的路径: IMAGES=$IMAGES"
+	else
+		debug_log "Modules were mounted on: IMAGES=$IMAGES"
+	fi
+	mkdir -p $CHANGES
+	mkdir -p $IMAGES
+
+	# 调试用测试点
+	debug_shell
+
+	# 将xino文件存储在内存, 更快速、安全
+	if [ "$XINO" != "$MEMORY" ]; then
+		mkdir -p $XINO
+		mount -n -t tmpfs tmpfs $XINO
+	fi
+
+	# mount aufs using the writable branch as the first one (leftmost/topmost)
+	mount -t aufs -o nowarn_perm,xino=$XINO/.aufs.xino,br:$CHANGES=rw aufs $UNION
+	if [ $? -ne 0 ]; then dmesg | tail -n 1; fatal "can't setup union (aufs)"; fi
+
+	# 调试用测试点
+	debug_shell
+
+	# If toram or copy2ram boot parameter is present, copy all fs modules to RAM.
+	# (skip modules from /optional/ which are not listed in load= boot option)
+	# Finaly modify DATA variable so it will point to correct directory
+	if [ "$(cmdline_parameter toram)" != "" -o "$(cmdline_parameter copy2ram)" != "" ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "拷贝$LIVECDNAME数据到内存，请稍候..."
+		else
+			echolog "copying $LIVECDNAME data to RAM, this may take some time..."
+		fi
+		mkdir -p $COPY2RAM
+
+		# make sure it's in RAM even with changes= parameter
+		if [ "$CHANGESMNT" ]; then mount -t tmpfs -o "size=$RAMSIZE" tmpfs $COPY2RAM; fi
+		copy_to_ram $DATA $COPY2RAM
+
+		cd_autoeject 1
+		fumount $DATA
+		fumount $MOUNTDIR/*
+		rmdir $MOUNTDIR/* 2>/dev/null # mounted device names are empty, remove them
+		DATA=$COPY2RAM
+		cd_autoeject 0
+	fi
+
+	# 调试用测试点
+	debug_shell
+
+	# DATA包含archlive里面的base目录，模块目录，可选模块目录
+	# 现在挂载到aufs文件系统中
+	if [ "$cn" = "y" ]; then
+		echolog "装载模块:"
+		debug_log "将$DATA下的模块挂载到$IMAGES，文件系统挂载到$UNION"
+	else
+		echolog "Loading modules:"
+		debug_log "Mount modules under $DATA to $IMAGES，mount root filesystem to $UNION"
+	fi
+	
+	union_insert_modules $UNION $DATA $IMAGES
+
+	# the $MEMORY directory can contain $MEMORY/modules too
+	# in the case if changes= boot argument is used. If not, it doesn't hurt
+	# 挂载保存修改的文件系统
+	debug_log "MEMORY=$MEMORY"
+	union_insert_modules $UNION $MEMORY $IMAGES
+
+	# 调试用测试点
+	debug_shell
+
+	# 默认装载$LIVECDNAME 中 rootcopy目录(只要存在， 除非有norootcopy参数)
+	if [ $(cmdline_parameter norootcopy) ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "启动参数有norootcopy"
+		else
+			echolog "Has argument: norootcopy, then not using rootcopy."
+		fi
+	elif [ -d $DATA/rootcopy ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "将$DATA/rootcopy下内容拷贝到$UNION"
+		else
+			echolog "Copying content of rootcopy directory"
+		fi
+		cp -af $DATA/rootcopy/* $UNION 2>/dev/null
+	fi
+
+	# 拷贝liblinuxlive库到$UNION/usr/lib/
+	cp -af /usr/lib/liblinuxlive $UNION/usr/lib/
+
+	# 调试用测试点
+	debug_shell
+
+	if [ "$cn" = "y" ]; then
+		echolog "更新 /etc/fstab 和硬盘分区挂载目录/mnt/... "
+	else
+		echolog "Update /etc/fstab and mount_directories /mnt/... "
+	fi
+	touch $UNION/etc/fstab
+	rmdir $UNION/mnt/* 2>/dev/null
+	echo "rootfs / rootfs rw 0 0" >$UNION/etc/mtab
+
+	fstab_update $UNION
+	#cp -f $UNION/etc/fstab $UNION/etc/mtab
+	#[ ! -f /etc/mtab ] && cp -f $UNION/etc/fstab /etc/mtab
+
+	# everything is ready now, so we may unload unused kernel modules
+	# and do some cleanup, unmount few things which are no longer needed.
+	rmmod_unused_modules
+	fumount /usr
+	fumount /sys
+
+	# More likely these directories aren't there.
+	# Even if they are, this won't hurt.
+	mkdir -p $UNION/boot
+	mkdir -p $UNION/proc
+	mkdir -p $UNION/sys
+	mkdir -p $UNION/dev
+	mkdir -p $UNION/var/log
+	mkdir -p -m 1777 $UNION/var/tmp
+	mkdir -p -m 1777 $UNION/var/lock
+	mkdir -p $UNION/tmp
+	chmod 1777 $UNION/tmp
+	chmod 1777 $UNION/var/tmp
+	[ -e $UNION/dev/console ] || (mknod $UNION/dev/console c 5 1)
+	:>$UNION/var/log/wtmp
+	:>$UNION/var/log/utmp
+	:>$UNION/var/log/lastlog
+	:>$UNION/var/log/btmp
+	chmod 0600 $UNION/var/log/btmp
+
+	# Boot will contain whatever was in ./boot directory in the bootable media
+	# Error output goes to null, as nothing is mounted with copy2ram
+	#mount -n -o rbind $(dirname $DATA 2>/dev/null)/boot $UNION/boot 2>/dev/null
+
+	# 调试用测试点
+	debug_shell
+
+	# This is for setup of locale varible in archlive
+	lang=$(cmdline_value lang)
+	if [ "$lang" ]; then
+		if [ -f "$UNION/etc/rc.conf" ]; then
+			sed -i -e "s/^ *\(LOCALE=\).*$/\1"$lang.utf8"/" $UNION/etc/rc.conf
+			touch $UNION/etc/locale.gen
+			echo "$lang.UTF-8 UTF-8" >> $UNION/etc/locale.gen
+			echo "$lang ISO-8859-1" >> $UNION/etc/locale.gen
+		fi
+	fi
+
+	# 调试用测试点
+	debug_shell
+
+	# Union contains all the files and directories unioned from all modules.
+	# Change root directory to it, and move initrd's root to /mnt/live/initramdisk
+	# Finaly execute /sbin/init to start the distribution.
+	if [ "$cn" = "y" ]; then
+		echolog "切换root目录到$UNION..."
+	else
+		echolog "Changing root directory to $UNION..."
+	fi
+
+	cd $UNION
+
+	mkdir -p $INITRAMDISK
+
+	# Copy all dev files (found by mdev) to unioned dev directory
+	# so at least disk devices exist (your Linux may need them).
+	# Two exceptions, do not copy pty* and tty* devs.
+	if [ ! -e /dev/console ]; then mknod /dev/console c 5 1; fi
+	cp -fdR /dev . 2>/dev/null
+
+	# time to end Linux Live scripts and start the distribution itself,
+	# using /sbin/init or whatever was found.
+	# We will copy init from the distro to initrd (there should be 2MB free)
+	# This allows us to use the cleanup script during reboot, as init will be
+	# started from memory and not from the union and /union will not be busy.
+
+	if [ -x bin/init ]; then INIT=bin/init; fi
+	if [ -x sbin/init ]; then INIT=sbin/init; fi
+	if [ "$cn" = "y" ]; then
+		if [ "$INIT" = "" ]; then fatal "没有找到init命令"; fi
+	else
+		if [ "$INIT" = "" ]; then fatal "Can't find executable init command"; fi
+	fi
+
+	# killall udevd
+	if [ "$cn" = "y" ]; then
+		echolog "清理udevd进程..."
+	else
+		echolog "Kill UDev Daemon..."
+	fi
+	udevpid=$(pidof udevd 2>/dev/null)
+	debug_log "udevpid=$udevpid"
+	if [ "x${udevpid}" != "x" ]; then
+		# Settle pending uevents, then kill udev
+		udevadm settle >/dev/null 2>&1
+		for i in $udevpid; do
+			kill -9 ${udevpid} > /dev/null 2>&1
+		done
+		sleep 0.01
+	fi
+	udevpid=$(pidof udevd 2>/dev/null)
+	debug_log "udevpid=$udevpid"
+
+	umount /proc >/dev/null 2>&1
+	umount /sys >/dev/null 2>&1
+
+	if [ "$cn" = "y" ]; then
+		debug_log "切换到 $UNION启动."
+	else
+		debug_log "switch_root to $UNION"
+	fi
+	debug_shell
+	#exec /sbin/switch_root -c /dev/console /${UNION} ${INIT} ${CMDLINE}
+
+CHROOT=chroot
+cp -af $INIT /bin
+if [ $? -eq 0 ]; then
+   pivot_root . $INITRAMDISK
+   exec $CHROOT . $INITRAMDISK/bin/init <dev/console >dev/console 2>&1
+else # If copying fails, start init directly.
+   pivot_root . $INITRAMDISK
+   exec $CHROOT . $INIT <dev/console >dev/console 2>&1
+fi
+
+	debug_log "看到此消息switch_root失败"
+}

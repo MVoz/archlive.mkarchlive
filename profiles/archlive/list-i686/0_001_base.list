@@ -113,6 +113,7 @@ mdadm
 #mkinitcpio-busybox
 #which
 mkinitcpio
+mkinitcpio-nfs-utils
 
 mlocate
 
@@ -168,7 +169,7 @@ bash-completion
 
 smbclient-mini
 
-#wireless_tools
+wireless_tools
 #linux-atm
 #iproute2
 #iptables

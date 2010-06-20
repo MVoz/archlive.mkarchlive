@@ -262,16 +262,17 @@ check_config_file ()
 }
 
 # 自定义软件仓
-# $1 预建立软件仓的位置
-# $2 预建立的软件仓的名称
+# $1 ARCH (i686 or x86_64)
+# $2 预建立软件仓的位置
+# $3 预建立的软件仓的名称
 function custom_repo () 
 {
    log=${BUILDLOG}/create_repo.log
    if [ -d $1 ]; then
 	if [ "${QUIET}" = "y" ]; then
-		sh ${START_DIR}/lib/create_repo $1 $2 >>$log 2>&1
+		sh ${START_DIR}/lib/create_repo -A $1 $2 $3 >>$log 2>&1
    	else
-		sh ${START_DIR}/lib/create_repo $1 $2 | tee $log
+		sh ${START_DIR}/lib/create_repo -A $1 $2 $3 | tee $log
    	fi
    else
 	error "$1 不存在!" | tee -a $log
@@ -457,7 +458,7 @@ cmd_prepare (){
 	# i686 自定义repo
 	if [ "x$i686_REPO_Name" != "x" -a "x$i686_REPO" != "x" ]; then
 		echo "在$i686_REPO下建立名为$i686_REPO_Name的i686软件仓"
-		custom_repo "${i686_REPO}" "${i686_REPO_Name}"
+		custom_repo "i686" "${i686_REPO}" "${i686_REPO_Name}"
 		if ! is_in_pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
 			add_customrepo2pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf" "${LOG}"
 		fi
@@ -465,7 +466,7 @@ cmd_prepare (){
 	# x86_64 自定义repo
 	if [ "x$x86_64_REPO_Name" != "x" -a "x$x86_64_REPO" != "x" ]; then
 		echo "在$x86_64_REPO下建立名为$x86_64_REPO_Name的i686软件仓"
-	       custom_repo "${x86_64_REPO}" "${x86_64_REPO_Name}"
+	       custom_repo "x86_64" "${x86_64_REPO}" "${x86_64_REPO_Name}"
 		if ! is_in_pacmanconf "${x86_64_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
 			add_customrepo2pacmanconf "${x86_64_REPO_Name}" "${x86_64_REPO}" "${PROFILE_DIR}/pacman_x86_64.conf" "${LOG}"
 		fi
@@ -1245,12 +1246,14 @@ check_kernel()
    # KER_VERSION_FILE 值由archlive.conf指定
     
    preset_file="$(basename ${KER_VERSION_FILE})"
-   basedir="$MODULEDIR/${KERNEL_MOD}"
+   #basedir="$MODULEDIR/${KERNEL_MOD}"
+   #if [ ! -d $basedir ]; then
+	#error "${WORK_DIR}下没有安装系统或者配置文件${CONFIG_FILE}中指定的${KERNEL_MOD}模块未被开启"
+	#usage 1
+   #fi
 
-   if [ ! -d $basedir ]; then
-	error "${WORK_DIR}下没有安装系统或者配置文件${CONFIG_FILE}中指定的${KERNEL_MOD}模块未被开启"
-	usage 1
-   fi
+   cmd_re_mount_all
+   basedir="$UNION"
 
    # 不采用pacman解决问题
    kernel_list_file="$(grep "modules.dep.bin" `find $basedir/var/lib/pacman/local` | cut -d ":" -f1)"
@@ -1376,6 +1379,7 @@ cmd_boot_kernel_image () {
 	usage 1
    fi
    green "完成！" | tee -a ${LOG}
+   umount -l $UNION
 }
 
 cmd_img () {

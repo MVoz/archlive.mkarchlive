@@ -18,9 +18,18 @@ install ()
     add_device "/dev/console" c 5 1
     add_device "/dev/mem"     c 1 1
 
-#    add_binary /lib/initcpio/busybox /bin/busybox
-    add_binary /sbin/modprobe
-    add_binary /sbin/blkid
+    add_binary "${BASEDIR}/lib/initcpio/busybox" "/bin/busybox"
+    libcfile=$(ls ${BASEDIR}/lib/libc.so*)
+    add_file "${libcfile}" "${libcfile##$BASEDIR}"
+    for ldfile in $(ls -1 ${BASEDIR}/lib/ld-linux*); do
+	add_file "${ldfile}" "${ldfile##$BASEDIR}"
+    done
+
+    add_binary ${BASEDIR}/sbin/modprobe /sbin/modprobe
+    add_binary ${BASEDIR}/sbin/blkid /sbin/blkid
+    for file in $(ls -1 ${BASEDIR}/lib/libblkid.so**) $(ls -1 ${BASEDIR}/lib/libuuid.so**); do
+	add_file "${file}" "${file##$BASEDIR}"
+    done
 
 #    add_file "/lib/initcpio/init_functions" "/init_functions"
 #    add_file "/lib/initcpio/init" "/init"

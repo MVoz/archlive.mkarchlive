@@ -15,9 +15,9 @@ welcome_archlive () {
 
 echo
 if [ "${msg_lang}" = "cn" ]; then
-	printf "\033[1;33;40m   欢迎使用 Archlive ! ${archlive_rev}\n"
+	printf "\033[1;33;40m   欢迎使用 Archlive !                                        ${archlive_rev}\n"
 else
-	printf "\033[1;33;40m   Welcome to Archlive! ${archlive_rev}\n"
+	printf "\033[1;33;40m   Welcome to Archlive!                                        ${archlive_rev}\n"
 fi
 printf "\033[1;32;40m   *******************************************************************************\033[1;0m\n"
 if [ "${msg_lang}" = "cn" ]; then

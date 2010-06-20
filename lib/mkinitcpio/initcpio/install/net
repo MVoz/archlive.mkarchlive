@@ -2,14 +2,14 @@
 
 install ()
 {
-    MODULES=" $(checked_modules "/drivers/net/") "
+    MODULES="nfs $(checked_modules "/drivers/net/") "
 
     BINARIES=""
     FILES=""
     SCRIPT="net"
 
-    add_binary "/lib/initcpio/ipconfig" "/bin/ipconfig"
-    add_binary "/lib/initcpio/nfsmount" "/bin/nfsmount"
+    add_binary "${BASEDIR}/lib/initcpio/ipconfig" "/bin/ipconfig"
+    add_binary "${BASEDIR}/lib/initcpio/nfsmount" "/bin/nfsmount"
 }
 
 help ()

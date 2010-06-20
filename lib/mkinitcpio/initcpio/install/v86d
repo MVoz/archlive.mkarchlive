@@ -1,5 +1,5 @@
 install() {
-    add_binary "/sbin/v86d_klibc" "/sbin/v86d"
+    add_binary "${BASEDIR}/sbin/v86d_klibc" "/sbin/v86d"
     add_file "/etc/modprobe.d/uvesafb"
     MODULES="uvesafb"
     SCRIPT="v86d"

@@ -3,7 +3,7 @@
 install ()
 {
     MODULES=" $(checked_modules "drivers/md/*" | grep -v "dm-") "
-    BINARIES="mdadm"
+    add_binary "${BASEDIR}/sbin/mdadm" "sbin/mdadm"
     FILES=""
     SCRIPT="raid-partitions"
     add_file "/usr/lib/klibc/bin/mdassemble" "/bin/mdassemble"

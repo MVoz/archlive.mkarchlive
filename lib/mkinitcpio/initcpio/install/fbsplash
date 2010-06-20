@@ -1,11 +1,11 @@
 
 install() {
-	[ -x /sbin/fbcondecor_helper ] || return 1
+	[ -x ${BASEDIR}/sbin/fbcondecor_helper ] || return 1
 
 	source /etc/conf.d/fbsplash
 	[ -z "${THEME}" ] && THEME="arch-banner-icons"
 
-	add_binary "/sbin/fbcondecor_helper"	
+	add_binary "${BASEDIR}/sbin/fbcondecor_helper" "${BASEDIR}/sbin/fbcondecor_helper"
 
 	add_device "/dev/null" c 1 3
 	add_device "/dev/console" c 5 1
