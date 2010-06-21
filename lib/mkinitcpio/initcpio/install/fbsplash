@@ -5,7 +5,13 @@ install() {
 	source /etc/conf.d/fbsplash
 	[ -z "${THEME}" ] && THEME="arch-banner-icons"
 
-	add_binary "${BASEDIR}/sbin/fbcondecor_helper" "${BASEDIR}/sbin/fbcondecor_helper"
+	add_file "${BASEDIR}/sbin/fbcondecor_helper" "${BASEDIR}/sbin/fbcondecor_helper"
+	SO="libjpeg.so libpng*.so libfreetype.so libz.so libm.so"
+	for so in $SO; do
+		for file in $(ls -1 ${BASEDIR}/lib/$so* 2>/dev/null); do
+			add_file "${file}" "${file##$BASEDIR}"
+		done
+	done
 
 	add_device "/dev/null" c 1 3
 	add_device "/dev/console" c 5 1

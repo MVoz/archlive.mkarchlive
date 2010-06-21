@@ -8,7 +8,7 @@ install ()
     SCRIPT="dmraid"
 
     add_dir "/dev/mapper"
-    add_file "/usr/sbin/dmraid.static" "/sbin/dmraid"
+    add_file "${BASEDIR}/usr/sbin/dmraid.static" "/sbin/dmraid"
 }
 
 help ()

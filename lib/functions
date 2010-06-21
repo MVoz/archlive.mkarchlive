@@ -1553,7 +1553,7 @@ cmd_img () {
             -o "${IMGNAME}" "${IMGROOT}"
         if [ $? -eq 0 ]; then
 		#perl ./lib/isohybrid "${IMGNAME}"
-		./lib/isohybrid "${IMGNAME}" 2>&1 >>${LOG}
+		./lib/bin/isohybrid "${IMGNAME}" 2>&1 >>${LOG}
 		md5sum "${IMGNAME}" > "${IMGNAME}".md5
 		iso_size=$(isosize ${IMGNAME} 2>/dev/null)
 		if [ "x${iso_size}" = "x" ]; then

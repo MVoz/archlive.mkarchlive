@@ -6,8 +6,10 @@ install ()
     BINARIES=""
     FILES=" /etc/udev/udev.conf"
     #SCRIPT="udev"
-    add_binary "${BASEDIR}/sbin/udevd" "/sbin/udevd"
-    add_binary "${BASEDIR}/sbin/udevadm" "/sbin/udevadm"
+    #add_binary "${BASEDIR}/sbin/udevd" "/sbin/udevd"
+    #add_binary "${BASEDIR}/sbin/udevadm" "/sbin/udevadm"
+    add_file "${BASEDIR}/sbin/udevd" "/sbin/udevd"
+    add_file "${BASEDIR}/sbin/udevadm" "/sbin/udevadm"
     for rules in 50-firmware.rules 50-udev-default.rules 60-persistent-storage.rules 80-drivers.rules; do
         add_file "${BASEDIR}/lib/udev/rules.d/${rules}" "/lib/udev/rules.d/${rules}"
     done

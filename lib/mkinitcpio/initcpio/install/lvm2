@@ -8,9 +8,24 @@ install ()
     SCRIPT="lvm2"
 
     add_dir "/dev/mapper"
-    add_binary "${BASEDIR}/sbin/lvm" "/sbin/lvm
-    add_binary "${BASEDIR}/sbin/dmsetup" "/sbin/dmsetup"
-    add_binary "${BASEDIR}/sbin/dmeventd" "/sbin/dmsetup"
+    add_file "${BASEDIR}/sbin/lvm" "/sbin/lvm
+    SO="libdl.so libdevmapper-event.so libdevmapper.so libreadline.so libudev.so libncursesw.so"
+    for so in $SO; do
+		for file in $(ls -1 ${BASEDIR}/lib/$so* 2>/dev/null); do
+			add_file "${file}" "${file##$BASEDIR}"
+		done
+    done
+
+    add_file "${BASEDIR}/sbin/dmsetup" "/sbin/dmsetup"
+    SO="libpthread.so libudev.so"
+    for so in $SO; do
+		for file in $(ls -1 ${BASEDIR}/lib/$so* 2>/dev/null); do
+			add_file "${file}" "${file##$BASEDIR}"
+		done
+    done
+
+    add_file "${BASEDIR}/sbin/dmeventd" "/sbin/dmsetup"
+
     add_file "/lib/udev/rules.d/10-dm.rules"
     add_file "/lib/udev/rules.d/13-dm-disk.rules"
     add_file "/lib/udev/rules.d/95-dm-notify.rules"

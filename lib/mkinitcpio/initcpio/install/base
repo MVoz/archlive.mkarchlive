@@ -18,17 +18,26 @@ install ()
     add_device "/dev/console" c 5 1
     add_device "/dev/mem"     c 1 1
 
-    add_binary "${BASEDIR}/lib/initcpio/busybox" "/bin/busybox"
-    libcfile=$(ls ${BASEDIR}/lib/libc.so*)
-    add_file "${libcfile}" "${libcfile##$BASEDIR}"
-    for ldfile in $(ls -1 ${BASEDIR}/lib/ld-linux*); do
-	add_file "${ldfile}" "${ldfile##$BASEDIR}"
+    #add_binary "${BASEDIR}/lib/initcpio/busybox" "/bin/busybox"
+    add_file "${BASEDIR}/lib/initcpio/busybox" "/bin/busybox"
+
+    for file in $(ls -1 ${BASEDIR}/lib/libc.so* 2>/dev/null); do
+	[ -f $file ] && add_file "${file}" "${file##$BASEDIR}"
     done
 
-    add_binary ${BASEDIR}/sbin/modprobe /sbin/modprobe
-    add_binary ${BASEDIR}/sbin/blkid /sbin/blkid
-    for file in $(ls -1 ${BASEDIR}/lib/libblkid.so**) $(ls -1 ${BASEDIR}/lib/libuuid.so**); do
-	add_file "${file}" "${file##$BASEDIR}"
+    for file in $(ls -1 ${BASEDIR}/lib/ld-linux* 2>/dev/null); do
+	[ -f $file ] && add_file "${file}" "${file##$BASEDIR}"
+    done
+
+    #add_binary ${BASEDIR}/sbin/modprobe /sbin/modprobe
+    #add_binary ${BASEDIR}/sbin/blkid /sbin/blkid
+    add_file ${BASEDIR}/sbin/modprobe /sbin/modprobe
+    add_file ${BASEDIR}/sbin/blkid /sbin/blkid
+    SO="libblkid.so libuuid.so"
+    for so in $SO; do
+		for file in $(ls -1 ${BASEDIR}/lib/$so* 2>/dev/null); do
+			add_file "${file}" "${file##$BASEDIR}"
+		done
     done
 
 #    add_file "/lib/initcpio/init_functions" "/init_functions"

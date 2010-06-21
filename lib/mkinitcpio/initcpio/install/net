@@ -8,8 +8,10 @@ install ()
     FILES=""
     SCRIPT="net"
 
-    add_binary "${BASEDIR}/lib/initcpio/ipconfig" "/bin/ipconfig"
-    add_binary "${BASEDIR}/lib/initcpio/nfsmount" "/bin/nfsmount"
+    #add_binary "${BASEDIR}/lib/initcpio/ipconfig" "/bin/ipconfig"
+    #add_binary "${BASEDIR}/lib/initcpio/nfsmount" "/bin/nfsmount"
+    add_file "${BASEDIR}/lib/initcpio/ipconfig" "/bin/ipconfig"
+    add_file "${BASEDIR}/lib/initcpio/nfsmount" "/bin/nfsmount"
 }
 
 help ()

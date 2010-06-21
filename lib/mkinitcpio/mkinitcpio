@@ -35,7 +35,7 @@ APPEND=""
 PRESET=""
 MESSAGE=""
 SKIPHOOKS=""
-PRESETDIR="${basedir}/etc/mkinitcpio.d"
+PRESETDIR="${BASEDIR}/etc/mkinitcpio.d"
 QUIET="y"
 SHOW_AUTOMODS="n"
 COMPRESSION="gzip"
@@ -80,7 +80,7 @@ sighandler() {
 trap sighandler TERM INT
 
 while getopts ':c:k:s:b:g:a:p:m:vH:LMhS:' arg; do
-    if [ "${OPTARG:0:1}" = "-" ]; then
+    if [ "${OPTARG#-}" != "${OPTARG}" ]; then
         echo "error: optional argument to '-${arg}' begins with a '-'"
         echo "  you probably don't want this....aborting."
         usage
@@ -96,26 +96,14 @@ while getopts ':c:k:s:b:g:a:p:m:vH:LMhS:' arg; do
         m) MESSAGE="${OPTARG}" ;;
         v) QUIET="n" ;;
         S) SKIPHOOKS="${OPTARG}" ;;
-        H) found=0
-           for instdir in ${INSTDIR}; do
-              if [ -f $instdir/${OPTARG} ]; then
-                 source "${INSTDIR}/${OPTARG}";
-                 echo "Help for hook '${OPTARG}':"
-                 help
-                 cleanup
-                 found=1
-                 break
-	      else
-                 continue
-              fi
-	   done
-           if [ $found -eq 0 ]; then echo "No hook ${OPTARG} available in dirs ${INSTDIR}"; fi		
+        H) . "${INSTDIR}/${OPTARG}";
+           echo "Help for hook '${OPTARG}':"
+           help
+           cleanup
            exit 0 ;;
         L) echo "Available hooks: " 
-           for instdir in ${INSTDIR}; do
-               for h in $instdir/*; do
-                  echo "   $(basename ${h})"
-               done
+           for h in ${INSTDIR}/*; do
+               echo "   $(basename ${h})"
            done
            cleanup
            exit 0 ;;
@@ -195,7 +183,7 @@ BASEDIR="${BASEDIR%/}"
 MODULEDIR="${BASEDIR}/lib/modules/${KERNELVERSION}"
 
 if [ -n "${BASEDIR}" ]; then
-    if [ "${BASEDIR:0:1}" != "/" ]; then
+    if [ "${BASEDIR}" = "${BASEDIR#/}" ]; then
         BASEDIR="$(pwd)/${BASEDIR}"
     elif [ ! -d "${BASEDIR}" ]; then
         echo "base directory '${BASEDIR}' does not exist or is not a directory"
@@ -209,7 +197,7 @@ if [ ! -f "${CONFIG}" ]; then
     cleanup
     exit 1
 fi
-source "${CONFIG}"
+. "${CONFIG}"
 
 if [ -f "${FILELIST}" -a -z "${APPEND}" ]; then
     if [ -z "${SAVELIST}" ]; then
@@ -256,7 +244,7 @@ for hook in ${HOOKS}; do
     # Deprecation check
     # A hook is considered deprecated if it is a symlink
     # within $INSTDIR.
-    if [ -L "${INSTDIR}/${hook}" ]; then
+    if [ -h "${INSTDIR}/${hook}" ]; then
         newhook="$(readlink -ne "${INSTDIR}/${hook}")"
         if [ -n "${newhook}" -a "${INSTDIR}/$(basename ${newhook})" -ef "${newhook}" ]; then
             newhook="$(basename ${newhook})"
@@ -267,31 +255,14 @@ for hook in ${HOOKS}; do
             hook="${newhook}"
         fi
     fi
-    found=0
-    for instdir in ${INSTDIR}; do
-	if grep "install" "$instdir/${hook}" >/dev/null 2>&1; then
-            source "$instdir/${hook}"
-            if [ "$QUIET" = "n" ]; then echo ":: Parsing hook [${hook}]"; fi
-            install
-            HOOKDIR="$instdir/../hooks"
-            parse_hook
-            found=1
-            break
-        else
-            continue
-        fi
-    done
-    if [ $found -eq 0 ]; then die "Hook '${hook}' can not be found in ${INSTDIR}."; fi
-
-#    if grep "install" "$instdir/${hook}" >/dev/null 2>&1; then
-#        source "${INSTDIR}/${hook}"
-#        echo ":: Parsing hook [${hook}]"
-#        install
-#        parse_hook
-#    else
-#        die "Hook '${hook}' can not be found."
-#    fi
-
+    if grep "install" "${INSTDIR}/${hook}" >/dev/null 2>&1; then
+        . "${INSTDIR}/${hook}"
+        echo ":: Parsing hook [${hook}]"
+        install
+        parse_hook
+    else
+        die "Hook '${hook}' can not be found."
+    fi
 done
 
 if [ "${HAS_MODULES}" = "y" ]; then
@@ -311,7 +282,7 @@ status=0
 
 if [ -n "${GENIMG}" ]; then
     if [ "$QUIET" = "n" ]; then echo -n ":: Generating image '${GENIMG}'..."; fi
-    if ! /sbin/gen_init_cpio ${FILELIST} | gzip -9 > "${GENIMG}"; then
+    if ! $CWD/initcpio/sbin/gen_init_cpio ${FILELIST} | gzip -9 > "${GENIMG}"; then
         echo "FAILED"
         status=1
     else

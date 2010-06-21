@@ -141,19 +141,19 @@ if [ "x$IMG_TYPE" = "x" ]; then IMG_TYPE="iso"; fi
 
 # 检测模块压缩模式
 case ${ZIP_MODE} in 
-   1) MKSQUASHFS="${START_DIR}/lib/bin/mksquashfs3"
+   1) MKSQUASHFS="${START_DIR}/lib/bin/mksquashfs3.static"
       EXT="sqfs"
       OPTION="-nolzma"
       #modprobe squashfs
       #[ $? -ne 0 ] && error "宿主系统无squashfs3 文件系统模块" && usage 1
       ;;
-   2) MKSQUASHFS="${START_DIR}/lib/bin/mksquashfs3"
+   2) MKSQUASHFS="${START_DIR}/lib/bin/mksquashfs3.static"
       EXT="lzm"
       OPTION=""
       #modprobe sqlzma
       #[ $? -ne 0 ] && error "宿主系统无打lzm补丁的squashfs文件系统模块" && usage 1
       ;;
-   3) MKSQUASHFS="${START_DIR}/lib/bin/mksquashfs4"
+   *) MKSQUASHFS="${START_DIR}/lib/bin/mksquashfs4.static"
       EXT="sqfs"
       OPTION=""
       #modprobe squashfs
