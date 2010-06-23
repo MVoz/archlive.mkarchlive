@@ -1,7 +1,8 @@
 #!/bin/sh
 # mkinitcpio - modular tool for building an init ramfs cpio image
-# base on ver: 0.5.26 Changed:
+# base on ver: 0.6.5 Changed:
 # INSTDIR can be 2 or more selections  (By Carbon Jiao)
+# 2010-06-22 更新: 使用静态编译的gen_init_cpio。同时根据官方版本同步更新。
 # 2009-10-12 更新: 新加功能——从INSTDIR参数中指定的顺序查找对应启动脚本，\
 #                    第一个目录中没有则从第二个查找， 依次类推
 #                    几个目录中同时存在时以排在前面的为优先
@@ -19,7 +20,8 @@
 
 # Settings
 TMPDIR="$(mktemp -d /tmp/mkinitcpio.XXXXXX)"
-CWD="$(dirname $0)"
+#CWD="$(dirname $0)"
+CWD="$(pwd)"
 BASEDIR=""
 FILELIST="${TMPDIR}/filelist"
 MESSAGEFILE="${TMPDIR}/message"
@@ -49,20 +51,20 @@ APPNAME=$(basename "${0}")
 usage ()
 {
     echo "${APPNAME}: usage"
-    echo "  -c CONFIG        Use CONFIG file. default: /etc/mkinitcpio.conf"
-    echo "  -k KERNELVERSION Use KERNELVERSION. default: $(uname -r)"
-    echo "  -s NAME          Save filelist. default: no"
-    echo "  -b BASEDIR       Use BASEDIR. default: /"
-    echo "  -g IMAGE         Generate a cpio image as IMAGE. default: no"
-    echo "  -a NAME          Append to an existing filelist. default: no"
-    echo "  -p PRESET        Build specified preset."
-    echo "  -m MESSAGE       Print MESSAGE before passing control to kinit."
-    echo "  -S SKIPHOOKS     Skip SKIPHOOKS (comma-separated) when building the image."
-    echo "  -v               Verbose output. Default: no"
-    echo "  -M               Display modules found via autodetection." 
-    echo "  -L               List all available hooks." 
-    echo "  -H HOOKNAME      Output help for hook 'HOOKNAME'."
-    echo "  -h               This message."
+    echo "  -c CONFIG        指定'CONFIG'为配置文件. 默认为: '/etc/mkinitcpio.conf'"
+    echo "  -k KERNELVERSION 指定内核版本为'KERNELVERSION'. 默认为: $(uname -r)"
+    echo "  -s NAME          保存清单文件. 默认不保存."
+    echo "  -b BASEDIR       指定基础目录 BASEDIR. 默认: /"
+    echo "  -g IMAGE         指定目标内核启动镜像文件名为'IMAGE'. 默认: 无——根据 PRESET文件中指定"
+    echo "  -a NAME          在现有的清单文件中添加条目. 默认: 无"
+    echo "  -p PRESET        指定preset文件."
+    echo "  -m MESSAGE       指定启动到内核镜像init前显示的信息."
+    echo "  -S SKIPHOOKS     制作内核启动镜像时忽略的hook文件'SKIPHOOKS' (逗号隔开)."
+    echo "  -v               制作时显示详细信息. 默认: 否"
+    echo "  -M               显示自动检测出的内核模块." 
+    echo "  -L               显示所有可用的hook文件." 
+    echo "  -H HOOKNAME      显示hook文件'HOOKNAME'的帮助信息."
+    echo "  -h               本帮助文件."
     cleanup
     exit 1
 }
@@ -81,8 +83,10 @@ trap sighandler TERM INT
 
 while getopts ':c:k:s:b:g:a:p:m:vH:LMhS:' arg; do
     if [ "${OPTARG#-}" != "${OPTARG}" ]; then
-        echo "error: optional argument to '-${arg}' begins with a '-'"
-        echo "  you probably don't want this....aborting."
+        #echo "error: optional argument to '-${arg}' begins with a '-'"
+        #echo "  you probably don't want this....aborting."
+        echo "错误: 指定的参数 '-${arg}' 值以 '-' 开头"
+        echo "  可能不是需要的....退出."
         usage
     fi
     case "${arg}" in
@@ -96,21 +100,51 @@ while getopts ':c:k:s:b:g:a:p:m:vH:LMhS:' arg; do
         m) MESSAGE="${OPTARG}" ;;
         v) QUIET="n" ;;
         S) SKIPHOOKS="${OPTARG}" ;;
-        H) . "${INSTDIR}/${OPTARG}";
-           echo "Help for hook '${OPTARG}':"
-           help
-           cleanup
+        H) # Changed by Archlive  (For instdir)
+           #. "${INSTDIR}/${OPTARG}";
+           #echo "Help for hook '${OPTARG}':"
+           #help
+           #cleanup
+           #exit 0 ;;
+
+           found=0
+           for instdir in ${INSTDIR}; do
+              if [ -f $instdir/${OPTARG} ]; then
+                 source "${INSTDIR}/${OPTARG}";
+                 echo "Help for hook '${OPTARG}':"
+                 help
+                 cleanup
+                 found=1
+                 break
+	      else
+                 continue
+              fi
+	   done
+           if [ $found -eq 0 ]; then echo "No hook ${OPTARG} available in dirs ${INSTDIR}"; fi		
            exit 0 ;;
         L) echo "Available hooks: " 
-           for h in ${INSTDIR}/*; do
-               echo "   $(basename ${h})"
+           # Changed by Archlive  (For instdir)
+           #for h in ${INSTDIR}/*; do
+           #    echo "   $(basename ${h})"
+           #done
+           #cleanup
+           #exit 0 ;;
+
+           for instdir in ${INSTDIR}; do
+               for h in $instdir/*; do
+                  echo "   $(basename ${h})"
+               done
            done
            cleanup
            exit 0 ;;
         M) SHOW_AUTOMODS="y" ;;
         h|?) usage ;;
-        :) echo "${OPTARG} requires a value..."; usage ;;
-        *) echo "invalid argument '${arg}'"; usage ;;
+        :) #echo "${OPTARG} requires a value..."
+           echo "需要指定参数 ${OPTARG} ..."
+           usage ;;
+        *) #echo "invalid argument '${arg}'"
+           echo "无效参数 '${arg}'"
+           usage ;;
     esac
 done
 shift $((${OPTIND} - 1))
@@ -163,15 +197,18 @@ if [ -n "${PRESET}" ]; then
 
             echo "==> Running command: ${PRESET_CMD}"
             if eval ${PRESET_CMD}; then
-                echo "==> SUCCESS"
+                #echo "==> SUCCESS"
+                echo "==> 成功"
             else
-                echo "==> FAIL"
+                #echo "==> FAIL"
+                echo "==> 失败"
             fi
         done
         cleanup
         exit 0
     else
-        echo "Preset ${PRESET} does not exist. Exiting."
+        #echo "Preset ${PRESET} does not exist. Exiting."
+        echo "Preset文件 ${PRESET} 不存在，退出。"
         cleanup
         exit 1
     fi
@@ -186,14 +223,16 @@ if [ -n "${BASEDIR}" ]; then
     if [ "${BASEDIR}" = "${BASEDIR#/}" ]; then
         BASEDIR="$(pwd)/${BASEDIR}"
     elif [ ! -d "${BASEDIR}" ]; then
-        echo "base directory '${BASEDIR}' does not exist or is not a directory"
+        #echo "base directory '${BASEDIR}' does not exist or is not a directory"
+        echo "基础目录 '${BASEDIR}' 不存在或者不是一个目录"
         cleanup
         exit 1
     fi
 fi
 
 if [ ! -f "${CONFIG}" ]; then
-    echo "config file '${CONFIG}' cannot be found, aborting..."
+    #echo "config file '${CONFIG}' cannot be found, aborting..."
+    echo "配置文件 '${CONFIG}' 不存在，放弃..."
     cleanup
     exit 1
 fi
@@ -204,7 +243,8 @@ if [ -f "${FILELIST}" -a -z "${APPEND}" ]; then
         rm ${FILELIST}
         touch "${FILELIST}"
     else
-        echo "destination file list '${FILELIST}' exists - remove before running"
+        #echo "destination file list '${FILELIST}' exists - remove before running"
+        echo "预保存的清单文件 '${FILELIST}' 已经存在，请先移出然后再运行本程序"
         cleanup
         exit 1
     fi
@@ -218,7 +258,8 @@ MODULEDIR=$(echo ${MODULEDIR} | tr -s /)
 . "${FUNCTIONS}"
 
 if [ "${SHOW_AUTOMODS}" = "y" ]; then
-    echo "Modules autodetected:"
+    #echo "Modules autodetected:"
+    echo "自动检查出内核模块:"
     . "${INSTDIR}/autodetect"
     install
     cat "${MODULE_FILE}"
@@ -227,9 +268,11 @@ if [ "${SHOW_AUTOMODS}" = "y" ]; then
 fi
 
 if [ -z "${GENIMG}" ]; then
-    echo ":: Begin dry run"
+    #echo ":: Begin dry run"
+    echo ":: 开始模拟制作"
 else
-    echo ":: Begin build"
+    #echo ":: Begin build"
+    echo ":: 开始制作内核启动镜像"
 fi
 #parse 'global' hook, as defined in ${CONFIG}
 parse_hook
@@ -255,18 +298,42 @@ for hook in ${HOOKS}; do
             hook="${newhook}"
         fi
     fi
-    if grep "install" "${INSTDIR}/${hook}" >/dev/null 2>&1; then
-        . "${INSTDIR}/${hook}"
-        echo ":: Parsing hook [${hook}]"
-        install
-        parse_hook
-    else
-        die "Hook '${hook}' can not be found."
+
+    # Changed by Archlive  (For instdir)
+    #if grep "install" "${INSTDIR}/${hook}" >/dev/null 2>&1; then
+    #    . "${INSTDIR}/${hook}"
+    #    echo ":: Parsing hook [${hook}]"
+    #    install
+    #    parse_hook
+    #else
+    #    die "Hook '${hook}' can not be found."
+    #fi
+    for instdir in ${INSTDIR}; do
+	if grep "install" "$instdir/${hook}" >/dev/null 2>&1; then
+            source "$instdir/${hook}"
+            if [ "$QUIET" = "n" ]; then
+			#echo ":: Parsing hook [${hook}]"
+			echo ":: 检查 hook文件 [${hook}]"
+            fi
+            install
+            #HOOKDIR="$instdir/../hooks"
+            HOOKDIR="${instdir/install/hooks}"
+            parse_hook
+            found=1
+            break
+        else
+            continue
+        fi
+    done
+    if [ $found -eq 0 ]; then
+	#die "Hook '${hook}' can not be found in ${INSTDIR}."
+	die "${INSTDIR}中没有找到Hook文件 '${hook}'."
     fi
 done
 
 if [ "${HAS_MODULES}" = "y" ]; then
-    echo ":: Generating module dependencies"
+    #echo ":: Generating module dependencies"
+    echo ":: 正在更新启动镜像中模块依赖关系"
     for mod in $(grep "file /lib/modules/${KERNELVERSION}" ${FILELIST} | cut -d' ' -f2); do
         dir=$(dirname "${mod}")
         mkdir -p "${TMPDIR}/${dir}"
@@ -281,12 +348,18 @@ fi
 status=0
 
 if [ -n "${GENIMG}" ]; then
-    if [ "$QUIET" = "n" ]; then echo -n ":: Generating image '${GENIMG}'..."; fi
+    if [ "$QUIET" = "n" ]; then
+		#echo -n ":: Generating image '${GENIMG}'...";
+		echo -n ":: 正在创建内核启动镜像 '${GENIMG}'...";
+    fi
+    #if ! gen_init_cpio ${FILELIST} | gzip -9 > "${GENIMG}"; then
     if ! $CWD/initcpio/sbin/gen_init_cpio ${FILELIST} | gzip -9 > "${GENIMG}"; then
-        echo "FAILED"
+        #echo "FAILED"
+        echo "失败！"
         status=1
     else
-        echo "SUCCESS"
+        #echo "SUCCESS"
+        echo "成功！"
         status=0
     fi
 
@@ -294,7 +367,8 @@ if [ -n "${GENIMG}" ]; then
         rm ${FILELIST}
     fi
 else
-    echo ":: Dry run complete, use -g IMAGE to generate a real image"
+    #echo ":: Dry run complete, use -g IMAGE to generate a real image"
+    echo ":: 模拟制作完成，请使用 -g 目标镜像名 来创建内核启动镜像"
 fi
 
 cleanup

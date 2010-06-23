@@ -1,3 +1,5 @@
+# Archlive
+# 2010-06-22 更新: 基于最新官方版本0.6.5修改add_file
 
 auto_modules ()
 {
@@ -83,7 +85,8 @@ add_device ()
     fi
 }
 
-# what the hell does this do?
+# $1 创建链接名
+# $2 链接源
 add_symlink ()
 {
     local fil dest dir
@@ -110,12 +113,13 @@ add_symlink2 ()
     fi
 }
 
-add_file ()
+add_file_old ()
 {
     local fil lnk dir dest
     if [ -f "${1}" ]; then
         fil="${1}"
         lnk=$(readlink -f "${fil}")
+          # lnk 为fil 指向的文件（链接源）
         if [ -n "${lnk}" ]; then
             add_symlink "${fil}" "${lnk}"
             fil="${lnk}"
@@ -134,6 +138,45 @@ add_file ()
         if ! grep "file ${dest} " "${FILELIST}" 2>&1 > /dev/null; then
             msg "  adding file ${dest}"
             echo "file ${dest} ${fil} $(stat -c '%a' ${fil}) 0 0" >> "${FILELIST}"
+        fi
+    else
+        err "file '${1}' does not exist"
+        return 1
+    fi
+}
+
+# archlive changed as below
+# $1 源文件
+# $2 目标文件(如果存在)
+add_file ()
+{
+    local fil lnk dir dest
+    if [ -f "${1}" ]; then
+        fil="${1}"
+        if [ $# -eq 2 ]; then
+            dest="${2}"
+        else
+            dest="${fil##$BASEDIR}"
+            if [ "${dest}" = "${dest#/}" ]; then
+                dest="/${dest}"
+            fi
+        fi
+
+	echo "file=$fil dest=$dest" >>/tmp/log
+
+        lnk=$(readlink -f "${fil}")
+          # 如果 fil 为链接，则 lnk 为fil 指向的文件（链接源）
+          # 如果 fil 为文件，则 lnk 跟 fil 同
+        if [ "${fil}" != "${lnk}" ]; then
+		# fil 为链接
+            add_symlink "${fil}" "${lnk}"
+            add_file "${lnk}"
+        else
+            add_dir $(dirname "${dest}")
+            if ! grep "file ${dest} " "${FILELIST}" 2>&1 > /dev/null; then
+                 msg "  adding file ${dest}"
+                 echo "file ${dest} ${fil} $(stat -c '%a' ${fil}) 0 0" >> "${FILELIST}"
+            fi
         fi
     else
         err "file '${1}' does not exist"
@@ -215,6 +258,7 @@ add_binary ()
     fi
 }
 
+# Special for Archlive change. (according with add_file)
 parse_hook ()
 {
     local mod bin fil
@@ -237,7 +281,12 @@ parse_hook ()
     done
 
     if [ -n "${SCRIPT}" ]; then
-        add_file "${HOOKDIR}/${SCRIPT}" "/hooks/${SCRIPT}"
+        if [ -f ${HOOKDIR}/${SCRIPT} ]; then
+            #hookname=${HOOKDIR}/${SCRIPT}
+            #hookname=${hookname##*/}
+            #hookname="$(basename ${HOOKDIR}/${SCRIPT})"
+            add_file "${HOOKDIR}/${SCRIPT}" "/hooks/${SCRIPT}"
+        fi
     fi
 }
 # vim: set ft=sh ts=4 sw=4 et:

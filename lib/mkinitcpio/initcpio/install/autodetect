@@ -14,7 +14,7 @@ install ()
     findfs ()
     {
         for blkdev in $(find /dev -type b | grep -v -e /dev/loop -e /dev/ram -e /dev/fd); do
-            (eval $(/sbin/blkid -o udev -p "${blkdev}"); [ "${ID_FS_USAGE}" = "filesystem" ] && echo $ID_FS_TYPE)
+            /sbin/blkid -u filesystem -o value -s TYPE -p "${blkdev}" 2> /dev/null
         done
     }
 
@@ -56,7 +56,7 @@ install ()
             *cramfs*) echo "zlib_inflate" >> "${MODULE_FILE}" ;;
             *isofs*) echo "zlib_inflate" >> "${MODULE_FILE}" ;;
             *msdos*) echo "fat" >> "${MODULE_FILE}" ;;
-            *vfat*) echo -e "fat\nnls_cp437" >> "${MODULE_FILE}" ;;
+            *vfat*) echo -e "fat\nnls_cp936" >> "${MODULE_FILE}" ;;
             *ocfs2*) echo -e "ocfs2_dlm\njbd\nocfs2_nodemanager\nconfigfs" >> "${MODULE_FILE}" ;;
         esac
         echo "${modname}" >> "${MODULE_FILE}"
