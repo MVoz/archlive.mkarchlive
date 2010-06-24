@@ -274,10 +274,12 @@ vattery
 #xlockmore
 
 # fcitx-svn-ibus   56.79MB   fcitx-svn-mini 6.18MB
-#fcitx-svn-mini
-# Archlive定制包,只含有智能拼音、智能双拼和五笔字型，如果需要二笔等，请用fcitx-svn-ibus
 
-fcitx
+fcitx-svn
+# fcitx 官方编译的deb转化
+
+#fcitx
+# Arch 官方编译版，无法切换到繁体
 
 yong
 # 小小输入法
