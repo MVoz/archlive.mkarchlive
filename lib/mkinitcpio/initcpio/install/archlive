@@ -1,7 +1,151 @@
-install ()
+base_install ()
 {
-    MODULES="cdrom ide-cd_mod ide-core ide-generic loop nls_cp936 nls_utf8 $(all_modules 'kernel/fs' | grep -v "nls")"
+    add_dir "/proc"
+    add_dir "/sys"
+    add_dir "/dev"
+    add_dir "/bin"
+    add_dir "/sbin"
+    add_dir "/lib"
+    add_dir "/usr"
+    add_dir "/usr/bin"
+    add_dir "/usr/lib"
+    add_dir "/usr/sbin"
 
+    add_device "/dev/null"    c 1 3
+    #add_device "/dev/zero"    c 1 5
+    add_device "/dev/console" c 5 1
+    #add_device "/dev/mem"     c 1 1
+
+    #add_file "${BASEDIR}/lib/initcpio/busybox" "/bin/busybox"
+    add_file "$CWD/initcpio/sbin/busybox-$ARCH" "/bin/busybox"
+
+    for file in $(ls -1 ${BASEDIR}/lib/libc.so* 2>/dev/null); do
+	[ -f $file ] && add_file "${file}" "${file##$BASEDIR}"
+    done
+
+    for file in $(ls -1 ${BASEDIR}/lib/ld-linux* 2>/dev/null); do
+	[ -f $file ] && add_file "${file}" "${file##$BASEDIR}"
+    done
+
+    add_file ${BASEDIR}/sbin/modprobe /sbin/modprobe
+    add_file ${BASEDIR}/sbin/blkid /sbin/blkid
+    SO="libblkid.so libuuid.so"
+    for so in $SO; do
+		for file in $(ls -1 ${BASEDIR}/lib/$so* 2>/dev/null); do
+			add_file "${file}" "${file##$BASEDIR}"
+		done
+    done
+
+    #add_file "${BASEDIR}/lib/initcpio/init_functions" "/init_functions"
+    #add_file "${BASEDIR}/lib/initcpio/init" "/init"
+    #add_file "$CWD/initcpio/init_functions" "/init_functions" #合并到liblinuxlive
+    add_file "$CWD/initcpio/init" "/init"
+
+    add_file "${CONFIG}" "/config"
+
+    if [ -n "${MESSAGE}" ]; then
+        echo -e "${MESSAGE}" > ${MESSAGEFILE}
+        add_file "${MESSAGEFILE}" "/message"
+    fi
+    add_file "/etc/modprobe.d/usb-load-ehci-first.conf"
+}
+
+udev_install ()
+{
+    FILES=" /etc/udev/udev.conf"
+    #SCRIPT="udev" # 合并到 init
+    add_file "${BASEDIR}/sbin/udevd" "/sbin/udevd"
+    add_file "${BASEDIR}/sbin/udevadm" "/sbin/udevadm"
+    for rules in 50-firmware.rules 50-udev-default.rules 60-persistent-storage.rules 80-drivers.rules; do
+        add_file "${BASEDIR}/lib/udev/rules.d/${rules}" "/lib/udev/rules.d/${rules}"
+    done
+    for tool in firmware ata_id path_id scsi_id usb_id; do
+        add_file "${BASEDIR}/lib/udev/${tool}" "/lib/udev/${tool}"
+    done
+    add_file "${BASEDIR}/lib/initcpio/udev/load-modules.sh" "/lib/udev/load-modules.sh"
+}
+
+pata_install ()
+{
+    MODULES="${MODULES} $(checked_modules "ata/pata_*") $(checked_modules "ata/ata_generic") 
+              $(checked_modules "ata/ata_piix")"
+
+    MODULES=$(echo ${MODULES}) #trim whitespace
+    if [ -n "${MODULES}" ]; then
+        MODULES="${MODULES} sd_mod"
+    fi
+}
+
+scsi_install ()
+{
+    MODULES="${MODULES} $(checked_modules "/scsi/" | grep -ve "imm" -e "pdc_adma" -e "ahci" -e "ata" -e "pcmcia" -e "ide") 
+              $(checked_modules "/block/" | grep -v "sx8")
+              $(checked_modules "/fusion/")"
+
+    MODULES=$(echo ${MODULES}) #trim whitespace
+    if [ -n "${MODULES}" ]; then
+        MODULES="${MODULES} sd_mod"
+    fi
+}
+
+sata_install ()
+{
+    MODULES="${MODULES} $(checked_modules "scsi/.*ata") $(checked_modules "block/sx8") 
+              $(checked_modules "scsi/ahci") $(checked_modules "scsi/pdc_adma") 
+              $(checked_modules "ata/sata_*") $(checked_modules "ata/ahci") 
+              $(checked_modules "ata/pdc_adma") $(checked_modules "ata/ata_piix")"
+
+    MODULES=$(echo ${MODULES}) #trim whitespace
+    if [ -n "${MODULES}" ]; then
+        MODULES="${MODULES} sd_mod"
+    fi
+}
+
+usb_install ()
+{
+    MODULES="${MODULES} $(checked_modules "/usb/host" | grep -ve "_cs" -e "sl1811-hcd" -e "isp116x-hcd")"
+
+    MODULES=$(echo ${MODULES}) #trim whitespace
+    if [ -n "${MODULES}" ]; then
+        MODULES="${MODULES} usb_storage sd_mod sr_mod"
+        MODULES="${MODULES} $(checked_modules "drivers/usb/storage/ums-*")"
+    fi
+}
+
+filesystems_install ()
+{
+    MODULES="${MODULES} $(checked_modules '/kernel/fs' | grep -v "nls") $(checked_modules '/kernel/fs/nls/nls_cp936')"
+}
+
+net_install ()
+{
+    MODULES="${MODULES} nfs $(checked_modules "/drivers/net/") "
+    SCRIPT="net"
+    add_file "${BASEDIR}/lib/initcpio/ipconfig" "/bin/ipconfig"
+    add_file "${BASEDIR}/lib/initcpio/nfsmount" "/bin/nfsmount"
+}
+
+kms_install ()
+{
+    MODULES="${MODULES} intel_agp i915 nouveau radeon mga i810 i830 sisfb sis savage via"
+}
+fw_install ()
+{
+    MODULES="${MODULES} $(checked_modules "/firewire/") "
+
+    MODULES=$(echo ${MODULES}) #trim whitespace
+    if [ -n "${MODULES}" ]; then
+        MODULES="${MODULES} firewire-sbp2 sd_mod sr_mod"
+    fi
+}
+
+archlive_install ()
+{
+
+    add_dir /tmp
+
+    MODULES="${MODULES} cdrom ide-cd_mod ide-core ide-generic loop nls_cp936 nls_utf8"
+    MODULES="${MODULES} aufs squashfs vfat ntfs fuse ext2 ext3 ext4 btrfs reiserfs xfs cifs"
     # usb, mmc, memstick support
     MODULES="${MODULES} $(checked_modules "/usb/host" | grep -ve "_cs" -e "sl1811-hcd" -e "isp116x-hcd") usb_storage"
     MODULES="${MODULES} $(all_modules '/mmc/host') mmc_block sdhci-pci sd_mod sr_mod"
@@ -9,23 +153,12 @@ install ()
     #pcmcia support
     MODULES="${MODULES} pcmcia rsrc_nonstatic yenta_socket"
 
-    # 网卡驱动模块等
-#    MODULES="${MODULES} $(all_modules '/net/wireless') $(all_modules '/net/usb')"
-
+     # 部分网卡驱动
     MODULES="${MODULES} r8169 ath5k iwl3945"
-
-#    MODULES="${MODULES} 3c501 3c503 3c505 3c507 3c509 3c515 3c59x 8139too 8139cp \
-#	ac3200 acenic at1700 atl1c de620 eepro e2100 epic100 hp100 ne2k-pci pcnet32 \
-#	r8169 skge sky2 smc-ultra sis900 smc9194 smsc9420 tg3 via-rhine yellowfin \
-#	dl2k ns83820 depca cs89x0 de4x5 de600 de620 e2100 eepro eexpress eth16i \
-#	ewrk3 forcedeth hp-plus hp ni52 ni65 sb1000 wd"
-
     MODULES="${MODULES} pppoe"
 
     #trim whitespace
     MODULES=$(echo ${MODULES}) 
-
-    add_file "$CWD/initcpio/sbin/busybox-$ARCH" "/bin/busybox"
 
     add_file "${BASEDIR}/lib/initcpio/ipconfig" "/bin/ipconfig"
     add_file "${BASEDIR}/lib/initcpio/nfsmount" "/bin/nfsmount"
@@ -55,13 +188,19 @@ install ()
 
     add_file "$CWD/initcpio/liblinuxlive" "/usr/lib/liblinuxlive"
     add_file "$CWD/initcpio/cleanup" "/cleanup"
-    add_file "$CWD/initcpio/init_functions" "/init_functions"
-    add_file "$CWD/initcpio/init" "/init"
 
-    FILES=""
-#    add_dir /real_root
-#    add_dir /tmpfs
-#    add_dir /bootmnt
-    add_dir /tmp
-    SCRIPT="archlive"
+    #SCRIPT="archlive" #已经合并到init
+}
+
+install ()
+{
+    base_install
+    udev_install
+    pata_install
+    scsi_install
+    sata_install
+    [ "${ALL_FS_BOOT}" = "y" ] && filesystems_install
+    [ "${NET_BOOT_ARCHLIVE}" = "y" ] && net_install
+    [ "${KMS_BOOT}" = "y" ] && kms_install
+    archlive_install
 }

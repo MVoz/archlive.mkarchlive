@@ -1,11 +1,34 @@
 #!/bin/ash
 
+boot_version=Ver.20100624
+
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改
 # Functions library :: for Linux Live scripts 6
 # Author: Tomas M. <http://www.linux-live.org>
-#
 
+# ===========================================================
+# GLOBAL variables
+# ===========================================================
+# linux live flag to fstab, if fstab line doesn't contain it,
+# never remove it from fstab automatically (user added it)
+FSTABLLFLAG="#Archlive-Update"
+
+# We have to set these variables very carefully
+#UNION=union
+UNION=new_root
+MEMORY=memory
+MOUNTDIR=mnt
+CHANGES=$MEMORY/changes
+XINO=$MEMORY/xino
+COPY2RAM=$MEMORY/copy2ram
+IMAGES=$MEMORY/images
+INITRAMDISK=$MOUNTDIR/live
+LOOPMOUNT=$MOUNTDIR/tmp
+
+# live系统制作脚本会自动更改如下参数，切忌手动修改，否则可能无法启动
+# this will be replaced by build script, so never change the following line!
+export LIVECDNAME="archlive"
 
 export BOOT_LOG="/var/log/live_boot.log"
 
@@ -92,35 +115,26 @@ warn () {
     fi
 }
 
-# ===========================================================
-# GLOBAL variables
-# ===========================================================
-
-# linux live flag to fstab, if fstab line doesn't contain it,
-# never remove it from fstab automatically (user added it)
-FSTABLLFLAG="#Archlive-Update"
-
-# We have to set these variables very carefully
-#UNION=union
-UNION=new_root
-MEMORY=memory
-MOUNTDIR=mnt
-CHANGES=$MEMORY/changes
-XINO=$MEMORY/xino
-COPY2RAM=$MEMORY/copy2ram
-IMAGES=$MEMORY/images
-INITRAMDISK=$MOUNTDIR/live
-LOOPMOUNT=$MOUNTDIR/tmp
-
-# live系统制作脚本会自动更改如下参数，切忌手动修改，否则可能无法启动
-# this will be replaced by build script, so never change the following line!
-export LIVECDNAME="archlive"
+poll_device() {
+    device="$1"
+    if [ "$2" -ge 0 ]; then
+        seconds="$2"
+    else
+        seconds=5
+    fi
+    if [ "${udevd_running}" -eq 1 ]; then
+        echo "Waiting ${seconds} seconds for device ${device} ..."
+        while [ ! -b "${device}" -a ! -h "${device}" -a ${seconds} -gt 0 ]; do
+            sleep 1
+            seconds=$((${seconds}-1))
+        done
+    fi
+    [ -b "${device}" -o -h "${device}" ]
+}
 
 # Checking boot paremeters 检查启动参数
 check_boot_paremeters ()
 {
-    read CMDLINE </proc/cmdline
-    export CMDLINE
     for cmd in ${CMDLINE}; do
 	case "${cmd}" in
         \#*) break ;; # ignore everything after a # in the commandline
@@ -142,6 +156,72 @@ check_boot_paremeters ()
              ;;
 	esac
     done
+}
+
+default_mount_handler() {
+    if [ ${root:0:5} != "/dev/" ] || ! poll_device "${root}" ${rootdelay}; then
+        msg "Root device '${root}' doesn't exist. Attempting to create it."
+        major=""
+        minor=""
+        if [ ${root:0:5} = "/dev/" ]; then
+            # It might be a block device (/dev/sda) -> /sys/block/sda/dev
+            # or a partition (/dev/sda1) -> /sys/block/sda/sda1/dev
+            for dir in /sys/block /sys/block/*; do
+                if [ -f ${dir}/${root:5}/dev ]; then
+                    major="$(cat ${dir}/${root:5}/dev | cut -d: -f1)"
+                    minor="$(cat ${dir}/${root:5}/dev | cut -d: -f2)"
+                    break
+                fi
+            done
+        # It might be a major/minor pair (8:1)
+        elif echo ${root} | grep -q :; then
+            major="$(echo ${root} | cut -d: -f1)"
+            minor="$(echo ${root} | cut -d: -f2)"
+            root="/dev/root"
+        # It might be major/minor encoded as a single hex-number (lilo-style) (801)
+        elif [ ${#root} -le 4 -a ${#root} -gt 2 ] && echo "${root}" | grep -qe '^[A-Fa-f0-9]*$'; then
+            str_offset=$((${#root}-2))
+            major=$((0x${root:0:${str_offset}}))
+            minor=$((0x${root:${str_offset}}))
+            root="/dev/root"
+        fi
+        if [ -n "${major}" -a -n "${minor}" ]; then
+            msg "Creating root device ${root} with major ${major} and minor ${minor}."
+            mknod ${root} b ${major} ${minor}
+        else
+            err "Unable to determine major/minor number of root device '${root}'."
+            echo "You are being dropped to a recovery shell"
+            echo "    Type 'exit' to try and continue booting"
+            launch_interactive_shell
+            msg "Trying to continue (this will most likely fail) ..."
+        fi
+    fi
+    # We didn't build filesystem support into busybox,
+    # instead we use util-linux-ng's blkid for best compatibility
+    if [ -n "${rootfstype}" ]; then
+        fstype="${rootfstype}"
+    else
+        fstype=$(sbin/blkid -u filesystem -o value -s TYPE -p "${root}")
+        if [ -z "${fstype}" ]; then
+            err "Unable to determine the file system type of ${root}:"
+            echo "Either it contains no filesystem, an unknown filesystem,"
+            echo "or more than one valid file system signature was found."
+            echo
+            echo "Try adding"
+            echo "    rootfstype=your_filesystem_type"
+            echo "to the kernel command line."
+            echo
+            echo "You are now being dropped into an emergency shell."
+            launch_interactive_shell
+            msg "Trying to continue (this will most likely fail) ..."
+        fi
+    fi
+    if [ "${readwrite}" = "yes" ]; then
+        rwopt="rw"
+    else
+        rwopt="ro"
+    fi
+    mount ${fstype:+-t ${fstype}} -o ${rwopt}${rootflags:+,${rootflags}} "${root}" "$1"
 }
 
 #=================================================================
@@ -215,6 +295,13 @@ debug_shell()
 	PS1='[ramfs \W]\$ ' /bin/sh -i 2>/dev/null
    fi
 }
+
+launch_interactive_shell() {
+    export PS1='[ramfs \W]\$ '
+    [ "$1" = "--exec" ] && exec /bin/sh -i
+    /bin/sh -i
+}
+
 
 # header
 # $1 = text to show
@@ -1027,6 +1114,32 @@ find_in_computer()
    done
    debug_log "RESULT=$RESULT"
    echo $RESULT
+}
+
+# 根据基本模块上级目录名查找
+# $1 基本模块上级目录名
+# 此中方式避免$SGN错误指定导致无法找到基本模块的情况
+find_by_folder ()
+{
+   if [ "$cn" = "y" ]; then
+	debug_log "根据基本模块的上级目录名$1来查找"
+   else
+	debug_log "Search the modules by the directory name $1 of them..."
+   fi
+   debug_log "find_by_foler $1"
+   DATAFROM=$(find_in_computer $1)
+   debug_log "DATAFROM=$DATAFROM"
+   if [ "$DATAFROM" ]; then
+	if [ "$(find_modules $DATAFROM)" != "" ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "在$DATAFROM找到模块文件"
+		else
+			echolog "Found modules in $DATAFROM."
+		fi
+		DATA=$DATAFROM
+		debug_log "DATA=$DATA"
+	fi
+   fi
 }
 
 # Find and run all scripts from the given module

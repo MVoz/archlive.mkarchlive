@@ -98,6 +98,7 @@ add_symlink ()
         if ! grep "slink ${fil} " "${FILELIST}" 2>&1 > /dev/null; then
             msg "  adding link ${fil} -> ${dest}"
             echo "slink ${fil} ${dest} $(stat -c '%a' ${1}) 0 0" >> "${FILELIST}"
+            echo "创建符号链接$fil指向$dest" >>/tmp/archlive-boot.log
         fi
     fi
     #fail quietly
@@ -162,7 +163,9 @@ add_file ()
             fi
         fi
 
-	echo "file=$fil dest=$dest" >>/tmp/log
+          # 相对路径转换成绝对路径
+	  case $fil in .*) fil=$(pwd)/$fil;; esac
+        fil=${fil/.\//}
 
         lnk=$(readlink -f "${fil}")
           # 如果 fil 为链接，则 lnk 为fil 指向的文件（链接源）
@@ -176,6 +179,7 @@ add_file ()
             if ! grep "file ${dest} " "${FILELIST}" 2>&1 > /dev/null; then
                  msg "  adding file ${dest}"
                  echo "file ${dest} ${fil} $(stat -c '%a' ${fil}) 0 0" >> "${FILELIST}"
+                 echo "$fil安装到启动镜像中的$dest" >>/tmp/archlive-boot.log
             fi
         fi
     else

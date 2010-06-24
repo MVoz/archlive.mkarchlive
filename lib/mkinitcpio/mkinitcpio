@@ -20,8 +20,7 @@
 
 # Settings
 TMPDIR="$(mktemp -d /tmp/mkinitcpio.XXXXXX)"
-#CWD="$(dirname $0)"
-CWD="$(pwd)"
+CWD="$(dirname $0)"
 BASEDIR=""
 FILELIST="${TMPDIR}/filelist"
 MESSAGEFILE="${TMPDIR}/message"
