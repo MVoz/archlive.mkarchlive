@@ -63,7 +63,7 @@ export FORCE
 # 检测、配置输入的命令
 while getopts 'A:i:P:b:M:m:a:t:c:nfvh' arg; do
    case "${arg}" in
-	A) ARCH="${OPTARG}" ;;
+	A) arch="${OPTARG}" ;;
 	i) CPIOCONFIG="${OPTARG}" ;;
 	b) BOOT="${OPTARG}" ;;
 	M) MODULES="${OPTARG}" ;;
@@ -83,11 +83,10 @@ shift $(($OPTIND - 1))
 CMD_NAME="${1}"
 
 # 检查重要参数
-case "$ARCH" in
-	i686) ;;
-	x86_64) ;;
-	dul) ;;
-	*) error "无效的ARCH $ARCH"; usage 1 ;;
+case "$arch" in
+	i686|x86_64) ARCH=$arch;;
+	dul) ARCH="";;
+	*) error "无效的ARCH $arch"; usage 1 ;;
 esac
 
 # 检查命令有效性
@@ -202,24 +201,28 @@ fi
 WORK_DIR=${WORK_DIR%/}
 
 if [ "x${IMGNAME}" = "x" ]; then
-	if [ "$ARCH" = "dul" ]; then
-		IMGNAME="archlive-dul-$(date +%F).${IMG_TYPE}"
-	else
-		IMGNAME="archlive-${ARCH}-$(date +%F).${IMG_TYPE}"
-	fi
+	IMGNAME="archlive-${arch}-$(date +%F).${IMG_TYPE}"
 fi
 IMGNAME="${WORK_DIR}/${IMGNAME}"
 
 ###---------------------------程序运行相关目录设置--------------------------------
 # 制作的Archlive镜像目录（该文件夹下所有内容全部包含于目标镜像）
-if [ "$ARCH" = "dul" ]; then
-	IMGROOT="${WORK_DIR}/dul_img"
-else
-	IMGROOT="${WORK_DIR}/${ARCH}_img"
-fi
+IMGROOT="${WORK_DIR}/${arch}-img"
 
 # 制作Archlive的aufs文件系统挂载点
 UNION="${WORK_DIR}/union"
+
+# 模块软件清单（包含版本信息）目录
+PACKLIST="${WORK_DIR}/${arch}-list"
+# .new  存放目前对应模块最新软件清单（需要安装的）
+# .old  存放运行本脚本前对应模块的软件清单
+# .list 存放对应模块更新详情
+# mod_模块.new 为最终 对应模块的实际软件清单
+
+# 模块安装日志存放目录
+BUILDLOG="${WORK_DIR}/${arch}-log"
+# 该目录下
+#  -errors.log 为对应模块安装错误日志
 
 # 附加独立程序模块EXTRAMODULES的存放位置（sqfs或者lzm模块）
 EXTRA_MODULES_TARGET="${IMGROOT}/${CDNAME}/modules/extra_modules"
@@ -236,6 +239,9 @@ function init_config ()
 	# 装载archlive软件仓等相关配置
 	PACMANCONF="${PROFILE_DIR}/pacman_${ARCH}.conf"
 
+	# 清单文件夹
+	LISTDIR=list-${ARCH}
+
 	# Arch软件仓数据库存放位置
 	SYNC="${WORK_DIR}/$ARCH-sync"
 
@@ -246,7 +252,7 @@ function init_config ()
 	PKGFILE="${WORK_DIR}/$ARCH-packages.list"
 
 	# 制作的Archlive的模块实际存放目录（安装的实际位置）
-	MODULEDIR="${WORK_DIR}/${ARCH}_modules"
+	MODULEDIR="${WORK_DIR}/${ARCH}-modules"
 
 	# archlive.conf中定义的EXTRAMODULES的安装位置
 	EXTRA_MODULES_INS_DIR="${MODULEDIR}/extra_modules"
@@ -254,26 +260,14 @@ function init_config ()
 	# 内核模块的安装位置   比如 ${WORK_DIR}/modules/0_000_core  制作启动内核镜像需要此变量
 	INSTROOT="${MODULEDIR}/$(basename ${KERNEL_MOD} .list)"
 
-	# 模块软件清单（包含版本信息）目录
-	PACKLIST="${WORK_DIR}/$ARCH-list"
-	# .new  存放目前对应模块最新软件清单（需要安装的）
-	# .old  存放运行本脚本前对应模块的软件清单
-	# .list 存放对应模块更新详情
-	# mod_模块.new 为最终 对应模块的实际软件清单
-
 	# 附加模块清单（最终，包含版本信息）
-	EXTRA_MODULE_LIST=${PACKLIST}/extra_module.list
-
-	# 模块安装日志存放目录
-	BUILDLOG="${WORK_DIR}/$ARCH-log"
-	# 该目录下
-	#  -errors.log 为对应模块安装错误日志
+	EXTRA_MODULE_LIST=${PACKLIST}/${ARCH}-extra_module.list
 
 	# 将宿主系统可用执行程序排序输出到工作目录下
 	[ -d ${PACKLIST} ] && sort /tmp/cmd_list > "${PACKLIST}/host_cmd_list"
 
 	# 安装清理删除的文件、目录的备份目录
-	CLEANED_BACKUP_DIR="${WORK_DIR}/$ARCH-Cleaned_files_backup"
+	CLEANED_BACKUP_DIR="${WORK_DIR}/${ARCH}-Cleaned_files_backup"
 }
 
 sleep $time
@@ -304,10 +298,10 @@ echo ""
 echo "  宿主系统是否是Arch GNU/Linux:  ${ARCH_HOST} "
 echo "        ${APPNAME}程序执行操作:  ${CMD_NAME}"
 echo "          Archlive定制配置文件:  ${CONFIG_FILE}"
-if [ "$ARCH" = "dul" ]; then
+if [ "$arch" = "dul" ]; then
 echo "                      目标系统:  双模式(i686 + x86_64)"
 else
-echo "                      目标系统:  ${ARCH}"
+echo "                      目标系统:  ${arch}"
 fi
 echo "                      工作目录:  ${WORK_DIR}"
 if [ "${CMD_NAME}" = "prepare" -o "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
@@ -316,7 +310,7 @@ fi
 if [ "${CMD_NAME}" = "install" -o "${CMD_NAME}" = "all" ]; then
 echo "                软件包缓存目录:  ${CACHE} "
 fi
-if [ "$ARCH" != "dul" ]; then
+if [ "$arch" != "dul" ]; then
 echo "               pacman.conf文件:  ${PACMANCONF}"
 fi
 if [ "${CMD_NAME}" = "img" -o "${CMD_NAME}" = "all" ]; then
@@ -365,9 +359,9 @@ msg "现在开始执行 ${APPNAME} ${CMD_NAME}"
 echo ""
 ###--------------------------------------主程序调用------------------------------------------------------
 case ${CMD_NAME} in
-	prepare) init_config; cmd_prepare ;;
+	prepare) cmd_prepare ;;
 	install)
-		if [ "$ARCH" = "dul" ]; then
+		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_install;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_install;
 		else
@@ -375,7 +369,7 @@ case ${CMD_NAME} in
 		fi
 		;;
 	clean)
-		if [ "$ARCH" = "dul" ]; then
+		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_clean;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_clean;
 		else
@@ -383,7 +377,7 @@ case ${CMD_NAME} in
 		fi
 		;;
 	remount)
-		if [ "$ARCH" = "dul" ]; then
+		if [ "$arch" = "dul" ]; then
 			error "重新挂载必须用 -A 来指定 i686 或者 x86_64"
 			usage 1
 		else
@@ -391,7 +385,7 @@ case ${CMD_NAME} in
 		fi
 		;;
 	solemodules)
-		if [ "$ARCH" = "dul" ]; then
+		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash;
 			export ARCH="x86_64"; init_config; second_confirm; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash;
 		else
@@ -399,7 +393,7 @@ case ${CMD_NAME} in
 		fi
 		;;
  	squash)
-		if [ "$ARCH" = "dul" ]; then
+		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_squash;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_squash;
 		else
@@ -407,7 +401,7 @@ case ${CMD_NAME} in
 		fi
 		;;
 	bootimage)
-		if [ "$ARCH" = "dul" ]; then
+		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_boot_kernel_image;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_boot_kernel_image;
 		else
@@ -418,11 +412,12 @@ case ${CMD_NAME} in
 		init_config; cmd_img;
 		;;
 	all)
-		if [ "$ARCH" = "dul" ]; then
-			export ARCH="i686"; init_config; second_confirm; cmd_prepare; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
-			export ARCH="x86_64"; init_config; second_confirm; cmd_prepare; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+		cmd_prepare;
+		if [ "$arch" = "dul" ]; then
+			export ARCH="i686"; init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+			export ARCH="x86_64"; init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
 		else
-			init_config; second_confirm; cmd_prepare; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
+			init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;
 		fi
 		cmd_img;
 		;;

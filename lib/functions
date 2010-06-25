@@ -267,13 +267,13 @@ check_config_file ()
 # $3 预建立的软件仓的名称
 function custom_repo () 
 {
-   log=${BUILDLOG}/create_repo.log
+   log=${BUILDLOG}/$1-create_repo.log
    if [ -d $2 ]; then
-	if [ "${QUIET}" = "y" ]; then
+	#if [ "${QUIET}" = "y" ]; then
 		sh ${START_DIR}/lib/create_repo -A $1 $2 $3 >>$log 2>&1
-   	else
-		sh ${START_DIR}/lib/create_repo -A $1 $2 $3 | tee $log
-   	fi
+   	#else
+	#	sh ${START_DIR}/lib/create_repo -A $1 $2 $3 | tee $log
+   	#fi
    else
 	error "$2 不存在!" | tee -a $log
 	usage 1
@@ -379,7 +379,7 @@ prepare_overlay (){
    [ -d "${OVERLAY}/home/arch" ] && chown -R 1001:100 "${OVERLAY}/home/arch" && chmod -R 700 "${OVERLAY}/home/arch"
    [ -d ${OVERLAY}/root ] && chown -R root:root "${OVERLAY}/root" && chmod -R 700 "${OVERLAY}/root"
 
-   msg2 "overlay准备完毕" | tee -a ${LOG}
+   green "overlay准备完毕" | tee -a ${LOG}
 }
 prepare_pacman (){
 
@@ -426,7 +426,6 @@ prepare_imgroot () {
 cmd_prepare (){
 
    [ ! -d ${WORK_DIR} ] && mkdir -p ${WORK_DIR}
-   [ -d ${PACKLIST} ] || mkdir -p ${PACKLIST}
 
     # 日志文件
    [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
@@ -456,23 +455,25 @@ cmd_prepare (){
    if [ "${_CUSTOM_REPO}" = "y" ]; then
 	msg2 "建立自定义软件仓..." | tee -a ${LOG}
 	# i686 自定义repo
-	if [ "$ARCH" = "i686" -o "$ARCH" = "dul" ]; then
+	if [ "$arch" = "i686" -o "$arch" = "dul" ]; then
 		if [ "x$i686_REPO_Name" != "x" -a "x$i686_REPO" != "x" ]; then
-			echo "在$i686_REPO下建立名为$i686_REPO_Name的i686软件仓"
+			plain "在$i686_REPO下建立名为$i686_REPO_Name的i686软件仓"
 			custom_repo "i686" "${i686_REPO}" "${i686_REPO_Name}"
 			if ! is_in_pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
 				add_customrepo2pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf" "${LOG}"
 			fi
+			green "i686自定义软件仓创建完成!" | tee -a ${LOG}
 		fi
 	fi
 	# x86_64 自定义repo
-	if [ "$ARCH" = "x86_64" -o "$ARCH" = "dul" ]; then
-		if [ "x$x86_64_REPO_Name" != "x" -a "x$x86_64_REPO" != "x" ]; then
-			echo "在$x86_64_REPO下建立名为$x86_64_REPO_Name的i686软件仓"
+	if [ "$arch" = "x86_64" -o "$arch" = "dul" ]; then
+		if [ "x${x86_64_REPO_Name}" != "x" -a "x${x86_64_REPO}" != "x" ]; then
+			plain "在$x86_64_REPO下建立名为$x86_64_REPO_Name的x86_64软件仓"
 			custom_repo "x86_64" "${x86_64_REPO}" "${x86_64_REPO_Name}"
 			if ! is_in_pacmanconf "${x86_64_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_x86_64.conf"; then
 				add_customrepo2pacmanconf "${x86_64_REPO_Name}" "${x86_64_REPO}" "${PROFILE_DIR}/pacman_x86_64.conf" "${LOG}"
 			fi
+			green "x86_64自定义软件仓创建完成!" | tee -a ${LOG}
 		fi
 	fi
 	green "自定义软件仓创建完成!" | tee -a ${LOG}
@@ -581,7 +582,7 @@ function sync_database () {
    [ -f ${UNION}/var/lib/pacman/db.lck ] && rm -f ${UNION}/var/lib/pacman/db.lck
 
    plain "现在开始更新软件仓..." | tee -a ${LOG}
-   log=${BUILDLOG}/$ARCH-sync.log
+   log=${BUILDLOG}/${ARCH}-sync.log
    if [ "${QUIET}" = "y" ]; then
 	ARCH=$ARCH $PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}" >>$log 2>&1
    else
@@ -593,16 +594,16 @@ function sync_database () {
 
    remount_aufs_r "${SYNC}" "${LOG}"
 
-   plain -n "导出可用软件包清单到${PACKLIST}/$ARCH-available.list" | tee -a ${LOG}
-   ARCH=$ARCH $PACMAN -Sl >${PACKLIST}/$ARCH-available.list
+   plain -n "导出可用软件包清单到${PACKLIST}/${ARCH}-available.list" | tee -a ${LOG}
+   ARCH=$ARCH $PACMAN -Sl >${PACKLIST}/${ARCH}-available.list
    green "完成!" | tee -a ${LOG}
 
-   plain -n "导出软件仓软件组信息到${PACKLIST}/$ARCH-group_detail.list" | tee -a ${LOG}
+   plain -n "导出软件仓软件组信息到${PACKLIST}/${ARCH}-group_detail.list" | tee -a ${LOG}
    [ -d /tmp/pacman_tmp ] && rm -rf /tmp/pacman_tmp && mkdir -p /tmp/pacman_tmp/var/lib/pacman/local
    for i in $(ls -A1 ${UNION}/var/lib/pacman/sync); do
 	cp -rf ${UNION}/var/lib/pacman/sync/$i/* /tmp/pacman_tmp/var/lib/pacman/local/ 2>/dev/null
    done
-   ARCH=$ARCH $PACMAN -Qg -r /tmp/pacman_tmp>${PACKLIST}/$ARCH-group_detail.list
+   ARCH=$ARCH $PACMAN -Qg -r /tmp/pacman_tmp>${PACKLIST}/${ARCH}-group_detail.list
    rm -rf /tmp/pacman_tmp
    green "完成!" | tee -a ${LOG}
 }
@@ -615,7 +616,7 @@ function pac_install () {
     [ ! -c $UNION/dev/zero ] && mknod $UNION/dev/zero c 1 5 >/dev/null
 
     while true; do
-	LOG="${BUILDLOG}/$ARCH-${mod}.log"
+	LOG="${BUILDLOG}/${ARCH}-${mod}.log"
 	echo -e "\n安装$pkgname\n" >> ${LOG}
 	if [ "${QUIET}" = "y" ]; then
 		ARCH=$ARCH $PACMAN -S -f $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" >>${LOG} 2>&1
@@ -628,7 +629,7 @@ function pac_install () {
 	    1) 
 		pkgname=${pkgname/-d /}
 		for pkg in $pkgname; do
-			if [ "x$(grep $pkgname ${PACKLIST}/$ARCH-available.list)" != "x" ]; then
+			if [ "x$(grep $pkgname ${PACKLIST}/${ARCH}-available.list)" != "x" ]; then
 				error "安装$pkgname出错" | tee -a ${LOG}
 				cat $log >> ${BUILDLOG}/${mod}-errors.log
 				break
@@ -719,7 +720,7 @@ cmd_extramodules_install () {
    if [ "x${1}" != "x" ]; then
 	LOG="${1}"
    else
-	LOG=${BUILDLOG}/$ARCH-install_extra_modules.log
+	LOG=${BUILDLOG}/${ARCH}-install_extra_modules.log
 	[ -f ${LOG} ] && rm -f ${LOG}
    fi
 
@@ -789,19 +790,18 @@ cmd_install ()
 
     # 日志文件
    [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
-   LOG=${BUILDLOG}/$ARCH-install.log
+   LOG=${BUILDLOG}/${ARCH}-install.log
    [ -f ${LOG} ] && rm -f ${LOG}
 
    [ -d ${UNION}/dev ] && rm -rf ${UNION}/dev
    [ ! -d ${PACKLIST} ] && mkdir -p ${PACKLIST}
 
    echo ""
-   echo "************************************************************"
    msg "开始进行Archlive($ARCH)的制作..." | tee -a ${LOG}
    msg2 "开始将$LISTDIR里面的软件安装/更新到对应模块文件夹" | tee -a ${LOG}
     # 更新软件仓库信息
    sync_database "${LOG}"
-   [ -f ${PACKLIST}/$ARCH-updated.list ] && rm -f ${PACKLIST}/$ARCH-updated.list
+   [ -f ${PACKLIST}/${ARCH}-updated.list ] && rm -f ${PACKLIST}/${ARCH}-updated.list
 
    for mod in ${MODULES}; do
 	echo | tee -a ${LOG}
@@ -815,7 +815,7 @@ cmd_install ()
 	plain -n "将模块软件清单整理后输出（去除被#注释的）" | tee -a ${LOG}
 	local old_list new_list
 	old_list="${PROFILE_DIR}/$LISTDIR/${mod}.list"
-	new_list="${PACKLIST}/${mod}.new"
+	new_list="${PACKLIST}/${ARCH}-${mod}.new"
 	[ "x$(tail -1 ${old_list})" = "x" ] || (echo >>"${old_list}")
  	cat "${old_list}" | sed -r "s/#.*//g" | sed -r "/^$/d" >${new_list}
 	green "完成!" | tee -a ${LOG}
@@ -823,9 +823,9 @@ cmd_install ()
 	msg2 -n "检查 ${mod} 软件清单中软件是否存在于设定的软件仓中..." | tee -a ${LOG}
 	cat ${new_list} | while read pkgname; do
 		pkgname=${pkgname#-d }
-		if grep " $pkgname " ${PACKLIST}/$ARCH-available.list >/dev/null; then
+		if grep " $pkgname " ${PACKLIST}/${ARCH}-available.list >/dev/null; then
 			continue
-		elif grep "$pkgname " ${PACKLIST}/$ARCH-group_detail.list >/dev/null; then
+		elif grep "$pkgname " ${PACKLIST}/${ARCH}-group_detail.list >/dev/null; then
 			continue
 		else
 			warn "模块 ${mod} 中指定的软件 $pkgname 无法从当前设定的软件仓中找到。" | tee -a ${LOG}
@@ -836,27 +836,27 @@ cmd_install ()
 	# 如果已经存在对应模块，则将对应软件包及版本信息输出到清单并根据已经安装的软件升级
 	pacman_local_data=${MODULEDIR}/${mod}/var/lib/pacman/local
 	if [ -d ${pacman_local_data} ] && [ "x$(find ${pacman_local_data} -type f -name "desc")" != "x" ]; then
-		$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${mod}.old | tee -a ${LOG}
-		green "已安装的程序及版本信息已导出到文件${PACKLIST}/${mod}.old" | tee -a ${LOG}
+		$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${ARCH}-${mod}.old | tee -a ${LOG}
+		green "已安装的程序及版本信息已导出到文件${PACKLIST}/${ARCH}-${mod}.old" | tee -a ${LOG}
 		$PACMAN -Su -f --needed --noconfirm --config "${PACMANCONF}" -fr "${UNION}" >/dev/null
 		green "已有程序升级完成." | tee -a ${LOG}
 
 		# 安装清单中需要的但没有被安装的软件包
 
 		# 首先将需要安装的清单中软件组挑出来, 替换为实际软件名
-		[ -f ${PACKLIST}/${mod}.new.tmp ] && rm -f ${PACKLIST}/${mod}.new.tmp
-		cp -f ${PACKLIST}/${mod}.new ${PACKLIST}/${mod}.new.tmp
-		cat ${PACKLIST}/${mod}.new | while read pkgname; do
+		[ -f ${PACKLIST}/${ARCH}-${mod}.new.tmp ] && rm -f ${PACKLIST}/${ARCH}-${mod}.new.tmp
+		cp -f ${PACKLIST}/${ARCH}-${mod}.new ${PACKLIST}/${ARCH}-${mod}.new.tmp
+		cat ${PACKLIST}/${ARCH}-${mod}.new | while read pkgname; do
 			pkgname=${pkgname#-d }
-			if grep " $pkgname " ${PACKLIST}/$ARCH-available.list >/dev/null; then continue; fi
-			grep "^$pkgname " ${PACKLIST}/$ARCH-group_detail.list | awk '{print $2}' >>${PACKLIST}/${mod}.new.tmp
-			cat ${PACKLIST}/${mod}.new.tmp | sed "s|^base$||g" | sed -r "/^$/d" >${PACKLIST}/${mod}.new.tmp.1
-			cp -f ${PACKLIST}/${mod}.new.tmp.1 ${PACKLIST}/${mod}.new.tmp
+			if grep " $pkgname " ${PACKLIST}/${ARCH}-available.list >/dev/null; then continue; fi
+			grep "^$pkgname " ${PACKLIST}/${ARCH}-group_detail.list | awk '{print $2}' >>${PACKLIST}/${ARCH}-${mod}.new.tmp
+			cat ${PACKLIST}/${ARCH}-${mod}.new.tmp | sed "s|^base$||g" | sed -r "/^$/d" >${PACKLIST}/${ARCH}-${mod}.new.tmp.1
+			cp -f ${PACKLIST}/${ARCH}-${mod}.new.tmp.1 ${PACKLIST}/${ARCH}-${mod}.new.tmp
 		done
 
 		# 比较新就清单执行相应动作
 		# 无-d选项的
-		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${mod}.old ${PACKLIST}/${mod}.new.tmp | grep -v "\-d")
+		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${ARCH}-${mod}.old ${PACKLIST}/${ARCH}-${mod}.new.tmp | grep -v "\-d")
 		for pkgname in ${newpkgname}; do
 			[ "x$pkgname" = "x" ] && continue
 			if $PACMAN -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
@@ -864,7 +864,7 @@ cmd_install ()
 			pac_install
 		done
 		# 有 -d 选项的
-		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${mod}.old ${PACKLIST}/${mod}.new.tmp | grep "\-d")
+		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${ARCH}-${mod}.old ${PACKLIST}/${ARCH}-${mod}.new.tmp | grep "\-d")
 		for pkgname in ${newpkgname}; do
 			[ "x$pkgname" = "x" ] && continue
 			if $PACMAN -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
@@ -873,11 +873,11 @@ cmd_install ()
 		done
 		# 删除已经安装的多余的软件
 		# 暂时先不卸载了！ 依赖关系！。。。
-		#pkgname=$(awk 'BEGIN {OFS="\t"}NR==FNR{a[$0];b[$2]}NR>FNR{if (!($1 in b)) {if (!($1 in a)) {print $1}}}' ${PACKLIST}/${mod}.new.tmp ${PACKLIST}/${mod}.old)
+		#pkgname=$(awk 'BEGIN {OFS="\t"}NR==FNR{a[$0];b[$2]}NR>FNR{if (!($1 in b)) {if (!($1 in a)) {print $1}}}' ${PACKLIST}/${ARCH}-${mod}.new.tmp ${PACKLIST}/${ARCH}-${mod}.old)
 		#if [ "x$pkgname" != "x" ]; then plain "$pkgname 在新清单中没有，需要删除..."; pac_remove; fi
 	fi
 	if [ "x$(find ${MODULEDIR}/${mod} -type f -name "desc")" = "x" ]; then
-		touch ${PACKLIST}/${mod}.old
+		touch ${PACKLIST}/${ARCH}-${mod}.old
 		if [ "${QUICK_INSTALL}" = "y" ]; then
 			get_d_pkgname ${PROFILE_DIR}/$LISTDIR/${mod}.list
 			if [ "x${pkgname}" != "x" ]; then
@@ -887,9 +887,9 @@ cmd_install ()
 			get_pkgname ${PROFILE_DIR}/$LISTDIR/${mod}.list
 			[ "x${pkgname}" != "x" ] && pac_install
 		else
-	        	cat  "${PACKLIST}/${mod}.new" | while read pkgname; do
+	        	cat  "${PACKLIST}/${ARCH}-${mod}.new" | while read pkgname; do
 				[ "x$pkgname" = "x" ] && continue
-				echo "$pkgname" >>${PACKLIST}/${mod}.order
+				echo "$pkgname" >>${PACKLIST}/${ARCH}-${mod}.order
 				pac_install
 	        	done
 		fi
@@ -913,12 +913,12 @@ cmd_install ()
 	$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/mod_${mod}.new
 	green "完成!" | tee -a ${LOG}
 
-	if [ -f ${PACKLIST}/${mod}.old ]; then
+	if [ -f ${PACKLIST}/${ARCH}-${mod}.old ]; then
 		msg2 -n "此次为升级安装，查看更新内容..." | tee -a ${LOG}
-		diff -ruNa ${PACKLIST}/${mod}.old ${PACKLIST}/mod_${mod}.new | grep "^[-,+][a-zA-Z]" > ${PACKLIST}/${mod}.list
-		if [ "x$(cat ${PACKLIST}/${mod}.list)" != "x" ]; then
-			echo "${mod} 模块更新内容(-表示删除的包，+表示新加入的包)" >>${PACKLIST}/updated.list
-			cat ${PACKLIST}/${mod}.list >>${PACKLIST}/updated.list
+		diff -ruNa ${PACKLIST}/${ARCH}-${mod}.old ${PACKLIST}/${ARCH}-mod_${mod}.new | grep "^[-,+][a-zA-Z]" > ${PACKLIST}/${ARCH}-${mod}.list
+		if [ "x$(cat ${PACKLIST}/${ARCH}-${mod}.list)" != "x" ]; then
+			echo "${mod} 模块更新内容(-表示删除的包，+表示新加入的包)" >>${PACKLIST}/${ARCH}-updated.list
+			cat ${PACKLIST}/${ARCH}-${mod}.list >>${PACKLIST}/${ARCH}-updated.list
 		fi
 		green "完成!" | tee -a ${LOG}
 	fi
@@ -1084,7 +1084,7 @@ cmd_clean () {
 
    # 日志文件
    [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
-   LOG=${BUILDLOG}/$ARCH-clean_files.log
+   LOG=${BUILDLOG}/${ARCH}-clean_files.log
    [ -f ${LOG} ] && rm -f ${LOG}
 
    plain "删除指定的文件夹..." | tee -a ${LOG}
@@ -1097,9 +1097,9 @@ cmd_clean () {
 
    if [ "${CUT_LOCALE}" = "y" ]; then
 	plain "删除${REMAIN_LOCALE}外的语言文件、帮助文件、X语言文件..." | tee -a $LOG
-	clean_target_locales="${PACKLIST}/clean_target_locales"
+	clean_target_locales="${PACKLIST}/${ARCH}-clean_target_locales"
 	for mod in ${MODULES}; do
-		clean_target="${PACKLIST}/clean_target_locales_$mod"
+		clean_target="${PACKLIST}/${ARCH}-clean_target_locales_$mod"
 		localedir=$(find ${MODULEDIR}/${mod} -type d -name "locale")
 		if [ -d ${MODULEDIR}/${mod}/usr/share/man ]; then
 			localedir="$localedir ${MODULEDIR}/${mod}/usr/share/man"
@@ -1209,7 +1209,7 @@ cmd_extramodules_squash () {
    if [ "x${1}" != "x" ]; then
 	LOG="${1}"
    else
-	LOG=${BUILDLOG}/$ARCH-create_extra_sqfs_modules.log
+	LOG=${BUILDLOG}/${ARCH}-create_extra_sqfs_modules.log
 	[ -f ${LOG} ] && rm -f ${LOG}
    fi
 
@@ -1220,7 +1220,7 @@ cmd_extramodules_squash () {
    [ ! -d ${EXTRA_MODULES_TARGET} ] && mkdir -p ${EXTRA_MODULES_TARGET}
    for module_dir in $(ls ${EXTRA_MODULES_INS_DIR}); do
 	source_dir="${EXTRA_MODULES_INS_DIR}/${module_dir}"
-	target_file="${EXTRA_MODULES_TARGET}/$ARCH-$(ls ${EXTRA_MODULES_INS_DIR}/${module_dir}/var/lib/pacman/local).${EXT}"
+	target_file="${EXTRA_MODULES_TARGET}/${ARCH}-$(ls ${EXTRA_MODULES_INS_DIR}/${module_dir}/var/lib/pacman/local).${EXT}"
 	mksquashfs_module "${source_dir}" "${target_file}" "${LOG}"
    done
    if [ "${RE_EXTRAMODULES}" = "y" ]; then
@@ -1286,7 +1286,7 @@ cmd_squash () {
 
    # 日志文件
    [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
-   LOG=${BUILDLOG}/$ARCH-create_sqfs_modules.log
+   LOG=${BUILDLOG}/${ARCH}-create_sqfs_modules.log
    [ -f ${LOG} ] && rm -f ${LOG}
 
    if [ ! -d ${MODULEDIR} ]; then
@@ -1306,12 +1306,12 @@ cmd_squash () {
    moduleplace="${IMGROOT}/${CDNAME}/base"
    for module_dir in $MODULES; do
 	#[ "$(case ${module_dir} in \#*) echo 0 ;; esac)" ] && continue
-	case ${module_dir} in [1-9]_*) moduleplace="${IMGROOT}/${CDNAME}/modules";; esac
+	case ${module_dir} in *-[1-9]_*) moduleplace="${IMGROOT}/${CDNAME}/modules";; esac
 	source_dir="${MODULEDIR}/${module_dir}"
-        target_file="${moduleplace}/$ARCH-$(basename ${module_dir}).${EXT}"
+        target_file="${moduleplace}/${ARCH}-$(basename ${module_dir}).${EXT}"
 
-	# 如果不存在制作好的模块或者有更新则创建模块  ${PACKLIST}/${module_dir}.list存放对应模块的更新详情
-        if [ ! "$(find $IMGROOT/$CDNAME -name $(basename  ${target_file}))" -o "x$(cat ${PACKLIST}/${module_dir}.list)" != "x" ]; then
+	# 如果不存在制作好的模块或者有更新则创建模块  ${PACKLIST}/${ARCH}-${module_dir}.list存放对应模块的更新详情
+        if [ ! "$(find $IMGROOT/$CDNAME -name $(basename  ${target_file}))" -o "x$(cat ${PACKLIST}/${ARCH}-${module_dir}.list)" != "x" ]; then
 		mksquashfs_module "${source_dir}" "${target_file}" "${LOG}"
 	fi
    done
@@ -1335,7 +1335,7 @@ cmd_boot_kernel_image () {
 
    # 日志文件
    [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
-   LOG=${BUILDLOG}/$ARCH-create_boot_image.log
+   LOG=${BUILDLOG}/${ARCH}-create_boot_image.log
    [ -f ${LOG} ] && rm -f ${LOG}
 
    msg "准备archlive内核及内核镜像" | tee -a ${LOG}
@@ -1375,10 +1375,10 @@ cmd_boot_kernel_image () {
 	plain "内核版本 ${kernelver} " | tee -a ${LOG}
 
    plain -n "创建启动内核镜像可能需要好几分钟时间，请稍候..."
-   [ -f ${BUILDLOG}/$ARCH-initrd.filelist ] && rm -f ${BUILDLOG}/$ARCH-initrd.filelist
+   [ -f ${BUILDLOG}/${ARCH}-initrd.filelist ] && rm -f ${BUILDLOG}/${ARCH}-initrd.filelist
    [ -f /tmp/archlive-boot.log ] && rm -f /tmp/archlive-boot.log
    ARCH=$ARCH sh $MKINITCPIO -c "${CPIOCONFIG}" -b "${basedir}" -k "${kernelver}" -g \
-		"${IMGROOT}/${CDNAME}/boot/$ARCH.img" -s ${BUILDLOG}/$ARCH-initrd.filelist >> ${LOG}
+		"${IMGROOT}/${CDNAME}/boot/$ARCH.img" -s ${BUILDLOG}/${ARCH}-initrd.filelist >> ${LOG}
    if [ $? -ne 0 ]; then
 	error "错误: 内核镜像创建失败..." | tee -a ${LOG}
 	usage 1
@@ -1415,7 +1415,7 @@ cmd_img () {
 		module_name=${module_name//i686-}
 		module_name=${module_name//x86_64-}
 	else
-		module_name=${module_name//$ARCH-}
+		module_name=${module_name//${ARCH}-}
 	fi
 	case $MODULES in *${module_name}*) needed="y" && break;; esac
 	case $EXTRAMODULES in *${module_name}*) needed="y" && break;; esac
