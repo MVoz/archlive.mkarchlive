@@ -419,7 +419,7 @@ prepare_imgroot () {
       echo "释放Archlive光盘根目录结构cd-root.tgz" | tee -a ${LOG}
       tar -xzvpf cd-root.tgz -C ${IMGROOT}  2>&1 > /dev/null
    fi
-   mkdir -p ${IMGROOT}/${CDNAME}/{base,modules,optional,rootcopy}
+   mkdir -p ${IMGROOT}/${CDNAME}/{base,modules,addons,optional,rootcopy}
    msg2 "目标镜像根目录结构准备完成." | tee -a ${LOG}
 
 }
@@ -1359,9 +1359,9 @@ cmd_boot_kernel_image () {
    right_ker_file="n" 
    case $(grep "boot/${KER_FILE}" "$(dirname ${kernel_desc_file})/files") in boot/$KER_FILE) right_ker_file="y";; esac
    [ "${right_ker_file}" = "n" ] && error "目标系统的内核文件名不是${KER_FILE}，请再次检查配置文件和目标系统的内核程序包..." | tee -a ${LOG} && exit 1
-   [ -f ${basedir}/boot/${KER_FILE} ] && cp -f "${basedir}/boot/${KER_FILE}" "${IMGROOT}/${CDNAME}/boot/$ARCH-${KER_FILE}"
+   [ -f ${basedir}/boot/${KER_FILE} ] && cp -f "${basedir}/boot/${KER_FILE}" "${IMGROOT}/${CDNAME}/boot/$ARCH.ker"
 
-   [ -f "${IMGROOT}/${CDNAME}/boot/$ARCH-${KER_FILE}" ] && green "完成." | tee -a ${LOG}
+   [ -f "${IMGROOT}/${CDNAME}/boot/$ARCH.ker" ] && green "完成." | tee -a ${LOG}
 
 
    msg2 -n "重置启动内核镜像启动标的..." | tee -a ${LOG}
@@ -1378,7 +1378,7 @@ cmd_boot_kernel_image () {
    [ -f ${BUILDLOG}/$ARCH-initrd.filelist ] && rm -f ${BUILDLOG}/$ARCH-initrd.filelist
    [ -f /tmp/archlive-boot.log ] && rm -f /tmp/archlive-boot.log
    ARCH=$ARCH sh $MKINITCPIO -c "${CPIOCONFIG}" -b "${basedir}" -k "${kernelver}" -g \
-		"${IMGROOT}/${CDNAME}/boot/$ARCH-archlive.img" -s ${BUILDLOG}/$ARCH-initrd.filelist >> ${LOG}
+		"${IMGROOT}/${CDNAME}/boot/$ARCH.img" -s ${BUILDLOG}/$ARCH-initrd.filelist >> ${LOG}
    if [ $? -ne 0 ]; then
 	error "错误: 内核镜像创建失败..." | tee -a ${LOG}
 	usage 1
@@ -1551,14 +1551,14 @@ cmd_img () {
         qflag=""
         [ "${QUIET}" = "y" ] && qflag="-quiet"
         mkisofs ${qflag} -J -R -D -r -l $bootflags -uid 0 -gid 0 \
-		-udf -allow-limited-size -iso-level 3 \
+		-udf \
+		-allow-limited-size \
 		-input-charset utf-8 -p "${AUTHOR}" \
             -no-emul-boot -boot-load-size 4 -boot-info-table \
             -publisher "${PUBLISHER}" -log-file /tmp/archlive_img.log \
             -A "${CDNAME}" -V "${CDNAME}" \
             -o "${IMGNAME}" "${IMGROOT}"
         if [ $? -eq 0 ]; then
-		#perl ./lib/isohybrid "${IMGNAME}"
 		./lib/bin/isohybrid "${IMGNAME}" 2>&1 >>${LOG}
 		md5sum "${IMGNAME}" > "${IMGNAME}".md5
 		iso_size=$(isosize ${IMGNAME} 2>/dev/null)

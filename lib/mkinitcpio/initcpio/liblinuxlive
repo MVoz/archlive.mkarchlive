@@ -1,6 +1,6 @@
 #!/bin/ash
 
-boot_version=Ver.20100624
+boot_version=Ver.20100625
 
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改
@@ -229,9 +229,8 @@ default_mount_handler() {
 #=================================================================
 
 # global variable
-DEBUG_IS_ENABLED=""
 if [ "$break" = "y" ] || [ "$debug" = "y" ]; then
-	DEBUG_IS_ENABLED="y"
+	export DEBUG_IS_ENABLED="y"
 fi
 
 debug_log()
@@ -540,6 +539,7 @@ fs_options()
    local NOAUTO IOCHARSET
 
    NOAUTO=$(cmdline_parameter noauto)
+   debug_log "NOAUTO=$NOAUTO"
    if [ "$NOAUTO" = "" ]; then NOAUTO="auto"; fi
    #if [ "$1" = "fuse.ntfs" -o "$1" = "ntfs" ]; then NOAUTO="force,norelatime"; fi
    if [ "$1" = "fuse.ntfs" -o "$1" = "ntfs" ]; then NOAUTO="norelatime"; fi
@@ -630,18 +630,21 @@ mount_device()
    if [ -d "$DEV" ]; then OPTIONS="$OPTIONS,rbind"; fi
    if [ "$3" ]; then OPTIONS="$OPTIONS,$3"; fi
    OPTIONS=$(echo "$OPTIONS" | sed -r "s/^,+//")
-   OPTIONS="-o $OPTIONS"
 
    debug_log "OPTIONS=$OPTIONS"
 
    if [ "$FS" = "-t ntfs-3g" ]; then
-      debug_log "ntfsmount "$DEV" "$2" $OPTIONS"
-      ntfsmount "$DEV" "$2" $OPTIONS >/dev/null 2>&1
+      ntfsmount "$DEV" "$2" -o $OPTIONS >/dev/null 2>&1
       ERR=$?
    else
-      debug_log "mount $OPTIONS $FS "$DEV" "$2""
-      mount $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
+      mount -n -o $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
       ERR=$?
+   fi
+
+    # 通过查看目标文件夹下内容来判断是否挂载成功
+   if [ "$(ls -1 "$2" 2>/dev/null | wc -l)" -ge 1 ]; then
+	ERR=0
+	return 1
    fi
 
    # not enough loop devices? try to create one.
@@ -655,9 +658,7 @@ mount_device()
        if [ $? -ne 0 ]; then
           losetup -r "$LOOPDEV" "$DEV" 2>/dev/null # force read-only in case of error
        fi
-       debug_log "OPTIONS=$OPTIONS"
-       debug_log "mount $OPTIONS $FS "$LOOPDEV" "$2""
-       mount $OPTIONS $FS "$LOOPDEV" "$2" >/dev/null 2>&1
+       mount -n -o $OPTIONS $FS "$LOOPDEV" "$2" >/dev/null 2>&1
        ERR=$?
    fi
 
@@ -667,7 +668,7 @@ mount_device()
        debug_log "以上办法都无法挂载，尝试强行只读挂载."
        debug_log "None of above actions works! try to force read-only mount"
        debug_log "mount -r $OPTIONS $FS "$DEV" "$2""
-       mount -r $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
+       mount -n -r -o $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
        ERR=$?
    fi
 
@@ -947,8 +948,8 @@ list_mounted_directories()
 list_partition_devices()
 {
    debug_log "list_partition_devices" "$*"
-   if [ "$(cmdline_parameter nohd)" != "" ]; then return 1; fi
-   #if [ "x$nohd)" != "x" ]; then return 1; fi
+   #if [ "$(cmdline_parameter nohd)" != "" ]; then return 1; fi
+   if [ "$nohd" = "y" ]; then return 1; fi
    cat /proc/partitions | grep -v loop | grep -v major | grep -v '^$' | sed -r "s:^[0-9 ]+:/dev/:"
    if [ -e /dev/mapper/control ]; then # list LVM partitions if available
       ls -1 /dev/mapper/ | grep -v "^control\$" | sed -r "s:^:/dev/mapper/:"
@@ -967,8 +968,9 @@ list_disk_devices()
 list_swap_devices()
 {
    debug_log "list_swap_devices" "$*"
-   if [ "$(cmdline_parameter nohd)" != "" -o "$(cmdline_parameter noswap)" != "" ]; then return 1; fi
-   #if [ "x$nohd" != "x" -o "x$noswap" != "x" ]; then return 1; fi
+
+   #if [ "$(cmdline_parameter nohd)" != "" -o "$(cmdline_parameter noswap)" != "" ]; then return 1; fi
+   if [ "$nohd" = "y" -o "$noswap" = "y" ]; then return 1; fi
    blkid -t TYPE="swap" -o device
 }
 
@@ -976,7 +978,8 @@ list_swap_devices()
 list_block_devices()
 {
    debug_log "list_block_devices" "$*"
-   if [ "$(cmdline_parameter nocd)" = "" ]; then
+   #if [ "$(cmdline_parameter nocd)" = "" ]; then
+   if [ "x$nocd" = "x" ]; then
       list_cdrom_devices
    fi
    list_partition_devices
@@ -1107,7 +1110,11 @@ find_in_computer()
    RESULT=$(find_file "$1")
 
    while [ $TIMEOUT -gt 0 -a "$RESULT" = "" ]; do
-      echo -ne "- wait a while\r" >&2
+	if [ "$cn" = "y" ]; then
+		echo -ne "- 请稍候...\r" >&2
+	else
+		echo -ne "- wait a while...\r" >&2
+	fi
       sleep 1
       TIMEOUT=$((TIMEOUT-1))
       RESULT=$(find_file "$1")
@@ -1216,8 +1223,10 @@ modprobe_essential_modules()
    fi
    modprobe_module loop
    modprobe_module isofs
+   modprobe_module udf
    modprobe_module squashfs
-   modprobe_module aufs brs=1
+   #modprobe_module aufs brs=1
+   modprobe_module aufs
    modprobe_module ext2
    modprobe_module ext3
    modprobe_module ext4
@@ -1237,7 +1246,7 @@ modprobe_usb_modules()
    local LSPCI
 
    # skip module loading if nohotplug bootparam is present
-   if [ "$(cmdline_parameter nohotplug)" ]; then return 0; fi
+   if [ "$nohotplug" = "y" -o "$(cmdline_parameter nohotplug)" ]; then return 0; fi
 
    LSPCI=$(lspci -v | grep -i prog-if)
    if [ "$(echo $LSPCI | egrep -i [eou]hci)" = "" ]; then
@@ -1268,8 +1277,7 @@ modprobe_pcmcia_modules()
    debug_log "modprobe_pcmcia_modules" "$*"
 
    # skip module loading if nohotplug bootparam is present
-   #if [ "$(cmdline_parameter nohotplug)" ]; then return 0; fi
-   if [ "x$nohotplug" != "x" ]; then return 0; fi 
+   if [ "x$nohotplug" != "x" -o "$(cmdline_parameter nohotplug)" ]; then return 0; fi
 
    if [ "$cn" = "y" ]; then
 	echolog "装载PCMCIA CardBus模块 ..."
@@ -1450,7 +1458,7 @@ fstab_update()
    echo "####  以下内容为Archlive启动时候自动添加 ####" >$FSTABTMP
    ROOT=$(cmdline_value root)
    #ROOT=$root
-   if [ x"$ROOT" != "x" ] && [ "$ROOT" != "/dev/ram0" ]; then
+   if [ "x$ROOT" != "x" ] && [ "$ROOT" != "/dev/ram0" ]; then
 	FS=$(device_filesystem $ROOT)
 	OPT=$(fs_options $FS fstab)
 	fstab_add_line $FSTABTMP $ROOT / $FS $OPT

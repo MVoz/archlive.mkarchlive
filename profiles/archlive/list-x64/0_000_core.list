@@ -7,5 +7,7 @@
 -d madwifi-utils
 -d madwifi
 -d aufs2
+# 如果使用archlive编译内核，则需要注释掉aufs2
+
 -d aufs2-util
 

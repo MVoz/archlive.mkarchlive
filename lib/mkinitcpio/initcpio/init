@@ -17,13 +17,37 @@ export cmd_line="$@"
 . /usr/lib/liblinuxlive # it requires proc to be mounted
 
 # Checking boot paremeters 检查启动参数
-check_boot_paremeters
+for cmd in ${CMDLINE}; do
+	case "${cmd}" in
+		\#*) break ;; # ignore everything after a # in the commandline
+		# The kernel passes those to the kernel on its own
+		[0123456Ss]) ;;
+		[0-9]*) ;;
+		single) ;;
+		rw) readwrite="yes" ;;
+		ro) readwrite="no" ;;
+		# only export stuff that does work with ash :)
+		*=*) rhs="$(echo "${cmd}" | cut -d= -f2-)"
+			cmd="$(echo "${cmd}" | cut -d= -f1 | sed 's|\.|_|g')"
+			cmd="$(echo "${cmd}" | sed 's|-|_|g')=${rhs}"
+			(echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}"
+			;;
+		*)   cmd="$(echo "${cmd}" | sed 's|\.|_|g')"
+			cmd="$(echo "${cmd}" | sed 's|-|_|g')"
+			(echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}=y"
+			;;
+	esac
+done
 
 # 双（多）模式启动判断
 # Special for dul-boot
 case $CMDLINE in *i686*) export ARCH="i686" ;;
 		*x86_64*) export ARCH="x86_64" ;;
 esac
+
+if [ "$break" = "y" ] || [ "$debug" = "y" ]; then
+	export DEBUG_IS_ENABLED="y"
+fi
 
 # if available, start udevd at this stage
 # 如果支持相关KMS 此处加载
@@ -193,9 +217,9 @@ debug_shell
 SGN=$sgn
 if [ "x$SGN" = "x" ]; then SGN=$LIVECDNAME.list; fi
 if [ "$cn" = "y" ]; then
-	echolog "搜索$LIVECDNAME模块(根据$SGN定位)"
+	echolog "搜索$LIVECDNAME模块(根据$SGN定位):"
 else
-	echolog "Search modules of $LIVECDNAME by target: $SGN"
+	echolog "Search modules of $LIVECDNAME by target: $SGN ..."
 fi
 
 # 在启动参数中加入from="..." cifs="..." 或者 ip="..." 可以加快查找基本模块
@@ -321,13 +345,13 @@ if [ "$DATA" = "" ]; then
 	"没有找到 $LIVECDNAME 的程序模块. 查找标的$SGN被误删除? 
 	可能使用了不被支持的启动设备(比如 SCSI或者老的PCMCIA). 
 	解决办法: 将$LIVECDNAME目录从你的启动设备拷贝到IDE/SATA盘，比如拷贝到 
-	/mnt/hda1/$LIVECDNAME 或者 C:\\$LIVECDNAME. 然后重新启动."
+	/mnt/hda1/$LIVECDNAME 或者 C:盘 $LIVECDNAME目录. 然后重新启动."
   else
 	fatal \
 	"Can't found $LIVECDNAME modules. Target file $SGN was deleted? 
 	Or you are using an unsupported boot device (eg. old SCSI, old PCMCIA).
 	Solutions: Copy the directory $LIVECDNAME from your boot device to an 
-	IDE/SATA disk, eg. to /mnt/hda1/$LIVECDNAME or C:\\$LIVECDNAME, then reboot."
+	IDE/SATA disk, eg. to /mnt/hda1/$LIVECDNAME or directory $LIVECDNAME under disk C:, then reboot."
   fi
 fi
 

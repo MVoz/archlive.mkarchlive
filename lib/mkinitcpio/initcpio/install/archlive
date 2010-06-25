@@ -145,7 +145,7 @@ archlive_install ()
     add_dir /tmp
 
     MODULES="${MODULES} cdrom ide-cd_mod ide-core ide-generic loop nls_cp936 nls_utf8"
-    MODULES="${MODULES} aufs squashfs vfat ntfs fuse ext2 ext3 ext4 btrfs reiserfs xfs cifs"
+    MODULES="${MODULES} aufs squashfs isofs udf fat vfat ntfs fuse ext2 ext3 ext4 btrfs reiserfs xfs cifs"
     # usb, mmc, memstick support
     MODULES="${MODULES} $(checked_modules "/usb/host" | grep -ve "_cs" -e "sl1811-hcd" -e "isp116x-hcd") usb_storage"
     MODULES="${MODULES} $(all_modules '/mmc/host') mmc_block sdhci-pci sd_mod sr_mod"
