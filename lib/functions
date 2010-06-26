@@ -448,7 +448,6 @@ cmd_prepare (){
    prepare_pacman "${LOG}"
    msg2 "创建制作archlive的相关目录" | tee -a ${LOG}
    [ ! -d ${UNION} ] && mkdir -p "${UNION}"    # {WORK_DIR} 一并被创建
-   [ ! -d ${INSTROOT} ] && mkdir -p "${INSTROOT}"
    [ ! -d ${BUILDLOG} ] && mkdir -p "${BUILDLOG}"
 
    if [ "${_CUSTOM_REPO}" = "y" ]; then
@@ -630,7 +629,8 @@ function sync_database () {
    green "完成!" | tee -a ${LOG}
 
    plain -n "导出软件仓软件组信息到${PACKLIST}/${ARCH}-group_detail.list" | tee -a ${LOG}
-   [ -d /tmp/pacman_tmp ] && rm -rf /tmp/pacman_tmp && mkdir -p /tmp/pacman_tmp/var/lib/pacman/local
+   [ -d /tmp/pacman_tmp ] && rm -rf /tmp/pacman_tmp
+   mkdir -p /tmp/pacman_tmp/var/lib/pacman/local
    for i in $(ls -A1 ${UNION}/var/lib/pacman/sync); do
 	cp -rf ${UNION}/var/lib/pacman/sync/$i/* /tmp/pacman_tmp/var/lib/pacman/local/ 2>/dev/null
    done
@@ -715,7 +715,7 @@ function pac_clean () {
    msg2 "清理无用文件..." | tee -a ${LOG}
 
    plain "清理aufs文件系统临时文件.wh.* " | tee -a ${LOG}
-   for tmp in "$(find ${MODULEDIR} -type f -name .wh.* )"; do rm_tmp $tmp; done
+   for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
    green "完成!" | tee -a ${LOG}
 
    if [ "${CMD_NAME}" != "solemodules" ]; then
@@ -798,6 +798,7 @@ cmd_extramodules_install () {
    # 卸载UNION
    msg2 "卸载aufs件系统 ${UNION}." | tee -a ${LOG}
    umount -l ${UNION}
+   for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
 }
 
 function get_pkgname () {
@@ -1077,6 +1078,7 @@ cmd_install ()
    if [ "x$(grep $UNION /proc/mounts)" != "x" ]; then
 	msg2 "卸载aufs件系统 ${UNION}." | tee -a ${LOG}
 	umount -l ${UNION}
+	for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
    fi
 
    # 清理不需要的文件
@@ -1346,9 +1348,9 @@ cmd_squash () {
    done
 
    if [ "${USE_OVERLAY}" = "y" ] && [ -d ${WORK_DIR}/overlay ]; then 
-	msg2 "创建附加设置模块overlay.${EXT}..." | tee -a ${LOG}
+	msg2 "创建附加设置模块z-overlay.${EXT}..." | tee -a ${LOG}
 	OVERLAY="${WORK_DIR}/overlay"
-	mksquashfs_module  "${OVERLAY}" "${IMGROOT}/${CDNAME}/modules/overlay.${EXT}" "${LOG}"
+	mksquashfs_module  "${OVERLAY}" "${IMGROOT}/${CDNAME}/modules/z-overlay.${EXT}" "${LOG}"
    fi
 
    #如果附加程序模块已经包含在程序清单中则不另外安装制作
@@ -1415,6 +1417,7 @@ cmd_boot_kernel_image () {
    cat /tmp/archlive-boot.log >>${LOG}
    green "完成！" | tee -a ${LOG}
    umount -l $UNION
+   for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
 }
 
 cmd_img () {
@@ -1437,7 +1440,8 @@ cmd_img () {
    [ ! -d ${NO_NEED_MODULES_DIR} ] && mkdir -p ${NO_NEED_MODULES_DIR}
    for module_file in $(find ${IMGROOT} -name "*.sqfs" -o -name "*.lzm"); do
 	needed="n"
-	case ${module_file} in */overlay.${EXT}) case ${USE_OVERLAY} in y) needed="y" && break;; esac;; esac
+	case ${module_file} in */z-overlay.${EXT}) case ${USE_OVERLAY} in y) needed="y" && break;; esac;; esac
+	case ${module_file} in */any-*.${EXT}) needed="y" && break;; esac
 	case ${module_file} in */archlive.sqfs) needed="y" && break;; esac
 	module_name=$(basename ${module_file} .${EXT})
 	if [ "${arch}" = "dul" ]; then
