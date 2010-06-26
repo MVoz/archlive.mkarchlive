@@ -1,6 +1,6 @@
 #!/bin/ash
 
-boot_version=Ver.20100625
+boot_version=Ver.20100626
 
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改
@@ -782,12 +782,14 @@ find_modules()
    else
 	append_cmd="grep -v *"
    fi
-   if [ "$baseonly" = "y" ]; then
-   	find "$1/base" "$1/addons" "$1/optional" -name "*.sqfs" | ${append_cmd} 2>/dev/null | sort
-   	find "$1/base" "$1/addons" "$1/optional" -name "*.lzm" | ${append_cmd} 2>/dev/null | sort
-   else
-   	find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.sqfs" | ${append_cmd} 2>/dev/null | sort
-   	find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.lzm" | ${append_cmd} 2>/dev/null | sort
+   if [ -d $1/base ]; then
+	if [ "$baseonly" = "y" ]; then
+   		find "$1/base" "$1/addons" "$1/optional" -name "*.sqfs" | ${append_cmd} 2>/dev/null | sort
+   		find "$1/base" "$1/addons" "$1/optional" -name "*.lzm" | ${append_cmd} 2>/dev/null | sort
+	else
+   		find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.sqfs" | ${append_cmd} 2>/dev/null | sort
+   		find "$1/base" "$1/addons" "$1/modules" "$1/optional" -name "*.lzm" | ${append_cmd} 2>/dev/null | sort
+	fi
    fi
 }
 
@@ -831,23 +833,23 @@ union_insert_module()
    if ismountpoint $TARGET; then return 1; fi # skip already used modules
    mkdir -p $TARGET
    mount_module $2 $TARGET
-   if [ $? -ne 0 ]; then
-	if [ "$cn" = "y" ]; then
-		echo "无法读取模块. 下载的文件不完整?" >&2;
-	else
-		echo "Cannot read module data. corrupted download?" >&2
-	fi
-	return 1
-   fi
+   #if [ $? -ne 0 ]; then
+#	if [ "$cn" = "y" ]; then
+#		echo "无法读取模块. 下载的文件不完整?" >&2;
+#	else
+#		echo "Cannot read module data. corrupted download?" >&2
+#	fi
+#	return 1
+ #  fi
    union_insert_dir $1 $TARGET
-   if [ $? -ne 0 ]; then
-	if [ "$cn" = "y" ]; then
-		echo "无法挂载模块到union" >&2
-	else
-		echo "can't insert module to union" >&2
-	fi
-	return 2
-   fi
+  # if [ $? -ne 0 ]; then
+#	if [ "$cn" = "y" ]; then
+#		echo "无法挂载模块到union" >&2
+#	else
+#		echo "can't insert module to union" >&2
+#	fi
+#	return 2
+#   fi
    echo "$2" | cut -b $(($4+1))-
    echolog "$2" >/dev/null
    return 0

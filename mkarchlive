@@ -246,7 +246,7 @@ function init_config ()
 	SYNC="${WORK_DIR}/$ARCH-sync"
 
 	# 更新安装时候的软件缓存位置
-	sed -i "s%.*CacheDir.*%CacheDir = $CACHE%g" $PACMANCONF
+	[ -f $PACMANCONF ] && sed -i "s%.*CacheDir.*%CacheDir = $CACHE%g" $PACMANCONF
 
 	#archlive最终软件清单
 	PKGFILE="${WORK_DIR}/$ARCH-packages.list"

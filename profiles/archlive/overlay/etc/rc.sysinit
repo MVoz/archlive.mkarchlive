@@ -11,6 +11,8 @@
 
 archlive_rev="Rev.$(cat /etc/arch-release)"
 
+debug_log "启动到真实系统的rc.sysinit"
+
 welcome_archlive () {
 
 echo
@@ -563,6 +565,8 @@ if [ -n "$clock_pid" ]; then
 fi
 
 run_hook sysinit_end
+
+debug_log "rc.sysinit启动完成"
 
 # End of file
 # vim: set ts=2 noet:

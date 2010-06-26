@@ -662,6 +662,7 @@ fi
 # Boot log
 debug_log "BOOT_LOG=${BOOT_LOG}"
 cp -f "${BOOT_LOG}" "/${UNION}${BOOT_LOG}"
+debug_log "${BOOT_LOG} 已复制到 /${UNION}${BOOT_LOG}"
 debug_shell
 
 exec /sbin/switch_root -c /dev/console /${UNION} ${INIT} ${CMDLINE}

@@ -132,13 +132,13 @@ usage ()
    green " 一般选项:"
    echo "       -A               指定Arch为i686或者x86_64或者dul(双模式)"
    echo "       -f               强制覆盖现有的工作目录等，全部重新制作"
-   echo "       -i CPIO_CONFIG   用CONFIG 作为archlive启动内核配置文件. "
+#   echo "       -i CPIO_CONFIG   用CONFIG 作为archlive启动内核配置文件. "
    echo "       -c CDNAME        目标镜像名. 默认: archlive"
    echo -e "       -b BOOT	     启动选项(syslinux,isolinux,grub,grub-gfx, grub2 \
 	 \n		        默认配置文件中没有提供grub2的菜单文件)"
-   echo "       -M MODULES       livecd的模块. "
+#   echo "       -M MODULES       livecd的模块. "
    echo "       -m MODULESCOPY   从指定的文件夹拷贝附加模块，比如程序模块等. 默认: 无"
-   echo "       -a ADDON_DIR     从指定文件夹制作附加设置模块. 默认: 无"
+#   echo "       -a ADDON_DIR     从指定文件夹制作附加设置模块. 默认: 无"
    echo "       -t <iso>         目标镜像类型. 默认iso."
    echo "       -v               运行输出结果."
    echo "       -h               本帮助信息."
@@ -449,7 +449,6 @@ cmd_prepare (){
    msg2 "创建制作archlive的相关目录" | tee -a ${LOG}
    [ ! -d ${UNION} ] && mkdir -p "${UNION}"    # {WORK_DIR} 一并被创建
    [ ! -d ${INSTROOT} ] && mkdir -p "${INSTROOT}"
-   [ ! -d ${MODULEDIR} ] && mkdir -p "${MODULEDIR}"
    [ ! -d ${BUILDLOG} ] && mkdir -p "${BUILDLOG}"
 
    if [ "${_CUSTOM_REPO}" = "y" ]; then
@@ -516,53 +515,85 @@ cmd_prepare (){
 }
 function mount_aufs_w () {
    LOG="${2}"
-   plain -n "将$1以aufs可写模式挂载到${UNION}" | tee -a ${LOG}
+   if [ "${3}" = "quiet" ]; then
+	plain -n "将$1以aufs可写模式挂载到${UNION}" >>${LOG}
+   else
+	plain -n "将$1以aufs可写模式挂载到${UNION}" | tee -a ${LOG}
+   fi
    [ "x$(grep $UNION /proc/mounts)" != "x" ] && umount -l ${UNION}
-   mount -t aufs -o br:$1=rw aufs ${UNION} | tee -a ${LOG}
+   mount -t aufs -o br:$1=rw aufs ${UNION} >>${LOG}
    if [ $? -ne 0 ]; then 
         error "无法将$1以aufs可写模式挂载到${UNION}." | tee -a ${LOG}
         usage 1
    else
-	green "完成." | tee -a ${LOG}
+	if [ "${3}" = "quiet" ]; then
+		green "完成." >>${LOG}
+	else
+		green "完成." | tee -a ${LOG}
+	fi
    fi
 }
 
 function mount_aufs_r () {
    LOG="${2}"
-   plain -n "将$1以aufs只读模式挂载到${UNION}" | tee -a ${LOG}
+   if [ "${3}" = "quiet" ]; then
+	plain -n "将$1以aufs只读模式挂载到${UNION}" >>${LOG}
+   else
+	plain -n "将$1以aufs只读模式挂载到${UNION}" | tee -a ${LOG}
+   fi
    [ "x$(grep $UNION /proc/mounts)" != "x" ] && umount -l ${UNION}
    [ -f ${UNION}/var/lib/pacman/db.lck ] && rm -f ${UNION}/var/lib/pacman/db.lck
    [ -d ${UNION}/dev ] && rm -rf ${UNION}/dev
-   mount -t aufs -o br:$1=ro aufs ${UNION} | tee -a ${LOG}
+   mount -t aufs -o br:$1=ro aufs ${UNION} >>${LOG}
    if [ $? -ne 0 ]; then 
         error "无法将$1以aufs只读模式挂载到${UNION}." | tee -a ${LOG}
         usage 1
    else
-	green "完成!" | tee -a ${LOG}
+	if [ "${3}" = "quiet" ]; then
+		green "完成!" >>${LOG}
+	else
+		green "完成!" | tee -a ${LOG}
+	fi
    fi
 }
 function remount_aufs_w () {
    LOG="${2}"
-   plain -n "将$1以aufs可写模式挂载到${UNION}" | tee -a ${LOG}
-   mount -t aufs -o remount,add:0:$1=rw aufs ${UNION} | tee -a ${LOG}
+   if [ "${3}" = "quiet" ]; then
+	plain -n "将$1以aufs可写模式挂载到${UNION}" >>${LOG}
+   else
+	plain -n "将$1以aufs可写模式挂载到${UNION}" | tee -a ${LOG}
+   fi
+   mount -t aufs -o remount,add:0:$1=rw aufs ${UNION} >>${LOG}
    if [ $? -ne 0 ]; then 
         error "无法将$1以aufs可写模式挂载到${UNION}." | tee -a ${LOG}
         usage 1
    else
-	green "完成!" | tee -a ${LOG}
+	if [ "${3}" = "quiet" ]; then
+		green "完成!" >>${LOG}
+	else
+		green "完成!" | tee -a ${LOG}
+	fi
    fi
 }
 function remount_aufs_r () {
    LOG="${2}"
-   plain -n "将$1以aufs只读模式挂载到${UNION}" | tee -a ${LOG}
+   if [ "${3}" = "quiet" ]; then
+	plain -n "将$1以aufs只读模式挂载到${UNION}" >>${LOG}
+   else
+	plain -n "将$1以aufs只读模式挂载到${UNION}" | tee -a ${LOG}
+   fi
    [ -f ${UNION}/var/lib/pacman/db.lck ] && rm -f ${UNION}/var/lib/pacman/db.lck
    [ -d ${UNION}/dev ] && rm -rf ${UNION}/dev
-   mount -t aufs -o remount,mod:$1=ro aufs ${UNION} | tee -a ${LOG}
+   mount -t aufs -o remount,mod:$1=ro aufs ${UNION} >>${LOG}
    if [ $? -ne 0 ]; then 
         error "无法将$1以aufs只读模式挂载到${UNION}." | tee -a ${LOG}
         usage 1
    else
-	green "完成!" | tee -a ${LOG}
+	if [ "${3}" = "quiet" ]; then
+		green "完成!" >>${LOG}
+	else
+		green "完成!" | tee -a ${LOG}
+	fi
    fi
 }
 
@@ -910,7 +941,7 @@ cmd_install ()
 	[ -f ${MODULEDIR}/${mod}/etc/sudoers ] && chmod 0440 ${MODULEDIR}/${mod}/etc/sudoers
 
 	msg2 -n "导出最新模块已安装软件清单..." | tee -a ${LOG}
-	$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/mod_${mod}.new
+	$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${ARCH}-mod_${mod}.new
 	green "完成!" | tee -a ${LOG}
 
 	if [ -f ${PACKLIST}/${ARCH}-${mod}.old ]; then
@@ -989,7 +1020,6 @@ cmd_install ()
 		local mod_file kernel_ver
 		mod_file="${UNION}/lib/modules/*/modules.dep"
 		kernel_ver="$(basename $(dirname ${mod_file}))"
-		#depmod -a -b ${UNION} {kernel_ver}
 		depmod -a -b ${UNION} {kernel_ver}
 	fi
 
@@ -1235,9 +1265,9 @@ cmd_re_mount_all ()
    LOG=${BUILDLOG}/re_mount_all.log
    [ -f ${LOG} ] && rm -f ${LOG}
 
-   mount_aufs_w "${SYNC}" "${LOG}"
+   mount_aufs_w "${SYNC}" "${LOG}" "quiet"
    for mod in ${MODULES}; do
-	remount_aufs_w "${MODULEDIR}/${mod}" "${LOG}"
+	remount_aufs_w "${MODULEDIR}/${mod}" "${LOG}" "quiet"
    done
 }
 
@@ -1302,16 +1332,15 @@ cmd_squash () {
    depmod -a -b ${basedir} ${kernelver} 2>&1 >/dev/null
    green "内核模块依赖关系更新完成." | tee -a ${LOG}
 
-   #squashfs压缩的基本模块存放位置 比如0_000_core-i686.sqfs
-   moduleplace="${IMGROOT}/${CDNAME}/base"
+   #squashfs压缩的基本模块存放位置 比如 i686-0_000_core.sqfs
    for module_dir in $MODULES; do
-	#[ "$(case ${module_dir} in \#*) echo 0 ;; esac)" ] && continue
-	case ${module_dir} in *-[1-9]_*) moduleplace="${IMGROOT}/${CDNAME}/modules";; esac
+	moduleplace="${IMGROOT}/${CDNAME}/base"
+	case ${module_dir} in [1-9]_*) moduleplace="${IMGROOT}/${CDNAME}/modules";; esac
 	source_dir="${MODULEDIR}/${module_dir}"
-        target_file="${moduleplace}/${ARCH}-$(basename ${module_dir}).${EXT}"
+	target_file="${moduleplace}/${ARCH}-$(basename ${module_dir}).${EXT}"
 
 	# 如果不存在制作好的模块或者有更新则创建模块  ${PACKLIST}/${ARCH}-${module_dir}.list存放对应模块的更新详情
-        if [ ! "$(find $IMGROOT/$CDNAME -name $(basename  ${target_file}))" -o "x$(cat ${PACKLIST}/${ARCH}-${module_dir}.list)" != "x" ]; then
+	if [ ! "$(find $IMGROOT/$CDNAME -name $(basename  ${target_file}))" -o "x$(cat ${PACKLIST}/${ARCH}-${module_dir}.list)" != "x" ]; then
 		mksquashfs_module "${source_dir}" "${target_file}" "${LOG}"
 	fi
    done
@@ -1411,11 +1440,11 @@ cmd_img () {
 	case ${module_file} in */overlay.${EXT}) case ${USE_OVERLAY} in y) needed="y" && break;; esac;; esac
 	case ${module_file} in */archlive.sqfs) needed="y" && break;; esac
 	module_name=$(basename ${module_file} .${EXT})
-	if [ "${ARCH}" = "dul" ]; then
+	if [ "${arch}" = "dul" ]; then
 		module_name=${module_name//i686-}
 		module_name=${module_name//x86_64-}
 	else
-		module_name=${module_name//${ARCH}-}
+		module_name=${module_name//${arch}-}
 	fi
 	case $MODULES in *${module_name}*) needed="y" && break;; esac
 	case $EXTRAMODULES in *${module_name}*) needed="y" && break;; esac
@@ -1438,18 +1467,24 @@ cmd_img () {
 
    msg2 -n "将软件清单放到镜像目录中..." | tee -a ${LOG}
    # ${CDNAME}.list 为默认启动标的  如果删除系统无法启动
-   cat ${PKGFILE} | sort > ${IMGROOT}/${CDNAME}/${CDNAME}.list
-   if [ "$ARCH" = "dul" ]; then
+   if [ "$arch" = "dul" ]; then
 	echo "i686 & x86_64 双模式 软件清单" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
 	echo " i686 部分软件清单：" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
-	cat ${PKGFILE//dul/i686} | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	cat ${WORK_DIR}/i686-packages.list | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
 	echo "************************************" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
 	echo " x86_64 部分软件清单：" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
-	cat ${PKGFILE//dul/x86_64} | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	cat ${WORK_DIR}/x86_64-packages.list | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+   else
+	cat ${WORK_DIR}/$arch-packages.list | sort > ${IMGROOT}/${CDNAME}/${CDNAME}.list
    fi
    green "完成!" | tee -a ${LOG}
 
    msg2 "准备启动文件..." | tee -a ${LOG}
+
+    # 双模式默认在i686模块中查找启动文件
+   case $arch in i686|x86_64) MODULEDIR="${WORK_DIR}/${ARCH}-modules" ;;
+			dul) MODULEDIR="${WORK_DIR}/i686-modules" ;;
+			esac
    bootflags=""
    if [ "$BOOT" = "grub" -o "$BOOT" = "grub-gfx" ]; then
 	[ ! -d "${IMGROOT}/boot/grub" ] && mkdir -p "${IMGROOT}/boot/grub"
@@ -1488,14 +1523,7 @@ cmd_img () {
 	[ ! -d ${target_bootfile_dir} ] && mkdir -p ${target_bootfile_dir}
 
 	# 双模式下也采用i686系统中的syslinux来启动
-	if [ "$ARCH" = "dul" ]; then
-		PACKLIST="${WORK_DIR}/i686-list"
-	fi
-	#boot_mod=$(basename "$(grep "syslinux" `find ${PACKLIST} -name "*.new"` |head -1)" ".new:syslinux")
-	#boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "\/mod_") | awk -F. '{print $1}')
-	boot_mod=$(basename $(find ${PACKLIST} -name "*.new" | xargs grep syslinux | grep -v "\/mod_")  ".new:syslinux")
-	[ "${boot_mod}" = ".new:syslinux" ] && warn "目标系统中没有选择安装syslinux"
-	bootfile_dir=${MODULEDIR}/${boot_mod}/usr/lib/syslinux
+	bootfile_dir="$(dirname $(find $MODULEDIR -type f -name "isolinux.bin"))"
 
 	# 优先使用目标系统的最新版syslinux， 其次使用 cd-root提供的  再次宿主系统提供
 	if [ -f ${bootfile_dir}/isolinux.bin ]; then
@@ -1506,8 +1534,7 @@ cmd_img () {
 			cp -f ${bootfile_dir}/*.* ${target_bootfile_dir}/
 		else
 			warn "目标系统和 ${IMGROOT} 下都没有 syslinux 启动文件，现在从宿主系统查找..." | tee -a ${LOG}
-			bootfile=$(find /usr -type f -name "isolinux.bin")
-			bootfile_dir=${bootfile%/isolinux.bin}
+			bootfile_dir=$(dirname $(find /usr -type f -name "isolinux.bin"))
 			if [ -f ${bootfile_dir}/isolinux.bin ]; then
 				cp -f ${bootfile_dir}/*.* ${target_bootfile_dir}/
 			else
@@ -1563,7 +1590,7 @@ cmd_img () {
 		md5sum "${IMGNAME}" > "${IMGNAME}".md5
 		iso_size=$(isosize ${IMGNAME} 2>/dev/null)
 		if [ "x${iso_size}" = "x" ]; then
-			iso_size=$(grep " MB" /tmp/archlive_img.log | sed 's|.*(\(.*MB\))|\1|')
+			iso_size=$(grep " MB" /tmp/archlive_img.log | sed 's|.*(\(.*cat ${PKGFILE} | sort > ${IMGROOT}/${CDNAME}/${CDNAME}.listMB\))|\1|')
 		fi 
 		cat /tmp/archlive_img.log >>${LOG}
 		rm -f /tmp/archlive_img.log
