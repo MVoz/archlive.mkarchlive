@@ -17,11 +17,11 @@ welcome_archlive () {
 
 echo
 if [ "${msg_lang}" = "cn" ]; then
-	printf "\033[1;33;40m   欢迎使用 Archlive !                                        ${archlive_rev}\n"
+	printf "\033[1;33;40m   欢迎使用 Archlive !                                            ${archlive_rev}\n"
 else
-	printf "\033[1;33;40m   Welcome to Archlive!                                        ${archlive_rev}\n"
+	printf "\033[1;33;40m   Welcome to Archlive!                                            ${archlive_rev}\n"
 fi
-printf "\033[1;32;40m   *******************************************************************************\033[1;0m\n"
+printf "\033[1;32;40m   ***********************************************************************************************\033[1;0m\n"
 if [ "${msg_lang}" = "cn" ]; then
 	printf "\033[1;34;40m   Archlive\033[1;0m, 基于\033[1;34;40mArch GNU/Linux\033[1;0m的\033[1;32;40mlive系统\033[1;0m.\n"
 	printf "\033[1;31;40m   此系统基于GNU通用发布协议(GPL)发行\033[1;0m\n"
@@ -29,7 +29,7 @@ else
 	printf "\033[1;34;40m   Archlive\033[1;0m, \033[1;32;40mlive system \033[1;0mbase on ${C_OTHER}Arch GNU/Linux\033[1;0m.\n"
 	printf "\033[1;31;40m   Distributed under the GNU General Public License (GPL)\033[1;0m\n"  
 fi
-printf "\033[1;32;40m   *******************************************************************************\033[1;0m\n"
+printf "\033[1;32;40m   ***********************************************************************************************\033[1;0m\n"
 echo
 }
 

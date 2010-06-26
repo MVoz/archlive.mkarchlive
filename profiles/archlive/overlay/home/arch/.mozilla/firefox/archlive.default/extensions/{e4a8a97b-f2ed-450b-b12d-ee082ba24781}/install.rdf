@@ -7,7 +7,7 @@
 
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
     <!-- NOTE: build.sh will correct the em:version. -->
-    <em:version>0.8.20100211.5</em:version>
+    <em:version>0.8.20100408.6</em:version>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
@@ -19,6 +19,7 @@
     <em:contributor>Anthony Lieuallen; http://arantius.com</em:contributor>
     <em:contributor>Chris Feldmann; http://axlotl.net</em:contributor>
     <em:contributor>David Schontzler; http://stilleye.com/</em:contributor>
+    <em:contributor>Erik Vold; http://erikvold.com/</em:contributor>
     <em:contributor>Gareth Andrew; http://freegarethandrew.org</em:contributor>
     <em:contributor>Hisateru Tanaka</em:contributor>
     <em:contributor>Jeremy Dunck; http://dunck.us/anabasis/</em:contributor>

@@ -93,6 +93,8 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_socksPort').value    = o_customprefs.getIntPref('socks_port');
         */
     }
+
+    doc.getElementById('torbutton_searchEngine').disabled = !doc.getElementById('torbutton_noCaptcha').checked;
 }
 
 function torbutton_prefs_init(doc) {
@@ -260,7 +262,6 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_disableLivemarks').checked = o_torprefs.getBoolPref('disable_livemarks');
     doc.getElementById('torbutton_closeTor').checked = o_torprefs.getBoolPref('close_tor');
     doc.getElementById('torbutton_closeNonTor').checked = o_torprefs.getBoolPref('close_nontor');
-    doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
     doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
     doc.getElementById('torbutton_noReferer').checked = o_torprefs.getBoolPref('disable_referer');
     doc.getElementById('torbutton_spoofEnglish').checked = o_torprefs.getBoolPref('spoof_english');
@@ -269,11 +270,38 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_blockTorFileNet').checked = o_torprefs.getBoolPref('block_tor_file_net');
     doc.getElementById('torbutton_blockNonTorFileNet').checked = o_torprefs.getBoolPref('block_nontor_file_net');
 
+    doc.getElementById('torbutton_fixGoogleSrch').checked = o_torprefs.getBoolPref('fix_google_srch');
     doc.getElementById('torbutton_lockedMode').checked = o_torprefs.getBoolPref('locked_mode');
+
+    switch(o_torprefs.getIntPref('google_redir_url')) {
+        case 1:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine1');
+            break;
+        case 2:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine2');
+            break;
+        case 3:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine3');
+            break;
+        case 4:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine4');
+            break;
+
+    }
+    doc.getElementById('torbutton_noCaptcha').checked = o_torprefs.getBoolPref('dodge_google_captcha');
+    doc.getElementById('torbutton_searchEngine').disabled = !o_torprefs.getBoolPref('dodge_google_captcha');
+
     /*
     doc.getElementById('torbutton_jarCerts').checked = o_torprefs.getBoolPref('jar_certs');
     doc.getElementById('torbutton_jarCACerts').checked = o_torprefs.getBoolPref('jar_ca_certs');
     */
+
+    doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
+    doc.getElementById('torbutton_updateTorbuttonViaTor').checked = o_torprefs.getBoolPref('update_torbutton_via_tor');
 
     torbutton_prefs_set_field_attributes(doc);
 }
@@ -311,6 +339,17 @@ function torbutton_prefs_save(doc) {
     torbutton_log(2, "called prefs_save()");
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     var o_customprefs = torbutton_get_prefbranch('extensions.torbutton.custom.');
+
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+        .getService(Components.interfaces.nsIWindowMediator);
+    var enumerator = wm.getEnumerator("navigator:browser");
+    while(enumerator.hasMoreElements()) {
+        var win = enumerator.getNext();
+        if(win != window && win.m_tb_is_main_window) {
+            torbutton_log(3, "Found main window for popup hack.");
+            win.torbutton_unique_pref_observer.did_toggle_warning = false;
+        }
+    }
 
     o_torprefs.setBoolPref('display_panel',   doc.getElementById('torbutton_displayStatusPanel').checked);
     o_torprefs.setCharPref('panel_style',     doc.getElementById('torbutton_panelStyle').value);
@@ -429,18 +468,39 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('close_tor', doc.getElementById('torbutton_closeTor').checked);
     o_torprefs.setBoolPref('close_nontor', doc.getElementById('torbutton_closeNonTor').checked);
     o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
-    
+
     o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
     o_torprefs.setBoolPref('disable_referer', doc.getElementById('torbutton_noReferer').checked);
     o_torprefs.setBoolPref('spoof_english', doc.getElementById('torbutton_spoofEnglish').checked);
-    
+
     o_torprefs.setBoolPref('locked_mode', doc.getElementById('torbutton_lockedMode').checked);
+    o_torprefs.setBoolPref('fix_google_srch', doc.getElementById('torbutton_fixGoogleSrch').checked);
+    o_torprefs.setBoolPref('dodge_google_captcha', doc.getElementById('torbutton_noCaptcha').checked);
+
+    if(doc.getElementById('torbutton_searchEngine').selectedItem ==
+            doc.getElementById('torbutton_engine1')) {
+        o_torprefs.setIntPref('google_redir_url', 1);
+    } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
+            doc.getElementById('torbutton_engine2')) {
+        o_torprefs.setIntPref('google_redir_url', 2);
+    } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
+            doc.getElementById('torbutton_engine3')) {
+        o_torprefs.setIntPref('google_redir_url', 3);
+    } else {
+        o_torprefs.setIntPref('google_redir_url', 4);
+    }
+
     /*
     o_torprefs.setBoolPref('jar_certs', doc.getElementById('torbutton_jarCerts').checked);
     o_torprefs.setBoolPref('jar_ca_certs',
             o_torprefs.getBoolPref('jar_certs') &&
             doc.getElementById('torbutton_jarCACerts').checked);
     */
+
+    o_torprefs.setBoolPref('no_updates',
+            doc.getElementById('torbutton_noUpdates').checked);
+    o_torprefs.setBoolPref('update_torbutton_via_tor',
+            doc.getElementById('torbutton_updateTorbuttonViaTor').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();

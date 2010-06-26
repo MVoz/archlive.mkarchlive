@@ -4,13 +4,14 @@
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>{02450954-cdd9-410f-b1da-db804e18c671}</em:id>
 		<em:name>Screengrab</em:name>
-		<em:version>0.96.2</em:version>
+		<em:version>0.96.3</em:version>
 		<em:description>Saves a web-page as an image.</em:description>
 		<em:creator>Andy Mutton</em:creator>
 		
 		<em:contributor>Jean-Bernard 'Goofy' Marcon from babelzilla.org (Help with locales)</em:contributor>
 		<em:contributor>All of the guys at babelzilla.org (Translations)</em:contributor>
 		<em:contributor>Dominic Letz (SecurityException bug fix)</em:contributor>
+		<em:contributor>vboriesazeau (Pointing out the deprecated getBoxObjectFor call)</em:contributor>
 		
 		<em:homepageURL>http://www.screengrab.org/</em:homepageURL>
 	    <em:optionsURL>chrome://screengrab/content/preferences.xul</em:optionsURL>

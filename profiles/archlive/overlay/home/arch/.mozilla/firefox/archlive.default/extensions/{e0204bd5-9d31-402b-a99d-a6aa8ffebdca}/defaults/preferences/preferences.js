@@ -1,7 +1,7 @@
 // debug prefs
 pref("extensions.torbutton.debug",true);
 pref("extensions.torbutton.loglevel",4);
-pref("extensions.torbutton.logmethod",2); // 0=stdout, 1=errorconsole, 2=debuglog
+pref("extensions.torbutton.logmethod",1); // 0=stdout, 1=errorconsole, 2=debuglog
 
 // Display prefs
 pref("extensions.torbutton.display_panel",true);
@@ -153,6 +153,7 @@ pref("extensions.torbutton.nontor_memory_jar",false);
 pref("extensions.torbutton.tz_string","");
 pref("extensions.torbutton.launch_warning",true);
 pref("extensions.torbutton.disable_livemarks",true);
+pref("extensions.torbutton.update_torbutton_via_tor",true);
 
 // Google Captcha prefs
 // FIXME: NID cookie?
@@ -170,14 +171,25 @@ pref("extensions.torbutton.regen_google_cookies", false);
 // Xfer google search cookies across all google domains
 pref("extensions.torbutton.xfer_google_cookies", true);
 
+// Google redirect prefs
+pref("extensions.torbutton.google_redir_url", 1);
+pref("extensions.torbutton.dodge_google_captcha", true);
+pref("extensions.torbutton.asked_google_captcha", false);
+pref("extensions.torbutton.redir_url.1", "https://www.ixquick.com/do/metasearch.pl?query=");
+pref("extensions.torbutton.redir_url.2", "http://www.bing.com/search?q=");
+pref("extensions.torbutton.redir_url.3", "http://search.yahoo.com/search?p=");
+pref("extensions.torbutton.redir_url.4", "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=");
+pref("extensions.torbutton.fix_google_srch", true);
+
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; LANG)");
 pref("extensions.torbutton.platform_override","Win32");
-pref("extensions.torbutton.oscpu_override", "Windows NT 5.1");
-pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7");
+pref("extensions.torbutton.oscpu_override", "Windows NT 6.1");
 
-pref("extensions.torbutton.productsub_override","2009021910");
+pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 6.1; LANG; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3");
+
+pref("extensions.torbutton.productsub_override","20100401");
 pref("extensions.torbutton.buildID_override","0");
 pref("extensions.torbutton.useragent_vendor", "");
 pref("extensions.torbutton.useragent_vendorSub","");

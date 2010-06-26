@@ -12,7 +12,7 @@ locale dta ca-AD jar:chrome/chrome.jar!/locale/ca-AD/
 locale dta cs-CZ jar:chrome/chrome.jar!/locale/cs-CZ/
 locale dta cy-GB jar:chrome/chrome.jar!/locale/cy-GB/
 locale dta da-DK jar:chrome/chrome.jar!/locale/da-DK/
-locale dta de-DE jar:chrome/chrome.jar!/locale/de-DE/
+locale dta de jar:chrome/chrome.jar!/locale/de/
 locale dta el-GR jar:chrome/chrome.jar!/locale/el-GR/
 locale dta es-ES jar:chrome/chrome.jar!/locale/es-ES/
 locale dta fi-FI jar:chrome/chrome.jar!/locale/fi-FI/
@@ -23,7 +23,7 @@ locale dta it-IT jar:chrome/chrome.jar!/locale/it-IT/
 locale dta ja-JP jar:chrome/chrome.jar!/locale/ja-JP/
 locale dta ko-KR jar:chrome/chrome.jar!/locale/ko-KR/
 locale dta mk-MK jar:chrome/chrome.jar!/locale/mk-MK/
-locale dta nl-NL jar:chrome/chrome.jar!/locale/nl-NL/
+locale dta nl jar:chrome/chrome.jar!/locale/nl/
 locale dta pl-PL jar:chrome/chrome.jar!/locale/pl-PL/
 locale dta pt-BR jar:chrome/chrome.jar!/locale/pt-BR/
 locale dta pt-PT jar:chrome/chrome.jar!/locale/pt-PT/
@@ -31,11 +31,11 @@ locale dta ro-RO jar:chrome/chrome.jar!/locale/ro-RO/
 locale dta ru-RU jar:chrome/chrome.jar!/locale/ru-RU/
 locale dta sk-SK jar:chrome/chrome.jar!/locale/sk-SK/
 locale dta sl-SI jar:chrome/chrome.jar!/locale/sl-SI/
-locale dta sr-RS jar:chrome/chrome.jar!/locale/sr-RS/
+locale dta sr jar:chrome/chrome.jar!/locale/sr/
 locale dta sv-SE jar:chrome/chrome.jar!/locale/sv-SE/
 locale dta tr-TR jar:chrome/chrome.jar!/locale/tr-TR/
-locale dta uk-UA jar:chrome/chrome.jar!/locale/uk-UA/
-locale dta vi-VN jar:chrome/chrome.jar!/locale/vi-VN/
+locale dta uk jar:chrome/chrome.jar!/locale/uk/
+locale dta vi jar:chrome/chrome.jar!/locale/vi/
 locale dta zh-CN jar:chrome/chrome.jar!/locale/zh-CN/
 locale dta zh-TW jar:chrome/chrome.jar!/locale/zh-TW/
 
