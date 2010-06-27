@@ -8,6 +8,7 @@ Xft.hinting: 1
 Xft.hintstyle: hintmedium
 EOF
 
+setxkbmap -option terminate:ctrl_alt_bksp
 
 xrdb -nocpp -merge $XRESOURCES
 rm -f $XRESOURCES

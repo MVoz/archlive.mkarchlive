@@ -140,6 +140,9 @@ fi
 sed -i "s/^.*DAEMONS=.*/DAEMONS=(syslog-ng hal @networkmanager ${NEW_BOOT_OPT})" /etc/rc.conf 2>/dev/null
 chmod -x /etc/rc.d/archlive
 
+# 开启 Ctrl + Alt + Backspace 无敌三键
+export LD_PRELOAD="/usr/lib/liblunar-gtk-preload.so"
+
 # 自动登录到默认的 DE
 if [ "$nox" != "y" ]; then
 	su arch -l -c "/bin/sh --login -c /usr/bin/startx > /dev/null 2>/dev/null"

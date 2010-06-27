@@ -72,15 +72,15 @@ fi
 hl "*******************************************************************************"
 echo
 if [ "$cn" = "y" ]; then
-	echo -e  "${EMY}  Archlive${RST}, 基于${EMY}Arch GNU/Linux${RST}的${EMG}live系统${RST}."
+	echo -e  "${EMY}  Archlive${RST}, 基于${EMY}Arch GNU/Linux${RST}的${EMG}live系统${EMY} ($ARCH)${RST}."
 else
-	echo -e  "${EMY}  Archlive${RST}, ${EMG}live system ${RST}base on ${EMY}Arch GNU/Linux${RST}."
+	echo -e  "${EMY}  Archlive${RST}, ${EMG}live system ($ARCH)${RST} base on ${EMY}Arch GNU/Linux${RST}."
 fi
 
 if [ "$cn" = "y" ]; then
-	hr "  此系统基于GNU通用发布协议(GPL)发行"
+	hr "  此系统基于GNU通用发布协议(GPL)发行."
 else
-	hr "  Distributed under the GNU General Public License (GPL)"  
+	hr "  Distributed under the GNU General Public License (GPL)."  
 fi
 hl "*******************************************************************************"
 echo
