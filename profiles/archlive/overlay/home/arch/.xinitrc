@@ -8,7 +8,13 @@ Xft.hinting: 1
 Xft.hintstyle: hintmedium
 EOF
 
+# 开启 Ctrl + Alt + Backspace 无敌三键
 setxkbmap -option terminate:ctrl_alt_bksp
+
+# 加载农历支持
+if [ -f liblunar-gtk-preload.so ]; then
+	export LD_PRELOAD="/usr/lib/liblunar-gtk-preload.so"
+fi
 
 xrdb -nocpp -merge $XRESOURCES
 rm -f $XRESOURCES
