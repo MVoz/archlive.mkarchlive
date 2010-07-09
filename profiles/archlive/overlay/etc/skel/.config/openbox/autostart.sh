@@ -29,7 +29,7 @@ export OOO_FORCE_DESKTOP=gnome
 # 使用pcmanfm管理桌面
 killall pcmanfm >/dev/null
 #pcmanfm -d &
-pcmanfm --desktop
+pcmanfm --desktop &
 # 新版pcmanfm
 
 # 背景图片
