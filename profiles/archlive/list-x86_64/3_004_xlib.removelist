@@ -14,6 +14,8 @@ rdesktop
 # libvncserver
 remmina
 # Archlive编译包
+remmina-plugins
+# Archlive编译包
 #
 # 局域网共享
 #

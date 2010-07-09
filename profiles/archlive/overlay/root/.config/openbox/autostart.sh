@@ -4,9 +4,10 @@
 # Environment variables set here are passed to the Openbox session.
 
 # D-bus
-if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-       eval `dbus-launch --sh-syntax --exit-with-session`
-fi
+#if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+#       eval `dbus-launch --sh-syntax --exit-with-session`
+#fi
+# 新版pcmanfm 需要注释掉(枪花提供)
 
 # Make GTK apps look and behave how they were set up in the gnome config tools
 [ -f /usr/libexec/gnome-settings-daemon ] && eval `/usr/libexec/gnome-settings-daemon & >/dev/null 2>&1` 
@@ -27,7 +28,9 @@ export OOO_FORCE_DESKTOP=gnome
 
 # 使用pcmanfm管理桌面
 killall pcmanfm >/dev/null
-pcmanfm -d &
+#pcmanfm -d &
+pcmanfm --desktop
+# 新版pcmanfm
 
 # 背景图片
 #feh --bg-scale ~/.config/wallpapers/Tiger_Blue.jpg
