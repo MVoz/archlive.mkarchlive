@@ -4,10 +4,10 @@
 # Environment variables set here are passed to the Openbox session.
 
 # D-bus
-#if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-#       eval `dbus-launch --sh-syntax --exit-with-session`
-#fi
-# 新版pcmanfm 需要注释掉(枪花提供)
+if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+       eval `dbus-launch --sh-syntax --exit-with-session`
+fi
+# 新版pcmanfm D-Bus支持
 
 # Make GTK apps look and behave how they were set up in the gnome config tools
 [ -f /usr/libexec/gnome-settings-daemon ] && eval `/usr/libexec/gnome-settings-daemon & >/dev/null 2>&1` 
