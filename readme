@@ -1,4 +1,5 @@
 mkarchlive 工具可以在任何符合条件的linux系统上构建基于Arch GNU/Linux包管理系统pacman的live系统——可以是桌面环境、专业服务器甚至是防火墙。mkarchlive给你充分定制机会。
+
 mkarchlive 可以运行于符合如下条件的linux系统中：
 A、宿主系统需要安装如下常用软件: cdrkit(mkisofs) wget tar links shell
    sed grep gawk module-init-tools(depmod) util-linux-ng(mount)  glibc(ldconfig) findutils(find)

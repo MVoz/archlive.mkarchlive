@@ -69,7 +69,7 @@ initrd=$MYMNT/archlive/boot/i686-kernel26.img
 label=Slax
 root=/dev/ram0
 read-write
-append = "ramsize=6666 changes=slaxchanges from=$TARGET"
+append = "ramsize=6666 archlivelabel=archlive changes=slaxchanges from=$TARGET"
 ENDOFTEXT
 
 echo Updating MBR to setup boot record...

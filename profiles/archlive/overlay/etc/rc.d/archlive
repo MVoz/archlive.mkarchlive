@@ -129,15 +129,29 @@ fi
 ARCH=`uname -m`
 [ -f /etc/pacman.conf ] || ln -sf /etc/pacman_${ARCH}.conf /etc/pacman.conf
 
-NEW_BOOT_OPT=""
-if which ossinfo 2>/dev/null >/dev/null; then
-	NEW_BOOT_OPT="${NEW_BOOT_OPT} @oss4"
-fi
-if which cupsctl 2>/dev/null >/dev/null; then
-	NEW_BOOT_OPT="${NEW_BOOT_OPT} @cups"
+# 根据启动参数bootdaemon指定的值来启动对应后台程序
+# 例如 bootdaemon=oss,cups,vbox,lighttpd,sshd 则在启动到X前启动这些后台程序
+if [ "x$bootdaemon" != "x" ]; then
+	bootdaemon=${bootdaemon//,/ }
+	for i in $bootdaemon; do
+		[ -x /etc/rc.d/$i ] && (/etc/rc.d/$i start &)
+	done
 fi
 
+# 修正启动参数
+NEW_BOOT_OPT="$bootdaemon"
+
+	# archlive 根据是否包含oss4 cups 模块来自动
+	if which ossinfo 2>/dev/null >/dev/null; then
+		NEW_BOOT_OPT="${NEW_BOOT_OPT} @oss4"
+	fi
+	if which cupsctl 2>/dev/null >/dev/null; then
+		NEW_BOOT_OPT="${NEW_BOOT_OPT} @cups"
+	fi
+
 sed -i "s/^.*DAEMONS=.*/DAEMONS=(syslog-ng hal @networkmanager ${NEW_BOOT_OPT})" /etc/rc.conf 2>/dev/null
+
+
 chmod -x /etc/rc.d/archlive
 
 # 开启 Ctrl + Alt + Backspace 无敌三键

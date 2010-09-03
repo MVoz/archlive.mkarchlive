@@ -1,5 +1,6 @@
 #!/bin/busybox ash
 # Archlive 启动脚本
+# Archlive (Carbon Jiao) 更新于2010.09.02
 
 # 创建busybox包含程序的链接
 # Install busybox's applets as symlinks
@@ -213,6 +214,8 @@ mkdir -p $MEMORY
 # 调试用测试点
 debug_shell
 
+######### Search Archlive ################
+
 # 启动参数可以通过sgn=...来定义搜索标的，该文件同一目录下的文件夹即为模块文件夹
 SGN=$sgn
 if [ "x$SGN" = "x" ]; then SGN=$LIVECDNAME.list; fi
@@ -222,104 +225,135 @@ else
 	echolog "Search modules of $LIVECDNAME by target: $SGN ..."
 fi
 
-# 在启动参数中加入from="..." cifs="..." 或者 ip="..." 可以加快查找基本模块
-# 指定方式:  A. ip=[]  B. from=[]  C. cifs=[]
+# 在启动参数中加入archlivelabel="..."  archliveuuid="..." from="..." cifs="..." 或者 ip="..." 可以加快查找基本模块
 
-# 方式A.  ip=[] 参数，PXE启动。可以同时指定 from 参数
-# ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
-# 启动参数 ip=192.168.0.144:192.168.0.252:192.168.0.1:255.255.255.0 from=archlive 则表示
-# 启动标的 $sgn 放在 http://192.168.0.252/archlive/ 下
-# 启动标的 $sgn 同级目录下有 base modules 等模块目录
-if [ "x$ip" != "x" ]; then
+
+# 方式A. archlivelabel=[] 参数 从指定卷标（盘符）的分区或者光盘启动。
+#	可以同时指定 from 参数指定下级文件夹， 比如
+#	archlivelabel=F from=archlive/20101212
+#	则从F盘下的archlive/20101212文件夹下启动archlive
+
+# 方式B. archliveuuid=[] 参数指定启动分区的UUID
+#	可以同时指定 from 参数指定下级文件夹， 比如
+#	archliveuuid=005B-005C from=archlive/20101212
+#	则从UUID为005B-005C的分区下的archlive/20101212文件夹下启动archlive
+
+# 方式C.  ip=[] 参数，挂载http共享并启动。可以同时指定 from 参数
+#	ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+#	启动参数 ip=192.168.0.144:192.168.0.252:192.168.0.1:255.255.255.0 from=archlive 则表示
+#	启动标的 $sgn 放在 http://192.168.0.252/archlive/ 下
+#	启动标的 $sgn 同级目录下有 base modules 等模块目录
+
+# 方式D. cifs=[] 参数，挂载共享并启动。比如 cifs="//192.168.0.252/share" user="archlive" passwd="archlive"
+#	则将 http://192.168.0.252/archlive 以用户archlive 密码 archlive 挂载到 /union/httpfs
+#	并从 /union/httpfs 启动 archlive
+
+# 方式E. 启动参数加pxe，PXE 启动
+
+# 方式F. from=[] 来指定本地目录，比如 from="/dev/sda1/archlive"
+
+# 方式G. 只用 from 参数指定 archlive的相对目录，比如 from=archlive/20101212
+#	则在电脑各分区或者磁盘中查找目录为 archlive/20101212  并从找到的第一个结果中启动
+
+if [ "x$archlivelabel" != "x" ]; then
+	# 方式 A
+	if [ "x$from" != "x" ]; then
+		DATA=$(find_filepath /dev/disk/by-label/$archlivelabel $from/$SGN)
+	else
+		DATA=$(find_filepath /dev/disk/by-label/$archlivelabel $SGN)
+	fi
+elif [ "x$archliveuuid" != "x" ]; then
+	# 方式 B
+	if [ "x$from" != "x" ]; then
+		DATA=$(find_filepath /dev/disk/by-uuid/$archliveuuid $from/$SGN)
+	else
+		DATA=$(find_filepath /dev/disk/by-uuid/$archliveuuid $SGN)
+	fi
+
+elif [ "x$ip" != "x" ]; then
+	# 方式 C
 	if [ "x$from" != "x" ]; then
 		DATAFROM="http://"$(echo $ip | cut -d : -f 2)"/$from"
 	else
 		DATAFROM="http://"$(echo $ip | cut -d : -f 2)
 	fi
-else
-	# 方式B. from=[] 来指定本地目录，比如 from="/dev/sda1/archlive"
-	DATAFROM=$from
-fi
-
-# 方式C. cifs=[] 参数，挂载共享并启动。比如 cifs="//192.168.0.252/share" user="archlive" pass="archlive"
-if [ "x$cifs" != "x" ]; then DATAFROM="$cifs"; fi
-
-if [ "$DATAFROM" ]; then
-	if [ "$(echo $DATAFROM | cut -b 1-7 | tr "[:upper:]" "[:lower:]")" = "http://" ]; then
-		if [ "$cn" = "y" ]; then
-			debug_log "PXE启动：from=$DATAFROM"
-		else
-			debug_log "PXE BOOT：from=$DATAFROM"
-		fi
-		# 如果启动参数中指定了 ip, 则初始化网络并从网络启动
-		# 初始化网络，加载网卡驱动模块
-		# 如果启动参数中 essid="A" pass="00000000001" 则使用密码"0000000001" 登录无线AP "A"
-		# 如果启动参数中 essid="A" pass="s:aaa" 则使用字符密码 "aaa"登录无线AP "A"
-      		init_dhcp $(modprobe_network_modules)
-
-		# 挂载网络文件系统到$MOUNTDIR/httpfs
-		# 上例中将 http://192.168.0.252/archlive 挂载到 /union/httpfs
-		mount_httpfs $DATAFROM $MOUNTDIR/httpfs
-      		# if mountdir/httpfs/livecdname is found, set DATA=, else umount httpfs
-
-	# cifs 或者 samba 共享启动
-	elif [ "x$cifs" != "x" ]; then
-		if [ "$cn" = "y" ]; then
-			debug_log "挂载共享分区并启动：from=$DATAFROM"
-		else
-			debug_log "Mount CIFS share and boot：from=$DATAFROM"
-		fi
-		init_dhcp $(modprobe_network_modules)
-
-		# 挂载cifs文件系统到 $MOUNTDIR/cifs
-		# 如果挂载成功则 DATA="$MOUNTDIR/cifs"
-		mount_cifs $DATAFROM $MOUNTDIR/cifs
-		[ ! -f $DATA/$SGN ] && [ ! -d $DATA/base ] && export DATA=""
-
-	# 从from指定的分区启动，比如from=/dev/sda1/archlive DATAFROM=$from
-	#elif [ -b $(dirname $DATAFROM 2>/dev/null) ]; then
-	elif [ "${DATAFROM/dev/}" !=  "${DATAFROM}" ]; then
-		if [ "$cn" = "y" ]; then
-			debug_log "根据from=$DATAFROM来查找模块"
-		else
-			debug_log "Search modules by term: from=$DATAFROM"
-		fi
-		if [ "${DATAFROM:9:1}" = "/" ]; then
-			DATA=$(find_filepath "${DATAFROM::10}" "${DATAFROM:10}/$SGN")
-		elif [ "${DATAFROM:8:1}" = "/" ]; then
-			DATA=$(find_filepath "${DATAFROM::9}" "${DATAFROM:9}/$SGN")
-		fi
-		debug_log "DATA=$DATA"
-		DATA="$(dirname $DATA 2>/dev/null)"
-		if [ "$DATA" -a "$(find_modules $DATA)" != "" ]; then
-			if [ "$cn" = "y" ]; then
-				echolog "在指定的$DATAFROM找到模块文件"
-			else
-				echolog "Found modules in $DATAFROM"
-			fi
-			DATA="$DATA"
-		fi
-		debug_log "DATA=$DATA"
-
-	# from 只指定了相对目录  (自行修改了iso或者USB中基本模块上级目录的名称）
+	if [ "$cn" = "y" ]; then
+		debug_log "PXE启动：from=$DATAFROM"
 	else
-		if [ "$cn" = "y" ]; then
-			debug_log "根据$DATAFROM来查找模块文件"
-		else
-			debug_log "Search modules by term: DATAFROM=$DATAFROM"
-		fi
-		find_by_folder $DATAFROM
+		debug_log "PXE BOOT：from=$DATAFROM"
 	fi
 
-# 如果启动参数没有指定任何参数，程序自动从本地所有资源按照默认目录结构查找
+	# 初始化网络
+	# 如果启动参数中 netdevice=eth0 则激活网卡eth0 动态获取ip地址
+	# 如果启动参数中 netdevice=wlan0 essid="A" pass="00000000001" 则激活无线网卡wlan0, 使用密码"0000000001" 登录无线AP "A"
+	# 如果启动参数中 netdevice=wlan0 essid="A" pass="s:aaa" 则激活无线网卡wlan0, 使用字符密码 "aaa"登录无线AP "A"
+	init_net $netdevice $essid $key
+
+	mount_httpfs $DATAFROM $MOUNTDIR/httpfs
+      	# if mountdir/httpfs/livecdname is found, set DATA=, else umount httpfs
+	DATA="$MOUNTDIR/httpfs"
+	[ ! -f $DATA/$SGN ] && [ ! -d $DATA/base ] && export DATA=""
+
+elif [ "x$cifs" != "x" ]; then
+	# 方式 D
+	DATAFROM="$cifs"
+	if [ "$cn" = "y" ]; then
+		debug_log "挂载共享分区并启动：from=$DATAFROM"
+	else
+		debug_log "Mount CIFS share and boot：from=$DATAFROM"
+	fi
+	init_net $netdevice $essid $key
+
+	# 挂载cifs文件系统到 $MOUNTDIR/cifs
+	# 如果挂载成功则 DATA="$MOUNTDIR/cifs"
+	mount_cifs $DATAFROM $MOUNTDIR/cifs $user $passwd
+	DATA="$MOUNTDIR/cifs"
+	[ ! -f $DATA/$SGN ] && [ ! -d $DATA/base ] && export DATA=""
+
+elif [ "x$pxe" != "x" ]; then
+	# 方式 E
+	init_net $netdevice $essid $key
+	export NFS="$(ipconfig $1 | grep rootpath | awk -Frootpath: '{print $2}')"
+	nfsmount ${NFS} $MOUNTDIR/nfs
+	DATA="$MOUNTDIR/nfs"
+	[ ! -f $DATA/$SGN ] && [ ! -d $DATA/base ] && export DATA=""
+
+elif [ "x$from" != "x" ] && [ "${from/dev/}" !=  "${from}" ]; then
+	# 方式 F
+	if [ "$cn" = "y" ]; then
+		debug_log "根据from=$from来查找模块"
+	else
+		debug_log "Search modules by term: from=$from"
+	fi
+	if [ "${from:9:1}" = "/" ]; then
+		DATA=$(find_filepath "${from::10}" "${from:10}/$SGN")
+	elif [ "${from:8:1}" = "/" ]; then
+		DATA=$(find_filepath "${from::9}" "${from:9}/$SGN")
+	fi
+	debug_log "DATA=$DATA"
+	DATA="$(dirname $DATA 2>/dev/null)"
+
+elif [ "x$from" != "x" ]; then
+	# 方式 G
+	if [ "$cn" = "y" ]; then
+		debug_log "根据$from来查找模块文件"
+	else
+		debug_log "Search modules by term: from=$from"
+	fi
+	DATA=$(find_in_computer $from/$SGN)
+
+# 如果启动参数没有按照上述几种方式指定archlive位置，程序自动从本地所有资源按照默认目录结构查找
 else
 	if [ "$cn" = "y" ]; then
 		debug_log "按照$LIVECDNAME默认方式从本地所有资源查找$SGN"
 	else
 		debug_log "Search $LIVECDNAME modules by target $SGN in local as default."
 	fi
-	find_by_folder $LIVECDNAME
+	DATA=$(find_in_computer $LIVECDNAME/$SGN)
 fi
+
+debug_log "DATA=$DATA"
+DATA=$(dirname $DATA 2>/dev/null)
 
 # 调试用测试点
 debug_shell
@@ -332,7 +366,7 @@ if [ "$DATA" = "" ]; then
 		debug_log "Can't found target $SGN by boot arguments，search modules again"
 	fi
 	# from= is not used or it didn't contain valid data
-	DATA=$(find_in_computer $LIVECDNAME/$SGN)
+	DATA=$(find_in_computer $SGN)
 	DATA=$(dirname $DATA 2>/dev/null)
 fi
 
@@ -340,20 +374,31 @@ fi
 debug_shell
 
 if [ "$DATA" = "" ]; then
-  if [ "$cn" = "y" ]; then
-	fatal \
-	"没有找到 $LIVECDNAME 的程序模块. 查找标的$SGN被误删除? 
-	可能使用了不被支持的启动设备(比如 SCSI或者老的PCMCIA). 
-	解决办法: 将$LIVECDNAME目录从你的启动设备拷贝到IDE/SATA盘，比如拷贝到 
-	/mnt/hda1/$LIVECDNAME 或者 C:盘 $LIVECDNAME目录. 然后重新启动."
-  else
-	fatal \
-	"Can't found $LIVECDNAME modules. Target file $SGN was deleted? 
-	Or you are using an unsupported boot device (eg. old SCSI, old PCMCIA).
-	Solutions: Copy the directory $LIVECDNAME from your boot device to an 
-	IDE/SATA disk, eg. to /mnt/hda1/$LIVECDNAME or directory $LIVECDNAME under disk C:, then reboot."
-  fi
+	if [ "$cn" = "y" ]; then
+		fatal \
+		"没有找到 $LIVECDNAME 的程序模块. 查找标的$SGN被误删除? 
+		可能使用了不被支持的启动设备(比如 SCSI或者老的PCMCIA). 
+		解决办法: 将$LIVECDNAME目录从你的启动设备拷贝到IDE/SATA盘，比如拷贝到 
+		/mnt/hda1/$LIVECDNAME 或者 C:盘 $LIVECDNAME目录. 然后重新启动."
+	else
+		fatal \
+		"Can't found $LIVECDNAME modules. Target file $SGN was deleted? 
+		Or you are using an unsupported boot device (eg. old SCSI, old PCMCIA).
+		Solutions: Copy the directory $LIVECDNAME from your boot device to an 
+		IDE/SATA disk, eg. to /mnt/hda1/$LIVECDNAME or directory $LIVECDNAME under disk C:, then reboot."
+	fi
+else
+	if [ "x$(find_modules $DATA)" != "x" ]; then
+		if [ "$cn" = "y" ]; then
+			echolog "在指定的$from找到模块文件"
+		else
+			echolog "Found modules in $from"
+		fi
+		DATA="$DATA"
+	fi
 fi
+
+#########   Boot Archlive  ################
 
 if [ "$cn" = "y" ]; then
 	echolog "从$DATA 启动 $LIVECDNAME"

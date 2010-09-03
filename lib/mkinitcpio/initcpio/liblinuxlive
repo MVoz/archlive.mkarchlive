@@ -1316,6 +1316,27 @@ modprobe_network_modules()
    done
 }
 
+# 初始化网络
+# $1 = netdevice (eth0, ath0, wlan0)
+# $2 = essid
+# $3 = key
+init_net()
+{
+   debug_log "start_init_net" "$*"
+   if [ "x$2" != "x" ]; then
+	ifconfig $1 up
+	#  无线网络支持
+	iwconfig $1 essid $2
+	if [ "x$3" != "x" ]; then iwconfig $1 key $3; fi
+	ipconfig $1
+   else
+	for i in $(ls /sys/class/net); do
+		[ "$i" = "lo" ] && continue
+		ipconfig $i
+	done
+   fi
+   export NFS="$(ipconfig $1 | grep rootpath | awk -Frootpath: '{print $2}')"
+}
 # Start udhcpc to get IP address from DHCP server
 # $1 = interface to use (optional)
 #
@@ -1352,18 +1373,20 @@ mount_httpfs()
 
 # Mount cifs filesystem
 # $1 = server $2 = targetmountdir
+# $3 = user	$4= password
 # user pass 直接在启动参数中指定
 mount_cifs()
 {
    debug_log "mount_cifs" "$*"
 
    mkdir -p $2
+   user=$3
+   pass=$4
    option="-o users,uid=1000,gid=100,file_mode=0777,dir_mode=0777,iocharset=utf8,rw"
    if [ "x$user" != "x" ]; then
 	option="$option,username=$user,password=$pass"
    fi
    mount.cifs $1 $2 $option
-   if [ $? -eq 0 ]; then export DATA="$2"; else export DATA=""; fi
 }
 
 # Unload modules loaded to kernel which are not used
