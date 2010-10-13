@@ -312,6 +312,9 @@ mpg123
 # Flash 插件相关
 flashplugin
 # Adobe Flash Player
+
+#flashplugin-prerelease
+
 #gnash-common
 # A GNU Flash movie player
 #gnash-gtk
