@@ -122,3 +122,5 @@ gnash-gtk
 swfdec
 # free library for decoding and rendering Flash animations
 
+ppstream
+# Online TV/Film (QT, Mplayer)  aur
