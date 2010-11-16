@@ -22,8 +22,8 @@ rm -f $XRESOURCES
 [ -x /usr/share/dropbox/dropbox ] && /usr/share/dropbox/dropbox &
 
 #exec /etc/X11/xinit/xinitrc.fluxbox
-exec /etc/X11/xinit/xinitrc.openbox
-#exec /etc/X11/xinit/xinitrc.lxde
+#exec /etc/X11/xinit/xinitrc.openbox
+exec startlxde
 #exec /etc/X11/xinit/xinitrc.icewm
 #exec /etc/X11/xinit/xinitrc.awesome
 #exec fvwm2

@@ -94,13 +94,10 @@ fi
 
 # VBOX虚拟机
 if [ "$vbox" = "y" ]; then
+	/etc/rc.d/vboxadd setup
 	/etc/rc.d/vboxadd start
 	/etc/rc.d/vboxadd-service start
-	#modprobe vboxadd
-	#modprobe vboxvfs
-	#modprobe vboxvideo
-	#chown root:vboxusers /dev/vboxdrv
-	cp -f /etc/X11/vbox_xorg.conf /etc/X11/xorg.conf
+	/etc/rc.d/vboxadd-x11 start
 fi
 
 # 如果想登入你想要的桌面环境，加入相应内核参数，比如"session=fvwm2" 
