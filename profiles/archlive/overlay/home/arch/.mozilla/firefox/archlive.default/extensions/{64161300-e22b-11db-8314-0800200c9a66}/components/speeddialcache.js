@@ -2,7 +2,7 @@ const nsISupports = Components.interfaces.nsISupports;
 const nsIDOMEventTarget = Components.interfaces.nsIDOMEventTarget;
 
 // You can change these if you like
-const CLASS_ID = Components.ID("7a44e0ce-757a-4f65-93aa-b05a377558a7");
+const CLASS_ID = Components.ID("{7a44e0ce-757a-4f65-93aa-b05a377558a7}");
 const CLASS_NAME = "c-speeddial";
 const CONTRACT_ID = "@uworks.net/speeddialcache;1";
 const INTERFACE = Components.interfaces.nsISupports;
@@ -18,6 +18,7 @@ function SpeedDialCache() {
 
 // This is the implementation of your component.
 SpeedDialCache.prototype = {
+  classID: CLASS_ID,
   imageArray: new Array(),
   hiddenWindow: null,
   currentInstances: 0,
@@ -159,3 +160,15 @@ var SpeedDialCacheModule = {
 
 //module initialization
 function NSGetModule(aCompMgr, aFileSpec) { return SpeedDialCacheModule; }
+
+// Firefox 4
+try {
+  Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+  
+  function myComponent() {
+  }
+  
+  // The following line is what XPCOM uses to create components. Each component prototype
+  // must have a .classID which is used to create it.
+  const NSGetFactory = XPCOMUtils.generateNSGetFactory([SpeedDialCache]);
+} catch (e) { }

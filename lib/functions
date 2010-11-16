@@ -148,6 +148,7 @@ usage ()
    echo "        clean <工作目录>          : 根据配置文件清理、精简目标系统"
    echo "        remount <工作目录>        : 将之前制作的模块文件夹重新可写挂载"
    echo "        squash <工作目录>         : 从指定的目录创建squash模块"
+   echo "        overlay <工作目录>         : 准备overlay目录到工作目录下，并用压缩为squash模块"
    echo "        bootimage <工作目录>      : 从指定的目录制作archlive启动内核镜像."
    echo "        img <工作目录> <目标镜像> : 从指定目录创建目标镜像"
    echo ""
@@ -1312,6 +1313,17 @@ check_kernel()
    plain "目标系统内核模块安装于 $basedir 版本为$kernelver" | tee -a ${LOG}
 }
 
+# 将工作目录下的overlay压缩为sqfs文件系统包
+# $1   LOG
+cmd_overlay_sqfs () {
+	LOG=$1
+	msg2 "创建附加设置模块z-overlay.${EXT}..." | tee -a ${LOG}
+	OVERLAY="${WORK_DIR}/overlay"
+	[ ! -d ${IMGROOT}/${CDNAME}/modules ] && mkdir -p ${IMGROOT}/${CDNAME}/modules
+	mksquashfs_module  "${OVERLAY}" "${IMGROOT}/${CDNAME}/modules/z-overlay.${EXT}" "${LOG}"
+	green "Overlay模块已经成功创建到${IMGROOT}/${CDNAME}/modules目录下." | tee -a ${LOG}
+}
+
 cmd_squash () {
 
    [ ! -d ${WORK_DIR} ] && (warn "工作目录还不存在，请先 install..." && exit 1)
@@ -1347,11 +1359,7 @@ cmd_squash () {
 	fi
    done
 
-   if [ "${USE_OVERLAY}" = "y" ] && [ -d ${WORK_DIR}/overlay ]; then 
-	msg2 "创建附加设置模块z-overlay.${EXT}..." | tee -a ${LOG}
-	OVERLAY="${WORK_DIR}/overlay"
-	mksquashfs_module  "${OVERLAY}" "${IMGROOT}/${CDNAME}/modules/z-overlay.${EXT}" "${LOG}"
-   fi
+   if [ "${USE_OVERLAY}" = "y" ] && [ -d ${WORK_DIR}/overlay ]; then cmd_overlay_sqfs; fi
 
    #如果附加程序模块已经包含在程序清单中则不另外安装制作
    [ "${RE_EXTRAMODULES}" != "y" ] && cmd_extramodules_squash "${LOG}"

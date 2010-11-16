@@ -18,6 +18,7 @@
 #
 # 支持全方位定制： 定制启动脚本、定制目标系统软件、定制软件仓、预配置文件。。。
 #########################################################################################
+# 2010-11-16 加入单独制作overlay模块, 以便重复制作时，单独更新overlay内容（需要在配置文件夹中修改，在工作目录中直接修改会被覆盖）
 # 2010-06-11 将双模式嵌入到每个步骤, 同一在制作配置文件中或者参数 -A 来设置
 # 2010-06-10 添加双模式制作(i686和x86_64同存在于一个iso或者img中)
 # 2010-02-20 添加功能：将devel独立出来（/usr/src等）
@@ -97,6 +98,7 @@ case "${CMD_NAME}" in
    remount) WORK_DIR="${2}";;
    clean) WORK_DIR="${2}";;
    squash) WORK_DIR="${2}";;
+   overlay) WORK_DIR="${2}";;
    bootimage) WORK_DIR="${2}";;
    img) WORK_DIR="${2}";;
    all) WORK_DIR="${2}";;
@@ -274,6 +276,7 @@ case "${CMD_NAME}" in
    clean) DESCRIPTION="根据配置文件清理 ${MODULEDIR}，删除或者移动运行时无需的文件." ;;
    remount) DESCRIPTION="将之前制作的模块文件夹重新可写挂载到$UNION." ;;
    squash) DESCRIPTION="将 ${MODULEDIR} 目录用 mksquash 压缩为模块." ;;
+   overlay) DESCRIPTION="准备Overlay目录到 ${WORKDIR}下，并用 mksquash 压缩为模块." ;;
    bootimage) DESCRIPTION="从指定目录 ${MODULEDIR}/${KERNEL_MOD} 制作 $CDNAME 启动内核" ;;
    img) DESCRIPTION="将目录 ${IMGROOT} 制作为 ${IMG_TYPE} 镜像." ;;
    all) DESCRIPTION="根据配置文件或者参数指定的设置制作${IMGNAME/*\//}" ;;
@@ -393,6 +396,9 @@ case ${CMD_NAME} in
 		else
 			init_config; second_confirm; cmd_squash; 
 		fi
+		;;
+	overlay)
+		prepare_overlay; cmd_overlay_sqfs;
 		;;
 	bootimage)
 		if [ "$arch" = "dul" ]; then

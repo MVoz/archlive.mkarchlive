@@ -1,0 +1,55 @@
+# 输入法选项 INPUT_APP 也可以在 ~/.bash_profile 或者其他先启动的
+# 配置文件中中作为全局变量指定
+
+INPUT_APP=fcitx
+
+# INPUT_APP 目前可选项：
+# fcitx: 小企鹅输入法
+# yong: 小小输入法
+# ibus: IBUS——新一代输入框架，支持拼音、五笔、二笔等等 
+# scim： SCIM--传统输入法
+#=======================================
+case ${INPUT_APP} in
+        fcitx) # 使用小企鹅输入法
+                export XIM=fcitx
+                export XMODIFIERS="@im=fcitx"
+                export XIM_PROGRAM="/usr/bin/fcitx"
+                export GTK_IM_MODULE="xim"
+                export QT_IM_MODULE="xim"
+                export XIM_ARGS="-d"
+                [ -z "$(pidof fcitx)" ] && (fcitx &)
+                ;;
+        yong) # 使用小小输入法
+                export XIM=yong
+                export XMODIFIERS="@im=yong"
+                export XIM_PROGRAM="/usr/bin/yong"
+                export GTK_IM_MODULE="xim"
+                export QT_IM_MODULE="xim"
+                export XIM_ARGS="-d"
+                [ -z "$(pidof fcitx)" ] && (yong -d &)
+                ;;
+        ibus) # 使用ibus输入框架
+                export XMODIFIERS="@im=ibus"
+                export GTK_IM_MODULE="ibus"
+                export QT_IM_MODULE="ibus"
+                export XIM=ibus
+                export XIM_PROGRAM=/usr/bin/ibus-daemon
+                export XIM_ARGS="-d -x"
+                pkill -9 ibus-daemon
+                ibus-daemon -d -x 
+                #ibus&
+                ;;
+        scim) # 使用scim输入框架
+                export XIM=scim
+                export XMODIFIERS="@im=scim"
+                export XIM_PROGRAM="/usr/bin/scim"
+                export GTK_IM_MODULE="scim-bridge"
+                export QT_IM_MODULE="scim-bridge"
+                export XIM_ARGS="-d"
+                [ -z "$(pidof scim)" ] && (scim-bridge &)
+                ;;
+        *) # 暂时没有该输入法的配置文件，请自行添加
+                echo "暂时没有该输入法的配置文件，请自行添加"
+                ;;
+        esac
+#===========================================================

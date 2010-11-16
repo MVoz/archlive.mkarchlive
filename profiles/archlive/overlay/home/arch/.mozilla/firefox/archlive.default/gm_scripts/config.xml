@@ -1,5 +1,1 @@
-<UserScriptConfig>
-	<Script filename="rayfile.user.js" name="rayfile" namespace="" description="" enabled="true" basedir="rayfile">
-		<Include>http://www.rayfile.com/*</Include>
-	</Script>
-</UserScriptConfig>
+<UserScriptConfig/>

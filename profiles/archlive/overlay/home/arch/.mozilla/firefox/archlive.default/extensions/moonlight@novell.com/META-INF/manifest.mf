@@ -10,95 +10,100 @@ SHA1-Digest: F2e/sP5GdWzN9dT1Bqe0Z+vjs+k=
 
 Name: install.rdf
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: P0UYsRurnrrqVg+o/4A3gQ==
-SHA1-Digest: cRZdkGd9jTDKL17Eexulxva/7GI=
+MD5-Digest: rT76+O3Ego48asQ4JpAfuA==
+SHA1-Digest: TujZBwm+EwUbVygzPa2QtgpvS0g=
 
 Name: plugins/libmoonloaderxpi.so
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: FgyLzirArC5QkImSwwh7XA==
-SHA1-Digest: AKYuxScQSwbFzac1CImXfMJPu8Y=
+MD5-Digest: Gbv/r5BKMxDin1SJXuU4rA==
+SHA1-Digest: +zS8WyGl7IveWTK90pJ3EsFtsFI=
 
 Name: plugins/moonlight/libmono.so
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: zIMcTriX1vSzu7vRavmM/A==
-SHA1-Digest: 8beD3zO1HE0hftSJECm4Xg5dQos=
+MD5-Digest: dgF1DPsgA6L8M8TVilVptw==
+SHA1-Digest: 3H9zlcWn+So8cjHwAANbWLy4ecA=
+
+Name: plugins/moonlight/libmoonplugin-curlbridge.so
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: s7CW6oEtJ/LxFIHQsf0Ldw==
+SHA1-Digest: 4bdj9DuwSjaCYLOTJjoyj59j/kI=
 
 Name: plugins/moonlight/libmoonplugin-ff2bridge.so
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: zZG938Rdv2SGzGmzAfiSPA==
-SHA1-Digest: wzwz3MTgjIiUMFz8Np94wCcqSFI=
+MD5-Digest: nUcpfuAfEkfiGcGhKFSRgw==
+SHA1-Digest: DLee0P0aYgy8cWuTAbw6tpLRNK8=
 
 Name: plugins/moonlight/libmoonplugin-ff3bridge.so
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: CEvmN8hr6qe2mVekB49DWg==
-SHA1-Digest: tP1KEAhF+wex5pKxVwGTp5nL77c=
+MD5-Digest: /PrzV5rZpJKJ8TIy+h5uUA==
+SHA1-Digest: AzHSOyBTzlzw+mMbHo5rmYa/h8Y=
 
 Name: plugins/moonlight/libmoonpluginxpi.so
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: wB1RLwi2Eyx9sMuQkIgEQA==
-SHA1-Digest: ThqXInDkTkMJH+BhymQH5EWM7us=
+MD5-Digest: Oy6WED5uobwlA6LQf42WTw==
+SHA1-Digest: WaM3rOamjIA+fU5BHiZXf8FA8wY=
 
 Name: plugins/moonlight/libmoonxpi.so
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: QZRwJ1KPxKJQRQVcp9fCgA==
-SHA1-Digest: BXQJtFlFXKagNa+fzrm8yIlmcto=
+MD5-Digest: QceXd21m03CCPFFThe9Vww==
+SHA1-Digest: J1/fVQ/RH6Kl/u6ad3MsTupgWd8=
 
 Name: plugins/moonlight/Microsoft.VisualBasic.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: yNYo+7gzCvST0PzK22S8vw==
-SHA1-Digest: zeSRKDRSGsU+xanaDwrqcQI+er4=
+MD5-Digest: 09nbOcddbwsJkQkrmVJIAg==
+SHA1-Digest: OAB1KQJJY35InU25gBk2ElClMys=
 
 Name: plugins/moonlight/mscorlib.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: AtYfycthCHPA9QatZe6cTg==
-SHA1-Digest: hZU6YS61jGg9SekpgjL/rXHS7R0=
+MD5-Digest: 1p9AGnZb+hKpYcOkHnDj/Q==
+SHA1-Digest: TVIaVa0m3M9HKlywBnIX30KwRQ4=
 
 Name: plugins/moonlight/System.Core.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: 98jckskHzlr0Ny3uvllzUw==
-SHA1-Digest: 8S7GCefL2r+UIvkWsr0EpXPZ5Kc=
+MD5-Digest: rRWArCSwJj8nYvxpvMzspQ==
+SHA1-Digest: DbPVt/vthY770rCgf+g9IzSKSk4=
 
 Name: plugins/moonlight/System.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: yhRlWPyOTk4FNwzFlYRhRw==
-SHA1-Digest: v2E1EBI/nAjNC0Bxb7i/tSaI644=
+MD5-Digest: 1KK+Qz8fRwXAZ18yTnJIqA==
+SHA1-Digest: pePcnN2i8tlWBZ2IpJp3yfCyogU=
 
 Name: plugins/moonlight/System.Net.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: r+OD5pbYXj9ucV+lDatupQ==
-SHA1-Digest: r3AA/aRmgTDxURa9Ql64beZw7GE=
+MD5-Digest: ps9OYnZ9+saEXEQC/xRu2Q==
+SHA1-Digest: YTnwc0loqjRow6uQ/lGEKY7J+fw=
 
 Name: plugins/moonlight/System.Runtime.Serialization.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: pihva1XA8FgGV+M+xtCZRw==
-SHA1-Digest: VMtLj+Fp6YQ4Bqt7hvBWj/qqpOE=
+MD5-Digest: M8VsHWjkO3dbuqCXw0047w==
+SHA1-Digest: pvDbG1gH1cDkjSavHYMJMZogcz4=
 
 Name: plugins/moonlight/System.ServiceModel.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: C11F1kaf73q9z97HL1q9tw==
-SHA1-Digest: 0MmvfQOaIRAovhI1KnZmgLRs+fo=
+MD5-Digest: D0pjbSZ1RsXaDy7m3TZZng==
+SHA1-Digest: Fu+ngTZgcbTwDkHA7cpj1GluL+4=
 
 Name: plugins/moonlight/System.ServiceModel.Web.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: nW0RxZ4+MRHQsmcZ4kDLcg==
-SHA1-Digest: cc6HoQiUvPJdU4zTRjdlJCkP2tk=
+MD5-Digest: GUaiASvubpR7ZYFkneBLNA==
+SHA1-Digest: cSD6t1ntr96vLV8kXvnFVmdm0QY=
 
 Name: plugins/moonlight/System.Windows.Browser.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: duUjaK6TNqwTHmLSlJGjPw==
-SHA1-Digest: qn4tGBe8mFeN/4tB4zBa8CdW3x0=
+MD5-Digest: v/4h8VmLKpGWYnMy3/ZI1g==
+SHA1-Digest: PbmJJoxgbu3CknRG93S0xCsTpnM=
 
 Name: plugins/moonlight/System.Windows.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: 1kf0sJ7sfqq3mciMPKFXmQ==
-SHA1-Digest: lfQblqKXSxS852lr3G3/Ve05KeM=
+MD5-Digest: OFOavcz/8OCbJ1LDnZjh/w==
+SHA1-Digest: 9Q4tvoEfwLEEClXQL9uR9G996kI=
 
 Name: plugins/moonlight/System.Xml.dll
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: rjXlWWQzEio2TNp931wbaA==
-SHA1-Digest: f0JA5KLQDPVaW6mUlFqB+s3+GaE=
+MD5-Digest: 3eY3f3aDBKhZLpDDHxpEJQ==
+SHA1-Digest: cSxCqfbL5hSvkVDobW+nl2NNItk=
 
-Name: skin/icon.png
+Name: skin/icon32.png
 Digest-Algorithms: MD5 SHA1
 MD5-Digest: USJUxcvjRP1wL43M/J4y8A==
 SHA1-Digest: 0qiPvUyH4SOfZYyDDKdC2aFgMhI=

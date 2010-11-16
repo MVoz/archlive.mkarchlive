@@ -6,7 +6,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>{64161300-e22b-11db-8314-0800200c9a66}</em:id>
     <em:name>Speed Dial</em:name>
-    <em:version>0.9.5</em:version>
+    <em:version>0.9.5.6</em:version>
     <em:description>Direct access to your most visited websites</em:description>
     <em:creator>Josep del Rio</em:creator>
     <em:contributor>Leszek(teo)Życzkowski</em:contributor>
@@ -36,25 +36,30 @@
     <em:translator>Mikes Kaszmán István [hu-HU]</em:translator>
     <em:translator>Edvinas Stonikas [lt-LT]</em:translator>
     <em:translator>Zeki Çelikbaş [tr-TR]</em:translator>
-    <em:translator>Zeki Çelikbaş [tr-TR]</em:translator>
     <em:translator>Felipe Barriga Richards [es-CL]</em:translator>
     <em:homepageURL>http://speeddial.uworks.net/</em:homepageURL>
     <em:iconURL>chrome://speeddial/skin/icon.png</em:iconURL>
     <em:optionsURL>chrome://speeddial/content/settings/settings.xul</em:optionsURL>
-    <em:type>2</em:type>    
+    <em:type>2</em:type>
 
     <em:targetApplication>
       <!-- Firefox -->
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>2.0</em:minVersion>
-        <em:maxVersion>3.7a1pre</em:maxVersion>
+        <em:maxVersion>4.0b4pre</em:maxVersion>
       </Description>
       <!-- Fennec -->
       <Description>
         <em:id>{a23983c0-fd0e-11dc-95ff-0800200c9a66}</em:id>
         <em:minVersion>0.8</em:minVersion>
         <em:maxVersion>1.0.*</em:maxVersion>
+      </Description>
+      <!-- SeaMonkey -->
+      <Description>
+        <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+        <em:minVersion>2.0</em:minVersion>
+        <em:maxVersion>2.0.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 

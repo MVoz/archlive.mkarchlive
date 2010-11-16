@@ -47,7 +47,7 @@ base_install ()
         echo -e "${MESSAGE}" > ${MESSAGEFILE}
         add_file "${MESSAGEFILE}" "/message"
     fi
-    add_file "/etc/modprobe.d/usb-load-ehci-first.conf"
+    add_file "${BASEDIR}/etc/modprobe.d/usb-load-ehci-first.conf" "/etc/modprobe.d/usb-load-ehci-first.conf"
 }
 
 udev_install ()
@@ -115,6 +115,14 @@ usb_install ()
 filesystems_install ()
 {
     MODULES="${MODULES} $(checked_modules '/kernel/fs' | grep -v "nls") $(checked_modules '/kernel/fs/nls/nls_cp936')"
+}
+
+btrfs_install()
+{
+    MODULES="${MODULES} $(all_modules btrfs)"
+    #BINARIES="/sbin/btrfs"
+    add_file "${BASEDIR}/sbin/btrfs" "/sbin/btrfs"
+    #SCRIPT="btrfs"
 }
 
 net_install ()
@@ -202,5 +210,6 @@ install ()
     [ "${ALL_FS_BOOT}" = "y" ] && filesystems_install
     [ "${NET_BOOT_ARCHLIVE}" = "y" ] && net_install
     [ "${KMS_BOOT}" = "y" ] && kms_install
+    btrfs_install
     archlive_install
 }

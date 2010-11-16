@@ -163,6 +163,8 @@ progsreiserfs
 
 xfsprogs
 
+btrfs-progs-unstable
+
 sudo
 
 bash-completion

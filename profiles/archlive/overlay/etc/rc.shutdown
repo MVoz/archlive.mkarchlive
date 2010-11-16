@@ -2,6 +2,9 @@
 #
 # /etc/rc.shutdown
 #
+# Special for Archlive
+# 2010.11.16  Carbon Jiao changed base on  initscripts 2010.07-1
+#
 
 . /etc/rc.conf
 . /etc/rc.d/functions

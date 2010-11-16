@@ -2,6 +2,9 @@
 #
 # /etc/rc.sysinit
 #
+# Special for Archlive
+# 2010.11.16 Carbon Jiao changed base on initscripts 2010.07-1
+#
 
 . /etc/rc.conf
 . /etc/rc.d/functions
@@ -38,10 +41,19 @@ welcome_archlive
 run_hook sysinit_start
 
 # mount /proc, /sys and our RAM /dev
-#/bin/mount -n -t tmpfs none /dev -o mode=0755
-/bin/mount -n -t tmpfs udev /dev -o mode=0755,size=10M,nosuid
-/bin/mount -n -t proc none /proc
-/bin/mount -n -t sysfs none /sys
+if ! /bin/mountpoint -q /proc; then
+  /bin/mount -n -t proc none /proc
+fi
+if ! /bin/mountpoint -q /sys; then
+  /bin/mount -n -t sysfs none /sys
+fi
+if ! /bin/mountpoint -q /dev; then
+  if grep -q devtmpfs /proc/filesystems 2>/dev/null; then
+    /bin/mount -n -t devtmpfs udev /dev -o mode=0755,size=10M,nosuid
+  else
+    /bin/mount -n -t tmpfs udev /dev -o mode=0755,size=10M,nosuid
+  fi
+fi
 
 # Copy static device nodes to /dev
 /bin/cp -a /lib/udev/devices/* /dev/
@@ -109,7 +121,7 @@ if /bin/pidof -o %PPID /sbin/udevd >/dev/null; then
 		stat_busy "Triggering UDev uevents"
 	fi
 	/sbin/udevadm control --property=STARTUP=1 &>/dev/null
-	/sbin/udevadm trigger &>/dev/null
+	/sbin/udevadm trigger --action=add &>/dev/null
 	stat_done
 fi
 
@@ -271,7 +283,9 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	status "Mounting Root Read-only"
 fi
+#debug_shell
 /bin/mount -n -o remount,ro / &>/dev/null
+#debug_shell
 
 FORCEFSCK=
 [ -f /forcefsck ] && FORCEFSCK="-- -f"
@@ -336,20 +350,18 @@ if [ "${msg_lang}" = "cn" ]; then
 else
 	stat_busy "Mounting Local Filesystems"
 fi
-/bin/mount -n -o remount,rw / &>/dev/null
-: >| /etc/mtab
-
-# make sure / gets written to /etc/mtab
-/bin/mount -o remount,rw /
-# Write /proc, /sys and /dev to /etc/mtab
-if [ -e /proc/mounts ]; then
-	/bin/grep -e "/proc " -e "/sys " -e "/dev " /proc/mounts >> /etc/mtab
+#debug_shell
+/bin/mount -n -o remount,rw /
+if [ -x /bin/findmnt -a -e /proc/self/mountinfo ]; then
+	/bin/findmnt -rnu -o SOURCE,TARGET,FSTYPE,OPTIONS >| /etc/mtab
+else
+	cat /proc/mounts >| /etc/mtab
 fi
-
+#debug_shell
 run_hook sysinit_premount
 
 # now mount all the local filesystems
-/bin/mount -a -t $NETFS -O no_netdev &>/dev/null
+/bin/mount -a -t $NETFS -O no_netdev
 stat_done
 
 if [ "${msg_lang}" = "cn" ]; then

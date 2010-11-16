@@ -92,3 +92,6 @@ rootcopy		启动时装载archlive下rootcopy目录
 changes		用于保存修改
 
 oss		用oss4声音驱动，而不用内核自带的oss/alsa
+
+7.  参考https://wiki.archlinux.org/index.php/Install_from_a_USB_flash_drive_(简体中文) 将Archlive iso写到USB上
+    Windows下可以下载 https://launchpad.net/win32-image-writer  来写iso到USB。

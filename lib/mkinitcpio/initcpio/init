@@ -1,6 +1,6 @@
 #!/bin/busybox ash
 # Archlive 启动脚本
-# Archlive (Carbon Jiao) 更新于2010.09.02
+# Archlive (Carbon Jiao) 更新于2010.11.16
 
 # 创建busybox包含程序的链接
 # Install busybox's applets as symlinks
@@ -10,6 +10,17 @@ export PATH=.:/:/usr/sbin:/usr/bin:/sbin:/bin
 
 /bin/mount -t proc proc /proc
 /bin/mount -t sysfs sys /sys
+if grep -q devtmpfs /proc/filesystems 2>/dev/null; then
+  /bin/mount -n -t devtmpfs udev /dev -o mode=0755,size=10M,nosuid
+else
+  /bin/mount -n -t tmpfs udev /dev -o mode=0755,size=10M,nosuid
+  # We don't have devtmpfs, so add the most important standard devices
+  /bin/mknod /dev/null c 1 3
+  /bin/mknod /dev/zero c 1 5
+  /bin/mknod /dev/console c 5 1
+  # /dev/mem is needed if we want to load uvesafb before triggering uevents
+  /bin/mknod /dev/mem c 1 1
+fi
 
 read CMDLINE </proc/cmdline
 export CMDLINE
@@ -17,28 +28,44 @@ export cmd_line="$@"
 
 . /usr/lib/liblinuxlive # it requires proc to be mounted
 
+echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
+
+# if available, start udevd at this stage
+# 如果支持相关KMS 此处加载
+if [ -x /sbin/udevd ]; then
+    echo > /proc/sys/kernel/hotplug
+    /sbin/udevd --daemon --resolve-names=never 2>&1 >/dev/null
+    export udevd_running=1
+    /sbin/udevadm trigger --action=add 2>&1 >/dev/null
+    /sbin/udevadm settle 2>&1 >/dev/null
+else
+    export udevd_running=0
+fi
+
+
 # Checking boot paremeters 检查启动参数
 for cmd in ${CMDLINE}; do
-	case "${cmd}" in
-		\#*) break ;; # ignore everything after a # in the commandline
-		# The kernel passes those to the kernel on its own
-		[0123456Ss]) ;;
-		[0-9]*) ;;
-		single) ;;
-		rw) readwrite="yes" ;;
-		ro) readwrite="no" ;;
-		# only export stuff that does work with ash :)
-		*=*) rhs="$(echo "${cmd}" | cut -d= -f2-)"
-			cmd="$(echo "${cmd}" | cut -d= -f1 | sed 's|\.|_|g')"
-			cmd="$(echo "${cmd}" | sed 's|-|_|g')=${rhs}"
-			(echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}"
-			;;
-		*)   cmd="$(echo "${cmd}" | sed 's|\.|_|g')"
-			cmd="$(echo "${cmd}" | sed 's|-|_|g')"
-			(echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}=y"
-			;;
-	esac
+    case "${cmd}" in
+        \#*) break ;; # ignore everything after a # in the commandline
+        # The kernel passes those to the kernel on its own
+        [0123456Ss]) ;;
+        [0-9]*) ;;
+        single) ;;
+        rw) readwrite="yes" ;;
+        ro) readwrite="no" ;;
+        # only export stuff that does work with ash :)
+        *=*) rhs="$(echo "${cmd}" | cut -d= -f2-)"
+             cmd="$(echo "${cmd}" | cut -d= -f1 | sed 's|\.|_|g')"
+             cmd="$(echo "${cmd}" | sed 's|-|_|g')=${rhs}"
+             (echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}"
+             ;;
+        *)   cmd="$(echo "${cmd}" | sed 's|\.|_|g')"
+             cmd="$(echo "${cmd}" | sed 's|-|_|g')"
+             (echo "${cmd}" | grep -qe '^[0-9]') || export "${cmd}=y"
+             ;;
+    esac
 done
+
 
 # 双（多）模式启动判断
 # Special for dul-boot
@@ -49,19 +76,6 @@ esac
 if [ "$break" = "y" ] || [ "$debug" = "y" ]; then
 	export DEBUG_IS_ENABLED="y"
 fi
-
-# if available, start udevd at this stage
-# 如果支持相关KMS 此处加载
-if [ -x /sbin/udevd ]; then
-    echo > /proc/sys/kernel/hotplug
-    /sbin/udevd --daemon --resolve-names=never 2>&1 >/dev/null
-    export udevd_running=1
-    /sbin/udevadm trigger 2>&1 >/dev/null
-    /sbin/udevadm settle 2>&1 >/dev/null
-else
-    export udevd_running=0
-fi
-
 
 clear
 echo
@@ -187,6 +201,8 @@ fi
 # use mdev to create /dev/ devices and setup it as a hotplug-handler
 modprobe_essential_modules
 
+[ -x /sbin/btrfs ] && (/sbin/btrfs device scan 2>&1 >/dev/null)
+
 # 挂载 squashfs 压缩的驱动及usr 目录（如果有）
 # /usr and some drivers are compressed in initrd 
 # so it must be mounted from .lzm files
@@ -217,8 +233,9 @@ debug_shell
 ######### Search Archlive ################
 
 # 启动参数可以通过sgn=...来定义搜索标的，该文件同一目录下的文件夹即为模块文件夹
+export SGN
 SGN=$sgn
-if [ "x$SGN" = "x" ]; then SGN=$LIVECDNAME.list; fi
+if [ -z $sgn ]; then SGN=$LIVECDNAME.list; fi
 if [ "$cn" = "y" ]; then
 	echolog "搜索$LIVECDNAME模块(根据$SGN定位):"
 else
@@ -255,14 +272,14 @@ fi
 # 方式G. 只用 from 参数指定 archlive的相对目录，比如 from=archlive/20101212
 #	则在电脑各分区或者磁盘中查找目录为 archlive/20101212  并从找到的第一个结果中启动
 
-if [ "x$archlivelabel" != "x" ]; then
+if [ "x$archlivelabel" != "x" ] && [ -d /dev/disk/by-label ]; then
 	# 方式 A
 	if [ "x$from" != "x" ]; then
 		DATA=$(find_filepath /dev/disk/by-label/$archlivelabel $from/$SGN)
 	else
 		DATA=$(find_filepath /dev/disk/by-label/$archlivelabel $SGN)
 	fi
-elif [ "x$archliveuuid" != "x" ]; then
+elif [ "x$archliveuuid" != "x" ] && [ -d /dev/disk/by-uuid ]; then
 	# 方式 B
 	if [ "x$from" != "x" ]; then
 		DATA=$(find_filepath /dev/disk/by-uuid/$archliveuuid $from/$SGN)
@@ -606,8 +623,8 @@ fi
 # everything is ready now, so we may unload unused kernel modules
 # and do some cleanup, unmount few things which are no longer needed.
 rmmod_unused_modules
-fumount /usr
-fumount /sys
+#fumount /usr
+#fumount /sys
 
 # More likely these directories aren't there.
 # Even if they are, this won't hurt.
@@ -687,6 +704,9 @@ debug_log "udevpid=$udevpid"
 if [ "x${udevpid}" != "x" ]; then
 	# Settle pending uevents, then kill udev
 	udevadm settle >/dev/null 2>&1
+#	while /bin/pidof udevd >/dev/null; do
+#		sleep 0.1
+#	done
 	for i in $udevpid; do
 		kill -9 ${udevpid} > /dev/null 2>&1
 	done
@@ -695,8 +715,12 @@ fi
 udevpid=$(pidof udevd 2>/dev/null)
 debug_log "udevpid=$udevpid"
 
-umount /proc >/dev/null 2>&1
-umount /sys >/dev/null 2>&1
+#umount /proc >/dev/null 2>&1
+#umount /sys >/dev/null 2>&1
+
+mount --move /proc /${UNION}/proc >/dev/null 2>&1
+mount --move /sys /${UNION}/sys >/dev/null 2>&1
+mount --move /dev /${UNION}/dev >/dev/null 2>&1
 
 if [ "$cn" = "y" ]; then
 	debug_log "切换到 $UNION启动."
@@ -709,6 +733,8 @@ debug_log "BOOT_LOG=${BOOT_LOG}"
 cp -f "${BOOT_LOG}" "/${UNION}${BOOT_LOG}"
 debug_log "${BOOT_LOG} 已复制到 /${UNION}${BOOT_LOG}"
 debug_shell
+
+#default_mount_handler $UNION
 
 exec /sbin/switch_root -c /dev/console /${UNION} ${INIT} ${CMDLINE}
 

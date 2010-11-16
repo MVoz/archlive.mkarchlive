@@ -99,7 +99,7 @@ pref("extensions.speeddial.useIframe", false);
 pref("extensions.speeddial.cloakEvents", false);
 pref("extensions.speeddial.buttonOpensInCurrentTab", false);
 pref("extensions.speeddial.focusElement", 0);
-pref("extensions.speeddial.flexibleTabBar", true);
+pref("extensions.speeddial.flexibleTabBar", false);
 pref("extensions.speeddial.rememberLastGroup", false);
 pref("extensions.speeddial.lastGroup", 0);
 pref("extensions.speeddial.numBackups", -1);
