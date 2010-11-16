@@ -265,6 +265,10 @@ tree
 vifm
 sshfs
 parted
+gdisk
+# (GUID) Partition Table (GPT) disks
+ncdu
+hd2u
 wvdial
 
 codecs
