@@ -1,6 +1,6 @@
 #!/bin/ash
 
-boot_version=Ver.20101116
+boot_version=Ver.20101117
 
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改
@@ -623,9 +623,9 @@ mount_device()
 
    mkdir -p "$2"
    if [ $? -eq 0 ]; then
-	debug_log "$2 created sucess!"
+	debug_log "挂载点 $2 创建成功！ Mount point $2 created sucess!"
    else
-	debug_log "$2 already exits?"
+	debug_log "挂载点$2已经存在? Mount point $2 already exits?"
    fi
 
    DEV="$1"
@@ -636,6 +636,7 @@ mount_device()
    if [ -f "$DEV" ]; then OPTIONS="$OPTIONS,loop"; fi
    if [ -d "$DEV" ]; then OPTIONS="$OPTIONS,rbind"; fi
    if [ "$3" ]; then OPTIONS="$OPTIONS,$3"; fi
+
    OPTIONS=$(echo "$OPTIONS" | sed -r "s/^,+//")
    if [ "x$OPTIONS" = "x" ]; then
 	OPTIONS=""
@@ -643,23 +644,16 @@ mount_device()
 	OPTIONS=" -o $OPTIONS"
    fi
 
-   debug_log "OPTIONS=$OPTIONS FS=$FS DEV=$DEV TARGET=$2"
+   debug_log "OPTIONS=\"$OPTIONS\" FS=\"$FS\" DEV=\"$DEV\" TARGET=\"$TARGET\""
 
    if [ "$FS" = "-t ntfs-3g" ]; then
-      ntfsmount "$DEV" "$2" $OPTIONS >/dev/null 2>&1
+      ntfsmount "$DEV" "$TARGET" $OPTIONS >/dev/null 2>&1
       ERR=$?
       debug_log "1st try: ERR=$ERR ................"
    else
-      mount -n $OPTIONS $FS "$DEV" "$2" >/dev/null 2>&1
+      mount -n $OPTIONS $FS "$DEV" "$TARGET" >/dev/null 2>&1
       ERR=$?
       debug_log "1st try: ERR=$ERR ................"
-   fi
-
-    # 通过查看目标文件夹下内容来判断是否挂载成功
-   if [ "$(ls -1 "$TARGET" 2>/dev/null | wc -l)" -ge 1 ]; then
-	ERR=0
-	return 0
-        debug_log "1st mount success!!!! ..........."
    fi
 
    # not enough loop devices? try to create one.
@@ -671,9 +665,11 @@ mount_device()
        OPTIONS=$(echo "$OPTIONS" | sed -r "s/,loop//g")
        losetup "$LOOPDEV" "$DEV" 2>/dev/null # busybox's losetup doesn't support -r
        if [ $? -ne 0 ]; then
+          debug_log "losetup -r $LOOPDEV $DEV"
           losetup -r "$LOOPDEV" "$DEV" 2>/dev/null # force read-only in case of error
        fi
-       mount -n -o $OPTIONS $FS "$LOOPDEV" "$TARGET" >/dev/null 2>&1
+       debug_log "OPTIONS=\"$OPTIONS\" FS=\"$FS\" LOOPDEV=\"$LOOPDEV\" TARGET=\"$TARGET\""
+       mount -n $OPTIONS $FS "$LOOPDEV" "$TARGET" >/dev/null 2>&1
        ERR=$?
        debug_log "2nd try: ERR=$SRR ....................."
    fi
@@ -683,13 +679,14 @@ mount_device()
    if [ $ERR -ne 0 ]; then
        debug_log "以上办法都无法挂载，尝试强行只读挂载."
        debug_log "None of above actions works! try to force read-only mount"
-       debug_log "mount -r $OPTIONS $FS "$DEV" "$TARGET""
-       mount -n -r -o $OPTIONS $FS "$DEV" "$TARGET" >/dev/null 2>&1
+       debug_log "mount -n -r $OPTIONS $FS $DEV $TARGET"
+       mount -n -r $OPTIONS $FS "$DEV" "$TARGET" >/dev/null 2>&1
        ERR=$?
        debug_log "3rd try: ERR=$SRR ....................."
    fi
 
    if [ $ERR -ne 0 ]; then
+        debug_log "$DEV 无法挂载到 $TARGET, 删除挂载点 $TARGET"
 	debug_log "$DEV can't be mount to $TARGET, delete $TARGET"
 	rmdir $TARGET 2>/dev/null
    fi
@@ -1035,7 +1032,7 @@ device_mountdir()
 #  在$1 上查找 $2， 先挂载并查找（如果已经挂载则保留原挂载路径）
 #  如果找到则返回路径
 #  没有找到则卸载
-find_filepath0()
+find_filepath()
 {
    debug_log "find_filepath" "$*"
    local DIR FOUND PRESERVE
@@ -1043,6 +1040,7 @@ find_filepath0()
    DIR=$(device_mountdir $1)
    ismountpoint $DIR
    if [ $? -eq 0 ]; then
+	debug_log "$1 已经挂载到 $DIR, 保留挂载"
       PRESERVE="true"
    else
       mount_device $1 $DIR rw
@@ -1077,7 +1075,7 @@ find_filepath0()
 # $1 = device
 # $2 = path/filename
 
-find_filepath()
+find_filepath1()
 {
    debug_log "find_filepath" "$*"
    local DIR FOUND PRESERVE ERR
@@ -1091,19 +1089,10 @@ find_filepath()
       debug_log "$1 已经挂载到 $DIR, 保留挂载"
       PRESERVE="true"
    else
-      case $1 in *sda*|*hda* )
-		debug_log "可写挂载设备 $1 到 $DIR"
-		mount_device $1 $DIR rw
-		ERR=$?
-		;;
-	*)
-		debug_log "挂载设备 $1 到 $DIR, 按照默认选项"
-		mount_device $1 $DIR
-		ERR=$?
-		;;
-	esac
+      mount_device $1 $DIR ro
+      ERR=$?
       if [ $ERR -ne 0 ]; then
-	debug_log "如果挂载不成功则返回"
+	debug_log "挂载不成功返回"
 	rmdir $DIR 2>/dev/null
 	return 1
       fi
@@ -1115,7 +1104,6 @@ find_filepath()
 	debug_log "$2 包含目录名"
 	case $FOUND in $DIR/$2) debug_log "在$DIR下找到了$2, 找到了符合条件的启动标的...";
 				   debug_log "FOUND=$FOUND";
-				   PRESERVE="true";
 				;;
 			*) FOUND="" 	;;
 		esac
@@ -1128,11 +1116,10 @@ find_filepath()
       fi
       return 1
    else
-      # remount without the 'ro' option now, so use rw or defaults
-      # Only in the case it was not mounted already before.
       if [ "$PRESERVE" != "true" ]; then
          fumount $DIR
          mount_device $1 $DIR
+         # 重新可写挂载或者按照默认选项挂载
          if [ $? -ne 0 ]; then
             rmdir $DIR 2>/dev/null
 	    return 2

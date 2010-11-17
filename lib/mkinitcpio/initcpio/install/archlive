@@ -159,7 +159,7 @@ archlive_install ()
     MODULES="${MODULES} $(all_modules '/mmc/host') mmc_block sdhci-pci sd_mod sr_mod"
     MODULES="${MODULES} $(all_modules '/memstick/host')"
     #pcmcia support
-    MODULES="${MODULES} pcmcia rsrc_nonstatic yenta_socket"
+    MODULES="${MODULES} pcmcia yenta_socket"
 
      # 部分网卡驱动
     MODULES="${MODULES} r8169 ath5k iwl3945"
