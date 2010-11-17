@@ -84,6 +84,9 @@ if [ -n "$HWCLOCK_PARAMS" ]; then
 	RTC_MAJOR=$(/bin/grep -w rtc /proc/devices 2>/dev/null)
 	RTC_MAJOR="${RTC_MAJOR%% *}"
 	if [ -n "$RTC_MAJOR" ]; then
+		[ -c /dev/rtc0 ] && rm -f /dev/rtc0
+		[ -c /dev/rtc ] && rm -f /dev/rtc
+		# 以上两句另外添加
 		/bin/mknod /dev/rtc0 c $RTC_MAJOR 0
 		/bin/ln -s /dev/rtc0 /dev/rtc
 	fi
@@ -285,6 +288,7 @@ else
 fi
 #debug_shell
 #/bin/mount -n -o remount,ro / &>/dev/null
+# live系统不需要重新挂载
 #debug_shell
 
 FORCEFSCK=
@@ -351,7 +355,8 @@ else
 	stat_busy "Mounting Local Filesystems"
 fi
 #debug_shell
-/bin/mount -n -o remount,rw /
+#/bin/mount -n -o remount,rw /
+# live系统不需要重新挂载
 if [ -x /bin/findmnt -a -e /proc/self/mountinfo ]; then
 	/bin/findmnt -rnu -o SOURCE,TARGET,FSTYPE,OPTIONS >| /etc/mtab
 else
