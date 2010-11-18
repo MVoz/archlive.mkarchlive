@@ -235,7 +235,7 @@ check_config_file ()
 {
 	# 装载archlive的配置文件, 从当前目录查看是否存在archlive.conf，存在即调用之
 	#echo "查找配置文件archlive.conf，以第一个符合条件的为制作配置文件"
-	for config_file in $(find .  -name "archlive.conf"); do
+    for config_file in $(find .  -maxdepth 3 -name "archlive.conf" | sort -d); do
 		source ${config_file}
 		if [ ! $(config_is_right) ]; then CONFIG_FILE=${config_file} && break; fi
 	done
