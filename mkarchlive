@@ -100,8 +100,8 @@ case "${CMD_NAME}" in
    squash) WORK_DIR="${2}";;
    overlay) WORK_DIR="${2}";;
    bootimage) WORK_DIR="${2}";;
-   img) WORK_DIR="${2}";;
-   all) WORK_DIR="${2}";;
+   img) WORK_DIR="${2}"; IMGNAME="${3}";;
+   all) WORK_DIR="${2}"; IMGNAME="${3}";;
    *) error "无效命令 '${CMD_NAME}'"; usage 1 ;;
 esac
 
@@ -190,16 +190,17 @@ if [ "x${WORK_DIR}" = "x" ]; then
 #   plain "命令行没有指定工作目录，查看配置文件中是否有设置的工作目录"
    WORK_DIR=$(grep "WORK_DIR=" ${CONFIG_FILE} | cut -d "=" -f2)
    if [ "x${WORK_DIR}" = "x" ]; then 
-	WORK_DIR="/$(date +%m%d)"
+	WORK_DIR="/Archlive_working_dir"
 	#warn "配置文件也没有指定工作目录，采用默认设置${WORK_DIR}"
    fi
 fi
 WORK_DIR=${WORK_DIR%/}
 
 if [ "x${IMGNAME}" = "x" ]; then
-	IMGNAME="archlive-${arch}-$(date +%F).${IMG_TYPE}"
+	IMGNAME="${WORK_DIR}/archlive-${arch}-$(date +%F).${IMG_TYPE}"
+elif [ "$(basename ${IMGNAME})" = "${IMGNAME}" ]; then
+	IMGNAME="${WORK_DIR}/${IMGNAME}"
 fi
-IMGNAME="${WORK_DIR}/${IMGNAME}"
 
 ###---------------------------程序运行相关目录设置--------------------------------
 # 制作的Archlive镜像目录（该文件夹下所有内容全部包含于目标镜像）
@@ -276,7 +277,7 @@ case "${CMD_NAME}" in
    clean) DESCRIPTION="根据配置文件清理 ${MODULEDIR}，删除或者移动运行时无需的文件." ;;
    remount) DESCRIPTION="将之前制作的模块文件夹重新可写挂载到$UNION." ;;
    squash) DESCRIPTION="将 ${MODULEDIR} 目录用 mksquash 压缩为模块." ;;
-   overlay) DESCRIPTION="准备Overlay目录到 ${WORKDIR}下，并用 mksquash 压缩为模块." ;;
+   overlay) DESCRIPTION="准备Overlay目录到 ${WORK_DIR}下，并用 mksquash 压缩为模块." ;;
    bootimage) DESCRIPTION="从指定目录 ${MODULEDIR}/${KERNEL_MOD} 制作 $CDNAME 启动内核" ;;
    img) DESCRIPTION="将目录 ${IMGROOT} 制作为 ${IMG_TYPE} 镜像." ;;
    all) DESCRIPTION="根据配置文件或者参数指定的设置制作${IMGNAME/*\//}" ;;
