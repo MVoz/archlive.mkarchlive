@@ -1,0 +1,355 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:NS1="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="rdf:#$PknYn2"
+                   NS1:id="{a463f10c-3994-11da-9945-000d60ca027b}"
+                   NS1:minVersion="2.0"
+                   NS1:maxVersion="2.5.*" />
+  <RDF:Description RDF:about="rdf:#$xlnYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="3.0.9"
+                   NS1:maxVersion="3.7a1pre" />
+  <RDF:Description RDF:about="urn:mozilla:item:{473f9a20-ce5a-11da-a94d-0800200c9a66}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.6"
+                   NS1:name="Google Bookmarks for Firefox"
+                   NS1:description="Creates a menu to access google bookmarks from any computer."
+                   NS1:creator="Suchi Software Solutions"
+                   NS1:homepageURL="http://www.suchisoft.com/ext/gbookmarks.php">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:targetApplication RDF:resource="rdf:#$ZjnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$.jnYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$ujnYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="3.0"
+                   NS1:maxVersion="3.7a1pre" />
+  <RDF:Description RDF:about="rdf:#$ZjnYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="1.5"
+                   NS1:maxVersion="3.6.*" />
+  <RDF:Description RDF:about="urn:mozilla:item:{00352F14-3F76-4e4d-ACFF-9976D7E4B3B9}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.6.8"
+                   NS1:internalName="MacOSX"
+                   NS1:name="MacOSX Theme"
+                   NS1:description="FMacOSX theme for Firefox 3"
+                   NS1:creator="GOLF-AT"
+                   NS1:homepageURL="https://addons.mozilla.org/en-US/firefox/addon/7172"
+                   NS1:contributor="Based on original Firefox 3.0 MacOS themes.">
+    <NS1:type NC:parseType="Integer">4</NS1:type>
+    <NS1:targetApplication RDF:resource="rdf:#$ujnYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$bYZRX2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="3.0"
+                   NS1:maxVersion="4.0b8pre" />
+  <RDF:Description RDF:about="rdf:#$NknYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="3.0"
+                   NS1:maxVersion="3.6.*" />
+  <RDF:Description RDF:about="rdf:#$gjnYn2"
+                   NS1:id="songbird@songbirdnest.com"
+                   NS1:minVersion="0.3pre"
+                   NS1:maxVersion="1.0.*" />
+  <RDF:Description RDF:about="rdf:#$QlnYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="2.0"
+                   NS1:maxVersion="3.7a1pre" />
+  <RDF:Description RDF:about="rdf:#$DlnYn2"
+                   NS1:id="prism@developer.mozilla.org"
+                   NS1:minVersion="1.0b1"
+                   NS1:maxVersion="1.0.*" />
+  <RDF:Description RDF:about="urn:mozilla:item:{64161300-e22b-11db-8314-0800200c9a66}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.9.5.6"
+                   NS1:optionsURL="chrome://speeddial/content/settings/settings.xul"
+                   NS1:iconURL="chrome://speeddial/skin/icon.png"
+                   NS1:name="Speed Dial"
+                   NS1:description="Direct access to your most visited websites"
+                   NS1:creator="Josep del Rio"
+                   NS1:homepageURL="http://speeddial.uworks.net/"
+                   NS1:contributor="Leszek(teo)Życzkowski">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:translator>Oriol González [ca-AD]</NS1:translator>
+    <NS1:translator>PetrTwo [cs-CZ]</NS1:translator>
+    <NS1:translator>Fang5566 [zh-CN]</NS1:translator>
+    <NS1:translator>velociraptor [zh-TW]</NS1:translator>
+    <NS1:translator>myahoo [fr-FR]</NS1:translator>
+    <NS1:translator>Sil [hu-HU]</NS1:translator>
+    <NS1:translator>Godai71 [it-IT]</NS1:translator>
+    <NS1:translator>Kiyotaka Uehara [ja-JP]</NS1:translator>
+    <NS1:translator>Jeong Seungwon [ko-KR]</NS1:translator>
+    <NS1:translator>Leszek(teo)Życzkowski [pl-PL]</NS1:translator>
+    <NS1:translator>npo33770 [pt-PT]</NS1:translator>
+    <NS1:translator>Modex [ru-RU]</NS1:translator>
+    <NS1:translator>wladow [sk-SK]</NS1:translator>
+    <NS1:translator>Yaroslav Krytsun (yaryi | dyedfox) [uk-UA]</NS1:translator>
+    <NS1:translator>Morgil [de-DE]</NS1:translator>
+    <NS1:translator>Jerone [nl-NL]</NS1:translator>
+    <NS1:translator>Balarii [ro-RO]</NS1:translator>
+    <NS1:translator>Gandhi2 [nb-NO]</NS1:translator>
+    <NS1:translator>Raryel Costa Souza [pt-BR]</NS1:translator>
+    <NS1:translator>Fuz [de-DE]</NS1:translator>
+    <NS1:translator>Joergen [da-DK]</NS1:translator>
+    <NS1:translator>Elad Bichman [he-IL]</NS1:translator>
+    <NS1:translator>Zaher Kadour [ar]</NS1:translator>
+    <NS1:translator>Mikes Kaszmán István [hu-HU]</NS1:translator>
+    <NS1:translator>Edvinas Stonikas [lt-LT]</NS1:translator>
+    <NS1:translator>Zeki Çelikbaş [tr-TR]</NS1:translator>
+    <NS1:translator>Felipe Barriga Richards [es-CL]</NS1:translator>
+    <NS1:targetApplication RDF:resource="rdf:#$zinYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$AinYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$BinYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:item:{D644F7E7-5141-4fac-A59C-21101C82C734}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.4.4"
+                   NS1:iconURL="chrome://firemule/skin/firemule.png"
+                   NS1:name="FireMule"
+                   NS1:description="Allow add multiple downloads to eMule/eDonkey2000."
+                   NS1:creator="Kai-Chieh Ku (kjackie@gmail.com)">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:translator>Andrea Zuccaro</NS1:translator>
+    <NS1:translator>ThecaTTony</NS1:translator>
+    <NS1:targetApplication RDF:resource="rdf:#$IjnYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$AinYn2"
+                   NS1:id="{a23983c0-fd0e-11dc-95ff-0800200c9a66}"
+                   NS1:minVersion="0.8"
+                   NS1:maxVersion="1.0.*" />
+  <RDF:Description RDF:about="rdf:#$LhnYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="1.5"
+                   NS1:maxVersion="3.6.*" />
+  <RDF:Description RDF:about="rdf:#$OknYn2"
+                   NS1:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
+                   NS1:minVersion="2.0"
+                   NS1:maxVersion="2.0.*" />
+  <RDF:Description RDF:about="rdf:#$AlnYn2"
+                   NS1:id="songbird@songbirdnest.com"
+                   NS1:minVersion="1.2.0b1"
+                   NS1:maxVersion="1.3.0b1pre" />
+  <RDF:Description RDF:about="rdf:#$BinYn2"
+                   NS1:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
+                   NS1:minVersion="2.0"
+                   NS1:maxVersion="2.0.*" />
+  <RDF:Description RDF:about="urn:mozilla:item:fwall.info@gmail.com"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.30"
+                   NS1:name="红杏浏览"
+                   NS1:description="右键菜单即可翻墙,http://www.cleocn.com"
+                   NS1:creator="cleo"
+                   NS1:homepageURL="http://www.fwall.info/"
+                   NS1:contributor="http://www.cleocn.com">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:targetApplication RDF:resource="rdf:#$bYZRX2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:item:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="1.2.5"
+                   NS1:optionsURL="chrome://torbutton/content/preferences.xul"
+                   NS1:iconURL="chrome://torbutton/skin/tor.png"
+                   NS1:name="Torbutton"
+                   NS1:creator="Mike Perry &amp; Scott Squires"
+                   NS1:homepageURL="https://www.torproject.org/torbutton">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:targetApplication RDF:resource="rdf:#$QlnYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:item:{DDC359D1-844A-42a7-9AA1-88A850A938A8}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="1.1.10"
+                   NS1:optionsURL="chrome://dta/content/preferences/prefs.xul"
+                   NS1:aboutURL="chrome://dta/content/about/about.xul"
+                   NS1:iconURL="chrome://dta/skin/common/icon.png"
+                   NS1:name="DownThemAll!"
+                   NS1:description="The mass downloader for Firefox."
+                   NS1:creator="Federico Parodi, Stefano Verna, Nils Maier"
+                   NS1:homepageURL="http://downthemall.net/">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:developer>Federico Parodi</NS1:developer>
+    <NS1:developer>Stefano Verna</NS1:developer>
+    <NS1:developer>Nils Maier</NS1:developer>
+    <NS1:targetApplication RDF:resource="rdf:#$NknYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$OknYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$PknYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$QknYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$BlnYn2"
+                   NS1:id="{aa5ca914-c309-495d-91cf-3141bbb04115}"
+                   NS1:minVersion="0.2"
+                   NS1:maxVersion="0.3" />
+  <RDF:Description RDF:about="urn:mozilla:item:autoproxy@autoproxy.org"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.3b4.0+.2009110800"
+                   NS1:optionsURL="chrome://autoproxy/content/ui/settings.xul"
+                   NS1:aboutURL="chrome://autoproxy/content/ui/about.xul"
+                   NS1:iconURL="chrome://autoproxy/skin/autoproxy.png"
+                   NS1:name="AutoProxy"
+                   NS1:description="GFW was yesterday!"
+                   NS1:creator="WCM"
+                   NS1:homepageURL="http://autoproxy.org/">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:targetApplication RDF:resource="rdf:#$xlnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$ylnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$zlnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$AlnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$BlnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$ClnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$DlnYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$OtiD.1"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="3.6.12"
+                   NS1:maxVersion="3.6.12" />
+  <RDF:Description RDF:about="rdf:#$MhnYn2"
+                   NS1:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
+                   NS1:minVersion="2.0b1"
+                   NS1:maxVersion="2.0.*" />
+  <RDF:Description RDF:about="rdf:#$zinYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="2.0"
+                   NS1:maxVersion="4.0b4pre" />
+  <RDF:Description RDF:about="urn:mozilla:item:moonlight@novell.com"
+                   NS1:installLocation="app-profile"
+                   NS1:version="2.3"
+                   NS1:updateURL="http://go-mono.com/archive/moonlight-plugins/updates/update-2.0-i586.rdf"
+                   NS1:iconURL="chrome://moonlight/skin/icon32.png"
+                   NS1:name="Novell Moonlight"
+                   NS1:description="The open source implementation of Microsoft Silverlight"
+                   NS1:creator="Mono Team"
+                   NS1:homepageURL="http://mono-project.com/Moonlight">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCi8rEWjKukJk4igOKjOU3RLj3vri9pff1znkb12M4N6
+                  irBv4vbTSBjjrDOzOOB+g6C/fAP8LsFCDHgqmXmRbsCxAycED/TKzbevpTkX0ywlUL6nfVwegwQMclzP5
+                  rjxQ1fXagEg2+6S4SlGVZnj8jXCybdz+giz53M5QeoaacuFwIDAQAB</NS1:updateKey>
+    <NS1:contributor>Chris Toshok</NS1:contributor>
+    <NS1:contributor>Geoff Norton</NS1:contributor>
+    <NS1:contributor>Larry Ewing</NS1:contributor>
+    <NS1:contributor>Jeff Stedfast</NS1:contributor>
+    <NS1:contributor>Miguel de Icaza</NS1:contributor>
+    <NS1:contributor>Jackson Harper</NS1:contributor>
+    <NS1:contributor>Fernando Herrera</NS1:contributor>
+    <NS1:contributor>Sebastien Pouliot</NS1:contributor>
+    <NS1:contributor>JB Evain</NS1:contributor>
+    <NS1:contributor>Rolf Kvinge</NS1:contributor>
+    <NS1:contributor>Michael Kostrzewa</NS1:contributor>
+    <NS1:contributor>Alan McGovern</NS1:contributor>
+    <NS1:contributor>Andreia Gaita</NS1:contributor>
+    <NS1:contributor>Stephane Delcroix</NS1:contributor>
+    <NS1:contributor>Rusty Howell</NS1:contributor>
+    <NS1:contributor>Andrew Jorgensen</NS1:contributor>
+    <NS1:targetApplication RDF:resource="rdf:#$LhnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$MhnYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$IjnYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="1.0"
+                   NS1:maxVersion="3.6.*" />
+  <RDF:Seq RDF:about="urn:mozilla:item:root">
+    <RDF:li RDF:resource="urn:mozilla:item:{972ce4c6-7e08-4474-a285-3208198ce6fd}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:moonlight@novell.com"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{64161300-e22b-11db-8314-0800200c9a66}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{e4a8a97b-f2ed-450b-b12d-ee082ba24781}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{00352F14-3F76-4e4d-ACFF-9976D7E4B3B9}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{D644F7E7-5141-4fac-A59C-21101C82C734}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{473f9a20-ce5a-11da-a94d-0800200c9a66}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{02450954-cdd9-410f-b1da-db804e18c671}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{DDC359D1-844A-42a7-9AA1-88A850A938A8}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:autoproxy@autoproxy.org"/>
+    <RDF:li RDF:resource="urn:mozilla:item:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}"/>
+    <RDF:li RDF:resource="urn:mozilla:item:fwall.info@gmail.com"/>
+  </RDF:Seq>
+  <RDF:Description RDF:about="rdf:#$zlnYn2"
+                   NS1:id="{3550f703-e582-4d05-9a08-453d09bdfdc6}"
+                   NS1:minVersion="3.0b3pre"
+                   NS1:maxVersion="3.1a1pre" />
+  <RDF:Description RDF:about="rdf:#$.jnYn2"
+                   NS1:id="{a463f10c-3994-11da-9945-000d60ca027b}"
+                   NS1:minVersion="0.4"
+                   NS1:maxVersion="0.8" />
+  <RDF:Description RDF:about="rdf:#$QknYn2"
+                   NS1:id="songbird@songbirdnest.com"
+                   NS1:minVersion="1.0"
+                   NS1:maxVersion="1.4.*" />
+  <RDF:Description RDF:about="rdf:#$ClnYn2"
+                   NS1:id="{a79fe89b-6662-4ff4-8e88-09950ad4dfde}"
+                   NS1:minVersion="0.1"
+                   NS1:maxVersion="100.0" />
+  <RDF:Description RDF:about="rdf:#$gknYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="3.0"
+                   NS1:maxVersion="3.6.*" />
+  <RDF:Description RDF:about="rdf:#$fjnYn2"
+                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   NS1:minVersion="1.5"
+                   NS1:maxVersion="3.6.*" />
+  <RDF:Description RDF:about="urn:mozilla:item:{02450954-cdd9-410f-b1da-db804e18c671}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.96.3"
+                   NS1:optionsURL="chrome://screengrab/content/preferences.xul"
+                   NS1:iconURL="chrome://screengrab/skin/screengrab_icon.gif"
+                   NS1:name="Screengrab"
+                   NS1:description="Saves a web-page as an image."
+                   NS1:creator="Andy Mutton"
+                   NS1:homepageURL="http://www.screengrab.org/">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:contributor>Jean-Bernard 'Goofy' Marcon from babelzilla.org (Help with locales)</NS1:contributor>
+    <NS1:contributor>All of the guys at babelzilla.org (Translations)</NS1:contributor>
+    <NS1:contributor>Dominic Letz (SecurityException bug fix)</NS1:contributor>
+    <NS1:contributor>vboriesazeau (Pointing out the deprecated getBoxObjectFor call)</NS1:contributor>
+    <NS1:targetApplication RDF:resource="rdf:#$gknYn2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$ylnYn2"
+                   NS1:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
+                   NS1:minVersion="2.0b1pre"
+                   NS1:maxVersion="2.0b1" />
+  <RDF:Description RDF:about="urn:mozilla:item:{972ce4c6-7e08-4474-a285-3208198ce6fd}"
+                   NS1:installLocation="app-global"
+                   NS1:version="3.6.12"
+                   NS1:internalName="classic/1.0"
+                   NS1:locked="true"
+                   NS1:appManaged="true"
+                   NS1:name="Default"
+                   NS1:description="The default theme."
+                   NS1:creator="Mozilla"
+                   NS1:contributor="Mozilla Contributors">
+    <NS1:type NC:parseType="Integer">4</NS1:type>
+    <NS1:targetApplication RDF:resource="rdf:#$OtiD.1"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:item:{e4a8a97b-f2ed-450b-b12d-ee082ba24781}"
+                   NS1:installLocation="app-profile"
+                   NS1:version="0.8.20100408.6"
+                   NS1:optionsURL="chrome://greasemonkey/content/manage.xul"
+                   NS1:iconURL="chrome://greasemonkey/content/icon_medium.png"
+                   NS1:name="Greasemonkey"
+                   NS1:description="A User Script Manager for Firefox"
+                   NS1:creator="Aaron Boodman; http://youngpup.net/"
+                   NS1:homepageURL="http://www.greasespot.net/">
+    <NS1:type NC:parseType="Integer">2</NS1:type>
+    <NS1:contributor>Anthony Lieuallen; http://arantius.com</NS1:contributor>
+    <NS1:contributor>Chris Feldmann; http://axlotl.net</NS1:contributor>
+    <NS1:contributor>David Schontzler; http://stilleye.com/</NS1:contributor>
+    <NS1:contributor>Erik Vold; http://erikvold.com/</NS1:contributor>
+    <NS1:contributor>Gareth Andrew; http://freegarethandrew.org</NS1:contributor>
+    <NS1:contributor>Hisateru Tanaka</NS1:contributor>
+    <NS1:contributor>Jeremy Dunck; http://dunck.us/anabasis/</NS1:contributor>
+    <NS1:contributor>Jesper Kristensen &lt;mail@jesperkristensen.dk&gt;</NS1:contributor>
+    <NS1:contributor>Johan Sundström; http://ecmanaut.blogspot.com/</NS1:contributor>
+    <NS1:contributor>JP Sugarbroad</NS1:contributor>
+    <NS1:contributor>Juan Pablo Guereca Alonso</NS1:contributor>
+    <NS1:contributor>Manpreet Singh</NS1:contributor>
+    <NS1:contributor>Mark Pilgrim; http://diveintomark.org</NS1:contributor>
+    <NS1:contributor>Marti Martz</NS1:contributor>
+    <NS1:contributor>Matthias Bauer; http://moeffju.net/</NS1:contributor>
+    <NS1:contributor>Matthew Gray; http://mkgray.com:8000/</NS1:contributor>
+    <NS1:contributor>Nikolas Coukouma; http://atrus.org/</NS1:contributor>
+    <NS1:contributor>Ori Avtallon</NS1:contributor>
+    <NS1:contributor>Pak Kei (logo); http://arkidect.com/</NS1:contributor>
+    <NS1:contributor>Sergio Abreu; http://sitedosergio.sitesbr.net</NS1:contributor>
+    <NS1:contributor>Tommi Rautava</NS1:contributor>
+    <NS1:targetApplication RDF:resource="rdf:#$fjnYn2"/>
+    <NS1:targetApplication RDF:resource="rdf:#$gjnYn2"/>
+  </RDF:Description>
+</RDF:RDF>

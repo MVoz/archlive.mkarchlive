@@ -1,0 +1,8 @@
+﻿<!ENTITY hongxingextension.label "Your localized menuitem">
+<!ENTITY hongxingextensionContext.label "紅杏瀏覽">
+<!ENTITY hongxingextensionContext.accesskey "Y">
+<!ENTITY hongxingextensionToolbarButton.label "Your Toolbar Button">
+<!ENTITY hongxingextensionToolbarButton.tooltip "This is your toolbar button!">
+<!ENTITY hongxingextensionSidebar.label "Your Sidebar">
+<!ENTITY hongxingextensionToolbar.name  "example">
+<!ENTITY hongxingextensionToolbar.label "This is an example toolbar. You can hide it under View &gt; toolbars &gt; &hongxingextensionToolbar.name;">

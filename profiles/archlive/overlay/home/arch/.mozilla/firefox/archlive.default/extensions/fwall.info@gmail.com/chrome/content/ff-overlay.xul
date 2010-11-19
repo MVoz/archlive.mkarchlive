@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://hongxingextension/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://hongxingextension/locale/overlay.dtd">
+<overlay id="hongxingextension-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="overlay.js"/>  
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="hongxingextension-strings-bundle" src="chrome://hongxingextension/locale/overlay.properties"/>
+  </stringbundleset>
+
+  <popup id="contentAreaContextMenu">
+    <menuitem id="context-hongxingextension" label="&hongxingextensionContext.label;"
+              accesskey="&hongxingextensionContext.accesskey;"
+              insertafter="context-stop"
+              oncommand="hongxingextension.onMenuItemCommand(event)"/>
+  </popup>
+
+
+
+
+</overlay>
