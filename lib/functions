@@ -946,7 +946,8 @@ cmd_install ()
 	$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${ARCH}-mod_${mod}.new
 	green "完成!" | tee -a ${LOG}
 
-	if [ -f ${PACKLIST}/${ARCH}-${mod}.old ]; then
+	[ -f ${PACKLIST}/${ARCH}-updated.list ] && rm -f ${PACKLIST}/${ARCH}-updated.list
+	if [ -f ${PACKLIST}/${ARCH}-${mod}.old ] && [ "x$(${PACKLIST}/${ARCH}-${mod}.old)" != "x" ]; then
 		msg2 -n "此次为升级安装，查看更新内容..." | tee -a ${LOG}
 		diff -ruNa ${PACKLIST}/${ARCH}-${mod}.old ${PACKLIST}/${ARCH}-mod_${mod}.new | grep "^[-,+][a-zA-Z]" > ${PACKLIST}/${ARCH}-${mod}.list
 		if [ "x$(cat ${PACKLIST}/${ARCH}-${mod}.list)" != "x" ]; then
@@ -1444,13 +1445,14 @@ cmd_img () {
 
     #判断${IMGROOT}下的模块是否是需要的——由${CONFIG_FILE}: archlive.conf定义
    
-   msg2 -n "清理不需要的模块到${NO_NEED_MODULES_DIR}下... " | tee -a ${LOG}
+   msg2 "清理不需要的模块到${NO_NEED_MODULES_DIR}下... " | tee -a ${LOG}
    [ ! -d ${NO_NEED_MODULES_DIR} ] && mkdir -p ${NO_NEED_MODULES_DIR}
    for module_file in $(find ${IMGROOT} -name "*.sqfs" -o -name "*.lzm"); do
 	needed="n"
-	case ${module_file} in */z-overlay.${EXT}) case ${USE_OVERLAY} in y) needed="y" && break;; esac;; esac
-	case ${module_file} in */any-*.${EXT}) needed="y" && break;; esac
-	case ${module_file} in */archlive.sqfs) needed="y" && break;; esac
+	#plain "检查 $(basename $module_file)"
+	case ${module_file} in */z-overlay.${EXT}) case ${USE_OVERLAY} in y) needed="y" && continue;; esac;; esac
+	case ${module_file} in */any-*.${EXT}) needed="y" && continue;; esac
+	case ${module_file} in */archlive.sqfs) needed="y" && continue;; esac
 	module_name=$(basename ${module_file} .${EXT})
 	if [ "${arch}" = "dul" ]; then
 		module_name=${module_name//i686-}
@@ -1458,14 +1460,14 @@ cmd_img () {
 	else
 		module_name=${module_name//${arch}-}
 	fi
-	case $MODULES in *${module_name}*) needed="y" && break;; esac
-	case $EXTRAMODULES in *${module_name}*) needed="y" && break;; esac
+	case $MODULES in *${module_name}*) needed="y" && continue;; esac
+	case $EXTRAMODULES in *${module_name}*) needed="y" && continue;; esac
 	if [ "$needed" = "n" ]; then
 		warn "$module_file未在${CONFIG_FILE}中定义，移除到${NO_NEED_MODULES_DIR}下" | tee -a ${LOG}
 		mv -f $module_file ${NO_NEED_MODULES_DIR}/
 	fi
    done
-   green "完成! " | tee -a ${LOG}
+   green "清理模块完成! " | tee -a ${LOG}
 
    # 拷贝附加程序模块
    if [ -d $EXTRAPACKAGEDIR ]; then
@@ -1477,17 +1479,49 @@ cmd_img () {
 	green "完成!" | tee -a ${LOG}
    fi
 
-   msg2 -n "将软件清单放到镜像目录中..." | tee -a ${LOG}
+   msg2 -n "整理软件清单放到镜像目录中..." | tee -a ${LOG}
    # ${CDNAME}.list 为默认启动标的  如果删除系统无法启动
+   FINAL_LIST="${IMGROOT}/${CDNAME}/${CDNAME}.list"
+   [ -f ${FINAL_LIST} ] && rm -f ${FINAL_LIST}
+
    if [ "$arch" = "dul" ]; then
-	echo "i686 & x86_64 双模式 软件清单" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
-	echo " i686 部分软件清单：" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
-	cat ${WORK_DIR}/i686-packages.list | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
-	echo "************************************" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
-	echo " x86_64 部分软件清单：" >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
-	cat ${WORK_DIR}/x86_64-packages.list | sort >> ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	arches="i686 x86_64"
    else
-	cat ${WORK_DIR}/$arch-packages.list | sort > ${IMGROOT}/${CDNAME}/${CDNAME}.list
+	arches="$arch"
+   fi
+   for i in $arches; do
+	[ -f ${WORK_DIR}/$i-packages.list ] && rm -f ${WORK_DIR}/$i-packages.list
+	if [ -f ${PACKLIST}/$i-updated.list ]; then
+		cp -f ${PACKLIST}/$i-updated.list ${IMGROOT}/${CDNAME}/
+	elif [ -f ${IMGROOT}/${CDNAME}/$i-updated.list ]; then
+		rm -f ${IMGROOT}/${CDNAME}/$i-updated.list
+	fi
+	for mod in ${MODULES}; do
+		echo "模块 ${mod} 包含: " >>${WORK_DIR}/$i-packages.list
+		echo "----------------------------------------" >>${WORK_DIR}/$i-packages.list
+		cat ${PACKLIST}/${i}-mod_${mod}.new | sort >>${WORK_DIR}/$i-packages.list
+		echo >>${WORK_DIR}/$i-packages.list
+	done
+   done
+
+   echo "########################################" >>${FINAL_LIST}
+   echo "#    ${CDNAME} 软件清单 ($arch)      #" >>${FINAL_LIST}
+   echo "########################################" >>${FINAL_LIST}
+   echo "${CDNAME} 最后更新于 $(date +%T" "%F)" >>${FINAL_LIST}
+   echo >> ${FINAL_LIST}
+
+   if [ "$arch" = "dul" ]; then
+	echo "i686 & x86_64 双模式 软件清单" >> ${FINAL_LIST}
+	echo >> ${FINAL_LIST}
+	echo "i686 部分软件清单：" >> ${FINAL_LIST}
+	echo "====================" >> ${FINAL_LIST}
+	cat ${WORK_DIR}/i686-packages.list | sort >> ${FINAL_LIST}
+	echo >> ${FINAL_LIST}
+	echo "x86_64 部分软件清单：" >> ${FINAL_LIST}
+	echo "====================" >> ${FINAL_LIST}
+	cat ${WORK_DIR}/x86_64-packages.list >> ${FINAL_LIST}
+   else
+	cat ${WORK_DIR}/$arch-packages.list >> ${FINAL_LIST}
    fi
    green "完成!" | tee -a ${LOG}
 
@@ -1559,6 +1593,8 @@ cmd_img () {
 	fi
 	green "在 ${bootfile_dir} 下找到 syslinux 启动程序." | tee -a ${LOG}
 	bootflags="-b isolinux/isolinux.bin -c isolinux/boot.cat"
+	[ ! -f ${IMGROOT}/isolinux/isolinux.cfg ] && error "不存在启动配置文件isolinux.cfg" && exit 1
+	# isolinux.cfg 在准备的时候从profile目录下cd-root对应目录中复制
 	green "引导程序 $BOOT 准备完毕." | tee -a ${LOG}
    fi
 
