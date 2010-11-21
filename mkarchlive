@@ -141,6 +141,8 @@ if [ "x$CACHE" = "x" ]; then
 	CACHE="/var/cache/pacman/pkg"
    fi
 fi
+[ ! -d ${CACHE} ] && mkdir -p ${CACHE}
+
 if [ "x$PUBLISHER" = "x" ]; then PUBLISHER="http://archlive.googlecode.com/"; fi
 if [ "x$AUTHOR" = "x" ]; then AUTHOR="Carbon Jiao"; fi
 

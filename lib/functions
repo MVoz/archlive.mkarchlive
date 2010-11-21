@@ -324,9 +324,7 @@ check_config ()
 
 	if [ "x${cache_dir}" != "x" ]; then
 		CACHE="${cache_dir}"
-		[ -d ${CACHE} ] && mkdir -p ${CACHE}
 	fi
-	[ -d ${CACHE} ] && mkdir -p ${CACHE}
 
 	# 根据配置文件设置更新消息提示风格，无设置默认有特别颜色显示提示消息
 	if [ "${COLOR}" != "n" ]; then
