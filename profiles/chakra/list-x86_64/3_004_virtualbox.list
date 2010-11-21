@@ -1,0 +1,7 @@
+#virtualbox_bin
+
+virtualbox-additions
+virtualbox-modules
+#virtualbox-ose-additions
+virtualbox-ose-additions-modules
+virtualbox-ose

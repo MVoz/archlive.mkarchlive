@@ -256,6 +256,20 @@ tftp-hpa
 # Official tftp server
 
 cdrkit
+# Suite of programs for CD/DVD recording, ISO image creation, and audio CD extraction
+
+dvd+rw-tools
+# dvd burning tools
+
+vcdimager
+# GNU VCDImager is a full-featured mastering suite for authoring disassembling and 
+# analyzing Video CD's and Super Video CD's
+
+streamripper
+# Records and splits streaming mp3 into tracks
+
+transcode
+# A video/DVD ripper and encoder for the terminal/console
 
 htop
 iotop
@@ -265,12 +279,9 @@ tree
 vifm
 sshfs
 parted
-gdisk
-# (GUID) Partition Table (GPT) disks
-ncdu
-hd2u
-
 wvdial
 
 codecs
 
+testdisk
+# Checks and undeletes partitions + PhotoRec, signature based recovery tool

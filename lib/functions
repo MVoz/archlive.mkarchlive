@@ -124,38 +124,36 @@ usage ()
    echo "       以上程序中，括号里面的是本脚本调用的命令，确保宿主系统包含这些命令! "
    echo ""
    hgreen " 注意："
-   green "          1、请确保archlive制作配置文件archlive.conf存放位置与"
-   green "             archlive.conf中指定的PROFILE_DIR一致; "
-   green "          2、输入的选项及命令定义的参数优先性高于配置文件."
+   green "          1、输入的选项及命令定义的参数优先性高于配置文件."
    echo ""
    hgreen " 用法：${APPNAME} [选项] 命令 <命令选项>"
    green " 一般选项:"
-   echo "       -A               指定Arch为i686或者x86_64或者dul(双模式)"
-   echo "       -f               强制覆盖现有的工作目录等，全部重新制作"
-#   echo "       -i CPIO_CONFIG   用CONFIG 作为archlive启动内核配置文件. "
-   echo "       -c CDNAME        目标镜像名. 默认: archlive"
-   echo -e "       -b BOOT	     启动选项(syslinux,isolinux,grub,grub-gfx, grub2 \
-	 \n		        默认配置文件中没有提供grub2的菜单文件)"
-#   echo "       -M MODULES       livecd的模块. "
-   echo "       -m MODULESCOPY   从指定的文件夹拷贝附加模块，比如程序模块等. 默认: 无"
-#   echo "       -a ADDON_DIR     从指定文件夹制作附加设置模块. 默认: 无"
-   echo "       -t <iso>         目标镜像类型. 默认iso."
-   echo "       -v               运行输出结果."
-   echo "       -h               本帮助信息."
+   echo "        -c CDNAME        目标镜像名. 默认: archlive"
+   echo "        -P               指定配置文件, 两种方式："
+   echo -e "                         1. 指定配置文件夹名，在profile目录下查找对应配置文件夹下的\
+	\n                            archlive.conf或者CDNAME.conf作为配置文件;"
+   echo -e "                         2. 指定配置文件的绝对路径，或相对mkarchlive的相对路径.\
+	\n                            此时，配置文件所在文件夹下必须包含必要的其他配置文件."
+   echo "        -A               指定Arch为i686或者x86_64或者dul(双模式)"
+   echo "        -i CPIO_CONFIG   用CONFIG 作为archlive启动内核配置文件. "
+   echo -e "        -b BOOT	         启动选项(syslinux,isolinux,grub,grub-gfx, grub2 \
+	 \n	 	         默认配置文件夹cd-root中没有提供grub2的菜单文件)"
+   echo "        -z               指定模块压缩格式，sqfs或者lzma"
+   echo "        -C               指定安装过程中下载的软件包存放位置"
+   echo "        -f               强制覆盖现有的工作目录等，全部重新制作"
+   echo "        -v               显示运行输出结果."
+   echo "        -h               本帮助信息."
    green " 命令:"
    echo "        prepare                   : 准备iso根目录结构及overlay (如果需要) "
    echo "        install <工作目录>        : 将程序安装到工作目录下"
    echo "        clean <工作目录>          : 根据配置文件清理、精简目标系统"
    echo "        remount <工作目录>        : 将之前制作的模块文件夹重新可写挂载"
    echo "        squash <工作目录>         : 从指定的目录创建squash模块"
-   echo "        overlay <工作目录>         : 准备overlay目录到工作目录下，并用压缩为squash模块"
+   echo "        overlay <工作目录>        : 准备overlay目录到工作目录下，并用压缩为squash模块"
    echo "        bootimage <工作目录>      : 从指定的目录制作archlive启动内核镜像."
    echo "        img <工作目录> [目标镜像] : 从指定目录创建目标镜像"
-   echo ""
    echo "        all <工作目录> [目标镜像] : 顺序执行以上所有命令"
-   echo ""
    echo "        solemodules <工作目录>    : 仅在工作目录下制作独立程序模块"
-   echo ""
    echo ""
    green "  一般用 all 来自动执行;  为了完全自由定制可以: "
    green "  先 prepare, 然后修改overlay、iso启动配置文件;"
@@ -231,22 +229,103 @@ config_is_right () {
    return 1
 }
 
-check_config_file ()
+check_config ()
 {
-	# 装载archlive的配置文件, 从当前目录查看是否存在archlive.conf，存在即调用之
-	#echo "查找配置文件archlive.conf，以第一个符合条件的为制作配置文件"
-    for config_file in $(find .  -maxdepth 3 -name "archlive.conf" | sort -d); do
-		source ${config_file}
-		if [ ! $(config_is_right) ]; then CONFIG_FILE=${config_file} && break; fi
-	done
-	if [ "x${CONFIG_FILE}" = "x" ]; then
-		error "没有找到正确的配置文件archlive.conf" && usage 1 
+	# config_file 由命令行参数指定
+	if [ "x${config_file}" = "x" ]; then
+		# 没有指定配置文件/配置名， 采用默认配置
+		if [ -f "${START_DIR}/profiles/archlive/archlive.conf" ]; then
+			CONFIG_FILE="${START_DIR}/profiles/archlive/archlive.conf"
+		else
+			error "没有指定制作配置文件、也不存在默认制作配置文件， \n请重新指定配置文件名或者重新获取archlive制作工具."
+			exit 1
+		fi
+	elif [ -f "${config_file}" ]; then
+		CONFIG_FILE="${config_file}"
+		PROFILE_DIR="$(dirname ${CONFIG_FILE})"
+	elif [ -d "${START_DIR}/profiles/${config_file}" ]; then
+		CONFIG_FILE="${START_DIR}/profiles/${config_file}/archlive.conf"
+		if [ ! -f ${CONFIG_FILE} ] && [ "x$cdname" != "x" ]; then
+			CONFIG_FILE="${START_DIR}/profiles/${config_file}/${cdname}.conf"
+			if [ ! -f ${CONFIG_FILE} ]; then
+				error "指定的配置名目录下无配置文件, 请指定具体配置文件名, \n或者-c指定配置文件名，该名同时也是目标镜像名."
+				exit 1
+			fi
+		fi
+		PROFILE_DIR="$(dirname ${CONFIG_FILE})"
 	else
-		source ${CONFIG_FILE}
-	if [ "x${PROFILE_DIR}" = "x" ]; then
-		error "载入配置文件${CONFIG_FILE}失败，请检查配置文件是否已经损坏..."
+		error "指定的配置名/配置文件名不存在，请重新指定."
+		exit 1
 	fi
+
+	source ${CONFIG_FILE}
+	if [ "x${boot_kernel_config1}" != "x" ]; then
+		CPIOCONFIG="${PROFILE_DIR}/${boot_kernel_config1}"
+	elif [ "x${boot_kernel_config}" != "x" ]; then
+		CPIOCONFIG="${PROFILE_DIR}/${boot_kernel_config}"
+	else
+		# 命令行和配置文件都没有指定启动内核配置文件，采用默认设置
+		CPIOCONFIG="${START_DIR}/profiles/archlive/archlive-mkinitcpio.conf"
 	fi
+	if [ ! -f "${CPIOCONFIG}" ]; then
+		error "配置文件错误: 没有指定启动内核配置文件，同时默认配置文件不存在.\n请重新指定配置文件名或者重新获取archlive制作工具."
+		exit 1
+	fi
+
+	if [ "x$boot" != "x" ]; then
+		BOOT="$boot"
+	elif [ "x$BOOT" = "x" ]; then
+		warn "命令行和配置文件都没有指定目标镜像启动模式, 采用默认的isolinux."
+		BOOT="isolinux"
+	fi
+	case $BOOT in
+		isolinux) BOOT="isolinux" ;;
+		syslinux) BOOT="syslinux" ;;
+		grub2) BOOT="gub2" ;;
+		grub*) BOOT="grub" ;;
+		*) BOOT="isolinux"; warn "未知的或者暂时不支持的目标镜像引导程序，采用默认的isolinux" ;;
+	esac
+
+	if [ "x$cdname" != "x" ]; then
+		CDNAME="$cdname"
+	elif [ "x$CDNAME" = "x" ]; then
+		warn "命令行和配置文件都没有指定live系统名，采用默认的\"archlive\""
+		CDNAME="archlive"
+	fi
+
+	if [ "x${zip_mode}" != "x" ]; then
+		case ${zip_mode} in sqfs|1) ZIP_MODE=1;;
+				lzma|2) ZIP_MODE=2;;
+				*) warn "命令行上参数指定了无效的压缩模式，采用默认的标准压缩.";
+					ZIP_MODE=1;;
+				esac
+	elif [ "x${ZIP_MODE}" = "x" ]; then
+		warn "命令行参数和配置文件都没有指定模块压缩方式，采用默认的标准压缩."
+		ZIP_MODE=1
+	fi
+
+	if [ "x${arch1}" != "x" ]; then
+		case "${arch1}" in
+			i686|x86_64) ARCH=${arch1};;
+			dul) ARCH="";;
+			*) warn "命令行指定了无效的 ARCH ${arch1}, 采用默认的 i686. "; ARCH="i686" ;;
+		esac
+	elif [ "x${arch}" != "x" ]; then
+		case "${arch}" in
+			i686|x86_64) ARCH=${arch};;
+			dul) ARCH="";;
+			*) warn "命令行指定了无效的 ARCH ${arch}, 采用默认的 i686. "; ARCH="i686" ;;
+		esac
+	else
+		warn "命令行和配置文件均没有指定 ARCH, 采用默认的 i686."
+		ARCH="i686"
+	fi
+
+	if [ "x${cache_dir}" != "x" ]; then
+		CACHE="${cache_dir}"
+		[ -d ${CACHE} ] && mkdir -p ${CACHE}
+	fi
+	[ -d ${CACHE} ] && mkdir -p ${CACHE}
 
 	# 根据配置文件设置更新消息提示风格，无设置默认有特别颜色显示提示消息
 	if [ "${COLOR}" != "n" ]; then
@@ -947,7 +1026,7 @@ cmd_install ()
 	green "完成!" | tee -a ${LOG}
 
 	[ -f ${PACKLIST}/${ARCH}-updated.list ] && rm -f ${PACKLIST}/${ARCH}-updated.list
-	if [ -f ${PACKLIST}/${ARCH}-${mod}.old ] && [ "x$(${PACKLIST}/${ARCH}-${mod}.old)" != "x" ]; then
+	if [ -f ${PACKLIST}/${ARCH}-${mod}.old ] && [ "x$(cat ${PACKLIST}/${ARCH}-${mod}.old)" != "x" ]; then
 		msg2 -n "此次为升级安装，查看更新内容..." | tee -a ${LOG}
 		diff -ruNa ${PACKLIST}/${ARCH}-${mod}.old ${PACKLIST}/${ARCH}-mod_${mod}.new | grep "^[-,+][a-zA-Z]" > ${PACKLIST}/${ARCH}-${mod}.list
 		if [ "x$(cat ${PACKLIST}/${ARCH}-${mod}.list)" != "x" ]; then

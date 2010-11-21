@@ -1,0 +1,50 @@
+#!/bin/bash
+
+job_configure_sudoers()
+{
+	msg_job_start "job_configure_sudoers"
+
+	# add given user to sudoers
+	msg "adding the user to sudoers"
+	echo >>${mountpoint}/etc/sudoers
+	echo "# user created during chakra setup" >>${mountpoint}/etc/sudoers
+	echo "${user_name}     ALL=(ALL) ALL" >>${mountpoint}/etc/sudoers
+	echo >>${mountpoint}/etc/sudoers
+
+	# add group bundle
+
+	mount -v -t proc none ${mountpoint}/proc 
+	mount -v -t sysfs none ${mountpoint}/sys 
+	mount -v -o bind /dev ${mountpoint}/dev 
+
+	echo "Create group bundle"
+	if [ "Group: `grep bundle ${mountpoint}/etc/group`" = "Group: " ] ; then
+		chroot ${mountpoint} /bin/groupadd bundle
+	else
+		echo "Group bundle already exists"
+	fi
+
+        # add users to group bundle
+	echo "Adding all existing users to group bundle"
+        for i in `cat ${mountpoint}/etc/passwd | grep /home | cut -d: -f1` ;  do
+            echo " - adding user $i"
+            # chroot ${mountpoint} /usr/sbin/usermod -a -G bundle $i
+	    chroot ${mountpoint} /usr/bin/gpasswd -a $i bundle
+        done
+
+	# add cinstall settings
+	echo "deleting any bundle settings"
+	sed -i -e '/^.*%bundle.*/d' ${mountpoint}/etc/sudoers
+	echo "adding the bundle setting"
+	echo "%bundle ALL=NOPASSWD: /bin/mount -o loop -t squashfs *" >> ${mountpoint}/etc/sudoers
+	echo "%bundle ALL=NOPASSWD: /bin/mount -o loop -t ext4 *" >> ${mountpoint}/etc/sudoers
+	echo "%bundle ALL=NOPASSWD: /bin/umount *" >> ${mountpoint}/etc/sudoers
+
+	# ensure correct permissions
+	msg "ensure correct sudoers permissions"
+	chmod -v 0440 ${mountpoint}/etc/sudoers
+
+	umount -v ${mountpoint}/proc ${mountpoint}/sys ${mountpoint}/dev 
+
+	msg_job_done
+}

@@ -1,0 +1,165 @@
+#!/bin/bash
+
+#
+# Special for Archlive
+
+. /etc/rc.d/functions
+. /usr/lib/liblinuxlive
+
+# 需要自己重新设置root用户密码在内核参数加上 newrootpass 参数
+if [ "$newrootpass" = "y" ]; then
+    echo -ne "\n请输入root用户新密码: "
+    read -s newrootpass
+    if [ "x$newrootpass" != "x" ]; then
+	echo "root:$newrootpass" | /usr/sbin/chpasswd
+    fi
+fi
+
+# 需要系统在启动前执行命令，加上autoexec="" 参数(中间用空格隔开)
+if [ "x$autoexec" != "x" ]; then
+   AUTOCMD=$(echo "$autoexec" | tr "~" " ")
+   echo "自动执行命令: su --login -c \"$AUTOCMD\""
+   su --login -c "$AUTOCMD"
+fi
+
+# 新模块加入时在内核参数中加入 ldconfig
+if [ "$ldconfig" = "y" ]; then  
+    [[ -x /sbin/ldconfig ]] && /sbin/ldconfig >/dev/null
+fi
+
+generate_initial_config() {
+		if [ "${msg_lang}" = "cn" ]; then
+			stat_busy "初始化 /etc/X11/xorg.conf"
+		else
+			stat_busy "Intilize /etc/X11/xorg.conf"
+		fi
+		sleep 3
+		LANG=C /usr/bin/Xorg -configure > /tmp/xorg_detection.log 2>&1
+		mv /xorg.conf.new /etc/X11/xorg.conf
+cat <<EOF >> /etc/X11/xorg.conf
+Section "Extensions"
+	Option "Composite" "Enable"
+	Option "RENDER" "Enable"
+EndSection
+
+Section "ServerFlags"
+	Option	"DontZap" "false"
+	Option 	 "AllowMouseOpenFail"  "true"	
+ 	Option 	 "AutoAddDevices" "true"
+EndSection
+
+EOF
+		stat_done
+}
+
+if [ "$noxconf" != "y" ] && [ ! -e /etc/X11/xorg.conf ]; then
+	if [ "$nonfree" = "y" ]; then
+  		/etc/rc.d/xakra-nonfree start
+	elif [ "$xakra" = "y" ]; then
+			/etc/rc.d/xakra start
+			sed -i 's|"vga"|"vesa"|g' /etc/X11/xorg.conf
+#	else
+		#generate_initial_config
+		# Ctrl + Alt + Backspace 已经完全无效了！
+	fi
+fi
+
+# lang: 重新设置语言
+if [ "x$lang" != "x" ] && [ "$lang" != "cn" ]; then
+    locale-gen
+fi
+
+# keyb: 重新设置键盘布局
+if [ "x$keyb" != "x" ] && [ "$keyb" != "us" ]; then
+   if [ -x /bin/loadkeys ]; then
+ 	/bin/loadkeys $keyb
+   fi
+fi
+
+debug_shell
+
+chmod 0440 /etc/sudoers &>/dev/null
+chmod 0644 /etc/passwd &>/dev/null
+
+
+if [ "x$root" = "x" ]; then
+	if [ -x /usr/bin/update-desktop-database ]; then
+		update-desktop-database -q
+	fi
+	#usermod -g users -u 1001 -d /home/arch arch &>/dev/null
+	chown arch:users -R /home/arch &>/dev/null
+	chown root:root -R /root &>/dev/null
+	chmod 755 /etc &>/dev/null
+fi
+
+# VBOX虚拟机
+if [ "$vbox" = "y" ]; then
+	/etc/rc.d/vboxadd setup
+	/etc/rc.d/vboxadd start
+	/etc/rc.d/vboxadd-service start
+	/etc/rc.d/vboxadd-x11 start
+fi
+
+# 如果想登入你想要的桌面环境，加入相应内核参数，比如"session=fvwm2" 
+if [ "x$session" != "x" ]; then
+	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/X11/xinit/xinitrc
+	cp -af "/etc/X11/xinit/xinitrc.${session}" /etc/skel/.xinitrc
+fi
+
+# ALSA or OSS4 ?
+# 启动时会自动选择加载内核自带的声卡驱动模块
+if [ "$oss" = "y" -o "$oss4" = "y" ]; then
+	tar -czvpf /lib/modules/`uname -r`/kernel/sound /lib/modules/`uname -r`/kernel_sound_backup.tgz
+	rm -rf /lib/modules/`uname -r`/kernel/sound
+	depmod -a
+	/etc/rc.d/oss* start
+fi
+
+rm -f /etc/issue
+if [ "${msg_lang}" = "cn" ]; then
+	ln -sf /etc/issue.cn /etc/issue
+else
+	ln -sf /etc/issue.en /etc/issue
+fi
+
+# pacman.conf
+ARCH=`uname -m`
+[ -f /etc/pacman.conf ] || ln -sf /etc/pacman_${ARCH}.conf /etc/pacman.conf
+
+# 根据启动参数bootdaemon指定的值来启动对应后台程序
+# 例如 bootdaemon=oss,cups,vbox,lighttpd,sshd 则在启动到X前启动这些后台程序
+if [ "x$bootdaemon" != "x" ]; then
+	bootdaemon=${bootdaemon//,/ }
+	for i in $bootdaemon; do
+		[ -x /etc/rc.d/$i ] && (/etc/rc.d/$i start &)
+	done
+fi
+
+# 修正启动参数
+NEW_BOOT_OPT="$bootdaemon"
+
+	# archlive 根据是否包含oss4 cups 模块来自动
+	if which ossinfo 2>/dev/null >/dev/null; then
+		NEW_BOOT_OPT="${NEW_BOOT_OPT} @oss4"
+	fi
+	if which cupsctl 2>/dev/null >/dev/null; then
+		NEW_BOOT_OPT="${NEW_BOOT_OPT} @cups"
+	fi
+
+sed -i "s/^.*DAEMONS=.*/DAEMONS=(syslog-ng hal @networkmanager ${NEW_BOOT_OPT})" /etc/rc.conf 2>/dev/null
+
+
+chmod -x /etc/rc.d/archlive
+
+# 开启 Ctrl + Alt + Backspace 无敌三键
+setxkbmap -option terminate:ctrl_alt_bksp
+
+# 加载农历支持
+if [ -f liblunar-gtk-preload.so ]; then
+	export LD_PRELOAD="/usr/lib/liblunar-gtk-preload.so"
+fi
+
+# 自动登录到默认的 DE
+if [ "$nox" != "y" ]; then
+	su arch -l -c "/bin/sh --login -c /usr/bin/startx > /dev/null 2>/dev/null"
+fi

@@ -1,0 +1,11 @@
+firefox
+# Standalone web browser from mozilla.org
+
+firefox-i18n
+# Language packs for Firefox
+
+totem-plugin
+# Totem mozilla/firefox plugin
+
+aliedit
+# Taobao plugin

@@ -25,8 +25,6 @@ xf86-input-synaptics
 #libx86
 #vbetool
 #pm-utils
-#consolekit
-#hal
 #libdrm
 #xf86vidmodeproto
 #libxxf86vm
@@ -112,6 +110,15 @@ iso-codes
 shared-mime-info
 # Freedesktop.org Shared MIME Info  2.64MB
 #
+
+xorg-xrdb
+# X server resource database utility
+
+consolekit
+# A framework for defining and tracking users, login sessions, and seats
+
+hal
+#  Hardware Abstraction Layer
 
 desktop-file-utils
 # Command line utilities for working with desktop entries   0.10MB
@@ -274,12 +281,10 @@ vattery
 #xlockmore
 
 # fcitx-svn-ibus   56.79MB   fcitx-svn-mini 6.18MB
+#fcitx-svn-mini
+# Archlive定制包,只含有智能拼音、智能双拼和五笔字型，如果需要二笔等，请用fcitx-svn-ibus
 
-fcitx-svn
-# fcitx 官方编译的deb转化
-
-#fcitx
-# Arch 官方编译版，无法切换到繁体
+fcitx
 
 yong
 # 小小输入法
@@ -325,3 +330,7 @@ libflashsupport
 mtasc
 # An open source flash (swf) compiler  安装后大小： 1032.00 K
 
+libjpeg
+libjpeg6
+libpng
+libpng12

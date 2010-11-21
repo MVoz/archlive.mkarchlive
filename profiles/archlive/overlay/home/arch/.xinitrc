@@ -1,5 +1,7 @@
 #.xinitrc
 
+. $HOME/.xprofile
+
 # 字体分辨率
 XRESOURCES=`mktemp /tmp/xrdb.XXXXXX`
 cat >> $XRESOURCES << EOF

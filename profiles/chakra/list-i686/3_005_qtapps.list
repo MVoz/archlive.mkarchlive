@@ -1,0 +1,41 @@
+quassel
+# QT4 irc client with a separated core
+
+# minitube
+# A native YouTube client in QT. Watch YouTube videos without Flash Player
+
+arora
+# A cross platform web browser built using Qt and WebKit
+
+luckybackup
+# Backup & Sync tool using Rsync and Qt4
+
+smplayer
+# A complete front-end for MPlayer
+
+avidemux-qt
+# A graphical tool to edit video (filter/re-encode/split) - QT GUI
+
+kadu
+# A Qt-based Gadu-Gadu client
+
+qt-recordmydesktop
+# Qt4 frontend for recordMyDesktop
+
+fotowall
+# A tool for rendering collages from your favorite photos or pictures
+
+migumusic_noqtlib
+# MiguMusic(No QT lib)
+
+ppstream
+# PPStream for GNU/Linux
+
+q-sheng
+# q-sheng stock software in China 全胜股票信息系统中
+
+qstardict
+# Qt4 clone of StarDict with full support of StarDict dictionaries.
+
+peazip-portable-qt
+# QT archiver utility (FINAL VERSION)

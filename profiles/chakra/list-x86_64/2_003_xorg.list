@@ -1,0 +1,163 @@
+##### xorg-server 及其依赖 42.41MB
+xorg-fonts-alias
+
+#libfontenc
+#freetype2
+#fontsproto
+#libxfont
+#xorg-font-utils
+xorg-fonts-encodings
+
+#xorg-fonts-100dpi
+#xorg-fonts-75dpi
+#xorg-fonts-cyrillic
+#xorg-fonts-misc
+#xorg-fonts-type1
+
+xf86-input-evdev
+xf86-input-keyboard
+xf86-input-mouse
+xf86-input-synaptics
+
+#hal-info
+#eject
+#dmidecode
+#libx86
+#vbetool
+#pm-utils
+#libdrm
+#xf86vidmodeproto
+#libxxf86vm
+#fixesproto
+#libxfixes
+#damageproto
+#libxdamage
+#libgl
+#libpciaccess
+#videoproto
+#libxv
+#pixman
+#xcursor-themes
+#libxpm
+#libxaw
+#libxkbfile
+#xorg-xkb-utils
+#xkeyboard-config
+#fontcacheproto
+#libxfontcache
+#inputproto
+#libxi
+#xf86miscproto
+#libxxf86misc
+#renderproto
+#libxrandr
+#mcpp
+xorg-server-utils
+#fontconfig
+#xorg-fonts-misc
+#xbitmaps
+xorg-server
+#########################
+#
+xorg-xauth
+xorg-xinit
+xorg-apps
+xorg-res-utils
+#
+#xterm
+#
+#######################################
+# xorg video drivers
+xf86-video-apm
+xf86-video-ark
+xf86-video-ati
+xf86-video-chips
+xf86-video-cirrus
+# remove geode if you are building x86_64
+xf86-video-geode
+xf86-video-glint
+xf86-video-i128
+xf86-video-i740
+xf86-video-intel
+xf86-video-mach64
+xf86-video-mga
+xf86-video-neomagic
+xf86-video-nv
+#xf86-video-openchrome
+xf86-video-r128
+xf86-video-radeonhd
+xf86-video-rendition
+xf86-video-s3
+xf86-video-s3virge
+xf86-video-savage
+xf86-video-siliconmotion
+xf86-video-sis
+xf86-video-sisusb
+xf86-video-tdfx
+xf86-video-trident
+xf86-video-tseng
+xf86-video-v4l
+xf86-video-vesa
+xf86-video-voodoo
+#
+# Archlive 作为Virtualbox的客户机时相关驱动等
+virtualbox-modules
+virtualbox-ose-additions-modules
+virtualbox-ose-additions
+#virtualbox-additions
+# Archlive定制，2.6.33-ARCH
+#
+#chakra-hardware-detection
+#xakra
+# Archlive定制包，Xorg.conf由此程序产生，来自于chakra项目
+#
+###################字体
+bdf-unifont
+# GNU Unifont Glyphs
+#ttf-openlogos
+ttf-dejavu
+##   7.88MB
+# 被vlc等依赖
+#gsfonts
+# Ghostscript standard Type1 fonts  4.86MB
+#ttf-droid
+wqy-bitmapfont
+# 18.46MB
+wqy-zenhei
+# 12.71MB
+ttf-bitstream-vera
+terminus-font
+ttf-ms-fonts
+ttf-liberation
+
+######
+shared-mime-info
+# Freedesktop.org Shared MIME Info  2.64MB
+#
+
+xorg-xrdb
+# X server resource database utility
+
+consolekit
+# A framework for defining and tracking users, login sessions, and seats
+
+hal
+#  Hardware Abstraction Layer
+
+iso-codes
+#  Lists of the country, language, and currency names 8.69MB
+
+#icon-naming-utils
+#Maps the new names of icons for Tango to the legacy names used by the GNOME and KDE desktops.  0.08MB
+#
+hicolor-icon-theme
+# Freedesktop.org Hicolor icon theme  1.26MB
+
+fcitx
+
+# Flash 插件相关
+flashplugin
+# Adobe Flash Player
+
+#flashplugin-prerelease
+

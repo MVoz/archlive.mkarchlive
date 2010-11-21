@@ -1,0 +1,24 @@
+#
+# Chakra Linux repository mirrorlist
+# Generated on 2010-08-29
+#
+
+# Germany
+Server = http://chakra-project.org/repo/$repo/x86_64
+Server = http://mirror.selfnet.de/kdemod/$repo/x86_64
+#Server = ftp://mirror.selfnet.de/kdemod/$repo/x86_64
+
+# Kazakhstan
+#Server = http://kdemod.archlinux.kz/$repo/x86_64
+
+# Norway
+#Server = http://kdemod.iskrembilen.com/$repo/x86_64
+
+# Switzerland
+#Server = http://archlinux.puzzle.ch/kdemod/$repo/x86_64
+
+# Spain
+#Server = http://ftp.caliu.cat/pub/distribucions/chakra/repo/$repo/x86_64
+
+# United States
+#Server = http://mirror.rit.edu/kdemod/$repo/x86_64

@@ -18,6 +18,7 @@
 #
 # 支持全方位定制： 定制启动脚本、定制目标系统软件、定制软件仓、预配置文件。。。
 #########################################################################################
+# 2010-11-20 整合配置文件指定和参数判断
 # 2010-11-19 细化软件清单内容
 # 2010-11-16 加入单独制作overlay模块, 以便重复制作时，单独更新overlay内容（需要在配置文件夹中修改，在工作目录中直接修改会被覆盖）
 # 2010-06-11 将双模式嵌入到每个步骤, 同一在制作配置文件中或者参数 -A 来设置
@@ -42,13 +43,15 @@
 # 2009-08-10 修改判断软件仓是否已经在pacman.conf中定义的判断方式
 #
 APPNAME=$(basename "${0}")
-cmdline=$@
+export cmdline=$@
 time=5
 
 # 消息提示风格, 默认 有颜色输出
 export COLOR=y
 
-. lib/functions
+#START_DIR=$(pwd)
+START_DIR=.
+. ${START_DIR}/lib/functions
 
 case "$cmdline" in *-h*) usage 1;; esac
 [ "$EUID" != "0" ] && (error "错误: 必须以root用户运行本制作脚本." && exit 1)
@@ -57,22 +60,21 @@ start_notice
 check_host_aufs
 check_host_cmd
 host_isnot_arch
-check_config_file
 
 export QUIET
 export FORCE
+export PROFILE_DIR
 
-# 检测、配置输入的命令
-while getopts 'A:i:P:b:M:m:a:t:c:nfvh' arg; do
+# 检测输入的参数
+while getopts 'P:c:A:i:b:z:C:nfvh' arg; do
    case "${arg}" in
-	A) arch="${OPTARG}" ;;
-	i) CPIOCONFIG="${OPTARG}" ;;
-	b) BOOT="${OPTARG}" ;;
-	M) MODULES="${OPTARG}" ;;
-	m) MODULESCOPY="${OPTARG}" ;;
-	a) ADDON_DIR="${OPTARG}" ;;
-	t) IMG_TYPE="${OPTARG}" ;;
-	c) CDNAME="${OPTARG}" ;;
+	c) cdname="${OPTARG}" ;;
+	P) config_file="${OPTARG}" ;;
+	A) arch1="${OPTARG}" ;;
+	i) boot_kernel_config1="${OPTARG}" ;;
+	b) boot="${OPTARG}" ;;
+	z) zip_mode="${OPTARG}" ;;
+	C) cache_dir="${OPTARG}" ;;
 	f) FORCE="y" ;;
 	v) QUIET="n" ;;
         h|?) usage 0 ;;
@@ -84,12 +86,8 @@ shift $(($OPTIND - 1))
 
 CMD_NAME="${1}"
 
-# 检查重要参数
-case "$arch" in
-	i686|x86_64) ARCH=$arch;;
-	dul) ARCH="";;
-	*) error "无效的ARCH $arch"; usage 1 ;;
-esac
+# 载入配置文件、配置相关参数
+check_config
 
 # 检查命令有效性
 case "${CMD_NAME}" in
@@ -113,12 +111,10 @@ MODULES=$(echo $MODULES | tr -s " " "\n" | grep -v "#")
 EXTRAMODULES=$(echo $EXTRAMODULES | tr -s " " "\n" | grep -v "#")
 
 #-------------------------------------------------------------------
-#START_DIR=$(pwd)
-START_DIR=.
-PROFILE_DIR="${START_DIR}/${PROFILE_DIR}"
 LIBS="${START_DIR}/lib/mkinitcpio/initcpio/liblinuxlive"
 MKINITCPIO="${START_DIR}/lib/mkinitcpio/mkinitcpio"
 PACMAN_STATIC="${START_DIR}/lib/bin/pacman.static"
+#-------------------------------------------------------------------
 
 # 如果archlive.conf没有定义则采用如下默认配置
 
@@ -139,7 +135,6 @@ if [ "x$CACHE" = "x" ]; then
 fi
 if [ "x$PUBLISHER" = "x" ]; then PUBLISHER="http://archlive.googlecode.com/"; fi
 if [ "x$AUTHOR" = "x" ]; then AUTHOR="Carbon Jiao"; fi
-if [ "x$IMG_TYPE" = "x" ]; then IMG_TYPE="iso"; fi
 
 # 检测模块压缩模式
 case ${ZIP_MODE} in 
@@ -157,10 +152,6 @@ case ${ZIP_MODE} in
       ;;
 esac
 
-# 目标镜像启动内核镜像配置文件
-if [ "x${CPIOCONFIG}" = "x" ]; then
-	CPIOCONFIG="${PROFILE_DIR}/archlive-mkinitcpio.conf"
-fi
 
 # 目标系统是否支持必须的文件系统：aufs squashfs
 if [ "${KERNEL_KEY_FS_INCLUDED}" = "y" ]; then
@@ -176,16 +167,6 @@ case $IMG_TYPE in
 	cd*) IMG_TYPE="iso" ;;
 	*) IMG_TYPE="iso"; warn "无效的目标类型，采用默认的iso";;
 esac
-
-case $BOOT in
-	isolinux) BOOT="isolinux" ;;
-	syslinux) BOOT="syslinux" ;;
-	grub2) BOOT="gub2" ;;
-	grub*) BOOT="grub" ;;
-	*) BOOT="isolinux"; warn "未知的或者暂时不支持的目标镜像引导程序，采用默认的isolinux" ;;
-esac
-
-if [ "x${BOOT}" = "x" ]; then BOOT="syslinux"; fi
 
 if [ "x${WORK_DIR}" = "x" ]; then
 #   plain "命令行没有指定工作目录，查看配置文件中是否有设置的工作目录"

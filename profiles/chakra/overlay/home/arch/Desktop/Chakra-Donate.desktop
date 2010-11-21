@@ -1,0 +1,26 @@
+[Desktop Entry]
+Categories=Chakra;
+Comment=Chakra Donations
+Comment[ca]=Donacions a Chakra
+Comment[ca@valencia]=Donacions a Chakra
+Comment[en_US]=Chakra Donations
+Comment[es]=Donaciones a Chakra
+Exec=xdg-open http://www.chakra-project.org/donate.html
+GenericName[en_US]=
+GenericName=
+Icon=applications-toys
+MimeType=
+Name=Donate
+Name[ca]=Dona
+Name[ca@valencia]=Dona
+Name[en_US]=Donate
+Name[es]=Dona
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

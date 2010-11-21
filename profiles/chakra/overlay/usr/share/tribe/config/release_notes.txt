@@ -1,0 +1,69 @@
+Chakra - 2010-08-11 - Build: DVD-0811-k445
+--------------------------------------------------------------------------------------
+
+The Chakra Developement Team is proud to announce the availability of Phoix
+
+In this a brand new DVD-Edition release with our own base!
+Over 2000 packages (4076 in all repos) are now available for our new Distribution and 
+almost 850 get installed by this media.
+
+We all try to give you the best experience Chakra GNU/Linux can give you atm.
+
+You got Kaffeine, K3B, Koffice, Networkmanager-Plasmoid and other great apps you need 
+to get started with our brand new Distribution.
+
+On this image we installed all translations we offer.
+Even in live-mode you have your translated menues.
+
+It took us some weeks to pull this off, so give us some feedback ;)
+
+Test this build and report back in our forum.
+Please don't use this image for productive use.
+
+greez
+
+Phil Miller and the Team behind Chakra GNU/Linux
+
+--------------------------------------------------------------------------------------
+
+System Requirements:
+
+    * a Intel Pentium II or higher processor
+    * 384MiB of RAM for running the live system and 512MiB of RAM for the installation
+    * around 6 Gib of available hard disk space (the more the better)
+    * a screen capable of 800 x 600 or higher resolution
+    * a reasonably fast internet connection, e.g. no modem (would be too slow)
+
+--------------------------------------------------------------------------------------
+
+Most noticeable changes & additions since Alpha5:
+
+Features:
+
+    * Kernel-2.6.33.7.1 with lzma and fbsplash support
+    * aufs2-20100514-6
+    * KDE SC 4.4.5
+    * Xorg-Server 1.7.6
+    * Catalyst-10.6
+    * NVidia-256 and NVidia legacy series
+
+Installed locales:
+
+    * catala
+    * deutsch
+    * english
+    * español
+
+Total Installed Size:   4145,06 MB
+
+--------------------------------------------------------------------------------------
+
+Known issues:
+
+    Tribe can't create partition-tables on blank disks
+    (followed link is one line: "http://chakra-project.org/wiki/index.php/Frequently_E
+     ncountered_Problems#Tribe_can.27t_create_partition_tables")
+
+--------------------------------------------------------------------------------------
+
+disc created by Phil Miller (amnon - Chakra ISO-Builder)

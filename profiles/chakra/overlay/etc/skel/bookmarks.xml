@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xbel>
+<xbel version="1.0" dbusName="konqueror" >
+ <bookmark href="http://www.chakra-project.org/" >
+  <title>The Chakra Project</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="chakra-smooth" />
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="http://www.chakra-project.org/news/" >
+  <title>News</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="akregator" />
+   </metadata>
+  </info>
+  <desc>Fresh news</desc>
+ </bookmark>
+ <bookmark href="http://www.chakra-project.org/bbs/" >
+  <title>Forums</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="system-users" />
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="http://www.chakra-project.org/wiki/index.php/Main_Page" >
+  <title>Documentation</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="system-help" />
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="http://www.chakra-project.org/code.html" >
+  <title>Code</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="preferences-system" />
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="http://chakra-project.org/code/index.php/log/packages:/" >
+  <title>Changelogs</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="utilities-log-viewer" />
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="http://www.chakra-project.org/bugs/" >
+  <title>Bugs</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="kbugbuster" />
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="http://chakra-project.org/donate.html" >
+  <title>Donate</title>
+  <info>
+   <metadata owner="http://freedesktop.org" >
+    <bookmark:icon name="face-wink" />
+   </metadata>
+  </info>
+ </bookmark>
+</xbel>

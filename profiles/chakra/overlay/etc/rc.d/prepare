@@ -1,0 +1,18 @@
+#!/bin/sh
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+. /usr/lib/liblinuxlive
+
+# 如果启动参数加上 nomount 则不会自动挂载搜索到的硬盘分区
+if [ "$nomount" != "y" ]; then
+	if [ "${msg_lang}" = "cn" ]; then
+		stat_busy "正在更新 本地fstab设置"
+	else
+		stat_busy "Update local fstab configure"
+	fi
+	[ -f /etc/fstab ] && (mv -f /etc/fstab /etc/fstab.bak)
+	touch "/etc/fstab"
+	fstab_update /
+	stat_done
+fi

@@ -1,0 +1,17 @@
+[Desktop Entry]
+Comment=Chakra Homepage
+Comment[ca]=Pàgina web de Chakra
+Comment[ca@valencia]=Pàgina web de Chakra
+Comment[es]=Página web de Chakra
+Comment[gl]=Páxina web de Chakra
+Exec=xdg-open http://www.chakra-project.org
+Icon=chakra-flat
+Name=Homepage
+Name[ca]=Pàgina web
+Name[ca@valencia]=Pàgina web
+Name[es]=Página web
+Name[gl]=Páxina web
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Chakra;

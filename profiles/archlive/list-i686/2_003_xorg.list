@@ -25,8 +25,6 @@ xf86-input-synaptics
 #libx86
 #vbetool
 #pm-utils
-#consolekit
-#hal
 #libdrm
 #xf86vidmodeproto
 #libxxf86vm
@@ -112,6 +110,15 @@ iso-codes
 shared-mime-info
 # Freedesktop.org Shared MIME Info  2.64MB
 #
+
+xorg-xrdb
+# X server resource database utility
+
+consolekit
+# A framework for defining and tracking users, login sessions, and seats
+
+hal
+#  Hardware Abstraction Layer
 
 desktop-file-utils
 # Command line utilities for working with desktop entries   0.10MB
@@ -323,3 +330,7 @@ libflashsupport
 mtasc
 # An open source flash (swf) compiler  安装后大小： 1032.00 K
 
+libjpeg
+libjpeg6
+libpng
+libpng12

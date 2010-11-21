@@ -1,0 +1,43 @@
+#base-devel
+m4
+autoconf
+automake
+bin86
+fakeroot
+# gcc 依赖
+#mpfr
+#libmpc
+#ppl
+#cloog-ppl
+#libelf
+gcc
+#
+#libtool
+# 被mpg123 等依赖安装
+
+gdb
+# The GNU Debugger
+
+make
+patch
+#pkgconfig
+pkg-config
+#
+pkgtools
+#rsync
+abs
+yaourt
+aurvote
+#
+bzr
+#A decentralized revision control system
+subversion
+mercurial
+git
+#
+cmake
+
+boost
+# Free peer-reviewed portable C++ source libraries - Development
+boost-libs
+# Free peer-reviewed portable C++ source libraries - Runtime

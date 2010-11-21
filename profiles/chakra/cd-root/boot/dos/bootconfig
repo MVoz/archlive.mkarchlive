@@ -1,0 +1,11 @@
+..\..\archlive\boot\i686-vmlinuz26
+root=/dev/ram0
+rw
+
+initrd=..\..\archlive\boot\i686-kernel26.img
+prompt_ramdisk=0         # we do not need to be prompted
+archlivelabel=archlive
+ramsize=60%        
+vga=791
+quiet
+cn

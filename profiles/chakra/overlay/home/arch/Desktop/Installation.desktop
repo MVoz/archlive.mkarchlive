@@ -1,0 +1,23 @@
+[Desktop Entry]
+Comment[en_US]=
+Comment=
+Comment[de]=
+Exec=/usr/bin/run-tribe.sh
+GenericName[en_US]=
+GenericName=
+GenericName[de]=
+Icon=tribe
+MimeType=
+Name[en_US]=Installation
+Name=Installation
+Name[ca]=Instal·lació
+Name[de]=Installation
+Path=
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

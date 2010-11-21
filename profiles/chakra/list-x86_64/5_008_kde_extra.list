@@ -1,0 +1,25 @@
+# kde (everything else)
+kdeadmin-kuser
+kdeadmin-kcron
+kdeadmin-ksystemlog
+kdeadmin-system-config-printer
+kdegraphics-gwenview
+kdegraphics-kamera
+kdegraphics-kolourpaint
+kdegraphics-ksnapshot
+kdegraphics-okular
+kdemultimedia-juk
+kdemultimedia-kmix
+kdemultimedia-thumbnailers
+kdenetwork-kget
+kdenetwork-kopete
+kdepim-runtime
+kdepim-kmail
+kdesdk-kate
+kdeutils-ark
+kdeutils-kcalc
+kdeutils-kgpg
+kdeutils-printer-applet
+kdeutils-sweeper
+kdeplasma-addons
+kdeutils-superkaramba

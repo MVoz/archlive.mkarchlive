@@ -1,0 +1,9 @@
+[General]
+homePage=http://www.chakra-project.org
+
+[MainWindow][Toolbar MainToolBar]
+ToolButtonStyle=IconOnly
+
+[NewTabPage]
+previewNames=The Chakra Project,News,Forums,Wiki,Code,Changelogs,Bugs,Donate
+previewUrls=http://www.chakra-project.org,http://www.chakra-project.org/news,http://www.chakra-project.org/bbs,http://www.chakra-project.org/wiki/index.php/Main_Page,http://www.chakra-project.org/code.html,http://chakra-project.org/code/index.php/log/packages:,http://www.chakra-project.org/bugs,http://chakra-project.org/donate.html

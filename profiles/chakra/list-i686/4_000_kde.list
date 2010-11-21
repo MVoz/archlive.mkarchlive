@@ -1,0 +1,37 @@
+kde-common
+kdelibs
+kdepimlibs
+kdebase-runtime
+kdebase
+kdebase-dolphin
+kdebase-konsole
+kdebase-konqueror
+kdebase-workspace
+kde-l10n-zh_cn
+oxygen-icons
+phonon-xine
+
+# chakra networkmanagement
+consolekit
+networkmanagement
+modemmanager
+
+# arxin, chase & tribe + dependencies
+kdebindings-common
+kdebindings-python
+#netcfg
+arxin
+kgrubeditor
+#shaman2-svn
+cinstall   
+hwinfo                                                                                                                                                               
+chakra-tribe
+
+# themes
+kde-kdm-themes-crunchy-branch-blue
+kde-ksplash-themes-crunchy-branch-blue
+kde-wallpapers-crunchy-branch-blue
+# default theme
+kde-kdm-themes-ashoc
+kde-ksplash-themes-ashoc
+kde-wallpapers-ashoc

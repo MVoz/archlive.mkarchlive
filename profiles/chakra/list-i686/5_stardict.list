@@ -1,0 +1,5 @@
+#stardict
+# 之前的软件清单中已经包含gtk或者qt版本的stardict
+
+-d stardict-babylon-Longman-img
+-d stardict-powerword2007_pwpcehh

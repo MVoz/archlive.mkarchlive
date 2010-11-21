@@ -1,6 +1,6 @@
 #!/bin/ash
 
-boot_version=Ver.20101117
+boot_version=Ver.20101118
 
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改

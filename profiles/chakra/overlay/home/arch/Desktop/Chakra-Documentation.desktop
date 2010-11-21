@@ -1,0 +1,17 @@
+[Desktop Entry]
+Comment=Chakra Documentation
+Comment[ca]=Documentació de Chakra
+Comment[ca@valencia]=Documentació de Chakra
+Comment[es]=Documentación de Chakra
+Comment[gl]=Documentación de Chakra
+Exec=xdg-open http://www.chakra-project.org/wiki/
+Icon=system-help
+Name=Documentation
+Name[ca]=Documentació
+Name[ca@valencia]=Documentació
+Name[es]=Documentación
+Name[gl]=Documentación
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Chakra;
