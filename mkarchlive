@@ -51,6 +51,8 @@ export COLOR=y
 
 #START_DIR=$(pwd)
 START_DIR=.
+# 两种方式均可
+
 . ${START_DIR}/lib/functions
 
 case "$cmdline" in *-h*) usage 1;; esac
@@ -288,6 +290,7 @@ echo ""
 echo "  宿主系统是否是Arch GNU/Linux:  ${ARCH_HOST} "
 echo "        ${APPNAME}程序执行操作:  ${CMD_NAME}"
 echo "          Archlive定制配置文件:  ${CONFIG_FILE}"
+echo "            Archlive配置文件夹:  ${PROFILE_DIR}"
 if [ "$arch" = "dul" ]; then
 echo "                      目标系统:  双模式(i686 + x86_64)"
 else

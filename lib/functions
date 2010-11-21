@@ -242,7 +242,6 @@ check_config ()
 		fi
 	elif [ -f "${config_file}" ]; then
 		CONFIG_FILE="${config_file}"
-		PROFILE_DIR="$(dirname ${CONFIG_FILE})"
 	elif [ -d "${START_DIR}/profiles/${config_file}" ]; then
 		CONFIG_FILE="${START_DIR}/profiles/${config_file}/archlive.conf"
 		if [ ! -f ${CONFIG_FILE} ] && [ "x$cdname" != "x" ]; then
@@ -251,14 +250,15 @@ check_config ()
 				error "指定的配置名目录下无配置文件, 请指定具体配置文件名, \n或者-c指定配置文件名，该名同时也是目标镜像名."
 				exit 1
 			fi
-		fi
-		PROFILE_DIR="$(dirname ${CONFIG_FILE})"
+		fi		
 	else
 		error "指定的配置名/配置文件名不存在，请重新指定."
 		exit 1
 	fi
 
 	source ${CONFIG_FILE}
+	PROFILE_DIR="$(dirname ${CONFIG_FILE})"
+
 	if [ "x${boot_kernel_config1}" != "x" ]; then
 		CPIOCONFIG="${PROFILE_DIR}/${boot_kernel_config1}"
 	elif [ "x${boot_kernel_config}" != "x" ]; then
@@ -1198,6 +1198,11 @@ cmd_clean () {
    [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
    LOG=${BUILDLOG}/${ARCH}-clean_files.log
    [ -f ${LOG} ] && rm -f ${LOG}
+
+   # 删除已经安装的主题、图标等
+   if [ "${DELETE_THEMES}" = "y" ]; then
+	DELDIR="${DELDIR} usr/share/icons usr/share/themes usr/share/backgrounds usr/share/cursors"
+   fi
 
    plain "删除指定的文件夹..." | tee -a ${LOG}
    for tmp_dir in ${DELDIR}; do
