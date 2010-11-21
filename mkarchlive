@@ -63,7 +63,15 @@ host_isnot_arch
 
 export QUIET
 export FORCE
+export CONFIG_FILE
 export PROFILE_DIR
+export ARCH
+export arch
+export CPIOCONFIG
+export ZIP_MODE
+export CACHE
+export BOOT
+export CDNAME
 
 # 检测输入的参数
 while getopts 'P:c:A:i:b:z:C:nfvh' arg; do

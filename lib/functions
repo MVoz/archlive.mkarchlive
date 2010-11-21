@@ -306,8 +306,8 @@ check_config ()
 
 	if [ "x${arch1}" != "x" ]; then
 		case "${arch1}" in
-			i686|x86_64) ARCH=${arch1};;
-			dul) ARCH="";;
+			i686|x86_64) ARCH=${arch1}; arch=${arch1};;
+			dul) ARCH=""; arch=${arch1};;
 			*) warn "命令行指定了无效的 ARCH ${arch1}, 采用默认的 i686. "; ARCH="i686" ;;
 		esac
 	elif [ "x${arch}" != "x" ]; then
@@ -319,6 +319,7 @@ check_config ()
 	else
 		warn "命令行和配置文件均没有指定 ARCH, 采用默认的 i686."
 		ARCH="i686"
+		arch="i686"
 	fi
 
 	if [ "x${cache_dir}" != "x" ]; then
