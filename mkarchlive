@@ -229,6 +229,9 @@ function init_config ()
 {
 	# 装载archlive软件仓等相关配置
 	PACMANCONF="${PROFILE_DIR}/pacman_${ARCH}.conf"
+	[ ! -f ${PACMANCONF} ] && error "不存在pacman配置文件${PACMANCONF}" && exit 1
+	cp -f $PACMANCONF ${WORK_DIR}/
+	PACMANCONF="${WORK_DIR}/$(basename ${PACMANCONF})"
 
 	# 清单文件夹
 	LISTDIR=list-${ARCH}

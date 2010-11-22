@@ -237,24 +237,30 @@ check_config ()
 		if [ -f "${START_DIR}/profiles/archlive/archlive.conf" ]; then
 			CONFIG_FILE="${START_DIR}/profiles/archlive/archlive.conf"
 		else
-			error "没有指定制作配置文件、也不存在默认制作配置文件， \n请重新指定配置文件名或者重新获取archlive制作工具."
+			error "没有指定制作配置文件、也不存在默认制作配置文件， \n请重新指定配置文件名或者重新获取archlive制作工具.\n"
 			exit 1
 		fi
 	elif [ -f "${config_file}" ]; then
 		CONFIG_FILE="${config_file}"
 	elif [ -d "${START_DIR}/profiles/${config_file}" ]; then
-		CONFIG_FILE="${START_DIR}/profiles/${config_file}/archlive.conf"
-		if [ ! -f ${CONFIG_FILE} ] && [ "x$cdname" != "x" ]; then
+		if [ "x$cdname" != "x" ]; then
 			CONFIG_FILE="${START_DIR}/profiles/${config_file}/${cdname}.conf"
 			if [ ! -f ${CONFIG_FILE} ]; then
-				error "指定的配置名目录下无配置文件, 请指定具体配置文件名, \n或者-c指定配置文件名，该名同时也是目标镜像名."
+				error "指定的配置名${config_file}目录下无配置文件${cdname}.conf.\n    指定了目标live系统名${cdname}, 其配置文件名也必须是${cdname}.conf.\n    请确保${cdname}.conf是否存在于${START_DIR}/profiles/${config_file}目录下.\n"
 				exit 1
 			fi
+		else
+			CONFIG_FILE="${START_DIR}/profiles/${config_file}/archlive.conf"
+			if [ ! -f ${CONFIG_FILE} ]; then
+				error "指定的配置名${config_file}目录下无标准配置文件archlive.conf, \n    请确保存在archlive.conf, \n    或者通过 -c 指定另外的名称，该名称同时也是目标系统名.\n"
+				exit 1
+			fi				
 		fi		
 	else
-		error "指定的配置名/配置文件名不存在，请重新指定."
+		error "指定的配置名/配置文件名不存在，请重新指定.\n"
 		exit 1
 	fi
+	[ "x$(grep "CDNAME" ${CONFIG_FILE})" = "x" ] && error "指定的配置文件${CONFIG_FILE}无效, 请重新指定.\n" && exit 1
 
 	source ${CONFIG_FILE}
 	PROFILE_DIR="$(dirname ${CONFIG_FILE})"
@@ -1472,6 +1478,7 @@ cmd_boot_kernel_image () {
 
    msg2 "更新版本信息" | tee -a ${LOG}
    boot_version="$(date +%Y%m%d)"
+   cp -f $(dirname $MKINITCPIO)/initcpio/{liblinuxlive,liblinuxlive.bak}
    sed -i "s%boot_version=.*%boot_version=Ver.$boot_version%g" $(dirname $MKINITCPIO)/initcpio/liblinuxlive
    chmod +x $(dirname $MKINITCPIO)/initcpio/init
 
@@ -1510,6 +1517,7 @@ cmd_boot_kernel_image () {
    green "完成！" | tee -a ${LOG}
    umount -l $UNION
    for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
+   mv -f $(dirname $MKINITCPIO)/initcpio/{liblinuxlive.bak,liblinuxlive}
 }
 
 cmd_img () {
