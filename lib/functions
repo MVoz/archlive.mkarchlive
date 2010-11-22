@@ -1444,7 +1444,7 @@ cmd_squash () {
 	target_file="${moduleplace}/${ARCH}-$(basename ${module_dir}).${EXT}"
 
 	# 如果不存在制作好的模块或者有更新则创建模块  ${PACKLIST}/${ARCH}-${module_dir}.list存放对应模块的更新详情
-	if [ ! "$(find $IMGROOT/$CDNAME -name $(basename  ${target_file}))" -o "x$(cat ${PACKLIST}/${ARCH}-${module_dir}.list)" != "x" ]; then
+	if [ ! "$(find $IMGROOT/$CDNAME -name $(basename  ${target_file}))" -o "x$(cat ${PACKLIST}/${ARCH}-${module_dir}.list 2>/dev/null)" != "x" ]; then
 		mksquashfs_module "${source_dir}" "${target_file}" "${LOG}"
 	fi
    done
@@ -1518,6 +1518,7 @@ cmd_boot_kernel_image () {
    umount -l $UNION
    for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
    mv -f $(dirname $MKINITCPIO)/initcpio/{liblinuxlive.bak,liblinuxlive}
+   chmod 777 $(dirname $MKINITCPIO)/initcpio/liblinuxlive
 }
 
 cmd_img () {
