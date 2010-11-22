@@ -1,6 +1,6 @@
 #!/bin/busybox ash
 # Archlive 启动脚本
-# Archlive (Carbon Jiao) 更新于2010.11.16
+# Archlive (Carbon Jiao) 更新于2010.11.22
 
 # 创建busybox包含程序的链接
 # Install busybox's applets as symlinks
@@ -72,6 +72,10 @@ done
 case $CMDLINE in *i686*) export ARCH="i686" ;;
 		*x86_64*) export ARCH="x86_64" ;;
 esac
+
+if [ "x${ARCH}" = "x" ]; then
+	ARCH=$(uname -m)
+fi
 
 if [ "$break" = "y" ] || [ "$debug" = "y" ]; then
 	export DEBUG_IS_ENABLED="y"
@@ -201,7 +205,7 @@ fi
 # use mdev to create /dev/ devices and setup it as a hotplug-handler
 modprobe_essential_modules
 
-[ -x /sbin/btrfs ] && (/sbin/btrfs device scan 2>&1 >/dev/null)
+#[ -x /sbin/btrfs ] && (/sbin/btrfs device scan 2>/dev/null 1>/dev/null)
 
 # 挂载 squashfs 压缩的驱动及usr 目录（如果有）
 # /usr and some drivers are compressed in initrd 
@@ -563,9 +567,11 @@ else
 	echolog "Loading modules:"
 	debug_log "Mount modules under $DATA to $IMAGES，mount root filesystem to $UNION"
 fi
-	
+
+debug_shell
 union_insert_modules $UNION $DATA $IMAGES
 
+debug_shell
 # the $MEMORY directory can contain $MEMORY/modules too
 # in the case if changes= boot argument is used. If not, it doesn't hurt
 # 挂载保存修改的文件系统

@@ -1050,8 +1050,8 @@ cmd_install ()
 		fi
 		[ -d ${conf_target}/etc/pacman.d ] || mkdir -p ${conf_target}/etc/pacman.d
 
-		mv -f ${MODULEDIR}/${mod}/etc/{pacman.conf,pacman.conf.larch}
-		mv -f ${MODULEDIR}/${mod}/etc/pacman.d/{mirrorlist,mirrorlist.larch}
+		mv -f ${MODULEDIR}/${mod}/etc/{pacman.conf,pacman.conf.larchsave}
+		mv -f ${MODULEDIR}/${mod}/etc/pacman.d/{mirrorlist,mirrorlist.larchsave}
 		#cp -f ${PACMANCONF} ${conf_target}/etc/pacman.conf
 		#cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist
 

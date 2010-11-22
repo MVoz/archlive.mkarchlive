@@ -1,6 +1,6 @@
 #!/bin/ash
 
-boot_version=Ver.20101118
+boot_version=Ver.20101122
 
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改
@@ -791,7 +791,7 @@ union_insert_dir()
 # $2 ARCH  i686 or x86_64
 find_modules()
 {
-   debug_log "find_modules" "$*"
+   debug_log "ARCH=$ARCH find_modules" "$*"
    if [ "$2" = "i686"  -o "$ARCH" = "i686" ]; then
 	 append_cmd="grep -v x86_64"
    elif [ "$2" = "x86_64" -o "$ARCH" = "x86_64" ]; then
@@ -817,7 +817,7 @@ find_modules()
 #
 list_modules()
 {
-   debug_log "list_modules" "$*"
+   debug_log "ARCH=$ARCH list_modules" "$*"
    local LOAD NOLOAD
 
    LOAD=$(cmdline_value load | sed -r 's/\*/.\*/g' | sed -r 's/,|;/|/g')
@@ -843,7 +843,7 @@ list_modules()
 # 将$2模块挂载到$3并加入$1，去掉前缀$4
 union_insert_module()
 {
-   debug_log "union_insert_module" "$*"
+   debug_log "ARCH=$ARCH union_insert_module" "$*"
    local TARGET
 
    TARGET="$3/$(basename $2)"
@@ -879,7 +879,7 @@ union_insert_module()
 # 将$2下的模块挂载到$3，并加入到$1
 union_insert_modules()
 {
-   debug_log "union_insert_modules" "$*"
+   debug_log "ARCH=$ARCH union_insert_modules" "$*"
    local INSERTED
 
    list_modules $2 | while read MODULE; do
