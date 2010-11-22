@@ -158,20 +158,6 @@
         <execute>scrot -b -s '/home/arch/Desktop/%Y%m%d_%H%M%S_$wx$h.png' -e 'gpicview $f'</execute>
       </action>
     </keybind>
-
-    <!--
-    <keybind key="A-Print">
-      <action name="Execute">
-        <execute>scrot  -d 5 '%Y-%m-%d_%S_$wx$h_scrot.png'</execute>
-      </action>
-    </keybind>
-     ######################################################################################
-    <keybind key="W-F12">
-      <action name="SessionLogout">
-        <prompt>yes</prompt>
-      </action>
-    </keybind>
-  -->
     <keybind key="A-F1">
       <action name="ToggleDecorations"/>
     </keybind>

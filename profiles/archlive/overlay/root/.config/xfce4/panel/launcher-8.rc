@@ -1,0 +1,13 @@
+[Entry 0]
+Name=Editor
+Comment=Edit text files
+Icon=accessories-text-editor
+Exec=leafpad
+Path=/home/arch
+Terminal=false
+StartupNotify=true
+
+[Global]
+MoveFirst=false
+ArrowPosition=0
+

@@ -36,8 +36,8 @@ pcmanfm --desktop &
 #feh --bg-scale ~/.config/wallpapers/Tiger_Blue.jpg
 
 # 桌面特效：部分窗口半透明、窗口阴影等
-#killall xcompmgr >/dev/null
-#xcompmgr -Ss -n -Cc -fF -I-10 -O-10 -D1 -t-3 -l-4 -r4 &
+killall xcompmgr >/dev/null
+xcompmgr -Ss -n -Cc -fF -I-10 -O-10 -D1 -t-3 -l-4 -r4 &
 
 # set panel
 #killall tint2 > /dev/null 2>&1

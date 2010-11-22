@@ -1,0 +1,105 @@
+---------------------------------                                                                                            
+-- archlive awesome theme --                                                                                            
+---------------------------------                                                                                            
+
+#font = terminus 10
+font = sans 10
+
+bg_normal     = #000000
+bg_focus      = #2f4f4f
+bg_urgent     = #8b0000
+
+fg_normal     = #f5deb3
+fg_focus      = #ffa500
+fg_urgent     = #ffff00
+
+border_width  = 1
+border_normal = #2f4f4f
+border_focus  = #ffa500
+border_marked = #8b0000
+
+# You can use your own command to
+# set your wallpaper
+#wallpaper_cmd =  xsetroot -bg black
+wallpaper_cmd = awsetbg /usr/share/wallpapers/Tiger_Blue.jpg
+
+# You can add as many variables as
+# you wish and access them by using
+# beautiful.variable in your rc.lua
+bg_widget    = #cc0000
+
+fg_cursor     = #00EE00
+
+# Display the taglist squares
+taglist_squares = true
+
+
+# Display the taglist squares
+taglist_squares_sel = /usr/share/awesome/themes/default/taglist/squarefw.png
+taglist_squares_unsel = /usr/share/awesome/themes/default/taglist/squarew.png
+
+tasklist_floating_icon = /usr/share/awesome/themes/default/tasklist/floatingw.png
+
+# Variables set for theming menu
+# menu_[bg|fg]_[normal|focus]
+# menu_[border_color|border_width]
+menu_submenu_icon = /usr/share/awesome/themes/default/submenu.png
+menu_height   = 24
+menu_width    = 120
+
+# Define the image to load
+titlebar_close_button_normal = /usr/share/awesome/themes/default/titlebar/close.png
+titlebar_close_button_focus = /usr/share/awesome/themes/default/titar/closer.png
+
+# You can use your own layout icons like this:
+layout_dwindle = /usr/share/awesome/themes/default/layouts/dwindlew.png
+layout_fairh = /usr/share/awesome/themes/default/layouts/fairhw.png
+layout_fairv = /usr/share/awesome/themes/default/layouts/fairvw.png
+layout_floating = /usr/share/awesome/themes/default/layouts/floatingw.png
+layout_magnifier = /usr/share/awesome/themes/default/layouts/magnifierw.png
+layout_max = /usr/share/awesome/themes/default/layouts/maxw.png
+layout_spiral = /usr/share/awesome/themes/default/layouts/spiralw.png
+layout_tilebottom = /usr/share/awesome/themes/default/layouts/tilebottomw.png
+layout_tileleft = /usr/share/awesome/themes/default/layouts/tileleftw.png
+layout_tile = /usr/share/awesome/themes/default/layouts/tilew.png
+layout_tiletop = /usr/share/awesome/themes/default/layouts/tiletopw.png
+
+awesome_icon = /usr/share/pixmaps/archlive.png
+awesome_orig_icon = /usr/share/awesome/icons/awesome16.png
+archlive_exit_icon = /usr/share/pixmaps/exit.png
+archlive_restart_icon = /usr/share/pixmaps/restart.png
+
+archlive_lxterminal_icon = /usr/share/pixmaps/lxterminal.png
+benliud_icon = /usr/share/pixmapns/benliud.png
+larchin_icon = /usr/share/pixmapns/larchin.png
+htop_icon = /usr/share/pixmapns/htop.png
+audacious_icon = /usr/share/pixmapns/audacious.png
+archlive_firefox_icon = /usr/share/pixmapns/firefox.png
+geany_icon = /usr/share/pixmapns/geany.png
+gpicview_icon = /usr/share/pixmapns/gpicview.png
+grsync_icon = /usr/share/pixmapns/grsync.png
+leafpad_icon = /usr/share/pixmapns/leafpad.png
+mtpaint_icon = /usr/share/pixmapns/mtpaint.png
+pcmanfm_icon = /usr/share/pixmapns/pcmanfm.png
+rox_icon = /usr/share/pixmapns/rox.png
+streamtuner_icon =/usr/share/pixmapns/streamtuner.png
+transmission_icon = /usr/share/pixmapns/transmission.png
+xchm_icon = /usr/share/pixmapns/xchm-16.xpm
+grdc_icon = /usr/share/pixmapns/grdc.png
+pidgin_icon = /usr/share/pixmapns/pidgin/logo.png
+skype_icon = /usr/share/pixmapns/skype.png
+xchat_icon = /usr/share/pixmapns/skype.png
+xchat_icon = /usr/share/pixmapns/xchat.png
+qq_icon = /usr/share/tencent/qq/qq.png
+comix_icon = /usr/share/icons/hicolor/48x48/apps/comix.png
+foxitreader_icon = /usr/share/pixmapns/foxitreader.png
+gsnapshot_icon = /usr/share/pixmapns/gsnapshot.png
+gmplayer_icon = /usr/share/pixmapns/mplayer.xpm
+vlc_icon = /usr/share/vlc/vlc48x48-christmas.png
+gmlive_icon = /usr/share/pixmapns/gmlive.png
+urxvt_icon = /usr/share/pixmapns/rxvt-unicode.png
+sakura_icon = /usr/share/pixmapns/terminal-tango.png
+crack_icon = /usr/share/pixmapns/crack.png
+gadmin-rsync_icon = /usr/share/pixmapns/gadmin-rsync.png
+pppoe_icon = /usr/share/pixmapns/pppoe.xpm
+net-wizard_icon = /usr/share/pixmapns/wizard16.xpm

@@ -1,0 +1,12 @@
+[Entry 0]
+Name=PCManFM
+Icon=pcmanfm
+Exec=/usr/bin/pcmanfm
+Path=/home/arch
+Terminal=false
+StartupNotify=false
+
+[Global]
+MoveFirst=false
+ArrowPosition=0
+
