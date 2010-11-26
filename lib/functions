@@ -262,8 +262,8 @@ check_config ()
 	fi
 	[ "x$(grep "CDNAME" ${CONFIG_FILE})" = "x" ] && error "指定的配置文件${CONFIG_FILE}无效, 请重新指定.\n" && exit 1
 
-	source ${CONFIG_FILE}
 	PROFILE_DIR="$(dirname ${CONFIG_FILE})"
+	source ${CONFIG_FILE}
 
 	if [ "x${boot_kernel_config1}" != "x" ]; then
 		CPIOCONFIG="${PROFILE_DIR}/${boot_kernel_config1}"
