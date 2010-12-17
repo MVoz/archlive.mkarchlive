@@ -1,0 +1,20 @@
+#
+# /etc/rc.conf - Main Configuration for Archlive
+
+LOCALE=zh_CN.utf8
+HARDWARECLOCK="localtime"
+TIMEZONE="Asia/Shanghai"
+KEYMAP="us"
+CONSOLEFONT=
+CONSOLEMAP=
+USECOLOR="yes"
+MOD_AUTOLOAD="yes"
+
+MODULES=("fuse" "loop")
+
+HOSTNAME="archlive"
+
+eth0="dhcp"
+INTERFACES=(eth0)
+
+DAEMONS=(syslog-ng !polkitparser dbus hal @networkmanager !crond !portmap !slim)

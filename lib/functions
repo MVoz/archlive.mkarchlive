@@ -735,10 +735,10 @@ function pac_install () {
 	LOG="${BUILDLOG}/${ARCH}-${mod}.log"
 	echo -e "\n安装$pkgname\n" >> ${LOG}
 	if [ "${QUIET}" = "y" ]; then
-		ARCH=$ARCH $PACMAN -S -f $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" >>${LOG} 2>&1
+		ARCH=$ARCH $PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" >>${LOG} 2>&1
 	else
 		echo ""
-		ARCH=$ARCH $PACMAN -S -f $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" | tee -a ${LOG}
+		ARCH=$ARCH $PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" | tee -a ${LOG}
 	fi
 	case $? in
 	   0) (green "软件包${pkgname/-d /} 安装成功! " | tee -a ${LOG} ) && break;;
@@ -767,9 +767,9 @@ function pac_remove () {
     while true; do
 	LOG=${BUILDLOG}/${mod}.log
 	if [ "${QUIET}" = "y" ]; then
-		ARCH=$ARCH $PACMAN -R -d -n --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
+		ARCH=$ARCH $PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
 	else
-		ARCH=$ARCH $PACMAN -R -d -n --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
+		ARCH=$ARCH $PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
 	fi
 	if [ $? -eq 0 ]; then
 		green "软件包${pkgname} 卸载成功! " | tee -a ${LOG}
@@ -1728,6 +1728,7 @@ cmd_img () {
         if [ $? -eq 0 ]; then
 		./lib/bin/isohybrid "${IMGNAME}" 2>&1 >>${LOG}
 		md5sum "${IMGNAME}" > "${IMGNAME}".md5
+		sha1sum "${IMGNAME}" > "${IMGNAME}".sha1
 		iso_size=$(isosize ${IMGNAME} 2>/dev/null)
 		if [ "x${iso_size}" = "x" ]; then
 			iso_size=$(grep " MB" /tmp/archlive_img.log | sed 's|.*(\(.*cat ${PKGFILE} | sort > ${IMGROOT}/${CDNAME}/${CDNAME}.listMB\))|\1|')
