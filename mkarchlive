@@ -122,7 +122,7 @@ EXTRAMODULES=$(echo $EXTRAMODULES | tr -s " " "\n" | grep -v "#")
 
 #-------------------------------------------------------------------
 LIBS="${START_DIR}/lib/mkinitcpio/initcpio/liblinuxlive"
-MKINITCPIO="${START_DIR}/lib/mkinitcpio/mkinitcpio"
+MKINITCPIO="${START_DIR}/lib/mkinitcpio"
 PACMAN_STATIC="${START_DIR}/lib/bin/pacman.static"
 #-------------------------------------------------------------------
 
@@ -228,9 +228,7 @@ EXTRA_PACKAGE_TARGET="${IMGROOT}/${CDNAME}/modules/extra_package"
 function init_config ()
 {
 	# 装载archlive软件仓等相关配置
-	PACMANCONF="${PROFILE_DIR}/pacman_${ARCH}.conf"
-	cp -f $PACMANCONF ${WORK_DIR}/
-	PACMANCONF="${WORK_DIR}/$(basename ${PACMANCONF})"
+	PACMANCONF="${WORK_DIR}/pacman_${ARCH}.conf"
 
 	# 清单文件夹
 	LISTDIR=list-${ARCH}

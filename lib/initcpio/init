@@ -1,12 +1,19 @@
 #!/bin/busybox ash
-# Archlive 启动脚本
-# Archlive (Carbon Jiao) 更新于2010.11.22
+#
+# Archlive 启动脚本 属于Archlive项目的一部分
+# This script is a part of the Archlive project.
+#
+# Author: Carbon Jiao <carbonjiao alt gmail dot com>
+# 作者 Carbon Jiao  <carbonjiao alt gmail dot com>
+# 更新于2010.12.20
+# Update in 2010.12.20
 
+# 由此开始美妙的旅程  Magic start here 
 # 创建busybox包含程序的链接
 # Install busybox's applets as symlinks
 /bin/busybox --install -s
 
-export PATH=.:/:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH=.:/:/usr/sbin:/usr/bin:/sbin:/bin:/session-save
 
 /bin/mount -t proc proc /proc
 /bin/mount -t sysfs sys /sys
@@ -721,12 +728,12 @@ fi
 udevpid=$(pidof udevd 2>/dev/null)
 debug_log "udevpid=$udevpid"
 
-#umount /proc >/dev/null 2>&1
-#umount /sys >/dev/null 2>&1
+umount /proc >/dev/null 2>&1
+umount /sys >/dev/null 2>&1
 
-mount --move /proc /${UNION}/proc >/dev/null 2>&1
-mount --move /sys /${UNION}/sys >/dev/null 2>&1
-mount --move /dev /${UNION}/dev >/dev/null 2>&1
+#mount --move /proc /${UNION}/proc >/dev/null 2>&1
+#mount --move /sys /${UNION}/sys >/dev/null 2>&1
+#mount --move /dev /${UNION}/dev >/dev/null 2>&1
 
 if [ "$cn" = "y" ]; then
 	debug_log "切换到 $UNION启动."

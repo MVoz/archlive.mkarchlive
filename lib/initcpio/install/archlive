@@ -56,10 +56,10 @@ udev_install ()
     #SCRIPT="udev" # 合并到 init
     add_file "${BASEDIR}/sbin/udevd" "/sbin/udevd"
     add_file "${BASEDIR}/sbin/udevadm" "/sbin/udevadm"
-    for rules in 50-firmware.rules 50-udev-default.rules 60-persistent-storage.rules 80-drivers.rules; do
+    for rules in 50-firmware.rules 50-udev-default.rules 60-persistent-storage.rules 60-cdrom_id.rules 80-drivers.rules; do
         add_file "${BASEDIR}/lib/udev/rules.d/${rules}" "/lib/udev/rules.d/${rules}"
     done
-    for tool in firmware ata_id path_id scsi_id usb_id; do
+    for tool in firmware ata_id path_id scsi_id usb_id udisks-part-id cdrom_id; do
         add_file "${BASEDIR}/lib/udev/${tool}" "/lib/udev/${tool}"
     done
     add_file "${BASEDIR}/lib/initcpio/udev/load-modules.sh" "/lib/udev/load-modules.sh"
@@ -121,8 +121,10 @@ btrfs_install()
 {
     MODULES="${MODULES} $(all_modules btrfs)"
     #BINARIES="/sbin/btrfs"
-    add_file "${BASEDIR}/sbin/btrfs" "/sbin/btrfs"
-    #SCRIPT="btrfs"
+    if [ -e "${BASEDIR}/sbin/btrfs" ]; then
+	add_file "${BASEDIR}/sbin/btrfs" "/sbin/btrfs"
+	#SCRIPT="btrfs"
+    fi
 }
 
 net_install ()
@@ -196,6 +198,19 @@ archlive_install ()
 
     add_file "$CWD/initcpio/liblinuxlive" "/usr/lib/liblinuxlive"
     add_file "$CWD/initcpio/cleanup" "/cleanup"
+
+    # 安装mksquashfs以合并overlay
+    add_file "$CWD/bin/mksquashfs4.static" "/usr/bin/mksquashfs"
+
+    add_file "${BASEDIR}/usr/bin/lzop" "/usr/bin/lzop"
+    for file in $(ls -1 ${BASEDIR}/usr/lib/liblzo2.so*  2>/dev/null); do
+	add_file "${file}" "${file##$BASEDIR}"
+    done
+    add_file "${BASEDIR}/bin/tar" "/bin/tar"
+    # tar库 librt.so libpthread.so 上面已经包含
+
+    # 调试程序用 ldd
+    add_file "${BASEDIR}/usr/bin/ldd" "/usr/bin/ldd"
 
     #SCRIPT="archlive" #已经合并到init
 }

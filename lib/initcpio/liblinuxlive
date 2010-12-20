@@ -1,6 +1,6 @@
 #!/bin/ash
 
-boot_version=Ver.20101122
+boot_version=Ver.20101220
 
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改
@@ -649,11 +649,11 @@ mount_device()
    if [ "$FS" = "-t ntfs-3g" ]; then
       ntfsmount "$DEV" "$TARGET" $OPTIONS >/dev/null 2>&1
       ERR=$?
-      debug_log "1st try: ERR=$ERR ................"
+      debug_log "1st try: ERR=$ERR ntfsmount "$DEV" "$TARGET" $OPTIONS ..."
    else
       mount -n $OPTIONS $FS "$DEV" "$TARGET" >/dev/null 2>&1
       ERR=$?
-      debug_log "1st try: ERR=$ERR ................"
+      debug_log "1st try: ERR=$ERR mount -n $OPTIONS $FS "$DEV" "$TARGET" ..."
    fi
 
    # not enough loop devices? try to create one.
@@ -671,7 +671,7 @@ mount_device()
        debug_log "OPTIONS=\"$OPTIONS\" FS=\"$FS\" LOOPDEV=\"$LOOPDEV\" TARGET=\"$TARGET\""
        mount -n $OPTIONS $FS "$LOOPDEV" "$TARGET" >/dev/null 2>&1
        ERR=$?
-       debug_log "2nd try: ERR=$SRR ....................."
+       debug_log "2nd try: ERR=$SRR mount -n $OPTIONS $FS "$LOOPDEV" "$TARGET" ..."
    fi
 
 

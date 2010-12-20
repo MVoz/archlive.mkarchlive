@@ -310,6 +310,8 @@ check_config ()
 		ZIP_MODE=1
 	fi
 
+	# arch1 参数来自于命令行，会覆盖配置文件中arch数值
+	# arch 或者 arch1 等于 dul 时候(双模式)，ARCH为空，否则ARCH等于arch1或者arch
 	if [ "x${arch1}" != "x" ]; then
 		case "${arch1}" in
 			i686|x86_64) ARCH=${arch1}; arch=${arch1};;
@@ -326,6 +328,10 @@ check_config ()
 		warn "命令行和配置文件均没有指定 ARCH, 采用默认的 i686."
 		ARCH="i686"
 		arch="i686"
+	fi
+
+	if [ "x${ARCH}" = "x" ] && [ "$(arch)" != "x86_64" ]; then
+		warn "欲在非64位宿主系统下制作双模式, 64位目标系统安装脚本会无法执行而出现无法欲知的错误!!!"
 	fi
 
 	if [ "x${cache_dir}" != "x" ]; then
@@ -535,6 +541,8 @@ cmd_prepare (){
    [ ! -d ${UNION} ] && mkdir -p "${UNION}"    # {WORK_DIR} 一并被创建
    [ ! -d ${BUILDLOG} ] && mkdir -p "${BUILDLOG}"
 
+   msg2 "准备安装配置文件pacman.conf" | tee -a ${LOG}
+   cp -fv ${PROFILE_DIR}/pacman*.conf ${WORK_DIR}/ >>${LOG}
    if [ "${_CUSTOM_REPO}" = "y" ]; then
 	msg2 "建立自定义软件仓..." | tee -a ${LOG}
 	# i686 自定义repo
@@ -542,8 +550,8 @@ cmd_prepare (){
 		if [ "x$i686_REPO_Name" != "x" -a "x$i686_REPO" != "x" ]; then
 			plain "在$i686_REPO下建立名为$i686_REPO_Name的i686软件仓"
 			custom_repo "i686" "${i686_REPO}" "${i686_REPO_Name}"
-			if ! is_in_pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf"; then
-				add_customrepo2pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_i686.conf" "${LOG}"
+			if ! is_in_pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${WORK_DIR}/pacman_i686.conf"; then
+				add_customrepo2pacmanconf "${i686_REPO_Name}" "${i686_REPO}" "${WORK_DIR}/pacman_i686.conf" "${LOG}"
 			fi
 			green "i686自定义软件仓创建完成!" | tee -a ${LOG}
 		fi
@@ -553,8 +561,8 @@ cmd_prepare (){
 		if [ "x${x86_64_REPO_Name}" != "x" -a "x${x86_64_REPO}" != "x" ]; then
 			plain "在$x86_64_REPO下建立名为$x86_64_REPO_Name的x86_64软件仓"
 			custom_repo "x86_64" "${x86_64_REPO}" "${x86_64_REPO_Name}"
-			if ! is_in_pacmanconf "${x86_64_REPO_Name}" "${i686_REPO}" "${PROFILE_DIR}/pacman_x86_64.conf"; then
-				add_customrepo2pacmanconf "${x86_64_REPO_Name}" "${x86_64_REPO}" "${PROFILE_DIR}/pacman_x86_64.conf" "${LOG}"
+			if ! is_in_pacmanconf "${x86_64_REPO_Name}" "${i686_REPO}" "${WORK_DIR}/pacman_x86_64.conf"; then
+				add_customrepo2pacmanconf "${x86_64_REPO_Name}" "${x86_64_REPO}" "${WORK_DIR}/pacman_x86_64.conf" "${LOG}"
 			fi
 			green "x86_64自定义软件仓创建完成!" | tee -a ${LOG}
 		fi
@@ -699,10 +707,10 @@ function sync_database () {
    plain "现在开始更新软件仓..." | tee -a ${LOG}
    log=${BUILDLOG}/${ARCH}-sync.log
    if [ "${QUIET}" = "y" ]; then
-	ARCH=$ARCH $PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}" >>$log 2>&1
+	$PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}" --arch $ARCH>>$log 2>&1
    else
 	echo ""
-	ARCH=$ARCH $PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}" | tee $log
+	$PACMAN -Sy --noprogressbar --noconfirm --config "${PACMANCONF}" -fr "${UNION}" --arch $ARCH | tee $log
    fi
    cat ${log} >> ${LOG}
    green "软件仓更新完成!" | tee -a ${LOG}
@@ -710,7 +718,7 @@ function sync_database () {
    remount_aufs_r "${SYNC}" "${LOG}"
 
    plain -n "导出可用软件包清单到${PACKLIST}/${ARCH}-available.list" | tee -a ${LOG}
-   ARCH=$ARCH $PACMAN -Sl >${PACKLIST}/${ARCH}-available.list
+   $PACMAN -Sl --config "${PACMANCONF}" -fr "${UNION}" --arch $ARCH >${PACKLIST}/${ARCH}-available.list
    green "完成!" | tee -a ${LOG}
 
    plain -n "导出软件仓软件组信息到${PACKLIST}/${ARCH}-group_detail.list" | tee -a ${LOG}
@@ -719,7 +727,7 @@ function sync_database () {
    for i in $(ls -A1 ${UNION}/var/lib/pacman/sync); do
 	cp -rf ${UNION}/var/lib/pacman/sync/$i/* /tmp/pacman_tmp/var/lib/pacman/local/ 2>/dev/null
    done
-   ARCH=$ARCH $PACMAN -Qg -r /tmp/pacman_tmp>${PACKLIST}/${ARCH}-group_detail.list
+   $PACMAN -Qg -r /tmp/pacman_tmp --arch $ARCH >${PACKLIST}/${ARCH}-group_detail.list
    rm -rf /tmp/pacman_tmp
    green "完成!" | tee -a ${LOG}
 }
@@ -734,11 +742,12 @@ function pac_install () {
     while true; do
 	LOG="${BUILDLOG}/${ARCH}-${mod}.log"
 	echo -e "\n安装$pkgname\n" >> ${LOG}
+	rm -rf $UNION/var/lib/pacman/db.lck
 	if [ "${QUIET}" = "y" ]; then
-		ARCH=$ARCH $PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" >>${LOG} 2>&1
+		$PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" >>${LOG} 2>&1
 	else
 		echo ""
-		ARCH=$ARCH $PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" | tee -a ${LOG}
+		$PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" | tee -a ${LOG}
 	fi
 	case $? in
 	   0) (green "软件包${pkgname/-d /} 安装成功! " | tee -a ${LOG} ) && break;;
@@ -767,9 +776,9 @@ function pac_remove () {
     while true; do
 	LOG=${BUILDLOG}/${mod}.log
 	if [ "${QUIET}" = "y" ]; then
-		ARCH=$ARCH $PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
+		$PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
 	else
-		ARCH=$ARCH $PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
+		$PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
 	fi
 	if [ $? -eq 0 ]; then
 		green "软件包${pkgname} 卸载成功! " | tee -a ${LOG}
@@ -829,6 +838,12 @@ function pac_clean () {
    done
    green "完成!" | tee -a ${LOG}
 }
+
+function umount_union () {
+   umount -l ${UNION}
+   for tmp in "$(find ${MODULEDIR} -name .wh..* )"; do rm_tmp $tmp; done
+}
+
 cmd_extramodules_install () {
 
    # 日志文件
@@ -875,7 +890,7 @@ cmd_extramodules_install () {
 	#再只读挂载
 	remount_aufs_r "${EXTRA_MODULES_INS_DIR}/${mod}" "${LOG}"
    	# 导出已经安装的软件清单(独立模块，含版本信息)
-	$PACMAN -Q -r "${EXTRA_MODULES_INS_DIR}/${mod}" >> ${EXTRA_MODULE_LIST}
+	$PACMAN -Q -r "${EXTRA_MODULES_INS_DIR}/${mod}" --arch $ARCH >> ${EXTRA_MODULE_LIST}
    done
 
    msg2 "附加模块 $(echo ${EXTRAMODULES} | tr -s "\n" " ") 安装完成." | tee -a ${LOG}
@@ -953,9 +968,9 @@ cmd_install ()
 	# 如果已经存在对应模块，则将对应软件包及版本信息输出到清单并根据已经安装的软件升级
 	pacman_local_data=${MODULEDIR}/${mod}/var/lib/pacman/local
 	if [ -d ${pacman_local_data} ] && [ "x$(find ${pacman_local_data} -type f -name "desc")" != "x" ]; then
-		$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${ARCH}-${mod}.old | tee -a ${LOG}
+		$PACMAN -Q --arch $ARCH -r ${MODULEDIR}/${mod} > ${PACKLIST}/${ARCH}-${mod}.old | tee -a ${LOG}
 		green "已安装的程序及版本信息已导出到文件${PACKLIST}/${ARCH}-${mod}.old" | tee -a ${LOG}
-		$PACMAN -Su -f --needed --noconfirm --config "${PACMANCONF}" -fr "${UNION}" >/dev/null
+		$PACMAN -Su -f --arch $ARCH --needed --noconfirm --config "${PACMANCONF}" -fr "${UNION}" >/dev/null
 		green "已有程序升级完成." | tee -a ${LOG}
 
 		# 安装清单中需要的但没有被安装的软件包
@@ -976,7 +991,7 @@ cmd_install ()
 		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${ARCH}-${mod}.old ${PACKLIST}/${ARCH}-${mod}.new.tmp | grep -v "\-d")
 		for pkgname in ${newpkgname}; do
 			[ "x$pkgname" = "x" ] && continue
-			if $PACMAN -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
+			if $PACMAN --arch $ARCH -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
 			plain "$pkgname 是新添加的(需要检测依赖关系)，需要安装..." | tee -a ${LOG}
 			pac_install
 		done
@@ -984,7 +999,7 @@ cmd_install ()
 		newpkgname=$(awk 'NR==FNR{a[$1];b[$2]}NR>FNR{if (!($2 in a)) {if (!($1 in a)) {print $0}}}' ${PACKLIST}/${ARCH}-${mod}.old ${PACKLIST}/${ARCH}-${mod}.new.tmp | grep "\-d")
 		for pkgname in ${newpkgname}; do
 			[ "x$pkgname" = "x" ] && continue
-			if $PACMAN -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
+			if $PACMAN --arch $ARCH -Q $pkgname -r ${UNION} 2>&1 >/dev/null;then continue; fi
 			plain "$pkgname 是新添加的(需要检测依赖关系)，需要安装..." | tee -a ${LOG}
 			pac_install
 		done
@@ -1027,7 +1042,7 @@ cmd_install ()
 	[ -f ${MODULEDIR}/${mod}/etc/sudoers ] && chmod 0440 ${MODULEDIR}/${mod}/etc/sudoers
 
 	msg2 -n "导出最新模块已安装软件清单..." | tee -a ${LOG}
-	$PACMAN -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${ARCH}-mod_${mod}.new
+	$PACMAN --arch $ARCH -Q -r ${MODULEDIR}/${mod} > ${PACKLIST}/${ARCH}-mod_${mod}.new
 	green "完成!" | tee -a ${LOG}
 
 	[ -f ${PACKLIST}/${ARCH}-updated.list ] && rm -f ${PACKLIST}/${ARCH}-updated.list
@@ -1136,7 +1151,7 @@ cmd_install ()
    fi
 
    msg2 -n "导出已经安装的软件清单..." | tee -a ${LOG}
-   $PACMAN -Q -r ${UNION} > ${PKGFILE}
+   $PACMAN --arch $ARCH -Q -r ${UNION} > ${PKGFILE}
    green "完成!" | tee -a ${LOG}
 
    #如果附加程序模块已经包含在程序清单中则不另外安装制作，除非archlive.conf中特别设置
@@ -1145,7 +1160,7 @@ cmd_install ()
 		cmd_extramodules_install "${LOG}"
 	else
 		local noinstall=""
-		$PACMAN -Q -r ${UNION} > ${PKGFILE}
+		$PACMAN --arch $ARCH -Q -r ${UNION} > ${PKGFILE}
 		for package in $EXTRAMODULES; do
 			if grep "^$pkgname " ${PKGFILE} >/dev/null; then
 				continue
@@ -1163,8 +1178,7 @@ cmd_install ()
    # 卸载UNION
    if [ "x$(grep $UNION /proc/mounts)" != "x" ]; then
 	msg2 "卸载aufs件系统 ${UNION}." | tee -a ${LOG}
-	umount -l ${UNION}
-	for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
+	umount_union
    fi
 
    # 清理不需要的文件
@@ -1354,10 +1368,7 @@ cmd_extramodules_squash () {
 cmd_re_mount_all ()
 {
     # 日志文件
-   [ -d ${BUILDLOG} ] || mkdir -p ${BUILDLOG}
-   LOG=${BUILDLOG}/re_mount_all.log
-   [ -f ${LOG} ] && rm -f ${LOG}
-
+   LOG="${1}"
    mount_aufs_w "${SYNC}" "${LOG}" "quiet"
    for mod in ${MODULES}; do
 	remount_aufs_w "${MODULEDIR}/${mod}" "${LOG}" "quiet"
@@ -1379,7 +1390,7 @@ check_kernel()
 	#usage 1
    #fi
 
-   cmd_re_mount_all
+   cmd_re_mount_all ${LOG}
    basedir="$UNION"
 
    # 不采用pacman解决问题
@@ -1435,6 +1446,9 @@ cmd_squash () {
    check_kernel ${LOG}
    depmod -a -b ${basedir} ${kernelver} 2>&1 >/dev/null
    green "内核模块依赖关系更新完成." | tee -a ${LOG}
+
+   # 卸载并清理UNION
+   umount_union
 
    #squashfs压缩的基本模块存放位置 比如 i686-0_000_core.sqfs
    for module_dir in $MODULES; do
@@ -1515,8 +1529,11 @@ cmd_boot_kernel_image () {
    fi
    cat /tmp/archlive-boot.log >>${LOG}
    green "完成！" | tee -a ${LOG}
-   umount -l $UNION
-   for tmp in "$(find ${WORKDIR} -name .wh..* )"; do rm_tmp $tmp; done
+
+   # 卸载并清理UNION
+   umount_union
+
+   # 恢复备份的liblinuxlive
    mv -f $(dirname $MKINITCPIO)/initcpio/{liblinuxlive.bak,liblinuxlive}
    chmod 777 $(dirname $MKINITCPIO)/initcpio/liblinuxlive
 }
