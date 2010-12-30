@@ -174,8 +174,8 @@ archlive_install ()
     add_file "${BASEDIR}/lib/initcpio/nfsmount" "/bin/nfsmount"
     add_file "$CWD/initcpio/sbin/mount.cifs-$ARCH" "/bin/mount.cifs"
     add_file "$CWD/initcpio/sbin/umount.cifs-$ARCH" "/bin/umount.cifs"
-    add_file "${BASEDIR}/sbin/mount.aufs" "/bin/mount.aufs"
-    add_file "${BASEDIR}/sbin/umount.aufs" "/bin/umount.aufs"
+    #add_file "${BASEDIR}/sbin/mount.aufs" "/bin/mount.aufs"
+    #add_file "${BASEDIR}/sbin/umount.aufs" "/bin/umount.aufs"
 
     add_file "${BASEDIR}/usr/sbin/iwconfig" "/bin/iwconfig"
     add_file "${BASEDIR}/usr/sbin/iwlist" "/bin/iwlist"
@@ -200,7 +200,13 @@ archlive_install ()
     add_file "$CWD/initcpio/cleanup" "/cleanup"
 
     # 安装mksquashfs以合并overlay
-    add_file "$CWD/bin/mksquashfs4.static" "/usr/bin/mksquashfs"
+    add_file "$CWD/bin/mksquashfs4" "/usr/bin/mksquashfs"
+    SO="usr/lib/libz.so lib/libm.so"
+    for so in $SO; do
+	for file in $(ls -1 ${BASEDIR}/$so*  2>/dev/null); do
+		add_file "${file}" "${file##$BASEDIR}"
+	done
+    done
 
     add_file "${BASEDIR}/usr/bin/lzop" "/usr/bin/lzop"
     for file in $(ls -1 ${BASEDIR}/usr/lib/liblzo2.so*  2>/dev/null); do

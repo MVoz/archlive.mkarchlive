@@ -516,7 +516,7 @@ else
 fi
 
 if [ "$cn" = "y" ]; then
-	debug_log "IMAGES保存模块的路径: IMAGES=$IMAGES"
+	debug_log "IMAGES保存模块的路径: IMAGES=$IMAGES CHANGES=$CHANGES"
 else
 	debug_log "Modules were mounted on: IMAGES=$IMAGES"
 fi
@@ -574,7 +574,6 @@ else
 	echolog "Loading modules:"
 	debug_log "Mount modules under $DATA to $IMAGES，mount root filesystem to $UNION"
 fi
-
 debug_shell
 union_insert_modules $UNION $DATA $IMAGES
 
@@ -604,8 +603,38 @@ elif [ -d $DATA/rootcopy ]; then
 	cp -af $DATA/rootcopy/* $UNION 2>/dev/null
 fi
 
+# 加载 addons 目录下以xz压缩的保存模块
+if [ "x$(ls -1 $DATA/addons)" != "x" ]; then
+	echolog "加载$DATA/addons下的之前保存的内容，可能需要几分钟时间..."
+	for i in $(ls -1 $DATA/addons/*.xz 2>/dev/null); do
+		tar -xJpf $i -C $UNION
+	done
+fi
+
 # 拷贝liblinuxlive库到$UNION/usr/lib/
 cp -af /usr/lib/liblinuxlive $UNION/usr/lib/
+
+# 拷贝备份程序
+cp -af /usr/bin/mksquashfs $UNION/usr/bin/
+
+debug_log "挂载$DATA到 $UNION$DATADIR"
+mkdir -p $UNION$DATADIR 2>&1 >/dev/null
+if [ -d $(dirname $DATA) ]; then
+	mount -o bind $(dirname $DATA) $UNION$DATADIR
+else
+	mount -o bind $DATA $UNION$DATADIR
+fi
+debug_log "挂载$CHANGES到$UNION/.live/changes"
+mkdir -p $UNION/.live/changes
+mount -o bind $CHANGES $UNION/.live/changes
+
+overlay=$(basename $(ls -1 $DATA/*/*overlay*))
+if [ "x$overlay" != "x" ]; then
+	debug_log "挂载$overlay到$UNION/.live/overlay"
+	mkdir -p $UNION/.live/overlay
+	mount -o bind $IMAGES/$overlay $UNION/.live/overlay
+	sed -i "s|overlayname=.*|overlayname=$overlay|g" $UNION/usr/lib/liblinuxlive
+fi
 
 # 调试用测试点
 debug_shell
@@ -615,29 +644,12 @@ if [ "$cn" = "y" ]; then
 else
 	echolog "Update /etc/fstab and mount_directories /mnt/... "
 fi
-touch $UNION/etc/fstab
-rmdir $UNION/mnt/* 2>/dev/null
-echo "rootfs / rootfs rw 0 0" >$UNION/etc/mtab
-
 fstab_update $UNION
-#cp -f $UNION/etc/fstab $UNION/etc/mtab
-#[ ! -f /etc/mtab ] && cp -f $UNION/etc/fstab /etc/mtab
-	
-# 此时如果从硬盘、USB或者光盘启动，则需要将对应行从fstab中注释掉，以免正式启动后出现重复挂载
-if [ "$(grep "/dev/" /proc/mounts)" != "x" ]; then
-	modules_device="$(grep "/dev/" /proc/mounts | head -1 | cut -d " " -f1)"
-	modules_mountdir="$(grep "/dev/" /proc/mounts | head -1 | cut -d " " -f2)"
-	case $DATA in ${modules_mountdir}*) 
-		sed -i "s|${modules_device}|\#${modules_device}|g" $UNION/etc/fstab 2>/dev/null
-		mount -o bind "${modules_mountdir}" "$UNION/${modules_mountdir}"	
-		;; esac
-fi
+cp -f $UNION/etc/fstab $UNION/etc/mtab
 
 # everything is ready now, so we may unload unused kernel modules
-# and do some cleanup, unmount few things which are no longer needed.
 rmmod_unused_modules
-#fumount /usr
-#fumount /sys
+
 
 # More likely these directories aren't there.
 # Even if they are, this won't hurt.
@@ -728,13 +740,6 @@ fi
 udevpid=$(pidof udevd 2>/dev/null)
 debug_log "udevpid=$udevpid"
 
-umount /proc >/dev/null 2>&1
-umount /sys >/dev/null 2>&1
-
-#mount --move /proc /${UNION}/proc >/dev/null 2>&1
-#mount --move /sys /${UNION}/sys >/dev/null 2>&1
-#mount --move /dev /${UNION}/dev >/dev/null 2>&1
-
 if [ "$cn" = "y" ]; then
 	debug_log "切换到 $UNION启动."
 else
@@ -743,12 +748,10 @@ fi
 
 # Boot log
 debug_log "BOOT_LOG=${BOOT_LOG}"
-cp -f "${BOOT_LOG}" "/${UNION}${BOOT_LOG}"
-debug_log "${BOOT_LOG} 已复制到 /${UNION}${BOOT_LOG}"
+cp -f "${BOOT_LOG}" "${UNION}${BOOT_LOG}"
+debug_log "${BOOT_LOG} 已复制到 ${UNION}${BOOT_LOG}"
 debug_shell
 
-#default_mount_handler $UNION
-
-exec /sbin/switch_root -c /dev/console /${UNION} ${INIT} ${CMDLINE}
+exec /sbin/switch_root -c /dev/console ${UNION} ${INIT} ${CMDLINE}
 
 debug_log "看到此消息switch_root失败"

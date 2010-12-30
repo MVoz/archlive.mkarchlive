@@ -1,9 +1,10 @@
 #
 # initscripts functions
 #
-# Special for Archlive   Base on initscripts-2010.06-1-i686.pkg.tar.xz
+# Special for Archlive   Base on initscripts-2010.07
 
 #------------------- Archlive changed -------------------------
+. /usr/lib/liblinuxlive
 # lang:
 export msg_lang
 if [ "$cn" = "y" ]; then
@@ -323,6 +324,187 @@ run_hook() {
 	done
 }
 
+#------------------- Archlive changed -------------------------
+# 保存live系统使用过程中的修改
+# $1 xz 或者 merge 
+# xz 将修改采用xz压缩到到存储目录下
+# merge 将修改合并到overlay中
+# $2 存储目录
+action_save ()
+{
+    SAVEPATH=$2
+    if [ "x$SAVEPATH" = "x" ]; then
+	if [ "${msg_lang}" = "cn" ]; then
+		echo "没有指定保存路径且默认的保存路径不可用，放弃保存!"
+	else
+		echo "No savepath determined or unusable, quit for saving changes!"
+	fi
+	return 1
+    fi
+
+    excludes=".live .wh* mnt media dev proc sys tmp var/run"
+    if [ "$1" = "xz" ]; then
+	EXCLUDES=""
+	for i in $excludes; do
+		EXCLUDES="${EXCLUDES} --exclude=$i"
+	done
+	pushd /.live/changes
+	tar -cJpf ${SAVEPATH}/$(date +%Y%m%d).tar.xz ./ ${EXCLUDES}
+	popd
+    elif [ "$1" = "merge" ]; then
+	save="bin boot etc home lib opt root sbin srv usr var"
+	mkdir /tmp/save_tmp
+	mount -t aufs -o br:$/.live/overlay=ro aufs /tmp/save_tmp >>${LOG}
+	mount -t aufs -o remount,add:0:$/.live/changes=ro aufs /tmp/save_tmp >>${LOG}
+	mksquashfs /tmp/save_tmp  ${SAVEPATH}/$overlayname.new -noappend >>${LOG}
+	#umount -l 
+    fi
+}
+
+doeject ()
+{
+    if [ -n "${ejectdev}" ]; then
+	if [ "${msg_lang}" = "cn" ]; then
+		echo "弹出$LIVECDNAME CD"
+	else
+		echo "Ejecting $LIVECDNAME CD"
+	fi
+        mount -n -o remount,rw /
+        # Remove the boot medium from /etc/mtab so that eject works
+        sed "/ \/.livesys\/medium / d" -i /etc/mtab
+        eject ${ejectdev}
+        mount -n -o remount,ro /
+        echo "========================================"
+        echo "It's safe to switch the computer off now"
+        echo -ne "Press Enter to continue"
+        read junk
+    fi
+
+    # This shouldn't be needed, but better safe than sorry?
+    sync
+}
+
+sysinit_premount_archlive() {
+    if [ "${msg_lang}" = "cn" ]; then
+	status "Archlive 预启动"
+    else
+	status "Archlive sysinit_premount hook"
+    fi
+    # Rebuild /etc/mtab
+    grep "^aufs */ " /proc/mounts               >/etc/mtab.new
+    grep "^unionfs */ " /proc/mounts            >>/etc/mtab.new
+    grep "^tmpfs */.livesys " /proc/mounts      >>/etc/mtab.new
+    if [ -d /.livesys/medium/larch ]; then
+        grep " /.livesys/medium " /proc/mounts  >>/etc/mtab.new
+    fi
+    grep -v "^rootfs " /etc/mtab                >>/etc/mtab.new
+    mv /etc/mtab.new /etc/mtab
+
+    # Add disk partitions to /etc/fstab
+    #fstab_update /
+}
+#add_hook sysinit_premount sysinit_premount_archlive
+
+sysinit_end_archlive() {
+    # Allow setting up of xorg.conf before xorg is started
+    status "Archlive sysinit_end hook"
+    [ -x /etc/X11/xinit/xorg.conf.set ] && /etc/X11/xinit/xorg.conf.set
+}
+#add_hook sysinit_end sysinit_end_archlive
+
+
+# rc.shutdown运行到结束所有进程后
+shutdown_postkillall_archlive() {
+    status "Archlive shutdown_postkillall hook"
+    if ! [ -f /.livesys/saveclock ]; then
+        # This will prevent the hardware clock from being set
+        HARDWARECLOCK='LIVE'
+    fi
+}
+#add_hook shutdown_postkillall shutdown_postkillall_archlive
+
+input_path () {
+    if [ "${msg_lang}" = "cn" ]; then
+	echo "请输入需要保存修改的位置:"
+	echo "---------------------------------"
+	echo " <回车>: 放弃"
+	echo "预保存的位置 <回车>: 将修改保存到指定的位置"
+	read -p "输入地址:" path
+	echo $path
+    else
+	echo "Please input the path for saving changes:"
+	echo "---------------------------------"
+	echo " <Enter>: Quit for saving changes"
+	echo "path <Enter>: Saving changes to \"path\""
+	read -p "Path?:" path
+	echo $path
+    fi
+}
+
+check_savepath() {
+    if [ "x$1" = "x" ]; then
+	return 1
+    else
+	savepath=$1
+	touch $savepath/empty 2>/dev/null && rm -f $savepath/empty 2>/dev/null
+	if [ $? -ne 0 ]; then
+		if [ "${msg_lang}" = "cn" ]; then
+			echo "警告: $savepath 不可写, 因此无法保存修改！"
+			echo
+			check_savepath $(input_path)
+		else
+			echo "Warn: $savepath not used or not writable, Can't saving changes！"
+			echo
+			check_savepath $(input_path)
+		fi
+    	else
+		SAVEPATH=$savepath
+		return 0
+	fi
+    fi
+}
+
+# 全局参数XZ_PATH MERGE_PATH 来自于/usr/lib/liblinuxlive
+shutdown_poweroff_archlive() {
+
+    export SAVEPATH
+    if [ "${msg_lang}" = "cn" ]; then
+	echo "===== 是否保存修改? ====="
+	echo 
+	echo "请输入选项:"
+	echo "----------------------------"
+	echo "   <回车>: 不保存"
+	echo " 1 <回车>: 保存修改为xz压缩包"
+	echo " 2 <回车>: 合并修改到overlay"
+	read -p "选择? :" select
+    else
+	echo "===== Save Changes? ====="
+	echo 
+	echo "Select:"
+	echo "----------------------------"
+	echo "   <Enter>: Don't Saving Changes"
+	echo " 1 <Enter>: Saving Changes as .xz on addon dir"
+	echo " 2 <Enter>: Merge Changes input Overlay"
+	read -p "Choice? :" select
+    fi
+    case ${select} in
+	1) if check_savepath $XZ_PATH ; then
+		action_save xz $SAVEPATH
+	   fi
+	   ;;
+	2) if check_savepath $MERGE_PATH ; then
+		action_save merge $SAVEPATH
+	   fi
+	   ;;
+	*) ;;
+    esac
+
+    # Eject CD/DVD
+    doeject
+}
+add_hook shutdown_poweroff shutdown_poweroff_archlive
+#---------------------------------------------------------------
+
 # Function for setting console font if required
 set_consolefont() {
     if [ -n "$CONSOLEFONT" ]; then
@@ -348,6 +530,8 @@ set_consolefont() {
 	fi
     fi
 }
+
+
 
 # Source additional functions at the end to allow overrides
 for f in /etc/rc.d/functions.d/*; do

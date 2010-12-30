@@ -1,6 +1,6 @@
 #!/bin/ash
 
-boot_version=Ver.20101220
+boot_version=Ver.20101221
 
 # Archlive 函数库
 # 基于 Linux live scripts 6 修改
@@ -15,21 +15,24 @@ boot_version=Ver.20101220
 FSTABLLFLAG="#Archlive-Update"
 
 # We have to set these variables very carefully
-#UNION=union
-UNION=new_root
-MEMORY=memory
-MOUNTDIR=mnt
+#UNION=/union
+UNION=/new_root
+MEMORY=/memory
+MOUNTDIR=/mnt
 CHANGES=$MEMORY/changes
 XINO=$MEMORY/xino
 COPY2RAM=$MEMORY/copy2ram
 IMAGES=$MEMORY/images
 INITRAMDISK=$MOUNTDIR/live
+DATADIR=$MOUNTDIR/data
 LOOPMOUNT=$MOUNTDIR/tmp
+XZ_PATH=$DATADIR/addons
+MERGE_PATH=$DATADIR/modules
 
 # live系统制作脚本会自动更改如下参数，切忌手动修改，否则可能无法启动
 # this will be replaced by build script, so never change the following line!
 export LIVECDNAME="archlive"
-
+export overlayname=""
 export BOOT_LOG="/var/log/live_boot.log"
 
 RST="\033[1;0m"
@@ -647,11 +650,11 @@ mount_device()
    debug_log "OPTIONS=\"$OPTIONS\" FS=\"$FS\" DEV=\"$DEV\" TARGET=\"$TARGET\""
 
    if [ "$FS" = "-t ntfs-3g" ]; then
-      ntfsmount "$DEV" "$TARGET" $OPTIONS >/dev/null 2>&1
+      ntfsmount "$DEV" "$TARGET" $OPTIONS 2>&1 >/dev/null
       ERR=$?
       debug_log "1st try: ERR=$ERR ntfsmount "$DEV" "$TARGET" $OPTIONS ..."
    else
-      mount -n $OPTIONS $FS "$DEV" "$TARGET" >/dev/null 2>&1
+      mount -n $OPTIONS $FS "$DEV" "$TARGET" 2>&1 >/dev/null
       ERR=$?
       debug_log "1st try: ERR=$ERR mount -n $OPTIONS $FS "$DEV" "$TARGET" ..."
    fi
@@ -663,13 +666,13 @@ mount_device()
 
        LOOPDEV=$(mknod_next_loop_dev)
        OPTIONS=$(echo "$OPTIONS" | sed -r "s/,loop//g")
-       losetup "$LOOPDEV" "$DEV" 2>/dev/null # busybox's losetup doesn't support -r
+       losetup "$LOOPDEV" "$DEV" 2>&1 >/dev/null # busybox's losetup doesn't support -r
        if [ $? -ne 0 ]; then
           debug_log "losetup -r $LOOPDEV $DEV"
-          losetup -r "$LOOPDEV" "$DEV" 2>/dev/null # force read-only in case of error
+          losetup -r "$LOOPDEV" "$DEV" 2>&1 >/dev/null # force read-only in case of error
        fi
        debug_log "OPTIONS=\"$OPTIONS\" FS=\"$FS\" LOOPDEV=\"$LOOPDEV\" TARGET=\"$TARGET\""
-       mount -n $OPTIONS $FS "$LOOPDEV" "$TARGET" >/dev/null 2>&1
+       mount -n $OPTIONS $FS "$LOOPDEV" "$TARGET" 2>&1 >/dev/null
        ERR=$?
        debug_log "2nd try: ERR=$SRR mount -n $OPTIONS $FS "$LOOPDEV" "$TARGET" ..."
    fi
@@ -680,7 +683,7 @@ mount_device()
        debug_log "以上办法都无法挂载，尝试强行只读挂载."
        debug_log "None of above actions works! try to force read-only mount"
        debug_log "mount -n -r $OPTIONS $FS $DEV $TARGET"
-       mount -n -r $OPTIONS $FS "$DEV" "$TARGET" >/dev/null 2>&1
+       mount -n -r $OPTIONS $FS "$DEV" "$TARGET" 2>&1 >/dev/null
        ERR=$?
        debug_log "3rd try: ERR=$SRR ....................."
    fi

@@ -9,7 +9,7 @@
 -d madwifi
 #-d aufs2
 # Chakra软件仓中内核已经包含aufs2
--d aufs2-util
+#-d aufs2-util
 -d squashfs-tools
 -d b43-fwcutter
 # firmware extractor for the bcm43xx kernel module
