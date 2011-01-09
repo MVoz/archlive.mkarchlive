@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Archlive
+Type=X-GNOME-Metatheme
+Comment=Change from Function by Carbon
+
+[X-GNOME-Metatheme]
+GtkTheme=Archlive
+IconTheme=Mint-X
+CursorTheme=Macbuntu-Cursors
+ButtonLayout=shade:minimize,maximize,close
+GtkColorScheme=fg_color:#4d4d4d4d4d4d,bg_color:#d6d6d6d6d6d6,text_color:#4d4d4d4d4d4d,base_color:#f7f7f9f9fafa,selected_fg_color:#ffffffffffff,selected_bg_color:#ad8dce958525,tooltip_fg_color:#463146314631,tooltip_bg_color:#ffffffffffff

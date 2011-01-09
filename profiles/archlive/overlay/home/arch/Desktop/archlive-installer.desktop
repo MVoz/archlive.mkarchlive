@@ -1,0 +1,11 @@
+[Desktop Entry]
+Categories=Application;System
+Encoding=UTF-8
+Exec=sudo archlive-installer
+Icon=/opt/archlive-installer/archlive-installer.png
+StartupNotify=true
+Terminal=false
+Type=Application
+Name=Install Archlive
+Name[zh_CN]=安装Archlive到硬盘
+Comment=

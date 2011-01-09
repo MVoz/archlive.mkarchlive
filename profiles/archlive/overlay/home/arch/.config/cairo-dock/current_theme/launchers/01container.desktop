@@ -1,0 +1,34 @@
+#!en
+
+[Desktop Entry]
+#s Sub-dock's name :
+Name=在线应用
+
+Exec=
+
+#Y[Use an image;1;1;Draw sub-dock's content as emblems;0;0;Draw sub-dock's content as stack;0;0;Draw sub-dock's content inside a box;0;0] How to render the icon :
+render=3
+
+#S Image's name or path :
+Icon=
+
+#X[Extra parameters]
+frame_extra=
+#f[0;100] Order you want for this launcher among the others:
+Order=2
+#d Name of the container it belongs to:
+Container=_MainDock_
+
+Is container=true
+
+#n Name of the view used for the sub-dock :/
+Renderer=
+
+#i-[0;16] Only show in this specific viewport
+#{If '0' the container will be displayed on every viewport.}
+ShowOnViewport=0
+
+group=0
+prevent inhibate=false
+StartupWMClass=
+Terminal=false

@@ -1,0 +1,12 @@
+
+[Launch]
+default backend=
+test composite=false
+
+last version=2.2.0-4
+
+[Help]
+entered once=true
+
+[Gui]
+mode=1

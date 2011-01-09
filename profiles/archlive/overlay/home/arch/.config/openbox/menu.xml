@@ -1,451 +1,209 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<openbox_menu xmlns="http://openbox.org/3.4/menu">
-<menu id="lxde-applications" label="Archlive程序菜单">
-<file>/etc/xdg/menus/lxde-applications.menu</file>
-</menu>
-<menu id="apps-accessories-menu" label="附件">
-  <item label="Squeeze 压缩解压缩工具">
-    <action name="Execute">
-      <command>squeeze</command>
-      <startupnotify>
-        <enabled>no</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Xarchiver 压缩解压缩工具">
-    <action name="Execute">
-      <command>xarchiver</command>
-      <startupnotify>
-        <enabled>no</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Calculator">
-    <action name="Execute">
-      <command>gnome-calculator</command>
-      <startupnotify>
-        <enabled>no</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="系统信息">
-    <action name="Execute">
-      <command>hardinfo</command>
-      <startupnotify>
-        <enabled>yesg</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="StarDict 辞典">
-    <action name="Execute">
-      <command>stardict</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="X Kill">
-    <action name="Execute">
-      <command>xkill</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-
-</menu>
-
-<menu id="apps-editors-menu" label="编辑器">
-  <item label="Geany 集成开发环境">
-    <action name="Execute">
-      <command>geany</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Leafpad 写字板">
-    <action name="Execute">
-      <command>leafpad</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Mousepad 写字板">
-    <action name="Execute">
-      <command>mousepad</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="gVim 编辑器">
-    <action name="Execute">
-      <command>gvim</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-</menu>
-
-<menu id="apps-term-menu" label="终端程序">
-  <item label="LxTerminal">
-    <action name="Execute">
-      <command>lxterminal</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Rxvt Unicode">
-    <action name="Execute">
-      <command>urxvt</command>
-    </action>
-  </item>
-  <item label="Sakura">
-    <action name="Execute"><command>sakura</command></action>
-  </item>
-  <item label="Xterm">
-    <action name="Execute"><command>xterm</command></action>
-  </item>
-</menu>
-
-<menu id="apps-net-menu" label="互联网程序">
-  <item label="Firefox网络浏览">
-    <action name="Execute">
-      <command>firefox</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-        <wmclass>Firefox</wmclass>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Pidgin在线聊天">
-    <action name="Execute">
-      <command>pidgin</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="腾讯 QQ">
-    <action name="Execute">
-      <command>qq</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="XChat IRC">
-    <action name="Execute">
-      <command>xchat</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Skype">
-    <action name="Execute">
-      <command>skype</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Transmission BT下载">
-    <action name="Execute">
-      <command>transmission</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Benliu BT下载">
-    <action name="Execute">
-      <command>benliud</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Grdc 远程桌面">
-    <action name="Execute">
-      <command>grdc</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-</menu>
-
-<menu id="apps-office-menu" label="办公应用">
-  <item label="Foxit PDF查看器">
-    <action name="Execute">
-      <command>foxitreader</command>
-    </action>
-  </item>
-  <item label="OpenOffice Base">
-    <action name="Execute">
-      <command>ooffice -base</command>
-    </action>
-  </item>
-  <item label="OpenOffice Calc">
-    <action name="Execute">
-      <command>ooffice -calc</command>
-    </action>
-  </item>
-  <item label="OpenOffice Draw">
-    <action name="Execute">
-      <command>ooffice -draw</command>
-    </action>
-  </item>
-  <item label="OpenOffice Impress">
-    <action name="Execute">
-      <command>ooffice -impress</command>
-    </action>
-  </item>
-  <item label="OpenOffice Math">
-    <action name="Execute">
-      <command>ooffice -math</command>
-    </action>
-  </item>
-  <item label="OpenOffice Printer Administration">
-    <action name="Execute">
-      <command>ooffice-printeradmin</command>
-    </action>
-  </item>
-  <item label="OpenOffice Writer">
-    <action name="Execute">
-      <command>ooffice -writer</command>
-    </action>
-  </item>
-</menu>
-
-<menu id="apps-multimedia-menu" label="多媒体应用">
-  <item label="VLC 媒体播放器">
-    <action name="Execute">
-      <command>vlc</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Mplayer 媒体播放器">
-    <action name="Execute">
-      <command>gmplayer</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Gmlive 网络媒体播放器">
-    <action name="Execute">
-      <command>gmlive</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Streamtuner 网络媒体播放器">
-    <action name="Execute">
-      <command>streantuner</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Audacious 音乐播放器">
-    <action name="Execute">
-      <command>audacious</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Realplayer媒体播放器">
-    <action name="Execute">
-      <command>realplay</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="桌面录像">
-    <action name="Execute">
-      <command>gtk-recordMyDesktop</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Gnome录音机">
-    <action name="Execute">
-      <command>gnome-sound-recorder</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-</menu>
-
-<menu id="apps-fileman-menu" label="文件管理器">
-  <item label="PCManFM文件管理器">
-    <action name="Execute">
-      <command>pcmanfm</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Thunar文件管理器">
-    <action name="Execute">
-      <command>thunar</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="ROX-Filer文件管理器">
-    <action name="Execute">
-      <command>rox</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-
-</menu>
-
-<menu id="apps-graphics-menu" label="图形图像">
-  <item label="GPicView图像查看">
-    <action name="Execute">
-      <command>gpicview</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Comix图像查看">
-    <action name="Execute">
-      <command>comix</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="GIMP图像编辑器">
-    <action name="Execute">
-      <command>gimp</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="GSnapShot抓屏">
-    <action name="Execute">
-      <command>gsnapshot</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-
-</menu>
-
-<menu id="system-menu" label="系统设置">
-  <item label="Openbox设置中心">
-    <action name="Execute">
-      <command>obconf</command>
-      <startupnotify><enabled>yes</enabled></startupnotify>
-    </action>
-  </item>
-  <item label="编辑Openbox菜单menu.xml">
-    <action name="Execute">
-      <command>leafpad ~/.config/openbox/menu.xml</command>
-      <startupnotify><enabled>yes</enabled></startupnotify>
-    </action>
-  </item>
-  <item label="编辑Openbox rc.xml文件">
-    <action name="Execute">
-      <command>gvim ~/.config/openbox/rc.xml</command>
-      <startupnotify><enabled>yes</enabled></startupnotify>
-    </action>
-  </item>
-
-  <item label="Gnome设置中心">
-    <action name="Execute">
-      <command>gnome-control-center</command>
-      <startupnotify><enabled>yes</enabled></startupnotify>
-    </action>
-  </item>
-  <item label="打印机配置">
-    <action name="Execute">
-      <command>xdg-open http://localhost:631/</command>
-      <startupnotify>
-        <enabled>no</enabled>
-        <icon>cups</icon>
-      </startupnotify>
-    </action>
-  </item>
-  <separator />
-  <item label="重新载入Openbox设置">
-    <action name="Reconfigure" />
-  </item>
-  <item label="退出Openbox">
-    <action name="Exit">
-      <prompt>yes</prompt>
-    </action>
-  </item>
-</menu>
-
-<menu id="root-menu" label="Openbox 3">
-  <item label="Gparted 硬盘分区">
-    <action name="Execute">
-      <command>sudo gparted</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Larchin 安装Archlinux">
-    <action name="Execute">
-      <command>sudo larchin.py</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="GSnapShot抓屏">
-    <action name="Execute">
-      <command>gsnapshot</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <separator/>
-  <menu id="apps-accessories-menu"/>
-  <menu id="apps-editors-menu"/>
-  <menu id="apps-graphics-menu"/>
-  <menu id="apps-net-menu"/>
-  <menu id="apps-office-menu"/>
-  <menu id="apps-multimedia-menu"/>
-  <menu id="apps-term-menu"/>
-  <menu id="apps-fileman-menu"/>
-  <separator/>
-  <menu id="system-menu"/>
-  <separator />
-  <item label="退出">
-    <action name="Execute">
-      <command>exitx</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-</menu>
-
+<?xml version="1.0" encoding="utf-8"?>
+<openbox_menu>
+	<menu execute="openbox-menu lxde-applications.menu" id="desktop-app-menu" label="应用程序"/>
+	<menu id="root-menu" label="OpenBox 3">
+		<separator label="Archlive"/>
+		<menu id="desktop-app-menu"/>
+		<menu id="client-list-menu"/>
+		<menu id="39" label="系统设置">
+			<item label="Openbox设置">
+				<action name="Execute">
+					<execute>
+					obconf
+					</execute>
+				</action>
+			</item>
+			<item label="菜单编辑">
+				<action name="Execute">
+					<execute>
+						obmenu
+					</execute>
+				</action>
+			</item>
+			<item label="快捷方式设置">
+				<action name="Execute">
+					<execute>
+					obkey
+					</execute>
+				</action>
+			</item>
+			<menu id="40" label="选择 Panel">
+				<item label="Lxpanel自动隐藏">
+					<action name="Execute">
+						<execute>
+							~/.config/scripts/lxpanel.sh sethidden
+						</execute>
+					</action>
+				</item>
+				<item label="Lxpanel固定">
+					<action name="Execute">
+						<execute>
+							~/.config/scripts/lxpanel.sh setnohide
+						</execute>
+					</action>
+				</item>
+				<item label="FBpanel自动隐藏">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/fbpanel.sh sethidden
+						</execute>
+					</action>
+				</item>
+				<item label="FBpanel固定">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/fbpanel.sh setnohide
+						</execute>
+					</action>
+				</item>
+				<item label="Tint2自动隐藏">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/tint2.sh sethidden
+						</execute>
+					</action>
+				</item>
+				<item label="Tint2固定">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/tint2.sh setnohide
+						</execute>
+					</action>
+				</item>
+			</menu>
+			<menu id="41" label="视觉效果">
+				<item label="禁用视觉效果">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/xcompmgr.sh unset
+						</execute>
+					</action>
+				</item>
+				<item label="窗口透明">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/xcompmgr.sh set
+						</execute>
+					</action>
+				</item>
+				<item label="透明+渐隐">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/xcompmgr.sh setshaded
+						</execute>
+					</action>
+				</item>
+				<item label="透明+渐隐+阴影">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/xcompmgr.sh setshadowshade
+						</execute>
+					</action>
+				</item>
+			</menu>
+			<menu id="39-53221" label="Cairo Dock">
+				<item label="停用">
+					<action name="Execute">
+						<execute>
+							killall cairo-dock
+						</execute>
+					</action>
+				</item>
+				<item label="启用">
+					<action name="Execute">
+						<execute>
+							cairo-dock -c
+						</execute>
+					</action>
+				</item>
+			</menu>
+			<menu id="42" label="桌面图标">
+				<item label="显示桌面图标">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/deskicons.sh seticons
+						</execute>
+					</action>
+				</item>
+				<item label="禁用桌面图标">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/deskicons.sh setnoicons
+						</execute>
+					</action>
+				</item>
+			</menu>
+			<menu id="43" label="声音图标">
+				<item label="显示">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/volumeicon.sh set
+						</execute>
+					</action>
+				</item>
+				<item label="隐藏">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/volumeicon.sh unset
+						</execute>
+					</action>
+				</item>
+			</menu>
+			<menu id="44" label="电池电量图标">
+				<item label="显示">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/batterymon.sh set
+						</execute>
+					</action>
+				</item>
+				<item label="隐藏">
+					<action name="Execute">
+						<execute>
+						~/.config/scripts/batterymon.sh unset
+						</execute>
+					</action>
+				</item>
+			</menu>
+			<item label="重新载入Openbox">
+				<action name="Reconfigure"/>
+			</item>
+		</menu>
+		<item label="终端">
+			<action name="Execute">
+				<execute>
+					lxterminal
+				</execute>
+			</action>
+		</item>
+		<separator/>
+		<item label="重新启动">
+			<action name="Execute">
+				<execute>
+					dbus-send --system --print-reply --dest=&quot;org.freedesktop.ConsoleKit&quot; /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart
+				</execute>
+			</action>
+		</item>
+		<item label="挂起">
+			<action name="Execute">
+				<execute>
+					dbus-send --print-reply --system --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend
+				</execute>
+			</action>
+		</item>
+		<item label="关机">
+			<action name="Execute">
+				<execute>
+					dbus-send --system --print-reply --dest=&quot;org.freedesktop.ConsoleKit&quot; /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop
+				</execute>
+			</action>
+		</item>
+		<item label="退出">
+			<action name="Exit">
+				<prompt>
+					yes
+				</prompt>
+			</action>
+		</item>
+	</menu>
 </openbox_menu>

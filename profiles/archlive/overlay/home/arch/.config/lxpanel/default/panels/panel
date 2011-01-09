@@ -7,7 +7,7 @@ Global {
     margin=0
     widthtype=percent
     width=100
-    height=26
+    height=24
     transparent=0
     tintcolor=#000000
     alpha=0
@@ -17,9 +17,9 @@ Global {
     setpartialstrut=1
     usefontcolor=1
     fontcolor=#ffffff
-    background=1
+    background=0
     backgroundfile=/usr/share/lxpanel/images/background.png
-    iconsize=24
+    iconsize=20
 }
 
 Plugin {
@@ -56,10 +56,10 @@ Plugin {
             id=pcmanfm.desktop
         }
         Button {
-            id=firefox.desktop
+            id=/usr/share/applications/lxterminal.desktop
         }
         Button {
-            id=/usr/share/applications/lxterminal.desktop
+            id=/usr/share/applications/firefox.desktop
         }
     }
 }
@@ -105,7 +105,7 @@ Plugin {
     Config {
         tooltips=1
         IconsOnly=0
-        ShowAllDesks=0
+        ShowAllDesks=1
         UseMouseWheel=1
         UseUrgencyHint=1
         FlatButton=0
@@ -130,22 +130,6 @@ Plugin {
         TooltipFmt=%A %x
         BoldFont=0
         IconOnly=0
-    }
-}
-
-Plugin {
-    type = batt
-    Config {
-        HideIfNoBattery=0
-        AlarmCommand=xmessage Battery low
-        AlarmTime=5
-        BackgroundColor=black
-        BorderWidth=1
-        ChargingColor1=#28f200
-        ChargingColor2=#22cc00
-        DischargingColor1=#ffee00
-        DischargingColor2=#d9ca00
-        Size=8
     }
 }
 

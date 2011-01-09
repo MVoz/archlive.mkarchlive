@@ -1,0 +1,10 @@
+
+[StatusIcon]
+stepsize=28
+lmb_slider=true
+mmb_mute=true
+onclick=ossxmix
+theme=Black Gnome
+
+[Alsa]
+channel=vmix0-outvol

@@ -1,0 +1,35 @@
+Archlive 快捷键一览表 (Openbox环境）
+
+Ctrl + Alt + Delete	重新启动
+Ctrl + Alt + Backspace	退出X到命令行
+Ctrl + Alt + ->		进入下一桌面
+Ctrl + Alt + <-		进入上一桌面
+Shift + F1		显示/不显示边框(只对当前窗口)
+Shift + F2		最小化当前窗口
+Shift + Alt + ->	发送当前窗口到下一桌面
+Shift + Alt + <-	发送当前窗口到上一桌面
+Win + F1		进入桌面1 （春）
+Win + F2		进入桌面2 （夏）
+Win + F3		进入桌面3 （秋）
+Win + F4		进入桌面4 （冬）
+Win + D		显示桌面
+Win + E			打开资源管理器 pcmanfm
+Win + F			当前窗口全屏（无边框）
+Win + P			当前窗口全屏（有边框）
+Win + V		当前窗口垂直最大化
+Win + H		当前窗口水平最大化
+Win + M		显示Openbox主菜单（右键菜单）
+Win + B			显示当前窗口右键菜单
+Win + N		显示桌面菜单 （春夏秋冬）
+Alt + F4		关闭当前窗口
+Alt + Esc		最小化当前窗口
+Alt + Tab		窗口向下切换
+Alt + Shift + Tab	窗口向上切换
+Alt + F1		启动终端程序 URXVT
+Alt + F2		快速运行程序 gmrun
+Alt + F3		启动资源管理器 pcmanfm
+Ctrl + Alt + K		关闭选择的窗口 （xkill）
+PrtSc			3秒后抓全屏，保存到/home/arch/Desktop下
+Alt + PrtSc		抓选择的窗口，保存到/home/arch/Desktop下
+
+鼠标点在窗口标题栏上，按住Win键，滚动鼠标可以调节对应窗口的透明效果
