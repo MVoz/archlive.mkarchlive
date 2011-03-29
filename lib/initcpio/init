@@ -15,8 +15,8 @@
 
 export PATH=.:/:/usr/sbin:/usr/bin:/sbin:/bin:/session-save
 
-/bin/mount -t proc proc /proc
-/bin/mount -t sysfs sys /sys
+/bin/mount -t proc proc /proc -o nosuid,noexec,nodev
+/bin/mount -t sysfs sys /sys -o nosuid,noexec,nodev
 if grep -q devtmpfs /proc/filesystems 2>/dev/null; then
   /bin/mount -n -t devtmpfs udev /dev -o mode=0755,size=10M,nosuid
 else
@@ -43,6 +43,7 @@ if [ -x /sbin/udevd ]; then
     echo > /proc/sys/kernel/hotplug
     /sbin/udevd --daemon --resolve-names=never 2>&1 >/dev/null
     export udevd_running=1
+    # msg -n ":: Triggering uevents..."
     /sbin/udevadm trigger --action=add 2>&1 >/dev/null
     /sbin/udevadm settle 2>&1 >/dev/null
 else
@@ -124,7 +125,7 @@ echo "0" > /proc/sys/kernel/printk
 export kinit_params=""
 export root=""
 export init=""
-echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
+#echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
 
 # set default mount handler
 mount_handler="default_mount_handler"
@@ -752,6 +753,9 @@ cp -f "${BOOT_LOG}" "${UNION}${BOOT_LOG}"
 debug_log "${BOOT_LOG} 已复制到 ${UNION}${BOOT_LOG}"
 debug_shell
 
+mount --move /proc /new_root/proc
+mount --move /sys /new_root/sys
+mount --move /dev /new_root/dev
 exec /sbin/switch_root -c /dev/console ${UNION} ${INIT} ${CMDLINE}
 
 debug_log "看到此消息switch_root失败"

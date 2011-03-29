@@ -9,7 +9,7 @@ acl
 bash
 
 #zlib
-binutils
+binutils-multilib
 
 bzip2
 
@@ -142,6 +142,8 @@ sdparm
 syslog-ng
 
 tar
+
+libtool-multilib
 
 usbutils
 

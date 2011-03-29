@@ -92,12 +92,40 @@ if [ "x$root" = "x" ]; then
 	chmod 755 /etc &>/dev/null
 fi
 
-# VBOX虚拟机
-if [ "$vbox" = "y" ]; then
-	/etc/rc.d/vboxadd setup
-	/etc/rc.d/vboxadd start
-	/etc/rc.d/vboxadd-service start
-	/etc/rc.d/vboxadd-x11 start
+# X 驱动
+# 可以通过启动参数videodrv=nv 来指定X驱动
+if [ "x$videodrv" != "x" ] && [ -f /usr/lib/xorg/modules/drivers/${videodrv}_drv.so ]; then
+	videodrv=$videodrv
+	if [ "$vbox" = "y" -o "$videodrv" = "vboxvideo" ]; then
+		# update for Virtualbox 4.0.4
+		source /etc/rc.d/rc.vboxadd
+		#setup   #live环境下不一定含有gcc等，安装预编译的内核模块
+		extra_setup
+		/etc/rc.d/rc.vboxadd start
+		/etc/rc.d/rc.vboxadd-service start
+		/etc/rc.d/rc.vboxadd-x11 setup  #安装合适的X驱动
+		rm -f /etc/X11/xorg.conf
+		rm -f /etc/X11/xorg.vbox.nobak
+		videodrv="vboxvideo"
+		# VBoxAdd-Xclient (special for Archlive in VBOX)
+		[ -f /etc/rc.d/98vboxadd-xclient ] && sh /etc/rc.d/98vboxadd-xclient
+	fi
+# 没有指定X驱动
+elif [ -n "$(lspci |grep -Eo "VGA.*nVidia")" ] && [ -f /usr/lib/xorg/modules/drivers/nouveau_drv.so ]; then
+	videodrv="nouveau"
+fi
+
+# 如果成功指定了X驱动或者安装如上规则启用了X驱动，则更新
+# 否则startx重新自动判断（X有如此功能?)
+
+if [ "x$videodrv" != "x" ]; then
+cat <<EOF > /etc/X11/xorg.conf.d/20-videodriver.conf
+Section "Device"
+	Identifier "Card0"
+	Driver     "$videodrv"
+EndSection
+
+EOF
 fi
 
 # 如果想登入你想要的桌面环境，加入相应内核参数，比如"session=fvwm2" 

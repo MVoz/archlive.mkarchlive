@@ -118,23 +118,6 @@ warn () {
     fi
 }
 
-poll_device() {
-    device="$1"
-    if [ "$2" -ge 0 ]; then
-        seconds="$2"
-    else
-        seconds=5
-    fi
-    if [ "${udevd_running}" -eq 1 ]; then
-        echo "Waiting ${seconds} seconds for device ${device} ..."
-        while [ ! -b "${device}" -a ! -h "${device}" -a ${seconds} -gt 0 ]; do
-            sleep 1
-            seconds=$((${seconds}-1))
-        done
-    fi
-    [ -b "${device}" -o -h "${device}" ]
-}
-
 # Checking boot paremeters 检查启动参数
 check_boot_paremeters ()
 {
@@ -159,6 +142,23 @@ check_boot_paremeters ()
              ;;
 	esac
     done
+}
+
+poll_device() {
+    device="$1"
+    if [ "$2" -ge 0 ]; then
+        seconds="$2"
+    else
+        seconds=5
+    fi
+    if [ "${udevd_running}" -eq 1 ]; then
+        echo "Waiting ${seconds} seconds for device ${device} ..."
+        while [ ! -b "${device}" -a ! -h "${device}" -a ${seconds} -gt 0 ]; do
+            sleep 1
+            seconds=$((${seconds}-1))
+        done
+    fi
+    [ -b "${device}" -o -h "${device}" ]
 }
 
 default_mount_handler() {
@@ -223,6 +223,9 @@ default_mount_handler() {
         rwopt="rw"
     else
         rwopt="ro"
+    fi
+    if [ -L "${root}" ]; then
+      root=$(readlink -f "${root}")
     fi
     mount ${fstype:+-t ${fstype}} -o ${rwopt}${rootflags:+,${rootflags}} "${root}" "$1"
 }
@@ -789,9 +792,9 @@ union_insert_dir()
    mount -n -o remount,add:1:$2=rr aufs $1
 }
 
-# Find LZM modules in given dir
-# $1 = root directory of mounted DATAdir
-# $2 ARCH  i686 or x86_64
+# Find LZM or sqfs modules in given dir
+# $1 = root directory of mounted DATA dir
+# $2 ARCH  i686 or x86_64 or any
 find_modules()
 {
    debug_log "ARCH=$ARCH find_modules" "$*"
@@ -1608,7 +1611,7 @@ fstab_update()
    fstab_add_line $FSTABTMP none /sys sysfs defaults
    fstab_add_line $FSTABTMP none /dev/pts devpts gid=5,mode=620
    fstab_add_line $FSTABTMP tmpfs /dev/shm tmpfs defaults
-   fstab_add_line $FSTABTMP tmpfs /tmp tmpfs defaults
+   #fstab_add_line $FSTABTMP tmpfs /tmp tmpfs defaults
    fstab_add_line $FSTABTMP tmpfs /tmp tmpfs defaults,mode=1777
    #fstab_add_line $FSTABTMP tmpfs /var/tmp tmpfs defaults,mode=1777
    #fstab_add_line $FSTABTMP tmpfs /var/log tmpfs defaults,mode=0755,size=1M

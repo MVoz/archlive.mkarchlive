@@ -41,7 +41,7 @@ xf86-input-synaptics
 #libxpm
 #libxaw
 #libxkbfile
-#xorg-xkb-utils
+xorg-xkb-utils
 #xkeyboard-config
 #fontcacheproto
 #libxfontcache
@@ -80,11 +80,8 @@ tdfx-dri
 xorg-video-drivers
 #
 # Archlive 作为Virtualbox的客户机时相关驱动等
-virtualbox-modules
-virtualbox-ose-additions-modules
-virtualbox-ose-additions
-#virtualbox-additions
-# Archlive定制，2.6.33-ARCH
+virtualbox-guest
+# Archlive定制，2.6.38-ARCH
 #
 #chakra-hardware-detection
 #xakra
@@ -100,7 +97,7 @@ ttf-dejavu
 #ttf-droid
 wqy-bitmapfont
 # 18.46MB
-#wqy-zenhei
+wqy-zenhei
 # 12.71MB
 
 iso-codes
@@ -172,8 +169,17 @@ alsa-utils
 alsa-oss
 # OSS compatibility library  0.13MB
 
-oss-hg
+# Archlive 定制包
+oss
+# oss4 kernel modules
+oss-build-mods
+# oss4 kernel sources and autobuild tools
+oss-utils
+# oss4 config and other tools
 
+volumeicon
+# Volume control for your system tray. 
+# Archlive 编译包，ALSA OSS 同时支持
 #####################
 #run-parts
 #ca-certificates
@@ -192,7 +198,7 @@ oss-hg
 feh
 # feh is a fast, lightweight image viewer which uses imlib2   0.55MB
 
-rxvt-unicode
+#rxvt-unicode
 # an unicode enabled rxvt-clone terminal emulator (urxvt)  5.09MB
 #slang
 # S-Lang is a powerful interpreted language jed依赖于此包 3.17MB
@@ -218,17 +224,34 @@ xkeycaps
 #------------------- openbox lxde -------
 #lxde
 #lxde组包含:
-lxde-common
-lxde-icon-theme
-lxmenu-data
+#lxde-common
+#lxde-icon-theme
+#lxmenu-data
 lxpanel
-lxsession-lite  
-lxterminal
+#lxsession-lite  
+#lxterminal
 lxappearance
 openbox
 pcmanfm
 leafpad
-gpicview
+
+#gpicview
+# Picture viewer of the LXDE Desktop
+
+viewnior
+#A simple, fast and elegant image viewer program
+
+obconf
+# A gtk2 based configuration tool for the Openbox windowmanager
+
+obmenu
+# Openbox menu editor
+
+openbox-menu
+# Dynamic XDG menu for openbox
+
+obkey
+#  Openbox Key Editor
 
 #libfm
 pcmanfm2
@@ -295,10 +318,8 @@ yong
 
 network-manager-applet
 
-larchin-syscalls-svn
-# Archlive定制包，中文版
-larchin-svn
-# Archlive定制包，中文版
+archlive-installer
+# Archlive 安装程序 
 
 xarchiver
 

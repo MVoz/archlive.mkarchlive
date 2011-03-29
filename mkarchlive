@@ -137,7 +137,7 @@ if [ "x$FORCE" = "x" ]; then FORCE="y"; fi
 if [ "x$CDNAME" = "x" ]; then CDNAME="archlive"; fi
 if [ "x$CACHE" = "x" ]; then
    if [ -f /etc/pacman.conf ]; then
-	CACHE="$(grep "CacheDir" /etc/pacman.conf | awk -F '=' '{print $2}')"
+	CACHE="$(grep "^CacheDir" /etc/pacman.conf | awk -F '=' '{print $2}')"
    else
 	plain "系统不存在pacman.conf，宿主系统不是Arch, 将创建软件包缓存位置/var/cache/pacman/pkg"
 	CACHE="/var/cache/pacman/pkg"

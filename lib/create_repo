@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # 该脚本在指定文件夹创建Arch软件仓
+# 2011-03-29 更新：配合pacman 3.5的数据库
 # 2010-06-20 更新：通过 -A 来指定 ARCH
 
 APPNAME=$(basename "${0}")
@@ -341,7 +342,7 @@ case "$REPO_DB_FILE_FORMAT" in
 	*tar.xz)  TAR_OPT="J" ;;
 esac
 
-REPO_DB_FILE="${REPO_DIR}/${REPO_NAME}.db.${REPO_DB_FILE_FORMAT}"
+REPO_DB_FILE="${REPO_DIR}/${REPO_NAME}.db"
 
 filename=$(basename "$REPO_DB_FILE")
 
