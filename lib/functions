@@ -744,10 +744,10 @@ function pac_install () {
 	echo -e "\n安装$pkgname\n" >> ${LOG}
 	rm -rf $UNION/var/lib/pacman/db.lck
 	if [ "${QUIET}" = "y" ]; then
-		$PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" >>${LOG} 2>&1
+		$PACMAN -S -f -d --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" >>${LOG} 2>&1
 	else
 		echo ""
-		$PACMAN -S -f --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" | tee -a ${LOG}
+		$PACMAN -S -f -d --arch $ARCH $pkgname --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" | tee -a ${LOG}
 	fi
 	case $? in
 	   0) (green "软件包${pkgname/-d /} 安装成功! " | tee -a ${LOG} ) && break;;
@@ -776,9 +776,9 @@ function pac_remove () {
     while true; do
 	LOG=${BUILDLOG}/${mod}.log
 	if [ "${QUIET}" = "y" ]; then
-		$PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
+		$PACMAN -R -dd -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
 	else
-		$PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
+		$PACMAN -R -dd -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
 	fi
 	if [ $? -eq 0 ]; then
 		green "软件包${pkgname} 卸载成功! " | tee -a ${LOG}
