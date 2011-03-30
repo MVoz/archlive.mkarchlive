@@ -1071,8 +1071,8 @@ cmd_install ()
 		#cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist
 
 		cp -f ${PACMANCONF} ${conf_target}/etc/pacman_${ARCH}.conf
-		cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist.${ARCH}
-		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist.${ARCH}%g" ${conf_target}/etc/pacman_${ARCH}.conf
+		cp -f ${PROFILE_DIR}/mirrorlist ${conf_target}/etc/pacman.d/mirrorlist
+		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist%g" ${conf_target}/etc/pacman_${ARCH}.conf
 		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${conf_target}/etc/pacman_${ARCH}.conf
 		pushd ${conf_target}/etc/ && ln -sf pacman_${ARCH}.conf pacman.conf && popd
 		green "完成!" | tee -a ${LOG}
