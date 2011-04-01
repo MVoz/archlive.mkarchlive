@@ -65,8 +65,9 @@ xorg-xinit
 #xterm
 #
 #######################################
-# xorg-dri
-# Archlive 定制组  包含
+# 最新组  xorg-drivers 包含
+xorg-drivers
+
 ati-dri
 intel-dri
 mach64-dri
@@ -77,11 +78,44 @@ savage-dri
 sis-dri
 tdfx-dri
 #trident-dri
-xorg-video-drivers
+
+# Video驱动 (xorg-video-drivers组不起作用了）
+# xorg-video-drivers
+xf86-video-apm
+xf86-video-ark
+xf86-video-chips
+xf86-video-cirrus
+xf86-video-dummy
+xf86-video-fbdev
+xf86-video-glint
+xf86-video-i128
+xf86-video-i740
+xf86-video-intel
+xf86-video-mach64
+xf86-video-mga
+xf86-video-neomagic
+xf86-video-nouveau
+xf86-video-nv
+xf86-video-r128
+xf86-video-rendition
+xf86-video-s3
+xf86-video-s3virge
+xf86-video-savage
+xf86-video-siliconmotion
+xf86-video-sis
+xf86-video-sisusb
+xf86-video-tdfx
+xf86-video-trident
+xf86-video-tseng
+xf86-video-v4l
+xf86-video-vesa
+xf86-video-vmware
+xf86-video-voodoo
+xf86-video-xgi
+xf86-video-xgixp
 #
-# Archlive 作为Virtualbox的客户机时相关驱动等
-virtualbox-guest
-# Archlive定制，2.6.38-ARCH
+
+virtualbox-guest-additions
 #
 #chakra-hardware-detection
 #xakra
@@ -89,7 +123,7 @@ virtualbox-guest
 #
 ###################字体
 #ttf-openlogos
-ttf-dejavu
+#ttf-dejavu
 ##   7.88MB
 # 被vlc等依赖
 #gsfonts
@@ -117,6 +151,9 @@ consolekit
 hal
 #  Hardware Abstraction Layer
 
+dbus
+#  Freedesktop.org message bus system
+
 desktop-file-utils
 # Command line utilities for working with desktop entries   0.10MB
 
@@ -131,7 +168,7 @@ xdg-utils
 startup-notification
 # Monitor and display application startup   0.14MB
 #
-xdialog
+#xdialog
 #A drop-in replacement for the 'dialog' or 'cdialog' programs  0.91MB
 #
 #gtkdialog
@@ -140,16 +177,18 @@ xdialog
 #zenity
 # Display graphical dialog boxes from shell scripts  4.67MB
 #
-gksu
+#gksu
 # A graphical frontend for su    0.10MB
+# 依赖 libgnome-keyring-2.91.93-1 [0.08 MB]  libgtop-2.28.2-1 [0.13 MB]  libidl2-0.8.14-1 [0.10 MB]  orbit2-2.14.19-1 [0.23 MB]  gtk3-3.0.6-1 [4.53 MB]  gconf-2.32.1-1 [0.85 MB]  libgksu-2.0.12-3 [0.04 MB]  gksu-2.0.2-3 [0.02 MB] 全部安装大小:  44.67 MB
 
 gamin
 #Gamin is a file and directory monitoring system defined to be a subset of the FAM (File Alteration Monitor) system.
 
-slim-archlive
+#slim-archlive
 # Desktop-independent graphical login manager for X11  0.50MB
 # Archlive 定制
 #
+
 #archlinux-themes-slim
 #Arch Linux themes for the SLiM login manager   0.50MB
 #xorg-twm
@@ -212,7 +251,7 @@ xkeycaps
 
 #lua
 #libev
-#dbus
+#
 #libxdg-basedir
 #awesome
 
@@ -229,11 +268,14 @@ xkeycaps
 #lxmenu-data
 lxpanel
 #lxsession-lite  
-#lxterminal
+lxterminal
 lxappearance
 openbox
 pcmanfm
 leafpad
+
+lxdm 
+#Lightweight Display Manager (part of LXDE)
 
 #gpicview
 # Picture viewer of the LXDE Desktop
@@ -244,6 +286,13 @@ viewnior
 obconf
 # A gtk2 based configuration tool for the Openbox windowmanager
 
+# obmenu 及其依赖
+#gobject-introspection
+# [0.76 MB]
+#pygobject
+# [0.24 MB]
+#pygtk
+#[1.49 MB]
 obmenu
 # Openbox menu editor
 
@@ -262,11 +311,13 @@ exitx
 # 枪花PKGBUILD 
 #  exitx is exit X for openbox
 
+oblogout
+
 #icon-naming-utils
 #Maps the new names of icons for Tango to the legacy names used by the GNOME and KDE desktops.  0.08MB
 #
-hicolor-icon-theme
-# Freedesktop.org Hicolor icon theme  1.26MB
+#hicolor-icon-theme
+# Freedesktop.org Hicolor icon theme  1.26MB  已经被作为依赖安装
 #
 #tango-icon-theme
 # The Tango Desktop Project exists to create a consistent user experience   13.03MB
@@ -276,9 +327,11 @@ hicolor-icon-theme
 # Default icon theme for GNOME2
 ### gnome-icon-theme 依赖于以下包，总 21.30MB
 
-gtk-engine-equinox
+gtk-engine-murrine
+
+#gtk-engine-equinox
 # A heavily modified version of the beautiful Aurora engine
-gtk-theme-equinox
+#gtk-theme-equinox
 # gtk theme for equinox engine
 
 vattery
@@ -318,9 +371,6 @@ yong
 
 network-manager-applet
 
-archlive-installer
-# Archlive 安装程序 
-
 xarchiver
 
 galculator
@@ -328,7 +378,7 @@ galculator
 gsnapshot
 # Archlive编译包，已汉化
 
-gvfs
+#gvfs
 # lxde 等小型桌面环境下使用pcmanfm2来访问网上邻居
 
 gmrun
@@ -348,10 +398,15 @@ flashplugin
 libflashsupport
 # Macromedia flash plugin support lib (OSS SSL)
 
-mtasc
+#mtasc
 # An open source flash (swf) compiler  安装后大小： 1032.00 K
 
 libjpeg
 libjpeg6
 libpng
 libpng12
+libmng
+
+archlive-installer
+# Archlive 安装程序 
+

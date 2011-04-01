@@ -1,9 +1,0 @@
-content   hongxingextension                 chrome/content/
-skin      hongxingextension   classic/1.0   chrome/skin/
-locale    hongxingextension   en-US         chrome/locale/en-US/
-locale    hongxingextension   zh         chrome/locale/zh/
-
-
-overlay   chrome://browser/content/browser.xul   chrome://hongxingextension/content/ff-overlay.xul
-override chrome://global/content/netError.xhtml chrome://hongxingextension/content/netError.xhtml
-overlay		chrome://browser/content/browser.xul	chrome://hongxingextension/content/fierr.xul

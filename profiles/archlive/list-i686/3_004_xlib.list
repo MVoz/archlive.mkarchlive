@@ -13,7 +13,7 @@ remmina-plugins
 #
 #libcdio gvfs  6.30MB
 # gogolo-svn 0.42MB
-gigolo
+#gigolo
 # Archlive编译包, 网上邻居的最好替代品，利用gvfs文件系统
 #
 ##### benliud  2.61MB
@@ -45,9 +45,12 @@ transmission-gtk
 libpurple
 finch
 pidgin
-# Archlive定制包
 
-openfetion
+# Archlive定制包
+ofetion-libpurple
+libqq-svn
+
+#openfetion
 
 #grsync
 #### pan,  A powerful Newsgroup Article reader based on GTK2   8.15MB

@@ -58,7 +58,10 @@ transmission-gtk
 libpurple
 finch
 pidgin
+
 # Archlive定制包
+ofetion-libpurple
+libqq-svn
 
 openfetion
 

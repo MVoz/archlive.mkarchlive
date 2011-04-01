@@ -208,6 +208,22 @@ check_host_cmd ()
    done
 }
 
+# $@  命令行  空格分隔
+check_host_cmds ()
+{
+   local cm err
+
+   err=n
+   # 检测宿主系统是否包含本脚本调用的命令
+   for cmd in $@; do
+	if [ "x$(which $cmd 2>/dev/null)" = "x" ]; then
+		error "宿主系统无必须的命令 $cmd"
+		error "PATH 变量设置正确？或者还没有安装该命令？"
+		err=y
+	fi
+   done
+   if [ "$err" = "y" ]; then exit 1; fi
+}
 # 判断宿主系统是否是Arch
 # 将判断结果赋值给变量 ARCH_HOST
 # 并将宿主系统pacman版本赋值给host_pacman_version
@@ -462,6 +478,22 @@ prepare_overlay (){
 	plain -n "释放附加字体包${font}-font.tgz" | tee -a ${LOG}
        	tar -xzvpf "${font}-font.tgz" -C "${OVERLAY}/usr/share/fonts/TTF/"  2>&1 > /dev/null
 	green "完成!" | tee -a ${LOG}
+   done
+
+   # 修正 pacman.conf
+   [ -d ${OVERLAY}/etc/pacman.d ] || mkdir -p ${OVERLAY}/etc/pacman.d
+   cp ${PROFILE_DIR}/mirrorlist ${OVERLAY}/etc/pacman.d/
+   if [ "$arch" = "dul" ]; then
+	cp -f ${PROFILE_DIR}/pacman_i686.conf ${OVERLAY}/etc/
+	cp -f ${PROFILE_DIR}/pacman_x86_64.conf ${OVERLAY}/etc/
+   else
+	cp -f ${PROFILE_DIR}/pacman_${ARCH}.conf ${OVERLAY}/etc/
+   fi
+   for i in pacman_i686.conf pacman_x86_64.conf; do
+        if [ -e ${OVERLAY}/etc/$i ]; then
+		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist%g" ${OVERLAY}/etc/$i
+		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${OVERLAY}/etc/$i
+	fi
    done
 
    msg2 "输出版本信息 v$(date +%Y%m%d)" | tee -a ${LOG}
@@ -776,9 +808,9 @@ function pac_remove () {
     while true; do
 	LOG=${BUILDLOG}/${mod}.log
 	if [ "${QUIET}" = "y" ]; then
-		$PACMAN -R -dd -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
+		$PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname >>${LOG} 2>&1
 	else
-		$PACMAN -R -dd -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
+		$PACMAN -R -d -n --arch $ARCH --noprogressbar --needed --noconfirm --config "${PACMANCONF}" -r "$UNION" $pkgname | tee -a ${LOG}
 	fi
 	if [ $? -eq 0 ]; then
 		green "软件包${pkgname} 卸载成功! " | tee -a ${LOG}
@@ -1067,10 +1099,8 @@ cmd_install ()
 
 		mv -f ${MODULEDIR}/${mod}/etc/{pacman.conf,pacman.conf.larchsave}
 		mv -f ${MODULEDIR}/${mod}/etc/pacman.d/{mirrorlist,mirrorlist.larchsave}
-		#cp -f ${PACMANCONF} ${conf_target}/etc/pacman.conf
-		#cp -f ${PROFILE_DIR}/mirrorlist.${ARCH} ${conf_target}/etc/pacman.d/mirrorlist
 
-		cp -f ${PACMANCONF} ${conf_target}/etc/pacman_${ARCH}.conf
+		cp -f ${PROFILE_DIR}/$(basename ${PACMANCONF}) ${conf_target}/etc/pacman_${ARCH}.conf
 		cp -f ${PROFILE_DIR}/mirrorlist ${conf_target}/etc/pacman.d/mirrorlist
 		sed -i "s%^Include =.*%Include = /etc/pacman.d/mirrorlist%g" ${conf_target}/etc/pacman_${ARCH}.conf
 		sed -i "s%.*CacheDir.*%\#CacheDir    = /var/cache/pacman/pkg/%g" ${conf_target}/etc/pacman_${ARCH}.conf

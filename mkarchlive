@@ -18,6 +18,7 @@
 #
 # 支持全方位定制： 定制启动脚本、定制目标系统软件、定制软件仓、预配置文件。。。
 #########################################################################################
+# 2011-04-01 改变判断宿主系统是否存在命令的方式；统一 mirrorlist, pacman.conf
 # 2010-11-20 整合配置文件指定和参数判断
 # 2010-11-19 细化软件清单内容
 # 2010-11-16 加入单独制作overlay模块, 以便重复制作时，单独更新overlay内容（需要在配置文件夹中修改，在工作目录中直接修改会被覆盖）
@@ -143,7 +144,7 @@ if [ "x$CACHE" = "x" ]; then
 	CACHE="/var/cache/pacman/pkg"
    fi
 fi
-[ ! -d ${CACHE} ] && mkdir -p ${CACHE}
+[ -d ${CACHE} ] || mkdir -p ${CACHE}
 
 if [ "x$PUBLISHER" = "x" ]; then PUBLISHER="http://archlive.googlecode.com/"; fi
 if [ "x$AUTHOR" = "x" ]; then AUTHOR="Carbon Jiao"; fi
@@ -351,8 +352,12 @@ msg "现在开始执行 ${APPNAME} ${CMD_NAME}"
 echo ""
 ###--------------------------------------主程序调用------------------------------------------------------
 case ${CMD_NAME} in
-	prepare) cmd_prepare ;;
+	prepare) 
+		check_host_cmds find grep sed wget gettext openssl
+		# gettext openssl 被create_repo需要
+		cmd_prepare ;;
 	install)
+		check_host_cmds awk diff depmod find grep sed chroot 
 		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_install;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_install;
@@ -361,6 +366,7 @@ case ${CMD_NAME} in
 		fi
 		;;
 	clean)
+		check_host_cmds find 
 		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_clean;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_clean;
@@ -369,6 +375,7 @@ case ${CMD_NAME} in
 		fi
 		;;
 	remount)
+		check_host_cmds tee
 		if [ "$arch" = "dul" ]; then
 			error "重新挂载必须用 -A 来指定 i686 或者 x86_64"
 			usage 1
@@ -377,6 +384,7 @@ case ${CMD_NAME} in
 		fi
 		;;
 	solemodules)
+		check_host_cmds sed find grep depmod
 		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash;
 			export ARCH="x86_64"; init_config; second_confirm; prepare_pacman; cmd_extramodules_install; cmd_extramodules_squash;
@@ -385,6 +393,7 @@ case ${CMD_NAME} in
 		fi
 		;;
  	squash)
+		check_host_cmds sed find depmod
 		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_squash;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_squash;
@@ -393,9 +402,11 @@ case ${CMD_NAME} in
 		fi
 		;;
 	overlay)
+		check_host_cmds find grep sed wget
 		prepare_overlay; cmd_overlay_sqfs;
 		;;
 	bootimage)
+		check_host_cmds find grep sed cut depmod
 		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_boot_kernel_image;
 			export ARCH="x86_64"; init_config; second_confirm; cmd_boot_kernel_image;
@@ -404,9 +415,11 @@ case ${CMD_NAME} in
 		fi
 		;;
 	img)
+		check_host_cmds mkisofs find isosize 
 		init_config; cmd_img;
 		;;
 	all)
+		check_host_cmds find grep sed wget gettext openssl awk mkisofs isosize diff depmod chroot
 		cmd_prepare;
 		if [ "$arch" = "dul" ]; then
 			export ARCH="i686"; init_config; second_confirm; cmd_install; cmd_clean; cmd_squash; cmd_boot_kernel_image;

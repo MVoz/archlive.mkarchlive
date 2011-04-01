@@ -48,7 +48,7 @@ lsof
 #gmime
 # Core mime parsing library  1.28MB
 
-tcpdump
+#tcpdump
 # A tool for network monitoring and data acquisition  1.23MB
 
 tcpflow
@@ -258,17 +258,17 @@ tftp-hpa
 cdrkit
 # Suite of programs for CD/DVD recording, ISO image creation, and audio CD extraction
 
-dvd+rw-tools
+#dvd+rw-tools
 # dvd burning tools
 
-vcdimager
+#vcdimager
 # GNU VCDImager is a full-featured mastering suite for authoring disassembling and 
 # analyzing Video CD's and Super Video CD's
 
-streamripper
+#streamripper
 # Records and splits streaming mp3 into tracks
 
-transcode
+#transcode
 # A video/DVD ripper and encoder for the terminal/console
 
 htop
@@ -279,9 +279,12 @@ tree
 vifm
 sshfs
 parted
-wvdial
 
-codecs
+#wvdial
+
+#codecs
+# Non-linux native codec pack.
 
 testdisk
 # Checks and undeletes partitions + PhotoRec, signature based recovery tool
+

@@ -63,7 +63,7 @@ cairo-dock -c &
 #killall cairo-compmgr >/dev/null
 #cairo-compmgr
 
-PANEL="fbpanel"
+PANEL="lxpanel"
 
 killall $PANEL > /dev/null 2>&1
 $PANEL & > /dev/null

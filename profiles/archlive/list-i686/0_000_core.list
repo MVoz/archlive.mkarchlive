@@ -1,5 +1,5 @@
 -d kernel26
--d linux-firmware
+#-d linux-firmware
 -d kernel26-headers
 -d linux-api-headers
 ##################### 常用网卡驱动程序
@@ -7,7 +7,7 @@
 -d madwifi-utils
 -d madwifi
 -d aufs2
-# 如果使用archlive编译内核，则需要注释掉aufs2
-
-#-d aufs2-util
+-d aufs2-util
+-d oss
+-d virtualbox-guest-modules
 

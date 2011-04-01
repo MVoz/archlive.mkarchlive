@@ -1,42 +1,150 @@
+##########
+-d glibc
+
+-d lib32-glibc
+# X86_64 multilib
+##########
+-d attr
+
+-d lib32-attr
+# X86_64 multilib
+##########
+-d dbus-glib
+
+-d lib32-dbus-glib
+# X86_64 multilib
+##########单选
+#-d binutils
+-d binutils-multilib
+# X86_64 multilib
+###################
+#-d gcc-libs
+# i686 或者 纯粹 x86_64 不可与下面两项同时选
+-d lib32-gcc-libs
+# X86_64 multilib
+-d gcc-libs-multilib
+# X86_64 multilib
+##################
+#-d libtool
+# i686 或者 纯粹 x86_64 不可与下面两项同时选
+-d lib32-libtool
+# X86_64 multilib
+-d libtool-multilib
+# X86_64 multilib
+##################
+-d coreutils
+
+-d coreutils-multilib
+# X86_64 multilib
+##################
+-d ncurses
+
+-d lib32-ncurses
+# X86_64 multilib
+###########
+-d readline
+
+-d lib32-readline
+# X86_64 multilib
+###########
+-d expat
+
+-d lib32-expat
+# X86_64 multilib
+###########
+-d dbus-core
+
+-d lib32-dbus-core
+# X86_64 multilib
+###########
+-d db
+
+-d lib32-db
+# X86_64 multilib
+###########
+-d zlib
+
+-d lib32-zlib
+# X86_64 multilib
+##########
+-d pcre
+
+-d lib32-pcre
+# X86_64 multilib
+##########
+-d util-linux
+
+-d lib32-util-linux
+# X86_64 multilib
+##########
+-d e2fsprogs
+
+-d lib32-e2fsprogs
+# X86_64 multilib
+##########
+-d libcap
+
+-d lib32-libcap
+# X86_64 multilib
+##########
+-d libgpg-error
+
+-d lib32-libgpg-error
+# X86_64 multilib
+##########
+-d libgcrypt
+
+-d lib32-libgcrypt
+# X86_64 multilib
+##########
+-d openssl
+
+-d lib32-openssl
+# X86_64 multilib
+##########
+-d sqlite3
+
+-d lib32-sqlite3
+# X86_64 multilib
+##########
+-d glib2
+
+-d lib32-glib2
+# X86_64 multilib
+##########
+
+##############################################
 # base 组包含：
 #tzdata
-#glibc
-#attr
 acl
 
-#ncurses
-#readline
 bash
+bash-completion
 
-#zlib
-binutils
-
+gen-init-cpio
+tar
+gmp
 bzip2
 
-#gcc-libs
-#db
-#cracklib
-#pam
-#shadow
-#gmp
-#libcap
-coreutils
+cracklib
+pam
+shadow
+
+sudo
 
 cpio
 
+#libusb
+#libusb-compat
+#module-init-tools
+#pciutils
+#udev
 #device-mapper
-#libgpg-error
-#libgcrypt
 #popt
-#util-linux-ng
-#e2fsprogs
 cryptsetup
 
-dash
-
-#expat
-#filesystem
-dbus-core
+#iana-etc
+filesystem
 
 dhcpcd
 dialog
@@ -48,11 +156,9 @@ findutils
 gawk
 
 gdbm
-gen-init-cpio
-pacman-mirrorlist
+
 gettext
 
-pcre
 grep
 
 perl
@@ -61,28 +167,23 @@ texinfo
 groff
 
 sed
-grub
 
 hdparm
 
-#libusb
-#glib2
-#module-init-tools
-#udev
 #net-tools
 #kbd
 #sysvinit
 initscripts
 
+sysfsutils
 iputils
+
 jfsutils
 
 less
 
 xz
-openssl
 libarchive
-
 zip
 unzip
 unrar
@@ -93,8 +194,11 @@ lzop
 unarj
 
 libfetch
+pacman-mirrorlist
+pacman
 
-libpcap
+#libnl
+#libpcap
 
 licenses
 
@@ -110,29 +214,23 @@ lzo2
 
 mdadm
 
-#mkinitcpio-busybox
 #which
+#mkinitcpio-busybox
 mkinitcpio
 mkinitcpio-nfs-utils
 
 mlocate
+# Faster merging drop-in for slocate
 
-nano
-
-#pacman-mirrorlist
-pacman
-
-pciutils
+#nano
+vi
 
 #sysfsutils
 pcmciautils
 
 ppp
-procinfo-ng
-procps
-psmisc
 
-reiserfsprogs
+
 
 rp-pppoe
 sdparm
@@ -141,44 +239,30 @@ sdparm
 #tcp_wrappers
 syslog-ng
 
-tar
-
 usbutils
 
-vi
+dosfstools
+jfsutils
+fuse
+ntfsprogs
+ntfs-3g
+reiserfsprogs
+progsreiserfs
+xfsprogs
+btrfs-progs-unstable
+
 wget
 
 #libnl
 wpa_supplicant
 
-e2fsprogs
-dosfstools
-jfsutils
-
-ntfsprogs
-ntfs-3g
-
-reiserfsprogs
-progsreiserfs
-
-xfsprogs
-
-btrfs-progs-unstable
-
-sudo
-
-bash-completion
-
-smbclient-mini
-
 wireless_tools
+
 #linux-atm
 #iproute2
 #iptables
 #nspr
-#sqlite2
 #nss
-#dbus-glib
 #eggdbus
 #polkit
 networkmanager
@@ -189,25 +273,33 @@ networkmanager-openvpn
 #pptpclient
 networkmanager-pptp
 
-#vpnc
-networkmanager-vpnc
-
-#libxml2
-#openconnect
-networkmanager-openconnect
-#
-syslinux
-#
-#
 netcfg
 wpa_actiond
-ifplugd
 
-nfs-utils
+#libdaemon
+ifplugd
 
 atop
 
-archlinux-installer
-libui-sh
-aif
+#archlinux-installer
+#libui-sh
+#aif
 
+#run-parts
+#ca-certificates
+#curl
+#yajl
+package-query
+yaourt
+
+#grub
+grub2-btrfs
+#syslinux
+
+# 以下可选调试工具
+procinfo-ng
+# Displays useful information from /proc
+procps
+#  Utilities for monitoring your system and processes on your system
+psmisc
+# Miscellaneous procfs tools
